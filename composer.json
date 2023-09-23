@@ -1,0 +1,18 @@
+{
+    "name": "jdubus/framework",
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "Framework/",
+            "App\\Controller\\": "app/Controller/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jerome Dubus",
+            "email": "dubus.jerome@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.0"
+    }
+}

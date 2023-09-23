@@ -1,0 +1,20 @@
+[
+    {
+        "path" : "/index.php",
+        "controller" : "App\\Controller\\Home",
+        "action" : "home",
+        "method" : "GET"
+    },
+    {
+        "path" : "/index.php?toto",
+        "controller" : "App\\Controller\\Home",
+        "action" : "login",
+        "method" : "GET"
+    },
+    {
+        "path" : "/index.php?tata",
+        "controller" : "App\\Controller\\Home",
+        "action" : "home",
+        "method" : "POST"
+    }
+]
