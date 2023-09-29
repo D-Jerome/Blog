@@ -1,18 +1,18 @@
 [
     {
-        "path" : "/index.php",
+        "path" : "/",
         "controller" : "App\\Controller\\Home",
         "action" : "home",
         "method" : "GET"
     },
     {
-        "path" : "/index.php?toto",
+        "path" : "/toto",
         "controller" : "App\\Controller\\Home",
         "action" : "login",
         "method" : "GET"
     },
     {
-        "path" : "/index.php?tata",
+        "path" : "/tata",
         "controller" : "App\\Controller\\Home",
         "action" : "home",
         "method" : "POST"

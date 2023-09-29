@@ -7,9 +7,9 @@ class Request
     protected string $uri;
     protected string $method;
 
-    public function __construct()
+    public function __construct(string $baseUrl)
     {  
-        $this->uri = $_SERVER['REQUEST_URI'];
+        $this->uri = str_replace($baseUrl,'',$_SERVER['REQUEST_URI']);
         $this->method = $_SERVER['REQUEST_METHOD'];
                
     }

@@ -13,7 +13,8 @@ final class Application
 
     public function __construct()
     {
-        $this->request = new Request();
+        $config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'),true);
+        $this->request = new Request($config['baseUrl']);
         $this->router = new Router();
 
     }
