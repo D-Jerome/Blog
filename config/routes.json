@@ -3,18 +3,35 @@
         "path" : "/",
         "controller" : "App\\Controller\\Home",
         "action" : "home",
-        "method" : "GET"
+        "method" : "GET",
+        "manager": [
+        ]
     },
     {
         "path" : "/toto",
         "controller" : "App\\Controller\\Home",
         "action" : "login",
-        "method" : "GET"
+        "method" : "GET",
+        "manager": [
+            "User"
+        ]
     },
     {
         "path" : "/tata",
         "controller" : "App\\Controller\\Home",
         "action" : "home",
-        "method" : "POST"
+        "method" : "POST",
+        "manager": [
+            "User"
+        ]
+    },
+    {
+        "path" : "/posts",
+        "controller" : "App\\Controller\\Home",
+        "action" : "home",
+        "method" : "POST",
+        "manager": [
+            "Posts"
+        ]
     }
 ]

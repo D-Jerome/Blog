@@ -6,15 +6,12 @@ final class Application
 {
      private Request $request;
      private Router $router;
-
-
-
-
+     private array $config;
 
     public function __construct()
     {
-        $config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'),true);
-        $this->request = new Request($config['baseUrl']);
+        $this->config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'),true);
+        $this->request = new Request($this->config['baseUrl']);
         $this->router = new Router();
 
     }
@@ -31,7 +28,10 @@ final class Application
         $route->$action();
     }
     
-    
+    public function getDatasource()
+    {
+        return $this->config['database'];
+    }
 
 
 }
