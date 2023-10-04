@@ -1,25 +1,24 @@
-<?php 
+<?php
 
 namespace Framework;
 
 final class Application
 {
-     private Request $request;
-     private Router $router;
-     private array $config;
+    private Request $request;
+    private Router $router;
+    private static array $config;
 
     public function __construct()
     {
-        $this->config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'),true);
-        $this->request = new Request($this->config['baseUrl']);
+        static::$config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
+        $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
-
     }
-    
+
     public function run()
     {
         $foundRoute = $this->router->findRoute($this->request);
-        if (null === $foundRoute){
+        if (null === $foundRoute) {
             die('route not found');
         }
         $controller = $foundRoute->getController();
@@ -27,11 +26,9 @@ final class Application
         $route = new $controller;
         $route->$action();
     }
-    
-    public function getDatasource()
-    {
-        return $this->config['database'];
+
+    public static function getDatasource()
+    {  
+          return static::$config['database'];
     }
-
-
 }

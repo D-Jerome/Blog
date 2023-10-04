@@ -1,14 +1,15 @@
 {
     "baseUrl" : "/blog-project",
     "database" : { 
-        "dbname" : "mysql:dbname:blog",
-        "host" : "host:localhost",
-        "port" : "port:33061",
+        "dbtype" : "mysql: ",
+        "dbname" : "dbname=blog",
+        "host" : "host=localhost",
+        "port" : "port=33061",
         "username": "blog",
         "password" : "fq/6HP<6",
         "options" : [
-            "DO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC",
-            "PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION"
+            "PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION",
+            "PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ"
         ]
     }
 }    

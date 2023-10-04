@@ -2,32 +2,43 @@
 
 namespace Framework;
 
-use PhpParser\JsonDecoder;
+use Exception;
+use PDO;
+use PhpParser\json_decode;
+
 
 class PDOConnection
 {
     private $dbConnect;
     private static $pdoInstance;
-    
+
+
     public static function getInstance(array $datasource)
     {
-        if(empty(self::$pdoInstance)){
+
+        if (empty(self::$pdoInstance) || (!isset(self::$pdoInstance))) {
             self::$pdoInstance = new PDOConnection($datasource);
         }
+
         return self::$pdoInstance->dbConnect;
     }
-    
+
     private function __construct($datasource)
     {
-        $dsn = $datasource['dbname'];
-        if (isset($datasource['host'])){
-            $dsn .= " ; " .$datasource['host']; 
+        $dsn = $datasource['dbtype'];
+        if (isset($datasource['host'])) {
+            $dsn .= $datasource['host'];
         }
-        if (isset($datasource['port'])){
-            $dsn .= " ; " . $datasource['port'];
+        if (isset($datasource['dbname'])) {
+            $dsn .= "; " . $datasource['dbname'];
         }
-        echo "$dsn";
-        $this->dbConnect = new \PDO($dsn, $datasource['username'], $datasource['password'], );
-                                        //  $datasource['options']
+        if (isset($datasource['port'])) {
+            $dsn .= "; " . $datasource['port'];
+        }
+
+        $this->dbConnect = new PDO($dsn, $datasource['username'], $datasource['password'] /*,[
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+        ]*/);
     }
 }

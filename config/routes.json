@@ -27,9 +27,9 @@
     },
     {
         "path" : "/posts",
-        "controller" : "App\\Controller\\Home",
-        "action" : "home",
-        "method" : "POST",
+        "controller" : "App\\Controller\\Posts",
+        "action" : "posts",
+        "method" : "GET",
         "manager": [
             "Posts"
         ]

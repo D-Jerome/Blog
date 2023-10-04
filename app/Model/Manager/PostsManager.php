@@ -1,15 +1,13 @@
 <?php
 
-namespace Model\Manager;
+namespace App\Model\Manager;
 
+use Framework\Application;
 use Framework\BaseManager;
+use Framework\PDOConnection;
 
 class PostsManager extends BaseManager
 {
-    public function __construct($datasource)
-    {
-        parent::__construct("posts","Posts",$datasource);
-    }
-
-    public function 
+    
+    
 }

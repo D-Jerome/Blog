@@ -10,5 +10,5 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Framework\\' => array($baseDir . '/Framework'),
-    'App\\Controller\\' => array($baseDir . '/app/Controller'),
+    'App\\' => array($baseDir . '/app'),
 );
