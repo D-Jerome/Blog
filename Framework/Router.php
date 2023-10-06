@@ -21,6 +21,7 @@ class Router
 
     public function findRoute(Request $request): ?Route
     {
+       
         foreach($this->routes as $route)
         {
             if($route->getPath() === $request->getUri()) {

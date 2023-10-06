@@ -10,7 +10,7 @@ final class Application
 
     public function __construct()
     {
-        static::$config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
+        self::$config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
     }
@@ -29,6 +29,6 @@ final class Application
 
     public static function getDatasource()
     {  
-          return static::$config['database'];
+          return self::$config['database'];
     }
 }

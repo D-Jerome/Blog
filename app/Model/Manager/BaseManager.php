@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework;
+namespace App\Model\Manager;
 
-use Framework\PDOConnection;
+use App\Model\PDOConnection;
+use PropertyNotFoundException;
 
-
-class BaseManager
+abstract class BaseManager
 {
 
     protected object $dbConnect;

@@ -1,5 +1,9 @@
 <?php
-	class NoRouteFoundException extends Exception
+	namespace Framework\Exception;
+
+use Exception;
+
+    class NoRouteFoundException extends Exception
 	{
 		public function __construct($message = "No route has been found")
 		{
