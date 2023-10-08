@@ -15,7 +15,7 @@ class BaseController
           
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
         $this->twig = new Environment($loader, [
-            'cache' => __DIR__ . '/../app/var/cache',
+            // 'cache' => __DIR__ . '/../app/var/cache',
         ]);   
      }
 

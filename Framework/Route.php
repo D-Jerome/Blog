@@ -1,6 +1,9 @@
 <?php
 namespace Framework;
 
+use Framework\Request;
+
+
 class Route
 {
     protected string $path;
@@ -18,17 +21,20 @@ class Route
     }
 
     public function getPath()
-    {
+    {         
         return $this->path;
     }
+
     public function getMethod()
     {
         return $this->method;
     }
+
     public function getController()
     {
         return $this->controller;
     }
+    
     public function getAction()
     {
         return $this->action;

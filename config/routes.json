@@ -8,27 +8,27 @@
         ]
     },
     {
-        "path" : "/toto",
-        "controller" : "App\\Controller\\Home",
-        "action" : "login",
+        "path" : "/post",
+        "controller" : "App\\Controller\\Post",
+        "action" : "posts",
         "method" : "GET",
         "manager": [
             "User"
         ]
     },
     {
-        "path" : "/tata",
-        "controller" : "App\\Controller\\Home",
-        "action" : "home",
-        "method" : "POST",
+        "path" : "/blog/category/[*:slug]-[i:id]'",
+        "controller" : "App\\Controller\\Post",
+        "action" : "post",
+        "method" : "GET",
         "manager": [
             "User"
         ]
     },
     {
-        "path" : "/posts",
-        "controller" : "App\\Controller\\Posts",
-        "action" : "posts",
+        "path" : "/post",
+        "controller" : "App\\Controller\\Post",
+        "action" : "post",
         "method" : "GET",
         "manager": [
             "Posts"

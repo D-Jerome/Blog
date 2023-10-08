@@ -30,7 +30,7 @@ abstract class BaseManager
     {      
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table);
         $query->execute();
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
     public function create()

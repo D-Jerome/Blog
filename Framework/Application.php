@@ -29,6 +29,7 @@ final class Application
 
     public static function getDatasource()
     {  
-          return self::$config['database'];
+        return self::$config['database'];
+
     }
 }
