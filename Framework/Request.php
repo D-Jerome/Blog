@@ -6,12 +6,14 @@ class Request
 
     protected string $uri;
     protected string $method;
+    protected array $params = [];
 
     public function __construct(string $baseUrl)
     {  
-        $this->uri = str_replace($baseUrl,'',$_SERVER['REQUEST_URI']);
+        $this->params = $_GET;
+        $this->uri = str_replace($baseUrl,'', parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH));
         $this->method = $_SERVER['REQUEST_METHOD'];
-               
+
     }
 
     public function getUri()

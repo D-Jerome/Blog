@@ -26,9 +26,9 @@
         ]
     },
     {
-        "path" : "/post",
+        "path" : "/post/list",
         "controller" : "App\\Controller\\Post",
-        "action" : "post",
+        "action" : "postsPaged",
         "method" : "GET",
         "manager": [
             "Posts"

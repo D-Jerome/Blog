@@ -38,11 +38,31 @@ abstract class BaseManager
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
-    public function create()
+    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit , ?int $page)
     {
+        $sql= 'SELECT * FROM '. $this->table;
+        if (isset($field)){
+            $sql .= ' ORDER BY ' . $field;
+        }
+        if (in_array($dir,['ASC', 'DESC'])){
+            $sql .= ' ' . $dir; 
+        }else{
+            $sql .= ' DESC';
+        }
+        if (isset($limit)){
+            $sql .= ' LIMIT ' . $limit;
+            if (isset($page) && $page !== 1 ){
+                $offset = ($page - 1) * $limit;
+                $sql .= ' OFFSET ' .  $offset;              
+            }
+                        
+        }
         
-    }
-
+        $query = $this->dbConnect->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    } 
+   
     public function insert($obj, $param)
     {
         $paramNumber = count($param);

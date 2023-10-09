@@ -36,5 +36,12 @@ class Post extends BaseController
         
 
     }
+    
+    public function postsPaged()
+    {
+        $posts = new PostManager(Application::getDatasource());
 
+        $statement = $posts->getAllOrderLimit('created_at', '', 20, 1) ; 
+        $this->view('posts.html.twig', ['posts'=> $statement]);
+    }
 }
