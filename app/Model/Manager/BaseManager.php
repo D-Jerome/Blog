@@ -21,8 +21,13 @@ abstract class BaseManager
 
     public function getById($id)
     {
-        $query = $this->dbConnect->prepare('SELECT * FROM  $this->table WHERE id =?');
-        $query->execute(array($id));
+        //don't work
+        // $query = $this->dbConnect->prepare('SELECT * FROM  $this->table WHERE id =?');
+        // $query->execute(array($id));
+       
+        $query = $this->dbConnect->prepare('SELECT * FROM '. $this->table .' WHERE id = ' . end($id));
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         return $query->fetch();
     }
 

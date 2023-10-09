@@ -24,4 +24,17 @@ class Post extends BaseController
     {
         echo "je suis la page de login";
     }
+
+    public function post($id)
+    {
+        $post = new PostManager(Application::getDatasource());
+
+        $statement = $post->getById($id);
+
+        
+        $this->view('post.html.twig', ['post'=> $statement]);
+        
+
+    }
+
 }

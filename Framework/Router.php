@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Framework\Route;
+
 class Router
 {
 
@@ -24,7 +26,14 @@ class Router
        
         foreach($this->routes as $route)
         {
-            if($route->getPath() === $request->getUri()) {
+        
+            $pattern = '~^' . $route->getPath() . '$~';
+    
+            if (preg_match_all($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL) != null ){
+                 
+                return $route;
+            }elseif($route->getPath() === $request->getUri()) {
+                
                 return $route;
             }
         }

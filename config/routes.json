@@ -17,12 +17,21 @@
         ]
     },
     {
-        "path" : "/blog/category/[*:slug]-[i:id]'",
+        "path" : "/blog/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",
         "manager": [
             "User"
+        ]
+    },
+    {
+        "path" : "/post",
+        "controller" : "App\\Controller\\Post",
+        "action" : "post",
+        "method" : "GET",
+        "manager": [
+            "Posts"
         ]
     },
     {

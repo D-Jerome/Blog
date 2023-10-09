@@ -24,7 +24,18 @@ final class Application
         $controller = $foundRoute->getController();
         $action =  $foundRoute->getaction();
         $route = new $controller;
-        $route->$action();
+        if ($action === 'post'){
+            $uri = $this->request->getUri();     
+            
+            $urio=(explode('-',$uri));
+            $id = array_filter($urio, function ($num) {
+                return is_numeric($num) == true;
+            } );
+            
+            $route->$action($id);
+        }else{
+            $route->$action();
+        }
     }
 
     public static function getDatasource()
