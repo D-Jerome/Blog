@@ -10,10 +10,18 @@
                         <h5 class="car-title text-warning">{{ post.name }}</h5>
                         <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
                         <p class="card-text">{{ post.excerptContent }} </p>
-                        <a href="blog-project/blog/{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
+                        <a href="{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>
 
 {% endfor %}
+{% endblock %}
+{% block page %}
+
+<div class="btn btn-secondary">{{ pages[suivActive] }}</div>
+<a href="11" class="btn btn-primary" {{ pages[precActive] }} >Page Précédente</a>
+<a href="{{ pages[suivActive] }}" class="btn btn-primary " {{ pages[suivActive] }}>Page Suivante</a>
+
+
 {% endblock %}

@@ -20,10 +20,7 @@ class Post extends BaseController
         $this->view('posts.html.twig', ['posts'=> $statement]);
     }
 
-    public function login()
-    {
-        echo "je suis la page de login";
-    }
+   
 
     public function post($id)
     {
@@ -39,9 +36,28 @@ class Post extends BaseController
     
     public function postsPaged()
     {
+        $orderBy = 'created_at'; 
+        $dir = 'DESC';
+        $perPage = $_GET['perPage']?? 8;
+        $page = $_GET['page'] ?? 1;
         $posts = new PostManager(Application::getDatasource());
+        $pages = [];
+        $statement = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $page) ;
+        $count = count($posts->getAll());
+       
+        if ($page >= (ceil(($count/$perPage)))) {
+            $pages['precActive'] = "aria-disabled='false'";
+            $pages['suivActive'] = "aria-disabled='true'";
+        }elseif ($page === 1 ) {
+            $pages['precActive'] = "aria-disabled='true'";
+            $pages['suivActive'] = "aria-disabled='false'";
+        }else{
+            $pages['suivActive'] = "aria-disabled='false'";
+            $pages['precActive'] = "aria-disabled='false'";
+        }
 
-        $statement = $posts->getAllOrderLimit('created_at', '', 20, 1) ; 
-        $this->view('posts.html.twig', ['posts'=> $statement]);
+
+        
+        $this->view('posts.html.twig', ['posts'=> $statement, 'pages'=> $pages]);
     }
 }

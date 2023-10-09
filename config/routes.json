@@ -42,5 +42,24 @@
         "manager": [
             "Posts"
         ]
+    },
+    {
+        "path" : "/login",
+        "controller" : "App\\Controller\\User",
+        "action" : "login",
+        "method" : "GET",
+        "manager": [
+            "User"
+        ]
+    },
+    {
+        "path" : "/auth",
+        "controller" : "App\\Controller\\Auth",
+        "action" : "login",
+        "method" : "POST",
+        "manager": [
+            "User"
+        ]
     }
+
 ]
