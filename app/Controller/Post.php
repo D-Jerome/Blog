@@ -39,23 +39,45 @@ class Post extends BaseController
         $orderBy = 'created_at'; 
         $dir = 'DESC';
         $perPage = $_GET['perPage']?? 8;
-        $page = $_GET['page'] ?? 1;
+        $currentPage = (int)$_GET['page'] ?? 1;
+       
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statement = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $page) ;
+        $statement = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage) ;
         $count = count($posts->getAll());
-       
-        if ($page >= (ceil(($count/$perPage)))) {
-            $pages['precActive'] = "aria-disabled='false'";
-            $pages['suivActive'] = "aria-disabled='true'";
-        }elseif ($page === 1 ) {
-            $pages['precActive'] = "aria-disabled='true'";
-            $pages['suivActive'] = "aria-disabled='false'";
+        
+        if ($currentPage >= (ceil(($count/$perPage)))) {
+            $pages['previousActive'] = true;
+            $pages['nextActive'] = false;
+
+        }elseif ($currentPage === 1 ) {
+            
+            $pages['previousActive'] = false;
+            $pages['nextActive'] = true;
+            
         }else{
-            $pages['suivActive'] = "aria-disabled='false'";
-            $pages['precActive'] = "aria-disabled='false'";
+            $pages['nextActive'] = true;
+            $pages['previousActive'] = true;
+           
         }
 
+        $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
+        $get = $_GET;
+        unset($get['page']);
+        
+        $queryP=http_build_query($get);
+        if (!empty($query)){
+                $uri = $uri . '?' . $query;
+        }
+        
+        //pagination
+            
+            $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
+            $get = $_GET;
+            unset($get['page']);
+            $query=http_build_query($get);
+            $pages['previousUri'] = $uri . '?page='. ($currentPage - 1) . $query; 
+            $pages['nextUri'] = $uri . '?page='. ($currentPage + 1) . $query; 
 
         
         $this->view('posts.html.twig', ['posts'=> $statement, 'pages'=> $pages]);

@@ -18,10 +18,16 @@
 {% endfor %}
 {% endblock %}
 {% block page %}
+{% if pages.previousActive %}
+    <a href="{{ pages.previousUri }}" class="btn btn-primary">Page Précédente</a>
+{% else %}
+    <a href="{{ pages.previousUri }}" class="btn btn-secondary disabled" role="button" aria-disabled="true">Page Précédente</a>
+{% endif %}
+{% if pages.nextActive %}
+    <a href="{{ pages.nextUri }}" class="btn btn-primary " {{ pages.nextActive }} >Page Suivante</a>
+{% else %}
+    <a href="{{ pages.nextUri }}" class="btn btn-secondary disabled" role="button" aria-disabled="true">Page Suivante</a>
 
-<div class="btn btn-secondary">{{ pages[suivActive] }}</div>
-<a href="11" class="btn btn-primary" {{ pages[precActive] }} >Page Précédente</a>
-<a href="{{ pages[suivActive] }}" class="btn btn-primary " {{ pages[suivActive] }}>Page Suivante</a>
-
+{% endif %}
 
 {% endblock %}

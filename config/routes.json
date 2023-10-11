@@ -17,7 +17,7 @@
         ]
     },
     {
-        "path" : "/blog/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/post/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",

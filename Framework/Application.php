@@ -24,6 +24,8 @@ final class Application
         $controller = $foundRoute->getController();
         $action =  $foundRoute->getaction();
         $route = new $controller;
+       
+        //à refactoriser
         if ($action === 'post'){
             $uri = $this->request->getUri();     
             
@@ -36,6 +38,7 @@ final class Application
         }else{
             $route->$action();
         }
+        //
     }
 
     public static function getDatasource()
