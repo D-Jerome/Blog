@@ -34,16 +34,7 @@
             "Posts"
         ]
     },
-    {
-        "path" : "/post",
-        "controller" : "App\\Controller\\Post",
-        "action" : "post",
-        "method" : "GET",
-        "manager": [
-            "Posts"
-        ]
-    },
-    {
+        {
         "path" : "/login",
         "controller" : "App\\Controller\\User",
         "action" : "login",
