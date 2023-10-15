@@ -1,15 +1,16 @@
 {% extends './layouts/default.html.twig' %}
 
 {% block content %}
-<div class="container">Login:
+<div class="container">Se connecter
 
-<form action="/auth" method="post">
-    <label for="login"> Identifiant </label>
-    <input type="text" id="login" name="login">
-    <label for="password">Mot de passe</label>
-    <input type="password" id="password" name="password">
-    <div >
-        <button class="btn btn-primary" type="submit">Connexion</button>
-    </div>
-</form>
+    <form action="/blog-project/login" method="post">
+        <label for="login"> Identifiant </label>
+        <input type="text" id="login" name="login">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password">
+        <div >
+            <button class="btn btn-primary" type="submit">Connexion</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

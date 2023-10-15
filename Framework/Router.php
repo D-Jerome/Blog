@@ -16,7 +16,7 @@ class Router
         foreach($routes as $route)
         {
             $this->routes[] = new Route($route['path'],$route['method'],$route['controller'],$route['action']);
-
+            
         }
         
     }
@@ -24,18 +24,21 @@ class Router
     public function findRoute(Request $request): ?Route
     {
        
+        
         foreach($this->routes as $route)
         {
-        
-            $pattern = '~^' . $route->getPath() . '$~';
-    
-            if (preg_match_all($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL) != null ){
-                 
-                return $route;
-            }elseif($route->getPath() === $request->getUri()) {
+            if ($route->getMethod() === $request->getMethod()){    
                 
-                return $route;
-            }
+                $pattern = '~^' . $route->getPath() . '$~';
+
+                
+                if (preg_match_all($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL) != null ) {
+                    return $route;
+                }elseif($route->getPath() === $request->getUri()) {
+                    
+                    return $route;
+                }
+            }    
         }
         return null;
     }

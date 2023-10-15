@@ -4,13 +4,18 @@
 
 {% block content %} {% for post in posts %}
             
-            <div class="col-md-3">            
+            <div class="col-md-10">            
                 <div class="card mb-3 bg-primary bg-gradient text-light">
                     <div class="card-body">
-                        <h5 class="car-title text-warning">{{ post.name }}</h5>
+                        <h5 class="car-title text-warning">{{ post.id }} {{ post.name }}</h5>
+                            <div>
+                                {% for category in post.categories %}                 
+                                    <span class="badge badge-info">{{ category.name }}</span>
+                                {% endfor %}   
+                            </div>
                         <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
                         <p class="card-text">{{ post.excerptContent }} </p>
-                        <a href="{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
+                        <a href="/blog-project/post/{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>

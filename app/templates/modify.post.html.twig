@@ -1,0 +1,32 @@
+
+
+{% extends './layouts/default.html.twig' %}
+
+{% block content %} 
+            <h1>Modification d'article</h1>            
+            <div class="col-md-10">            
+                <div class="card mb-3 bg-secondary bg-gradient text-light">
+                    <div class="card-body">
+                        <h5 class="car-title text-warning">{{ post.name }}</h5>
+                        <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
+                        <pclass="card-text">{{ post.content }} </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 border border-dark"> 
+                <form action="" method="post">
+                <div class="form-group">
+                    <label id="name">Titre de l'article</label>
+                    <input class="form-control" type="text" id="name"  name="name" value="{{ post.name|raw }}">
+                </div>    
+                <div class="form-group">
+                    <label id="content">Contenu de l'article</label>
+                    <textarea class="form-control" rows="8" id="content" name="content" >{{ post.content|raw }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Modifier</button>
+
+                
+                </form> 
+            </div>    
+
+{% endblock %}

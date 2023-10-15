@@ -8,9 +8,9 @@ use PropertyNotFoundException;
 abstract class BaseManager
 {
 
-    protected object $dbConnect;
-    private string $table;
-    private  $object;
+    public object $dbConnect;
+    protected string $table;
+    public  $object;
 
     public function __construct(string $table,  $objectName, $datasource)
     {
@@ -113,14 +113,15 @@ abstract class BaseManager
         $req->execute($boundParam);
     }
 
-    public function delete($obj):bool
+    public function delete($id):bool
     {
-        if (property_exists($obj, "id")) {
-            $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id=?");
-            $query->execute(array($obj->id));
-            return true;
-        } else {
-            return false;
-        }
+            try{
+                $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= " . end($id));
+                $query->execute();
+                return true;
+            }catch ( \Exception $e){
+                dd($e->getMessage());
+                return false;
+            }    
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Model\Entities;
 
-abstract class PostEntity
+abstract class Entity
 {
     
 

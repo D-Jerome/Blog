@@ -2,25 +2,34 @@
 
 namespace App\Controller;
 
+use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
-use App\Model\Manager\PostManager;
+use App\Model\Manager\{CategoryManager, PostManager};
 use Framework\Application;
+use \PDO;
+
 
 class Post extends BaseController
 {
+
     public function posts()
     {
 
-       
+
         $posts = new PostManager(Application::getDatasource());
 
-        $statement = $posts->getAll();
-
+        $statementPosts = $posts->getAll();
         
-        $this->view('posts.html.twig', ['posts'=> $statement]);
+        foreach ($statementPosts as $statementPost){
+            
+            $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+        }
+           
+       
+        $this->view('posts.html.twig', ['posts' => $statementPosts ]);
     }
 
-   
+
 
     public function post($id)
     {
@@ -28,58 +37,58 @@ class Post extends BaseController
 
         $statement = $post->getById($id);
 
-        
-        $this->view('post.html.twig', ['post'=> $statement]);
-        
 
+        $this->view('post.html.twig', ['post' => $statement]);
     }
-    
+
     public function postsPaged()
     {
-        $orderBy = 'created_at'; 
+        $orderBy = 'created_at';
         $dir = 'DESC';
-        $perPage = $_GET['perPage']?? 8;
-        $currentPage = (int)$_GET['page'] ?? 1;
-       
+        $perPage = $_GET['perPage'] ?? 8;
+        $currentPage = $_GET['page'] ?? 1;
+        $currentPage = (int)$currentPage;
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statement = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage) ;
-        $count = count($posts->getAll());
+        $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage);
+        foreach ($statementPosts as $statementPost){
+            
+            $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+        }
         
-        if ($currentPage >= (ceil(($count/$perPage)))) {
+        $count = count($posts->getAll());
+
+        if ($currentPage >= (ceil(($count / $perPage)))) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
+        } elseif ($currentPage === 1) {
 
-        }elseif ($currentPage === 1 ) {
-            
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
-            
-        }else{
+        } else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
-           
         }
 
-        $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
+        $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         $get = $_GET;
         unset($get['page']);
-        
-        $queryP=http_build_query($get);
-        if (!empty($query)){
-                $uri = $uri . '?' . $query;
-        }
-        
-        //pagination
-            
-            $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
-            $get = $_GET;
-            unset($get['page']);
-            $query=http_build_query($get);
-            $pages['previousUri'] = $uri . '?page='. ($currentPage - 1) . $query; 
-            $pages['nextUri'] = $uri . '?page='. ($currentPage + 1) . $query; 
 
-        
-        $this->view('posts.html.twig', ['posts'=> $statement, 'pages'=> $pages]);
+        $queryP = http_build_query($get);
+        if (!empty($query)) {
+            $uri = $uri . '?' . $query;
+        }
+
+        //pagination
+
+        $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $get = $_GET;
+        unset($get['page']);
+        $query = http_build_query($get);
+        $pages['previousUri'] = $uri . '?page=' . ($currentPage - 1) . $query;
+        $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
+
+
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages]);
     }
 }

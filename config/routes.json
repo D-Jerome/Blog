@@ -53,13 +53,41 @@
         ]
     },
     {
-        "path" : "/auth",
-        "controller" : "App\\Controller\\Auth",
-        "action" : "login",
+        "path" : "/admin",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "Posts",
+        "method" : "GET",
+        "manager": [
+            "Post"
+        ]
+    },
+    {
+        "path" : "/admin/post/delete/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "deletePost",
+        "method" : "GET",
+        "manager": [
+            "Post"
+        ]
+    },
+    {
+        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "modifyPost",
+        "method" : "GET",
+        "manager": [
+            "Post"
+        ] 
+    },
+    {
+        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "modifyedPost",
         "method" : "POST",
         "manager": [
-            "User"
-        ]
+            "Post"
+        ]           
     }
+
 
 ]

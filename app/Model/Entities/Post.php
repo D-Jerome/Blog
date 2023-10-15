@@ -2,7 +2,9 @@
 
 namespace App\Model\Entities;
 
-class Post extends PostEntity
+use PDO;
+
+class Post extends Entity
 {
 	protected int $id;
 	protected string $name;
@@ -10,13 +12,15 @@ class Post extends PostEntity
 	protected string $content;
 	protected  $createdAt;
 	protected string $excerptContent;
+	protected array $categories = [];
+
 
 	public function getId()
 	{
 		return $this->id;
 	}
 
-	public function getname()
+	public function getName()
 	{
 		return $this->name;
 	}
@@ -38,6 +42,12 @@ class Post extends PostEntity
 
 	public function getExcerptContent()
 	{
-		return substr($this->content, 0, 60);
+		return substr($this->content, 0, 60) . '...';
 	}
+		
+	public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
 }

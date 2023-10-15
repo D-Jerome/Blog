@@ -26,4 +26,9 @@ class Request
         return $this->method;
     }
 
+    public function getParams()
+    {
+        return $this->params;
+    }
+
 }
