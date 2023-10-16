@@ -14,6 +14,7 @@ abstract class BaseManager
 
     public function __construct(string $table,  $objectName, $datasource)
     {
+       
         $this->table = $table;
         $this->object = $objectName;
         $this->dbConnect = PDOConnection::getInstance($datasource);

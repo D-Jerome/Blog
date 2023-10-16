@@ -1,0 +1,9 @@
+
+
+{% extends './layouts/default.html.twig' %}
+
+{% block content %}    
+<h1>Panneau des commentaires</h1>         
+            <a href="/blog-project/admin/post/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> <a href="/blog-project/admin/post/delete/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
+
+{% endblock %}

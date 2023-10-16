@@ -9,6 +9,7 @@ class User extends Entity
 	protected string $password;
 	protected $createdAt;
 	protected int $roleId;
+	protected string $roleName;
 
 	public function getId()
 	{
@@ -35,4 +36,8 @@ class User extends Entity
 		return $this->roleId;
 	}
 	
+	public function getRoleName()
+	{
+		return $this->roleName;
+	}
 }

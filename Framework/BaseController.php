@@ -12,7 +12,10 @@ class BaseController
 
      public function __construct()
      {
-          
+        if (session_status() === PHP_SESSION_NONE){
+            session_start();
+        }  
+
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
         $this->twig = new Environment($loader, [
             // 'cache' => __DIR__ . '/../app/var/cache',
@@ -25,5 +28,15 @@ class BaseController
 
     }
 
-
+    public function isAuthorize( array $authRoles)
+    {
+        return true;
+        if (!empty($_SESSION)){
+            
+            if (in_array( $authRoles , $_SESSION['role']  ) || $authRoles === 'all'){
+                return true;
+            }
+        }
+        return false;    
+    }
 }

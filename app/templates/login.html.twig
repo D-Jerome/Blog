@@ -1,16 +1,19 @@
 {% extends './layouts/default.html.twig' %}
 
 {% block content %}
-<div class="container">Se connecter
-
+<h1>Se connecter</h1>
+<div class="col-md-10 mt-4 border border-dark"> 
     <form action="/blog-project/login" method="post">
-        <label for="login"> Identifiant </label>
-        <input type="text" id="login" name="login">
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password">
-        <div >
+        <div class="form-group mt-4">
+            <input class="form-control" type="text" name="login" placeholder="Identifiant">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password"  name="password" placeholder="Mot de passe">
+        </div>
+        <div class="form-group">
             <button class="btn btn-primary" type="submit">Connexion</button>
         </div>
     </form>
+    <a href="?blog-project/login/forgot">Mot de passe oublié</a>
 </div>
 {% endblock %}
