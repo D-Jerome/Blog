@@ -15,7 +15,7 @@ class Post extends BaseController
 
     public function posts()
     {
-        $username=Session::getUsername();
+        //$username=Session::getUsername();
 
         $posts = new PostManager(Application::getDatasource());
 
@@ -27,25 +27,25 @@ class Post extends BaseController
         }
            
        
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'name' => $username ]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
     }
 
 
 
     public function post($id)
     {
-        $username=Session::getUsername();
+       // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
 
 
-        $this->view('post.html.twig', ['post' => $statement, 'name' => $username]);
+        $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName')]);
     }
 
     public function postsPaged()
     {
-        $username=Session::getUsername();
+       //$username=Session::getUsername();
         $orderBy = 'created_at';
         $dir = 'DESC';
         $perPage = $_GET['perPage'] ?? 8;
@@ -92,6 +92,6 @@ class Post extends BaseController
         $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
 
 
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'name' => $username]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'user' => Session::getSessionByKey('authName')]);
     }
 }

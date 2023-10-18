@@ -6,6 +6,7 @@ use App\Controller\Post as ControllerPost;
 use App\Model\Manager\PostManager;
 use Framework\Application;
 use Framework\BaseController;
+use Framework\Session;
 
 class Post extends BaseController
 {
@@ -15,7 +16,7 @@ class Post extends BaseController
         
         $posts = (new PostManager(Application::getDatasource()))->getAll();
 
-        $this->view('admin.posts.html.twig', ['posts' => $posts ]);
+        $this->view('admin.posts.html.twig', ['posts' => $posts , 'user' => Session::getSessionByKey('authName')]);
         
 
     }
@@ -35,7 +36,7 @@ class Post extends BaseController
         
        
 
-        $this->view('modify.post.html.twig', ['post' => $statement]);
+        $this->view('modify.post.html.twig', ['post' => $statement , 'user' => Session::getSessionByKey('authName')]);
 
     }
 
@@ -62,7 +63,7 @@ class Post extends BaseController
             echo 'modification';
         }
 
-        $this->view('modify.post.html.twig', ['post' => $statement]);
+        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName')]);
 
     }
 

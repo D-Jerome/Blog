@@ -100,8 +100,21 @@
         "authorize": [
             "admin",
             "editor",
-            "visitor"
-        ]           
+            "visitor",
+            "all"
+        ]   
+    },
+    {
+        "path" : "/logged",
+        "controller" : "App\\Controller\\User",
+        "action" : "loggedIn",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
     }
 
 

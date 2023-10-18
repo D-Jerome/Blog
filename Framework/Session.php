@@ -6,30 +6,38 @@ namespace Framework;
 
 class Session
 {
+    const CIPHERING = "aes-128-cbc";
+    // Using OpenSSl Encryption method
+    const IV = "vbuHTFDrWC7ML5==";
+
+    const ENCRYPTIONKEY = "OCR-P5-blog";
 
     public static function setSessionValue(string $key, string $value)
     {
-        echo 'session' . $key;
-        $_SESSION[$key] = serialize($value);
-        var_dump($_SESSION[$key],'|');
+        $_SESSION[$key] = self::cryptData($value);
         return true;
     }
 
     public static function getSessionByKey(string $key)
     {
         if (self::checkSessionKey($key)) {
-            return $_SESSION[$key];
+            return self::decryptData($_SESSION[$key]);
         }
         return false;
     }
 
     public static function checkSessionKey(string $key)
     {
-        echo 'check|';
-        var_dump($key,'|');
-        var_dump(isset($_SESSION[$key]),'|');
         return isset($_SESSION[$key]);
     }
 
+    private static function cryptData(string $data): string
+    {
+        return openssl_encrypt($data, self::CIPHERING, self::ENCRYPTIONKEY, OPENSSL_RAW_DATA, self::IV );
+    }
 
+    private static function decryptData(string $data): string
+    {
+        return openssl_decrypt($data, self::CIPHERING, self::ENCRYPTIONKEY, OPENSSL_RAW_DATA, self::IV );
+    }
 }

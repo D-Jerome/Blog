@@ -12,14 +12,12 @@ class User extends BaseController
 
     public function loginAuth()
     {
-   
-        
         $users = (new UserManager(Application::getDatasource()));
         $user = $users->getByUsername($_POST['login']);
-        
+       
         if (null === ($user)) {
-            echo 'toto';
-            return $this->view('login.html.twig', ['error' => true, 'login' => false]);
+       
+            return $this->view('login.html.twig', ['error' => true, 'login' => false , 'user' => Session::getSessionByKey('authName')]);
             
         }
             // Verifier si le mot de passe correspond a l'utilisateur
@@ -34,18 +32,21 @@ class User extends BaseController
             //     si ok : Mise en place de session de connexion pour l'utilisateur
             Session::setSessionValue('auth', $user->getId()) ;
             Session::setSessionValue('role', $user->getRole());
-            
+            Session::setSessionValue('authName', $user->getUsername());
+            Session::setSessionValue('roleName', ($users->getRoleById($user->getRole()))->getRole());
+
+            var_dump(Session::getSessionByKey('authName'));
             $user->roleName = ($users->getRoleById($user->getRole()))->getRole();
-            dd($_SESSION);
+            
             switch ($user->getRoleName()) {
                 case 'admin':
-                    return $this->view('admin.panel.html.twig', ['login' => true, 'user' => $user]);
+                    return $this->view('admin.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
                     
                 case 'editor':
-                    return $this->view('editor.panel.html.twig', ['login' => true , 'user' => $user]);
+                    return $this->view('editor.panel.html.twig', ['login' => true , 'user' => Session::getSessionByKey('authName')]);
                   
                 case 'visitor':
-                    return $this->view('comment.panel.html.twig', ['login' => true , 'user' => $user]);
+                    return $this->view('comment.panel.html.twig', ['login' => true ,  'user' => Session::getSessionByKey('authName')]);
                    
             }
 
@@ -53,7 +54,7 @@ class User extends BaseController
             //     si nok : renvoi sur page de login avec message d'erreur
             
         }else{
-            return $this->view('login.html.twig', ['error' => true, 'login' => false]);
+            return $this->view('login.html.twig', ['error' => true, 'login' => false, 'user' => Session::getSessionByKey('authName')]);
         }  
 
         
@@ -64,11 +65,16 @@ class User extends BaseController
     {
 
         if (Session::checkSessionKey('auth')){
-            header('Location: /blog-project/admin?auth=1');
+            header('Location: /blog-project/logged');
         }
             //afficher page de connection
         
-        $this->view('login.html.twig', ['error' => false]);
+        $this->view('login.html.twig', ['error' => false, 'user' => Session::getSessionByKey('authName')]);
+    }
+
+    public function loggedIn()
+    {
+        $this->view('admin.panel.html.twig', ['error' => false, 'login' => true, 'user' => Session::getSessionByKey('authName')]);
     }
 
     public function logout()

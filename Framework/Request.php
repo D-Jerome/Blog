@@ -10,7 +10,7 @@ class Request
 
     public function __construct(string $baseUrl)
     {  
-        $this->params = $_GET;
+        $this->params = $_GET ?: $_POST;
         $this->uri = str_replace($baseUrl,'', parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH));
         $this->method = $_SERVER['REQUEST_METHOD'];
 
