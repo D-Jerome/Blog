@@ -12,6 +12,7 @@ class Post extends BaseController
 
     public function posts()
     {
+        
         $posts = (new PostManager(Application::getDatasource()))->getAll();
 
         $this->view('admin.posts.html.twig', ['posts' => $posts ]);

@@ -6,6 +6,7 @@ use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
 use App\Model\Manager\{CategoryManager, PostManager};
 use Framework\Application;
+use Framework\Session;
 use \PDO;
 
 
@@ -14,7 +15,7 @@ class Post extends BaseController
 
     public function posts()
     {
-
+        $username=Session::getUsername();
 
         $posts = new PostManager(Application::getDatasource());
 
@@ -26,23 +27,25 @@ class Post extends BaseController
         }
            
        
-        $this->view('posts.html.twig', ['posts' => $statementPosts ]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'name' => $username ]);
     }
 
 
 
     public function post($id)
     {
+        $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
 
 
-        $this->view('post.html.twig', ['post' => $statement]);
+        $this->view('post.html.twig', ['post' => $statement, 'name' => $username]);
     }
 
     public function postsPaged()
     {
+        $username=Session::getUsername();
         $orderBy = 'created_at';
         $dir = 'DESC';
         $perPage = $_GET['perPage'] ?? 8;
@@ -74,7 +77,7 @@ class Post extends BaseController
         $get = $_GET;
         unset($get['page']);
 
-        $queryP = http_build_query($get);
+        $query = http_build_query($get);
         if (!empty($query)) {
             $uri = $uri . '?' . $query;
         }
@@ -89,6 +92,6 @@ class Post extends BaseController
         $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
 
 
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'name' => $username]);
     }
 }

@@ -5,15 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>{% block title %}Mon Projet 5{% endblock %}</title>
+    <title>{% block title %}Blog Project{% endblock %}</title>
 </head>
 
 <body class="d-flex flex-column h-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a href="#" class="navbar-brand">Mon Projet 5</a>
+    <nav class="navbar navbar-expand-lg navbar-expand-lg navbar-light bg-light ">
+        <div class="col-10">
+        <a href="/blog-project/" class="navbar-brand">Mon Projet 5</a>
         <a href="/blog-project/post" class="navbar-brand">post</a>
         <a href="/blog-project/post/list" class="navbar-brand">posts</a>
-        <a href="/blog-project/login" class="navbar-brand">Login</a>
+        </div>
+        <div class="col-2">
+        {% block login %}?{% endblock %}
+        </div>   
     </nav>
 
     <div class="container mt-4">

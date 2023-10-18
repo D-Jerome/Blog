@@ -12,50 +12,63 @@ class User extends BaseController
 
     public function loginAuth()
     {
-
+   
+        
         $users = (new UserManager(Application::getDatasource()));
         $user = $users->getByUsername($_POST['login']);
-        if (isset($user)) {
-
+        
+        if (null === ($user)) {
+            echo 'toto';
+            return $this->view('login.html.twig', ['error' => true, 'login' => false]);
+            
+        }
             // Verifier si le mot de passe correspond a l'utilisateur
             //     si ok : Mise en place de session de connexion pour l'utilisateur
             //     si nok : renvoi sur page de login avec message d'erreur
             // verification du role pour connexion à l'administration>
 
 
-
-
             // Verifier si le mot de passe correspond a l'utilisateur
-            if (password_verify($_POST['password'], $user->password)) {
-                //     si ok : Mise en place de session de connexion pour l'utilisateur
-
-                $_SESSION['auth'] = $user->getId();
-                $_SESSION['role'] = $user->getRole();
-                
-                $user->roleName = ($users->getRoleById($user->getRole()))->getRole();
-                
-                switch ($user->getRoleName()) {
-                    case 'admin':
-                        $this->view('admin.panel.html.twig', []);
-                        break;
-                    case 'editor':
-                        $this->view('editor.panel.html.twig', []);
-                        break;
-                    case 'visitor':
-                        $this->view('comment.panel.html.twig', []);
-                        break;
-                }
-            } else {
-                //     si nok : renvoi sur page de login avec message d'erreur
-                $this->view('login.html.twig', []);
+         
+        if (password_verify($_POST['password'], $user->password) ) {
+            //     si ok : Mise en place de session de connexion pour l'utilisateur
+            Session::setSessionValue('auth', $user->getId()) ;
+            Session::setSessionValue('role', $user->getRole());
+            
+            $user->roleName = ($users->getRoleById($user->getRole()))->getRole();
+            dd($_SESSION);
+            switch ($user->getRoleName()) {
+                case 'admin':
+                    return $this->view('admin.panel.html.twig', ['login' => true, 'user' => $user]);
+                    
+                case 'editor':
+                    return $this->view('editor.panel.html.twig', ['login' => true , 'user' => $user]);
+                  
+                case 'visitor':
+                    return $this->view('comment.panel.html.twig', ['login' => true , 'user' => $user]);
+                   
             }
-        }
+
+
+            //     si nok : renvoi sur page de login avec message d'erreur
+            
+        }else{
+            return $this->view('login.html.twig', ['error' => true, 'login' => false]);
+        }  
+
+        
+       
     }
 
     public function login()
     {
 
-        $this->view('login.html.twig', []);
+        if (Session::checkSessionKey('auth')){
+            header('Location: /blog-project/admin?auth=1');
+        }
+            //afficher page de connection
+        
+        $this->view('login.html.twig', ['error' => false]);
     }
 
     public function logout()

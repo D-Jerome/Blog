@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use Framework\BaseController;
+use Framework\Request;
 
 class Home extends BaseController
 {
     public function home()
     {
-        
-        $this->view('home.html.twig',['name' => 'Jerome']);        
-        
+       
+        if (isset($_GET['auth'])){
+           return $this->view('home.html.twig',['error' => true]);        
+        }
+        $this->view('home.html.twig',[]);
     }
 
     public function login()
