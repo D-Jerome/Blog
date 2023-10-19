@@ -54,13 +54,25 @@
         ]
     },
     {
-        "path" : "/admin",
+        "path" : "/admin/post",
         "controller" : "App\\Controller\\Admin\\Post",
-        "action" : "Posts",
+        "action" : "posts",
         "method" : "GET",
         "authorize": [
             "admin",
-            "editor"
+            "editor",
+            "visitor"
+        ]
+    },
+    {
+        "path" : "/admin",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "loggedIn",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
         ]
     },
     {
@@ -105,9 +117,21 @@
         ]   
     },
     {
-        "path" : "/logged",
-        "controller" : "App\\Controller\\User",
+        "path" : "/admin/logged",
+        "controller" : "App\\Controller\\Admin\\Post",
         "action" : "loggedIn",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
+    },
+    {
+        "path" : "/logout",
+        "controller" : "App\\Controller\\User",
+        "action" : "logout",
         "method" : "GET",
         "authorize": [
             "admin",

@@ -24,8 +24,9 @@ class Post extends BaseController
         foreach ($statementPosts as $statementPost){
             
             $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
         }
-           
+     
        
         $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
     }
@@ -57,6 +58,7 @@ class Post extends BaseController
         foreach ($statementPosts as $statementPost){
             
             $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
         }
         
         $count = count($posts->getAll());
@@ -93,5 +95,12 @@ class Post extends BaseController
 
 
         $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'user' => Session::getSessionByKey('authName')]);
+    }
+    public function admin()
+    {
+        
+                return $this->view(''. Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
+               
+        
     }
 }

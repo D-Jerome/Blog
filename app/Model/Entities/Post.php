@@ -13,7 +13,7 @@ class Post extends Entity
 	protected  $createdAt;
 	protected string $excerptContent;
 	protected array $categories = [];
-
+	protected int $countComments;
 
 	public function getId()
 	{
@@ -49,5 +49,10 @@ class Post extends Entity
     {
         return $this->categories;
     }
+
+	public function getCountComments(): int
+	{
+		return $this->countComments;
+	}
 
 }

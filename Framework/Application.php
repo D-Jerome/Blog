@@ -25,7 +25,7 @@ final class Application
         $action =  $foundRoute->getaction();
         $authRoles = $foundRoute->getAuthRoles();
         $route = new $controller;
-        
+
         if (!$route->isAuthorize($authRoles)) {
             header('Location: /blog-project/?auth=0');
         }

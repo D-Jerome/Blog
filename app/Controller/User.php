@@ -35,20 +35,9 @@ class User extends BaseController
             Session::setSessionValue('authName', $user->getUsername());
             Session::setSessionValue('roleName', ($users->getRoleById($user->getRole()))->getRole());
 
-            var_dump(Session::getSessionByKey('authName'));
             $user->roleName = ($users->getRoleById($user->getRole()))->getRole();
             
-            switch ($user->getRoleName()) {
-                case 'admin':
-                    return $this->view('admin.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
-                    
-                case 'editor':
-                    return $this->view('editor.panel.html.twig', ['login' => true , 'user' => Session::getSessionByKey('authName')]);
-                  
-                case 'visitor':
-                    return $this->view('comment.panel.html.twig', ['login' => true ,  'user' => Session::getSessionByKey('authName')]);
-                   
-            }
+            header('Location: /blog-project/admin/logged');
 
 
             //     si nok : renvoi sur page de login avec message d'erreur
@@ -65,20 +54,17 @@ class User extends BaseController
     {
 
         if (Session::checkSessionKey('auth')){
-            header('Location: /blog-project/logged');
+            header('Location: /blog-project/admin/logged');
         }
             //afficher page de connection
         
         $this->view('login.html.twig', ['error' => false, 'user' => Session::getSessionByKey('authName')]);
     }
 
-    public function loggedIn()
-    {
-        $this->view('admin.panel.html.twig', ['error' => false, 'login' => true, 'user' => Session::getSessionByKey('authName')]);
-    }
-
     public function logout()
     {
         session_destroy();
+
+        header('Location: /blog-project/');
     }
 }

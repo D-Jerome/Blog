@@ -32,7 +32,7 @@ class BaseController
         if (Session::checkSessionKey('auth')) {
 
             if (in_array(Session::getSessionByKey('role'), $authRoles) || $authRoles === 'all') {
-
+                var_dump($authRoles);
                 return true;
             }
         }

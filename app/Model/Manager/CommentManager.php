@@ -11,15 +11,14 @@ class PostManager extends BaseManager
 {
     public function __construct($datasource)
     {
-        parent::__construct('post', Post::class, $datasource );
+        parent::__construct('comment', Comment::class, $datasource );
     }
 	
-   public function getCategoriesById(int $id)
+   public function getCommentsByPostId(int $id)
    {
         $statement = $this->dbConnect->prepare('
-            SELECT c.* FROM category c 
-            INNER JOIN post_category pc ON pc.category_id = c.id 
-            INNER JOIN post p ON pc.post_id = p.id 
+            SELECT com.* FROM comment com 
+            INNER JOIN post p ON com.post_id = p.id 
             WHERE p.id = ?
             ');
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -27,15 +26,17 @@ class PostManager extends BaseManager
         return $statement->fetchAll();
    }
 
+
    public function getCountCommentsByPostId(int $id)
    {
         $statement = $this->dbConnect->prepare('
-            SELECT(com.id) FROM comment com 
+            SELECT count(com.id) FROM comment com 
             INNER JOIN post p ON com.post_id = p.id 
-            WHERE p.id = ? 
+            WHERE p.id = ?
             ');
+        $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
-        return $statement->rowcount();
+        return $statement->fetch();
    }
    
 }

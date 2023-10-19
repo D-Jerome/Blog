@@ -67,4 +67,16 @@ class Post extends BaseController
 
     }
 
+    public function loggedIn()
+    {     
+        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
+    }
+
+    public function logout()
+    {
+        session_destroy();
+
+        header('Location: /blog-project/');
+    }
+
 }
