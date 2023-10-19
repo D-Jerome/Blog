@@ -35,10 +35,10 @@ final class Application
 
                 $uri = (explode('-', $this->request->getUri()));
 
-                $id = array_filter($uri, function ($num) {
+                $id = current(array_filter($uri, function ($num) {
                     return is_numeric($num) == true;
-                });
-
+                }));
+                
                 $route->$action($id);
             } else {
                 $route->$action();

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
-use App\Model\Manager\{CategoryManager, PostManager};
+use App\Model\Manager\{CategoryManager, PostManager, CommentManager};
 use Framework\Application;
 use Framework\Session;
 use \PDO;
@@ -33,15 +33,15 @@ class Post extends BaseController
 
 
 
-    public function post($id)
+    public function post(int $id)
     {
        // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
-
+        $comment = new CommentManager(Application::getDatasource());
         $statement = $post->getById($id);
+        $statementComments = $comment->getCommentsByPostId($id);
 
-
-        $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName')]);
+        $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
     }
 
     public function postsPaged()

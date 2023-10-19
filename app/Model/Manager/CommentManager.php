@@ -2,27 +2,28 @@
 
 namespace App\Model\Manager;
 
-use App\Model\Entities\Post;
+use App\Model\Entities\Comment;
 use Framework\Application;
 use Framework\PDOConnection;
 use PDO;
 
-class PostManager extends BaseManager  
+class CommentManager extends BaseManager  
 {
     public function __construct($datasource)
     {
         parent::__construct('comment', Comment::class, $datasource );
     }
 	
-   public function getCommentsByPostId(int $id)
+   public function getCommentsByPostId($id)
    {
         $statement = $this->dbConnect->prepare('
             SELECT com.* FROM comment com 
             INNER JOIN post p ON com.post_id = p.id 
             WHERE p.id = ?
             ');
+            
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
-        $statement->execute([$id]);
+        $statement->execute([(int)$id]);
         return $statement->fetchAll();
    }
 
@@ -36,7 +37,7 @@ class PostManager extends BaseManager
             ');
         $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
-        return $statement->fetch();
+        return $statement->rowCount();
    }
    
 }

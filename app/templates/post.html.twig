@@ -12,5 +12,19 @@
                     </div>
                 </div>
             </div>
+            {% if comments %}
+            <h2> Commentaires </h2>
+            {% endif %}
+            {% for comment in comments %}
+            
+            <div class="col-md-10">            
+                <div class="card mb-3 bg-white bg-gradient ">
+                    <div class="card-body">
+                        <p class="car-title badge bg- text-warning">par {{ comment.user }} le {{ comment.createdAt }}</p>
+                        <p class="card-text">{{ comment.content }} </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
 {% endblock %}
