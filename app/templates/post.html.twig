@@ -6,9 +6,9 @@
             <div class="col-md-10">            
                 <div class="card mb-3 bg-secondary bg-gradient text-light">
                     <div class="card-body">
-                        <h5 class="car-title text-warning">{{ post.name }}</h5>
-                        <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
-                        <pclass="card-text">{{ post.content }} </p>
+                        <h3 class="car-title text-warning">{{ post.name }}</h3>
+                        <h4><p class="badge bg-primary text-light">par {{ post.username }} le {{ post.createdAt }}</p></h4>
+                        <p class="card-text">{{ post.content }} </p>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="col-md-10">            
                 <div class="card mb-3 bg-white bg-gradient ">
                     <div class="card-body">
-                        <p class="car-title badge bg- text-warning">par {{ comment.user }} le {{ comment.createdAt }}</p>
+                        <p class="car-title badge bg-primary text-light">par {{ comment.username }} le {{ comment.createdAt }}</p>
                         <p class="card-text">{{ comment.content }} </p>
                     </div>
                 </div>

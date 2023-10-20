@@ -37,5 +37,14 @@ class PostManager extends BaseManager
         $statement->execute([$id]);
         return $statement->rowcount();
    }
-   
+   public function getPostUsername(int $id)
+   {
+        $query = $this->dbConnect->prepare('
+            SELECT username FROM user
+            WHERE user.id = ?
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->execute([$id]);
+        return $query->fetch();
+    }  
 }

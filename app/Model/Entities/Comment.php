@@ -11,7 +11,7 @@ class Comment extends Entity
 	protected $createdAt;
 	protected int $postId;
 	protected int $userId;
-
+	protected string $userName;
 
 	public function getId()
 	{
@@ -33,9 +33,14 @@ class Comment extends Entity
 		return $this->postId;
 	}
 		
-	public function userId()
+	public function getUserId()
     {
         return $this->userId;
+    }
+
+	public function getUserName()
+    {
+        return $this->userName;
     }
 
 }

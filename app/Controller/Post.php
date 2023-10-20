@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
-use App\Model\Manager\{CategoryManager, PostManager, CommentManager};
+use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
 use Framework\Application;
 use Framework\Session;
 use \PDO;
@@ -23,10 +23,12 @@ class Post extends BaseController
         
         foreach ($statementPosts as $statementPost){
             
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->categories =  $posts->getCategoriesById($statementPost->id) ;
             $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
+            $statementPost->username =  $posts->getCategoriesById($statementPost->id) ;
+            
         }
-     
+            
        
         $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
     }
@@ -40,7 +42,12 @@ class Post extends BaseController
         $comment = new CommentManager(Application::getDatasource());
         $statement = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
-
+        foreach ($statementComments as $statementComment){
+            //dd($statementComment->getUserId());
+            $statementComment->userName = current($comment->getCommentUserName($statementComment->getUserId()));
+        }
+       
+        
         $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
     }
 
