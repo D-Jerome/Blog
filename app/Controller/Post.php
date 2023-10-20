@@ -2,84 +2,112 @@
 
 namespace App\Controller;
 
+use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
-use App\Model\Manager\PostManager;
+use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
 use Framework\Application;
+use Framework\Session;
+use \PDO;
+
 
 class Post extends BaseController
 {
+
     public function posts()
     {
+        //$username=Session::getUsername();
 
-       
         $posts = new PostManager(Application::getDatasource());
 
-        $statement = $posts->getAll();
-
+        $statementPosts = $posts->getAll();
         
-        $this->view('posts.html.twig', ['posts'=> $statement]);
+        foreach ($statementPosts as $statementPost){
+            
+            $statementPost->categories =  $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
+            $statementPost->username =  $posts->getCategoriesById($statementPost->id) ;
+            
+        }
+            
+       
+        $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
     }
 
-   
 
-    public function post($id)
+
+    public function post(int $id)
     {
+       // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
-
+        $comment = new CommentManager(Application::getDatasource());
         $statement = $post->getById($id);
-
+        $statementComments = $comment->getCommentsByPostId($id);
+        foreach ($statementComments as $statementComment){
+            //dd($statementComment->getUserId());
+            $statementComment->userName = current($comment->getCommentUserName($statementComment->getUserId()));
+        }
+       
         
-        $this->view('post.html.twig', ['post'=> $statement]);
-        
-
+        $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
     }
-    
+
     public function postsPaged()
     {
-        $orderBy = 'created_at'; 
+       //$username=Session::getUsername();
+        $orderBy = 'created_at';
         $dir = 'DESC';
-        $perPage = $_GET['perPage']?? 8;
-        $currentPage = (int)$_GET['page'] ?? 1;
-       
+        $perPage = $_GET['perPage'] ?? 8;
+        $currentPage = $_GET['page'] ?? 1;
+        $currentPage = (int)$currentPage;
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statement = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage) ;
-        $count = count($posts->getAll());
+        $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage);
+        foreach ($statementPosts as $statementPost){
+            
+            $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
+        }
         
-        if ($currentPage >= (ceil(($count/$perPage)))) {
+        $count = count($posts->getAll());
+
+        if ($currentPage >= (ceil(($count / $perPage)))) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
+        } elseif ($currentPage === 1) {
 
-        }elseif ($currentPage === 1 ) {
-            
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
-            
-        }else{
+        } else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
-           
         }
 
-        $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
+        $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         $get = $_GET;
         unset($get['page']);
-        
-        $queryP=http_build_query($get);
-        if (!empty($query)){
-                $uri = $uri . '?' . $query;
-        }
-        
-        //pagination
-            
-            $uri = explode('?',$_SERVER['REQUEST_URI'])[0];
-            $get = $_GET;
-            unset($get['page']);
-            $query=http_build_query($get);
-            $pages['previousUri'] = $uri . '?page='. ($currentPage - 1) . $query; 
-            $pages['nextUri'] = $uri . '?page='. ($currentPage + 1) . $query; 
 
+        $query = http_build_query($get);
+        if (!empty($query)) {
+            $uri = $uri . '?' . $query;
+        }
+
+        //pagination
+
+        $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $get = $_GET;
+        unset($get['page']);
+        $query = http_build_query($get);
+        $pages['previousUri'] = $uri . '?page=' . ($currentPage - 1) . $query;
+        $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
+
+
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'user' => Session::getSessionByKey('authName')]);
+    }
+    public function admin()
+    {
         
-        $this->view('posts.html.twig', ['posts'=> $statement, 'pages'=> $pages]);
+                return $this->view(''. Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
+               
+        
     }
 }

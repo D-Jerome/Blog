@@ -6,19 +6,17 @@ use Framework\BaseController;
 
 class Auth extends BaseController
 {
-    public function getConnected()
+    
+    public function getSession()
     {
-
        
-        $posts = new PostManager(Application::getDatasource());
-
-        $statement = $posts->getAll();
-
+        if (session_status() === PHP_SESSION_NONE){
+                session_start();
+        }
         
-        $this->view('posts.html.twig', ['posts'=> $statement]);
     }
 
-    public function getRole()
+    public function ()
     {
 
        

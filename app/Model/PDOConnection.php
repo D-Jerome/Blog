@@ -15,7 +15,7 @@ class PDOConnection
 
     public static function getInstance(array $datasource)
     {
-
+        
         if (empty(self::$pdoInstance) || (!isset(self::$pdoInstance))) {
             self::$pdoInstance = new PDOConnection($datasource);
         }

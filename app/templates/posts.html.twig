@@ -1,17 +1,25 @@
 
 
-{% extends './layouts/default.html.twig' %}
+{% extends './layouts/connection.html.twig' %}
 
 {% block content %} {% for post in posts %}
             
-            <div class="col-md-3">            
+            <div class="col-md-12">            
                 <div class="card mb-3 bg-primary bg-gradient text-light">
                     <div class="card-body">
                         <h5 class="car-title text-warning">{{ post.name }}</h5>
-                        <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
+                            <div>
+                                {% for category in post.categories %}                 
+                                    <span class="badge bg-info">{{ category.name }}</span>
+                                {% endfor %}   
+                            </div>
+                        <p class="text-muted text-white ">{{ post.createdAt }}</p>
                         <p class="card-text">{{ post.excerptContent }} </p>
-                        <a href="{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
+                        <a href="/blog-project/post/{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
                     </div>
+                    <button type="button" class="btn btn-light mx-auto">
+                        Commentaires <span class="badge text-bg-secondary">{{ post.countComments }}</span>
+                    </button>
                 </div>
             </div>
 

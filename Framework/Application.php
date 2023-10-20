@@ -23,27 +23,33 @@ final class Application
         }
         $controller = $foundRoute->getController();
         $action =  $foundRoute->getaction();
+        $authRoles = $foundRoute->getAuthRoles();
         $route = new $controller;
-       
-        //à refactoriser
-        if ($action === 'post'){
-            $uri = $this->request->getUri();     
-            
-            $urio=(explode('-',$uri));
-            $id = array_filter($urio, function ($num) {
-                return is_numeric($num) == true;
-            } );
-            
-            $route->$action($id);
-        }else{
-            $route->$action();
+
+        if (!$route->isAuthorize($authRoles)) {
+            header('Location: /blog-project/?auth=0');
         }
-        //
+        if ($route->isAuthorize($authRoles)) {     
+            //à refactoriser
+            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost')) {
+
+                $uri = (explode('-', $this->request->getUri()));
+
+                $id = current(array_filter($uri, function ($num) {
+                    return is_numeric($num) == true;
+                }));
+                
+                $route->$action($id);
+            } else {
+                $route->$action();
+            }
+            //
+
+        }
     }
 
     public static function getDatasource()
-    {  
+    {
         return self::$config['database'];
-
     }
 }

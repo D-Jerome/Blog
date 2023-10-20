@@ -4,7 +4,8 @@
         "controller" : "App\\Controller\\Home",
         "action" : "home",
         "method" : "GET",
-        "manager": [
+        "authorize": [
+            "all"
         ]
     },
     {
@@ -12,8 +13,8 @@
         "controller" : "App\\Controller\\Post",
         "action" : "posts",
         "method" : "GET",
-        "manager": [
-            "User"
+        "authorize": [
+            "all"
         ]
     },
     {
@@ -21,8 +22,8 @@
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",
-        "manager": [
-            "User"
+        "authorize": [
+            "all"
         ]
     },
     {
@@ -30,27 +31,115 @@
         "controller" : "App\\Controller\\Post",
         "action" : "postsPaged",
         "method" : "GET",
-        "manager": [
-            "Posts"
+        "authorize": [
+            "all"
         ]
     },
-        {
+    {
+        "path" : "/post",
+        "controller" : "App\\Controller\\Post",
+        "action" : "post",
+        "method" : "GET",
+        "authorize": [
+            "all"
+        ]
+    },
+    {
         "path" : "/login",
         "controller" : "App\\Controller\\User",
         "action" : "login",
         "method" : "GET",
-        "manager": [
-            "User"
+        "authorize": [
+            "all"
         ]
     },
     {
-        "path" : "/auth",
-        "controller" : "App\\Controller\\Auth",
-        "action" : "login",
-        "method" : "POST",
-        "manager": [
-            "User"
+        "path" : "/admin/post",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "posts",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
         ]
+    },
+    {
+        "path" : "/admin",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "loggedIn",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ]
+    },
+    {
+        "path" : "/admin/post/delete/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "deletePost",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "modifyPost",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor"
+        ] 
+    },
+    {
+        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "modifyedPost",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor"
+        ]           
+    },
+    {
+        "path" : "/login",
+        "controller" : "App\\Controller\\User",
+        "action" : "loginAuth",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]   
+    },
+    {
+        "path" : "/admin/logged",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "loggedIn",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
+    },
+    {
+        "path" : "/logout",
+        "controller" : "App\\Controller\\User",
+        "action" : "logout",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
     }
+
 
 ]

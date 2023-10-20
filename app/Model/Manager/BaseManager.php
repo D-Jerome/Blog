@@ -8,12 +8,13 @@ use PropertyNotFoundException;
 abstract class BaseManager
 {
 
-    protected object $dbConnect;
-    private string $table;
-    private  $object;
+    public object $dbConnect;
+    protected string $table;
+    public  $object;
 
     public function __construct(string $table,  $objectName, $datasource)
     {
+       
         $this->table = $table;
         $this->object = $objectName;
         $this->dbConnect = PDOConnection::getInstance($datasource);
@@ -25,9 +26,9 @@ abstract class BaseManager
         // $query = $this->dbConnect->prepare('SELECT * FROM  $this->table WHERE id =?');
         // $query->execute(array($id));
        
-        $query = $this->dbConnect->prepare('SELECT * FROM '. $this->table .' WHERE id = ' . end($id));
-        $query->execute();
+        $query = $this->dbConnect->prepare('SELECT * FROM '. $this->table .' WHERE id = ?');
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
+        $query->execute([$id]);
         return $query->fetch();
     }
 
@@ -113,14 +114,15 @@ abstract class BaseManager
         $req->execute($boundParam);
     }
 
-    public function delete($obj):bool
+    public function delete($id):bool
     {
-        if (property_exists($obj, "id")) {
-            $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id=?");
-            $query->execute(array($obj->id));
-            return true;
-        } else {
-            return false;
-        }
+            try{
+                $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= " . end($id));
+                $query->execute();
+                return true;
+            }catch ( \Exception $e){
+                dd($e->getMessage());
+                return false;
+            }    
     }
 }

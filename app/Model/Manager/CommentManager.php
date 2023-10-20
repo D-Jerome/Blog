@@ -2,42 +2,43 @@
 
 namespace App\Model\Manager;
 
-use App\Model\Entities\Post;
+use App\Model\Entities\Comment;
 use Framework\Application;
 use Framework\PDOConnection;
 use PDO;
 
-class PostManager extends BaseManager  
+class CommentManager extends BaseManager  
 {
     public function __construct($datasource)
     {
-        parent::__construct('post', Post::class, $datasource );
+        parent::__construct('comment', Comment::class, $datasource );
     }
 	
-   public function getCategoriesById(int $id)
+   public function getCommentsByPostId($id)
    {
         $statement = $this->dbConnect->prepare('
-            SELECT c.* FROM category c 
-            INNER JOIN post_category pc ON pc.category_id = c.id 
-            INNER JOIN post p ON pc.post_id = p.id 
-            WHERE p.id = ?
+            SELECT * FROM comment com 
+            WHERE com.post_id = ?
             ');
+            
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$id]);
         return $statement->fetchAll();
    }
 
+
    public function getCountCommentsByPostId(int $id)
    {
         $statement = $this->dbConnect->prepare('
-            SELECT(com.id) FROM comment com 
-            INNER JOIN post p ON com.post_id = p.id 
-            WHERE p.id = ? 
+            SELECT com.id FROM comment com 
+            WHERE p.id = ?
             ');
+        $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
-        return $statement->rowcount();
+        return $statement->rowCount();
    }
-   public function getPostUsername(int $id)
+   
+   public function getCommentUserName(int $id)
    {
         $query = $this->dbConnect->prepare('
             SELECT username FROM user
@@ -46,5 +47,6 @@ class PostManager extends BaseManager
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->execute([$id]);
         return $query->fetch();
-    }  
+
+   }
 }
