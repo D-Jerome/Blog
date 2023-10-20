@@ -38,7 +38,7 @@ class CommentManager extends BaseManager
         return $statement->rowCount();
    }
    
-   public function getCommentUserName(int $id)
+   public function getCommentUsername(int $id)
    {
         $query = $this->dbConnect->prepare('
             SELECT username FROM user

@@ -24,12 +24,11 @@ class Post extends BaseController
         foreach ($statementPosts as $statementPost){
             
             $statementPost->categories =  $posts->getCategoriesById($statementPost->id) ;
-            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username =  $posts->getCategoriesById($statementPost->id) ;
+            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);       
+            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId())) ;
             
         }
             
-       
         $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
     }
 
@@ -40,15 +39,16 @@ class Post extends BaseController
        // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
         $comment = new CommentManager(Application::getDatasource());
-        $statement = $post->getById($id);
+        $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
+        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId())) ;
         foreach ($statementComments as $statementComment){
             //dd($statementComment->getUserId());
-            $statementComment->userName = current($comment->getCommentUserName($statementComment->getUserId()));
+            $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
        
         
-        $this->view('post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
+        $this->view('post.html.twig', ['post' => $statementPost, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
     }
 
     public function postsPaged()

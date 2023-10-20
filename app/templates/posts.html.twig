@@ -13,7 +13,7 @@
                                     <span class="badge bg-info">{{ category.name }}</span>
                                 {% endfor %}   
                             </div>
-                        <p class="text-muted text-white ">{{ post.createdAt }}</p>
+                        <p class="text-muted text-white ">Par {{ post.username }} le {{ post.createdAt }}</p>
                         <p class="card-text">{{ post.excerptContent }} </p>
                         <a href="/blog-project/post/{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
                     </div>

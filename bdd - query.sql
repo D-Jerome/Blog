@@ -1,12 +1,3 @@
-CREATE TABLE post (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
-    content TEXT(650000) NOT NULL,
-    created_at DATETIME NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE category (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -18,6 +9,36 @@ CREATE TABLE role (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     role VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE user (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(60) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    role_id INT UNSIGNED DEFAULT '3',
+    PRIMARY KEY (id),
+    CONSTRAINT fk_role
+        FOREIGN KEY (role_id)
+        REFERENCES  role (id)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+) ;   
+
+CREATE TABLE post (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    content TEXT(650000) NOT NULL,
+    created_at DATETIME NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_user_post
+        FOREIGN KEY (user_id)
+        REFERENCES  user (id)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
 );
 
 CREATE TABLE post_category (
@@ -36,20 +57,6 @@ CREATE TABLE post_category (
         ON UPDATE RESTRICT    
 ) ;   
 
-CREATE TABLE user (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(60) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL,
-    role_id INT UNSIGNED DEFAULT '3',
-    PRIMARY KEY (id),
-    CONSTRAINT fk_role
-        FOREIGN KEY (role_id)
-        REFERENCES  role (id)
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION
-) ;   
 
 CREATE TABLE comment (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -58,12 +65,12 @@ CREATE TABLE comment (
     post_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user
+    CONSTRAINT fk_user_comment
         FOREIGN KEY (user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT fk_comment_post
+    CONSTRAINT fk_post_comment
         FOREIGN KEY (post_id)
         REFERENCES  post (id)
         ON DELETE CASCADE

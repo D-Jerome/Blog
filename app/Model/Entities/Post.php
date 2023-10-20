@@ -14,7 +14,8 @@ class Post extends Entity
 	protected string $excerptContent;
 	protected array $categories = [];
 	protected int $countComments;
-	protected int $username;
+	protected int $userId;
+	protected string $username;
 
 	public function getId()
 	{
@@ -41,6 +42,11 @@ class Post extends Entity
 		return $this->createdAt;
 	}
 
+	public function getUserId(): int
+	{
+		return $this->userId;
+	}
+
 	public function getExcerptContent()
 	{
 		return substr($this->content, 0, 60) . '...';
@@ -56,9 +62,10 @@ class Post extends Entity
 		return $this->countComments;
 	}
 	
-	public function getUsername(): int
+	public function getUsername(): string
 	{
 		return $this->username;
 	}
+
 
 }

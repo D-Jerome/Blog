@@ -21,10 +21,24 @@ $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
 
 $posts = [];
 $categories = [];
-$comments=[];
+$comments = [];
+
+$pdo->exec("INSERT INTO role (role) VALUES ('admin') ");
+$pdo->exec("INSERT INTO role (role) VALUES ('editor') ");
+$pdo->exec("INSERT INTO role (role) VALUES ('visitor') ");
+
+$passadmin = password_hash('admin', PASSWORD_BCRYPT);
+$passeditor = password_hash('editor', PASSWORD_BCRYPT);
+$passvisitor = password_hash('visitor', PASSWORD_BCRYPT);
+
+$pdo->exec("INSERT INTO user SET username='admin', password='$passadmin' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
+
+$pdo->exec("INSERT INTO user SET username='editor', password='$passeditor' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
+
+$pdo->exec("INSERT INTO user SET username='visitor', password='$passvisitor' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
 
 for ($i = 0; $i < 50; $i++) {
-    $pdo->exec("INSERT INTO post SET name='{$faker->sentence()}', slug='{$faker->slug()}', created_at='{$faker->date()} {$faker->time()}', content='{$faker->paragraphs(rand(3, 15), true)}'");
+    $pdo->exec("INSERT INTO post SET name='{$faker->sentence()}', slug='{$faker->slug()}', created_at='{$faker->date()} {$faker->time()}', content='{$faker->paragraphs(rand(3, 15), true)}', user_id='{$faker->numberBetween(1, 3)}'");
     $posts[] = $pdo->lastInsertId();
 }
 
@@ -40,23 +54,7 @@ foreach ($posts as $post) {
     }
 }
 
-$pdo->exec("INSERT INTO role (role) VALUES ('admin') ");
-$pdo->exec("INSERT INTO role (role) VALUES ('editor') ");
-$pdo->exec("INSERT INTO role (role) VALUES ('visitor') ");
-
-
-$passadmin = password_hash('admin', PASSWORD_BCRYPT);
-$passeditor = password_hash('editor', PASSWORD_BCRYPT);
-$passvisitor = password_hash('visitor', PASSWORD_BCRYPT);
-$pdo->exec("INSERT INTO user SET username='admin', password='$passadmin' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
-
-$pdo->exec("INSERT INTO user SET username='editor', password='$passeditor' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
-
-$pdo->exec("INSERT INTO user SET username='visitor', password='$passvisitor' , email='{$faker->email()}, ' , created_at='{$faker->date()} {$faker->time()}'");
-
-
 for ($i = 0; $i < 50; $i++) {
     $pdo->exec("INSERT INTO comment SET created_at='{$faker->date()} {$faker->time()}', content='{$faker->paragraphs(rand(1, 4), true)}', post_id='{$faker->numberBetween(1, 50)}', user_id = '{$faker->numberBetween(1, 3)}';");
     $comments[] = $pdo->lastInsertId();
 }
-

@@ -66,7 +66,7 @@
     },
     {
         "path" : "/admin",
-        "controller" : "App\\Controller\\Admin\\Post",
+        "controller" : "App\\Controller\\Admin\\Auth",
         "action" : "loggedIn",
         "method" : "GET",
         "authorize": [
@@ -118,7 +118,7 @@
     },
     {
         "path" : "/admin/logged",
-        "controller" : "App\\Controller\\Admin\\Post",
+        "controller" : "App\\Controller\\Admin\\Auth",
         "action" : "loggedIn",
         "method" : "GET",
         "authorize": [

@@ -37,6 +37,7 @@ class PostManager extends BaseManager
         $statement->execute([$id]);
         return $statement->rowcount();
    }
+   
    public function getPostUsername(int $id)
    {
         $query = $this->dbConnect->prepare('
