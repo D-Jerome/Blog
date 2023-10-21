@@ -31,4 +31,29 @@ class UserManager extends BaseManager
         $statement->execute([$id]);
         return $statement->fetch();
     }
+    
+    public function insertNewUser(array $params)
+    {
+        $query = $this->dbConnect->prepare('
+            INSERT INTO ' . $this->table . '(username, email , password, created_at, role_id ) 
+            VALUES (:username, :email , :password, :created_at, :role_id)
+        ');
+        
+        if (isset($params['password'])){
+            $password = password_hash($params['password'], PASSWORD_BCRYPT);
+        }else{
+            $password = password_hash('default',PASSWORD_BCRYPT);
+        }
+        
+        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $query->bindParam(':username', $params['username']);
+        $query->bindParam(':email', $params['email']);
+        $query->bindParam(':password', $password);
+        $query->bindParam(':created_at', $created_at);
+        $query->bindParam(':role_id', $params['roleId']);
+        $query->execute();
+
+        return $this->dbConnect->lastInsertId();
+    }
 }

@@ -4,10 +4,10 @@
 {% if user %}
 <div class="btn-group dropstart">
     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    {{ user }}
+    {{ user.name }}
     </button>
     <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="/blog-project/admin/profil">Profil</a></li>
+        <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ user.name }}-{{ user.id }}">Profil</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="/blog-project/admin/logged">Administration</a></li>
         <li><hr class="dropdown-divider"></li>

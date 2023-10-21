@@ -66,6 +66,7 @@ class Post extends BaseController
             
             $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
+            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId())) ;
         }
         
         $count = count($posts->getAll());

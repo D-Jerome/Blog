@@ -31,11 +31,11 @@ class User extends BaseController
         if (password_verify($_POST['password'], $user->password) ) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
             Session::setSessionValue('auth', $user->getId()) ;
-            Session::setSessionValue('role', $user->getRole());
+            Session::setSessionValue('role', $user->getRoleId());
             Session::setSessionValue('authName', $user->getUsername());
-            Session::setSessionValue('roleName', ($users->getRoleById($user->getRole()))->getRole());
+            Session::setSessionValue('roleName', ($users->getRoleById($user->getRoleId()))->getRole());
 
-            $user->roleName = ($users->getRoleById($user->getRole()))->getRole();
+            $user->roleName = ($users->getRoleById($user->getRoleId()))->getRole();
             
             header('Location: /blog-project/admin/logged');
 

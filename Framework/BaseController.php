@@ -30,9 +30,8 @@ class BaseController
     public function isAuthorize(array $authRoles)
     {
         if (Session::checkSessionKey('auth')) {
-
-            if (in_array(Session::getSessionByKey('role'), $authRoles) || $authRoles === 'all') {
-                var_dump($authRoles);
+           
+            if (in_array(Session::getSessionByKey('roleName'), $authRoles) || in_array('all', $authRoles )) {
                 return true;
             }
         }

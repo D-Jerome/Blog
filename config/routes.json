@@ -54,14 +54,13 @@
         ]
     },
     {
-        "path" : "/admin/post",
+        "path" : "/admin/posts",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "posts",
         "method" : "GET",
         "authorize": [
             "admin",
-            "editor",
-            "visitor"
+            "editor"
         ]
     },
     {
@@ -71,8 +70,8 @@
         "method" : "GET",
         "authorize": [
             "admin",
-            "editor",
-            "visitor"
+            "editor"
+            
         ]
     },
     {
@@ -97,7 +96,7 @@
     {
         "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
         "controller" : "App\\Controller\\Admin\\Post",
-        "action" : "modifyedPost",
+        "action" : "updatedPost",
         "method" : "POST",
         "authorize": [
             "admin",
@@ -105,14 +104,31 @@
         ]           
     },
     {
+        "path" : "/admin/post/new",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "addPost",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor"
+        ] 
+    },
+    {
+        "path" : "/admin/post/new",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "addedPost",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor"
+        ] 
+    },
+    {
         "path" : "/login",
         "controller" : "App\\Controller\\User",
         "action" : "loginAuth",
         "method" : "POST",
         "authorize": [
-            "admin",
-            "editor",
-            "visitor",
             "all"
         ]   
     },
@@ -124,9 +140,58 @@
         "authorize": [
             "admin",
             "editor",
-            "visitor",
-            "all"
+            "visitor"
+
         ]             
+    },
+    {
+        "path" : "/admin/users",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "userList",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ]             
+    },
+    {
+        "path" : "/admin/user/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "modifyUser",
+        "method" : "GET",
+        "authorize": [
+            "admin",           
+            "editor",
+            "visitor"
+        ]             
+    },
+    {
+        "path" : "/admin/user/delete/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "deleteUser",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]             
+    },
+    {
+        "path" : "/admin/user/new",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "adduser",
+        "method" : "GET",
+        "authorize": [
+            "all"
+        ] 
+    },
+    {
+        "path" : "/admin/user/new",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "addedUser",
+        "method" : "POST",
+        "authorize": [
+            "all"
+        ] 
     },
     {
         "path" : "/logout",

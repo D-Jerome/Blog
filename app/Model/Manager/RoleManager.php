@@ -2,7 +2,7 @@
 
 namespace App\Model\Manager;
 
-use App\Model\Entities\Category;
+use App\Model\Entities\Role;
 use Framework\PDOConnection;
 use PDO;
 

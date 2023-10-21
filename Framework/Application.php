@@ -31,7 +31,7 @@ final class Application
         }
         if ($route->isAuthorize($authRoles)) {     
             //à refactoriser
-            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost')) {
+            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost') || ($action === 'deleteUser') || ($action === 'modifyUser')  ) {
 
                 $uri = (explode('-', $this->request->getUri()));
 
@@ -52,4 +52,6 @@ final class Application
     {
         return self::$config['database'];
     }
+
+    
 }

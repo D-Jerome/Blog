@@ -117,8 +117,8 @@ abstract class BaseManager
     public function delete($id):bool
     {
             try{
-                $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= " . end($id));
-                $query->execute();
+                $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= ?");
+                $query->execute([$id]);
                 return true;
             }catch ( \Exception $e){
                 dd($e->getMessage());

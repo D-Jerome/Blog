@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+
 use Framework\BaseController;
 use Framework\Session;
 
@@ -9,7 +10,11 @@ class Auth extends BaseController
 {
     public function loggedIn()
     {     
-        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => $user]);
     }
 
     public function logout()

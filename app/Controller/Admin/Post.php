@@ -3,9 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Post as ControllerPost;
+use App\Model\Manager\CategoryManager;
 use App\Model\Manager\PostManager;
 use Framework\Application;
 use Framework\BaseController;
+use Framework\Request;
 use Framework\Session;
 
 class Post extends BaseController
@@ -14,9 +16,16 @@ class Post extends BaseController
     public function posts()
     {
         
-        $posts = (new PostManager(Application::getDatasource()))->getAll();
-
-        $this->view('admin.posts.html.twig', ['posts' => $posts , 'user' => Session::getSessionByKey('authName')]);
+        $posts = (new PostManager(Application::getDatasource()));
+        $statementPosts = $posts->getAll();
+        foreach ($statementPosts as $statementPost){
+        $statementPost->username = current($posts->getPostUsername($statementPost->getUserId())) ;
+        }
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        $this->view('admin.posts.html.twig', ['posts' => $statementPosts , 'user' => $user]);
         
 
     }
@@ -28,19 +37,52 @@ class Post extends BaseController
         header('Location: /blog-project/admin');
     }
 
+    public function addPost()
+    {
+        $category = new CategoryManager(Application::getDatasource());
+        $statementCategories = $category->getAll();
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+            
+        $this->view('add.post.html.twig', ['categories' => $statementCategories , 'user' => $user ]);
+
+    }
+
+    public function addedPost()
+    {      
+        $post = new PostManager(Application::getDatasource());
+        $request = new Request("/blog-project/");
+    
+        $post->insertNewPost($request->getParams());
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        
+
+        $statement = '';
+        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => $user]);
+
+    }
+    
     public function modifyPost($id)
     {
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
-        
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
        
 
-        $this->view('modify.post.html.twig', ['post' => $statement , 'user' => Session::getSessionByKey('authName')]);
+        $this->view('modify.post.html.twig', ['post' => $statement , 'user' => $user]);
 
     }
 
-    public function modifyedPost($id)
+    public function updatedPost($id)
     {      
         $post = new PostManager(Application::getDatasource());
 
@@ -62,8 +104,11 @@ class Post extends BaseController
             //update date
             echo 'modification';
         }
-
-        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => Session::getSessionByKey('authName')]);
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => $user]);
 
     }
 

@@ -2,9 +2,13 @@
 
 namespace App\Model\Manager;
 
+
 use App\Model\Entities\Post;
+use DateTime;
 use Framework\Application;
+use Framework\Helpers\Text;
 use Framework\PDOConnection;
+use Framework\Request;
 use PDO;
 
 class PostManager extends BaseManager  
@@ -48,4 +52,37 @@ class PostManager extends BaseManager
         $query->execute([$id]);
         return $query->fetch();
     }  
+
+    public function insertNewPost(array $params)
+    {
+        $query = $this->dbConnect->prepare('
+            INSERT INTO ' . $this->table . '(name , slug, content, created_at, user_id) 
+            VALUES (:name , :slug , :content, :created_at, :user_id)
+        ');
+        
+        $slug = Text::toSlug($params['name']);
+        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $query->bindParam(':name', $params['name']);
+        $query->bindParam(':slug', $slug);
+        $query->bindParam(':content', $params['content']);
+        $query->bindParam(':created_at', $created_at);
+        $query->bindParam(':user_id', $params['userId']);
+        $query->execute();
+
+        $postId = $this->dbConnect->lastInsertId();
+        $categories = $params['categoryId'];
+        foreach ($categories as $category){
+            $query = $this->dbConnect->prepare('
+                INSERT INTO post_category (post_id, category_id) 
+                VALUES (:post_id , :category_id)
+                ');
+        $query->bindParam(':post_id', $postId);
+        $query->bindParam(':category_id', $category);
+        $query->execute();
+
+        }
+
+
+    }
 }

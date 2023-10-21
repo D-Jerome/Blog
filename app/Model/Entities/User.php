@@ -6,6 +6,7 @@ class User extends Entity
 {
 	protected int $id;
 	protected string $username;
+	protected string $email;
 	protected string $password;
 	protected $createdAt;
 	protected int $roleId;
@@ -21,6 +22,11 @@ class User extends Entity
 		return $this->username;
 	}
 
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
 	public function getPassword()
 	{
 		return $this->password;
@@ -31,7 +37,7 @@ class User extends Entity
 		return $this->createdAt;
 	}
 
-	public function getRole()
+	public function getRoleId()
 	{
 		return $this->roleId;
 	}

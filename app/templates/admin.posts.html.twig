@@ -3,6 +3,7 @@
 
 {% block content %}    
 <h1>Administration des articles</h1>         
+            <a href="/blog-project/admin/post/new" class="btn btn-primary">Ajouter un article</a>
             <table class="table">
                 <thead>
                     <tr>
@@ -10,6 +11,7 @@
                         <th scope="col">Titre</th>
                         <th scope="col">Extrait</th>
                         <th scope="col">Publié le </th>
+                        <th scope="col">Par</th>
                         <th scope="col"> </th>
                     </tr>
                 </thead>
@@ -20,7 +22,9 @@
                         <td>{{ post.name }}</td>
                         <td>{{ post.excerptContent }}</td>
                         <td>{{ post.createdAt }}</td>
-                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> <a href="/blog-project/admin/post/delete/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
+                        <td>{{ post.username }}</td>
+                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> 
+                        <a href="/blog-project/admin/post/delete/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
                     </tr>
                     {% endfor %}
                 </tbody>
