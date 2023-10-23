@@ -1,13 +1,14 @@
 {% extends './layouts/default.html.twig' %}
 
 {% block login %}
-{% if user %}
+{% if authUser.id != false  %}
+
 <div class="btn-group dropstart">
     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    {{ user.name }}
+    {{ authUser.name }}
     </button>
     <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ user.name }}-{{ user.id }}">Profil</a></li>
+        <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}-{{ authUser.id }}">Profil</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="/blog-project/admin/logged">Administration</a></li>
         <li><hr class="dropdown-divider"></li>
@@ -15,7 +16,14 @@
     </ul>
 </div>
 {% else %}
-    <a href="/blog-project/login" class="navbar-brand">se connecter</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="/blog-project/signup" class="nav-link">Inscrivez-vous</a>
+        </li>
+        <li class="nav-item">
+            <a href="/blog-project/login" class="nav-link">Identifiez-vous</a>
+        </li>    
+    </ul>    
 {% endif %}
 
 {% endblock %}

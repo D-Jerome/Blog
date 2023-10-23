@@ -194,6 +194,46 @@
         ] 
     },
     {
+        "path" : "/admin/comment/add/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "addComment",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ] 
+    },
+    {
+        "path" : "/admin/comment/add/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "addedComment",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ] 
+    },
+    {
+        "path" : "/signup",
+        "controller" : "App\\Controller\\User",
+        "action" : "signUp",
+        "method" : "GET",
+        "authorize": [
+            "all"
+        ] 
+    },
+    {
+        "path" : "/signup",
+        "controller" : "App\\Controller\\User",
+        "action" : "validationSignUp",
+        "method" : "POST",
+        "authorize": [
+            "all"
+        ] 
+    },
+    {
         "path" : "/logout",
         "controller" : "App\\Controller\\User",
         "action" : "logout",

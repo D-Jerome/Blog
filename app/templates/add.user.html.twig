@@ -10,7 +10,7 @@
                     <label id="username">Identifiant</label>
                     <input class="form-control" type="text" id="username"  name="username" value="">
                 </div>
-                {% if user.role == "admin" %}
+                {% if authUser.role == "admin" %}
                     <div class="form-group bg-light">
                     Role:
                     {% for role in roles %}

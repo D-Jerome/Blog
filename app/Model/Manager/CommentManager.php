@@ -2,6 +2,7 @@
 
 namespace App\Model\Manager;
 
+use App\Helpers\Text;
 use App\Model\Entities\Comment;
 use Framework\Application;
 use Framework\PDOConnection;
@@ -49,4 +50,22 @@ class CommentManager extends BaseManager
         return $query->fetch();
 
    }
+
+   public function insertNewComment(array $params)
+   {
+        $query = $this->dbConnect->prepare('
+            INSERT INTO ' . $this->table . '(content, created_at, post_id, user_id) 
+            VALUES (:content, :created_at, :post_id, :user_id)
+        ');
+        
+        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $query->bindParam(':content', $params['content']);
+        $query->bindParam(':created_at', $created_at);
+        $query->bindParam(':post_id', $params['postId']);
+        $query->bindParam(':user_id', $params['userId']);
+        $query->execute();
+
+   }
+
 }

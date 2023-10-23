@@ -34,10 +34,18 @@ class UserManager extends BaseManager
     
     public function insertNewUser(array $params)
     {
-        $query = $this->dbConnect->prepare('
-            INSERT INTO ' . $this->table . '(username, email , password, created_at, role_id ) 
-            VALUES (:username, :email , :password, :created_at, :role_id)
-        ');
+        
+        if(isset($params['roleId'])){
+            $query = $this->dbConnect->prepare('
+                INSERT INTO ' . $this->table . '(username, email , password, created_at, role_id ) 
+                VALUES (:username, :email , :password, :created_at, :role_id)
+            ');
+        }else{
+            $query = $this->dbConnect->prepare('
+                INSERT INTO ' . $this->table . '(username, email , password, created_at ) 
+                VALUES (:username, :email , :password, :created_at)
+            ');
+        }    
         
         if (isset($params['password'])){
             $password = password_hash($params['password'], PASSWORD_BCRYPT);
@@ -46,12 +54,15 @@ class UserManager extends BaseManager
         }
         
         $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
-
+         
         $query->bindParam(':username', $params['username']);
         $query->bindParam(':email', $params['email']);
         $query->bindParam(':password', $password);
         $query->bindParam(':created_at', $created_at);
-        $query->bindParam(':role_id', $params['roleId']);
+        if(isset($params['roleId'])){
+            $query->bindParam(':role_id', $params['roleId']);
+        }
+                
         $query->execute();
 
         return $this->dbConnect->lastInsertId();

@@ -12,6 +12,20 @@
                     </div>
                 </div>
             </div>
+            <h1>Ajout d'un commentaire</h1>
+            <div class="col border border-dark"> 
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label id="content">Contenu du commentaire</label>
+                        <textarea class="form-control" rows="8" id="content" name="content" ></textarea>
+                    </div>
+                <input type="hidden" name="userId" id="hiddenUser" value="{{ authUser.id}}" />
+                <input type="hidden" name="postId" id="hiddenPost" value="{{ post.id}}" />
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+
+                
+                </form> 
+            </div>     
             {% if comments %}
             <h2> Commentaires </h2>
             {% endif %}
@@ -32,4 +46,5 @@
                 <div class="col-1 mx-auto p-2">ou</div>
                 <a href="/blog-project/login" class="btn btn-warning btn-outline-primary mx-auto p-2 mb-3 w-100">Identifiez-vous</a>
             </div>
+
 {% endblock %}

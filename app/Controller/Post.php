@@ -28,8 +28,12 @@ class Post extends BaseController
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId())) ;
             
         }
-            
-        $this->view('posts.html.twig', ['posts' => $statementPosts , 'user' => Session::getSessionByKey('authName')]);
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        
+        $this->view('posts.html.twig', ['posts' => $statementPosts , 'authUser' => $user ]);
     }
 
 
@@ -46,9 +50,12 @@ class Post extends BaseController
             //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
-       
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
         
-        $this->view('post.html.twig', ['post' => $statementPost, 'user' => Session::getSessionByKey('authName'), 'comments' => $statementComments]);
+        $this->view('post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
     public function postsPaged()
@@ -100,15 +107,25 @@ class Post extends BaseController
         $query = http_build_query($get);
         $pages['previousUri'] = $uri . '?page=' . ($currentPage - 1) . $query;
         $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
 
-
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'user' => Session::getSessionByKey('authName')]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'authUser' => $user]);
     }
     public function admin()
     {
-        
-                return $this->view(''. Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => Session::getSessionByKey('authName')]);
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+                return $this->view(''. Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
                
         
     }
+
+   
+
+
 }

@@ -4,7 +4,8 @@ namespace App\Controller;
 
 
 use App\Model\Manager\UserManager;
-use Framework\{Application, Session};
+use Exception;
+use Framework\{Application, Request, Session};
 use Framework\BaseController;
 
 class User extends BaseController
@@ -16,8 +17,11 @@ class User extends BaseController
         $user = $users->getByUsername($_POST['login']);
        
         if (null === ($user)) {
-       
-            return $this->view('login.html.twig', ['error' => true, 'login' => false , 'user' => Session::getSessionByKey('authName')]);
+            $user = [
+                'name'=> Session::getSessionByKey('authName'),
+                'id'=> Session::getSessionByKey('auth')
+            ];
+            return $this->view('login.html.twig', ['error' => true, 'login' => false , 'authUser' => $user]);
             
         }
             // Verifier si le mot de passe correspond a l'utilisateur
@@ -39,11 +43,14 @@ class User extends BaseController
             
             header('Location: /blog-project/admin/logged');
 
-
+            $user = [
+                'name'=> Session::getSessionByKey('authName'),
+                'id'=> Session::getSessionByKey('auth')
+            ];
             //     si nok : renvoi sur page de login avec message d'erreur
             
         }else{
-            return $this->view('login.html.twig', ['error' => true, 'login' => false, 'user' => Session::getSessionByKey('authName')]);
+            return $this->view('login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user ]);
         }  
 
         
@@ -56,9 +63,58 @@ class User extends BaseController
         if (Session::checkSessionKey('auth')){
             header('Location: /blog-project/admin/logged');
         }
-            //afficher page de connection
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];    //afficher page de connection
         
-        $this->view('login.html.twig', ['error' => false, 'user' => Session::getSessionByKey('authName')]);
+        $this->view('login.html.twig', ['error' => false, 'authUser' => $user]);
+    }
+
+    public function signUp()
+    {
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth')
+        ];
+        
+        $this->view('signup.html.twig', ['error' => false, 'authUser' => $user]);
+    }
+    
+    public function validationSignUp()
+    {
+        $error = false;
+        $postdatas = (new Request('blog-project'))->getParams();
+        foreach ($postdatas as $k => $data){
+            if (null === $data){
+                $error = true;
+                //throw Exception;
+            }
+            
+            if (str_contains($k,"password") && !preg_match("|^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$|", $data)){
+                // erreur
+                $error = true;
+            }
+        }
+        $users = new UserManager(Application::getDatasource());
+       
+        if ($users->getByUsername($postdatas['username'])){
+            $error = true;
+        }
+        
+        if ($postdatas['password'] !==$postdatas['confirmPassword']){
+            $error = true;
+
+        }
+        
+        if ($error){
+            unset($postdatas['password']);
+            unset($postdatas['confirmPassword']);
+            $this->view('signup.html.twig', ['error' => true, 'data' => $postdatas]);
+        }else{
+            $users->insertNewUser($postdatas);
+            header('Location: /blog-project/');
+        }
     }
 
     public function logout()

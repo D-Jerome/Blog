@@ -21,7 +21,7 @@ class User extends BaseController
             'name' => Session::getSessionByKey('authName'),
             'id' => Session::getSessionByKey('auth')
         ];
-        $this->view('admin.users.html.twig', ['registredUsers' => $statementUsers, 'user' => $user]);
+        $this->view('admin.users.html.twig', ['registredUsers' => $statementUsers, 'authUser' => $user]);
     }
 
     public function modifyUser($id)
@@ -35,7 +35,7 @@ class User extends BaseController
         ];
        
 
-        $this->view('modify.user.html.twig', ['users' => $statement , 'user' => $user]);
+        $this->view('modify.user.html.twig', ['users' => $statement , 'authUser' => $user]);
 
     }
     
@@ -56,7 +56,7 @@ class User extends BaseController
             'role' => Session::getSessionByKey('roleName')
         ];
             
-        $this->view('add.user.html.twig', ['roles' => $statementRoles , 'user' => $user ]);
+        $this->view('add.user.html.twig', ['roles' => $statementRoles , 'authUser' => $user ]);
 
     }
 
@@ -74,7 +74,7 @@ class User extends BaseController
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 
-        $this->view('modify.user.html.twig', ['users' => $statementUser, 'user' => $user]);
+        $this->view('modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
 
     }
 }

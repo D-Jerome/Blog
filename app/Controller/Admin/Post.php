@@ -4,35 +4,34 @@ namespace App\Controller\Admin;
 
 use App\Controller\Post as ControllerPost;
 use App\Model\Manager\CategoryManager;
-use App\Model\Manager\PostManager;
+use App\Model\Manager\{PostManager, CommentManager};
 use Framework\Application;
 use Framework\BaseController;
 use Framework\Request;
 use Framework\Session;
+
 
 class Post extends BaseController
 {
 
     public function posts()
     {
-        
+
         $posts = (new PostManager(Application::getDatasource()));
         $statementPosts = $posts->getAll();
-        foreach ($statementPosts as $statementPost){
-        $statementPost->username = current($posts->getPostUsername($statementPost->getUserId())) ;
+        foreach ($statementPosts as $statementPost) {
+            $statementPost->username = current($posts->getPostUsername($statementPost->getUserId()));
         }
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-        $this->view('admin.posts.html.twig', ['posts' => $statementPosts , 'user' => $user]);
-        
-
+        $this->view('admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
     public function deletePost($id)
     {
-        
+
         (new PostManager(Application::getDatasource()))->delete($id);
         header('Location: /blog-project/admin');
     }
@@ -42,76 +41,107 @@ class Post extends BaseController
         $category = new CategoryManager(Application::getDatasource());
         $statementCategories = $category->getAll();
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-            
-        $this->view('add.post.html.twig', ['categories' => $statementCategories , 'user' => $user ]);
 
+        $this->view('add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
 
     public function addedPost()
-    {      
+    {
         $post = new PostManager(Application::getDatasource());
         $request = new Request("/blog-project/");
-    
+
         $post->insertNewPost($request->getParams());
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-        
+
 
         $statement = '';
-        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => $user]);
-
+        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
-    
+
     public function modifyPost($id)
     {
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-       
 
-        $this->view('modify.post.html.twig', ['post' => $statement , 'user' => $user]);
 
+        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
     public function updatedPost($id)
-    {      
+    {
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
         $modification = false;
         // dd($_POST, $statement);
-        if ($_POST['content'] != $statement->getContent()){
-            echo 'corps';//update du content
+        if ($_POST['content'] != $statement->getContent()) {
+            echo 'corps'; //update du content
             $modification = true;
         }
         // dd($_POST['name'], $statement->getName());
-        if ($_POST['name'] !== $statement->getName()){
+        if ($_POST['name'] !== $statement->getName()) {
             echo 'titre';
-            
+
             //update du name
             $modification = true;
         }
-        if ($modification){
+        if ($modification) {
             //update date
             echo 'modification';
         }
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-        $this->view('modify.post.html.twig', ['post' => $statement, 'user' => $user]);
-
+        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    
+    public function addComment($id)
+    {
+        // $username=Session::getUsername();
+        $post = new PostManager(Application::getDatasource());
+        $comment = new CommentManager(Application::getDatasource());
+        $statementPost = $post->getById($id);
+        $statementComments = $comment->getCommentsByPostId($id);
+        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        foreach ($statementComments as $statementComment) {
+            //dd($statementComment->getUserId());
+            $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
+        }
+        $user = [
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
+        ];
 
+        $this->view('add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+    }
+
+    public function addedComment($id)
+    {
+
+        $comment = new CommentManager(Application::getDatasource());
+        $request = new Request("/blog-project/");
+
+        $comment->insertNewComment($request->getParams());
+        $user = [
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
+        ];
+
+        $post = new PostManager(Application::getDatasource());
+        $statementPost = $post->getById($id);
+        $slug = $statementPost->getSlug();
+        Header("Location: /blog-project/post/$slug-$id");
+    }
 }

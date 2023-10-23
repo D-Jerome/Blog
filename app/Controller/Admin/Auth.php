@@ -14,7 +14,7 @@ class Auth extends BaseController
             'name'=> Session::getSessionByKey('authName'),
             'id'=> Session::getSessionByKey('auth')
         ];
-        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'user' => $user]);
+        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
     public function logout()

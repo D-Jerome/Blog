@@ -31,7 +31,7 @@ final class Application
         }
         if ($route->isAuthorize($authRoles)) {     
             //à refactoriser
-            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost') || ($action === 'deleteUser') || ($action === 'modifyUser')  ) {
+            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost') || ($action === 'deleteUser') || ($action === 'modifyUser') || ($action === 'addComment') || ($action === 'addedComment')) {
 
                 $uri = (explode('-', $this->request->getUri()));
 

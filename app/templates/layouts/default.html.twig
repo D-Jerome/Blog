@@ -10,19 +10,29 @@
 </head>
 
 <body class=" d-flex flex-column ">
-    <nav class="navbar navbar-expand-lg navbar-expand-lg navbar-light bg-light fixed-top">
-        <ul class="col-10">
-        <a href="/blog-project/" class="navbar-brand">Mon Projet 5</a>
-        <a href="/blog-project/post" class="navbar-brand">post</a>
-        <a href="/blog-project/post/list" class="navbar-brand">posts</a>
-        </ul>
-        <ul class="col-2">
-        {% block login %}?{% endblock %}
-        </ul>   
+    <nav class="row navbar navbar-expand-lg navbar-expand-lg navbar-light bg-light fixed-top justify-content-between">
+        <div class="col-4">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/blog-project/" class="navbar-brand">Mon Projet 5</a>
+                </li>    
+                <li class="nav-item">
+                    <a href="/blog-project/post" class="nav-link">post</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/blog-project/post/list" class="nav-link">posts</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-3 me-2">
+            <ul class="navbar-nav">
+                {% block login %}?{% endblock %}
+            </ul> 
+        </div>
     </nav>
-    <div class="container mt-5"><hr></div>
-    <div class="container mt-5">
-        <div class="row">
+        <div class="container mt-5"><hr></div>
+        <div class="container mt-5">
+            <div class="row">
 
         {% block content %}{% endblock %}
          </div>
