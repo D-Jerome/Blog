@@ -1,0 +1,31 @@
+
+{% extends './layouts/connection.html.twig' %}
+
+{% block content %}    
+<h1>Administration des commentaires</h1>         
+            <a href="/blog-project/admin/comment/new" class="btn btn-primary">Ajouter un commentaire</a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Extrait</th>
+                        <th scope="col">Publié le </th>
+                        <th scope="col">Par</th>
+
+                        <th scope="col"> Post </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments %}
+                    <tr>
+                        <th scope="row">{{ comment.id }}</th>
+                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.createdAt }}</td>
+                        <td>{{ comment.username }}</td>
+                        <td><a href="/blog-project/admin/comment/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> 
+                        <a href="/blog-project/admin/comment/delete/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+{% endblock %}

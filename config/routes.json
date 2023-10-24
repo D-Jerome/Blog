@@ -64,6 +64,17 @@
         ]
     },
     {
+        "path" : "/admin/comments",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "comments",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ]
+    },
+    {
         "path" : "/admin",
         "controller" : "App\\Controller\\Admin\\Auth",
         "action" : "loggedIn",

@@ -51,6 +51,21 @@ class CommentManager extends BaseManager
 
    }
 
+   public function getCommentsByUserId(int $id)
+   {
+        $query = $this->dbConnect->prepare("
+            SELECT * FROM  $this->table 
+            WHERE user_id = :user_id
+        ");
+        
+        $query->setFetchMode(PDO::FETCH_CLASS, $this->object);
+        $query->bindParam(':user_id', $id);
+        $query->execute();
+
+        return $query->fetchAll() ;
+
+   }
+
    public function insertNewComment(array $params)
    {
         $query = $this->dbConnect->prepare('
