@@ -87,22 +87,26 @@ class User extends BaseController
         $postdatas = (new Request('blog-project'))->getParams();
         foreach ($postdatas as $k => $data){
             if (null === $data){
+                die("valeurs non authorisées");
                 $error = true;
                 //throw Exception;
             }
             
-            if (str_contains($k,"password") && !preg_match("|^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[-+!*$@%_])([-+!*$@%_\w]{8,})$|", $data)){
+            if (str_contains($k,"password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)){
                 // erreur
+                die("le mot de passe ne correspond pas à la politique de mot de passe ");
                 $error = true;
             }
         }
         $users = new UserManager(Application::getDatasource());
        
         if ($users->getByUsername($postdatas['username'])){
+            die( "l'identifiant est indisponible");
             $error = true;
         }
         
         if ($postdatas['password'] !==$postdatas['confirmPassword']){
+            die("les mots de passe sont différents ");
             $error = true;
 
         }

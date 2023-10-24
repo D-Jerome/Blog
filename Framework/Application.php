@@ -29,9 +29,10 @@ final class Application
         if (!$route->isAuthorize($authRoles)) {
             header('Location: /blog-project/?auth=0');
         }
+        
         if ($route->isAuthorize($authRoles)) {     
             //à refactoriser
-            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifyedPost') || ($action === 'deleteUser') || ($action === 'modifyUser') || ($action === 'addComment') || ($action === 'addedComment')) {
+            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifiedPost') || ($action === 'deleteUser') || ($action === 'modifyUser') || ($action === 'modifiedUser') || ($action === 'addComment') || ($action === 'addedComment')) {
 
                 $uri = (explode('-', $this->request->getUri()));
 

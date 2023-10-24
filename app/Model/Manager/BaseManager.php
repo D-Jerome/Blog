@@ -90,27 +90,32 @@ abstract class BaseManager
     public function update($obj, $param)
     {
         $sql = "UPDATE " . $this->table . " SET ";
-        foreach($param as $paramName)
+        foreach($param as $paramName => $paramValue)
         {
-            $sql = $sql . $paramName . " = ?, ";
+            if ($paramName !== 'id'){
+                $sql = $sql . $paramName . " = ?, ";
+            }    
         }
         $sql = $sql . " WHERE id = ? ";
         $req = $this->dbConnect->prepare($sql);
-        
+       
         $param[] = 'id';
         $boundParam = array();
-        foreach($param as $paramName)
+        foreach($param as $paramName => $paramValue)
         {
-            if(property_exists($obj,$paramName))
-            {
-                $boundParam[$paramName] = $obj->$paramName;	
-            }
-            else
-            {
-                throw new PropertyNotFoundException($this->object,$paramName);	
-            }
+            if ($paramName !== 'id' || $paramName !== 0 ){
+                
+                if(property_exists($obj,$paramName))
+                {   
+                    $boundParam[$paramName] = $paramValue;	
+                }
+                else
+                {
+                    throw new PropertyNotFoundException($this->object,$paramName);	
+                }
+            }    
         }
-        
+    
         $req->execute($boundParam);
     }
 

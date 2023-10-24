@@ -27,15 +27,42 @@ class User extends BaseController
     public function modifyUser($id)
     {
         $users = new UserManager(Application::getDatasource());
+        $statementUser = $users->getById($id);
+        
+        $roles= new RoleManager(Application::getDatasource());
+        $statementRoles = $roles->getAll();
 
+        $user = [
+            'name'=> Session::getSessionByKey('authName'),
+            'id'=> Session::getSessionByKey('auth'),
+            'role'=> Session::getSessionByKey('roleName')
+        ];
+       
+        $this->view('modify.user.html.twig', ['user' => $statementUser , 'roles' => $statementRoles , 'authUser' => $user]);
+
+    }
+
+    public function modifiedUser($id)
+    {
+        $users = new UserManager(Application::getDatasource());
+        $request = new Request("/blog-project/");
+       
+        $roles= new RoleManager(Application::getDatasource());
+        $statementRoles = $roles->getAll();
+       
+        $return = $users->updateUser($request->getParams());
+       
+        $param = $request->getParams();
+
+  
         $statement = $users->getById($id);
         $user = [
             'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'id'=> Session::getSessionByKey('auth'),
+            'role'=> Session::getSessionByKey('roleName')
         ];
        
-
-        $this->view('modify.user.html.twig', ['users' => $statement , 'authUser' => $user]);
+        $this->view('modify.user.html.twig', ['users' => $statement , 'roles' => $statementRoles , 'authUser' => $user]);
 
     }
     

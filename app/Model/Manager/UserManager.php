@@ -46,7 +46,7 @@ class UserManager extends BaseManager
                 VALUES (:username, :email , :password, :created_at)
             ');
         }    
-        
+
         if (isset($params['password'])){
             $password = password_hash($params['password'], PASSWORD_BCRYPT);
         }else{
@@ -66,5 +66,23 @@ class UserManager extends BaseManager
         $query->execute();
 
         return $this->dbConnect->lastInsertId();
+    }
+
+    public function updateUser(array $params)
+    {
+
+        $actualUser = $this->getById($params['id']);
+        
+        foreach ($params as $k => $param){
+            $getUser = 'get' . ucfirst($k);
+            //dd($actualUser->$getUser(), $param, $k);
+            if ($param != $actualUser->$getUser()){
+                $query = $this->dbConnect->prepare("UPDATE $this->table SET  $k = :value WHERE id = :id" ); 
+                $query->bindParam(':value', $param);
+                $query->bindParam(':id', $params['id']);
+                $query->execute();
+            }
+        }
+        return $actualUser->getId();
     }
 }

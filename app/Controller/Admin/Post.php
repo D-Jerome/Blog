@@ -78,7 +78,7 @@ class Post extends BaseController
         $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    public function updatedPost($id)
+    public function modifiedPost($id)
     {
         $post = new PostManager(Application::getDatasource());
 
