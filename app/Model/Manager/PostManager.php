@@ -53,6 +53,20 @@ class PostManager extends BaseManager
         return $query->fetch();
     }  
 
+    public function verifyCoupleIdSlug(int $id , string $slug): int
+   {
+       
+        $query = $this->dbConnect->prepare('
+            SELECT id FROM ' . $this->table . '
+            WHERE id = :id AND slug = :slug
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->bindParam(':slug', $slug); 
+        $query->execute();
+        return $query->rowCount();
+    }  
+
     public function insertNewPost(array $params)
     {
         $query = $this->dbConnect->prepare('

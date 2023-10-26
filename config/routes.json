@@ -18,7 +18,7 @@
         ]
     },
     {
-        "path" : "/post/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/post/{:slug}{:postId}",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",
@@ -86,7 +86,7 @@
         ]
     },
     {
-        "path" : "/admin/post/delete/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/post/delete/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "deletePost",
         "method" : "GET",
@@ -95,7 +95,7 @@
         ]
     },
     {
-        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/post/modify/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "modifyPost",
         "method" : "GET",
@@ -105,7 +105,7 @@
         ] 
     },
     {
-        "path" : "/admin/post/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/post/modify/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "updatedPost",
         "method" : "POST",
@@ -167,7 +167,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/user/modify/{:username}{:userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "modifyUser",
         "method" : "GET",
@@ -178,7 +178,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/modify/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/user/modify/{:username}{:userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "modifiedUser",
         "method" : "POST",
@@ -189,7 +189,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/delete/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/user/delete/{:username}{:userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "deleteUser",
         "method" : "GET",
@@ -216,7 +216,7 @@
         ] 
     },
     {
-        "path" : "/admin/comment/add/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/comment/add/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "addComment",
         "method" : "GET",
@@ -227,7 +227,7 @@
         ] 
     },
     {
-        "path" : "/admin/comment/add/([a-zA-Z]{1,}-){1,}[0-9]{1,}",
+        "path" : "/admin/comment/add/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "addedComment",
         "method" : "POST",
@@ -236,6 +236,15 @@
             "editor",
             "visitor"
         ] 
+    },
+    {
+        "path" : "/post/{:commentId}{:postId}",
+        "controller" : "App\\Controller\\Post",
+        "action" : "post",
+        "method" : "GET",
+        "authorize": [
+            "all"
+        ]
     },
     {
         "path" : "/signup",

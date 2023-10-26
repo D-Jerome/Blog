@@ -22,8 +22,8 @@
                         <td>{{ comment.content }}</td>
                         <td>{{ comment.createdAt }}</td>
                         <td>{{ comment.username }}</td>
-                        <td><a href="/blog-project/admin/comment/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> 
-                        <a href="/blog-project/admin/comment/delete/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
+                        <td><a href="/blog-project/post/{{ comment.id }}-{{ comment.postId }}" class="btn btn-secondary ">Voir le post</a> 
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

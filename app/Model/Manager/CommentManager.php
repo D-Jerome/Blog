@@ -82,5 +82,17 @@ class CommentManager extends BaseManager
         $query->execute();
 
    }
-
+   
+   public function verifyCoupleCommentIdPostId(int $postId , int $commentId): int
+   {
+        $query = $this->dbConnect->prepare('
+            SELECT id FROM ' . $this->table . '
+            WHERE post_id = :postId AND id = :commentId
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':postId', $postId);
+        $query->bindParam(':commentId', $commentId); 
+        $query->execute();
+        return $query->rowCount();
+    }  
 }

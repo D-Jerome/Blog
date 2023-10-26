@@ -85,4 +85,18 @@ class UserManager extends BaseManager
         }
         return $actualUser->getId();
     }
+
+    public function verifyCoupleUsernameUserId(int $id, string $string): int
+    {
+       
+        $query = $this->dbConnect->prepare('
+            SELECT id FROM ' . $this->table . '
+            WHERE id = :id AND username = :username
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->bindParam(':username', $string); 
+        $query->execute();
+        return $query->rowCount();
+    }  
 }

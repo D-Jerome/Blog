@@ -21,18 +21,28 @@ final class Application
         if (null === $foundRoute) {
             die('route not found');
         }
+        
         $controller = $foundRoute->getController();
         $action =  $foundRoute->getaction();
         $authRoles = $foundRoute->getAuthRoles();
         $route = new $controller;
-
+        
         if (!$route->isAuthorize($authRoles)) {
             header('Location: /blog-project/?auth=0');
         }
         
         if ($route->isAuthorize($authRoles)) {     
             //à refactoriser
-            if (($action === 'post') || ($action === 'deletePost') || ($action === 'modifyPost') || ($action === 'modifiedPost') || ($action === 'deleteUser') || ($action === 'modifyUser') || ($action === 'modifiedUser') || ($action === 'addComment') || ($action === 'addedComment')) {
+            if (($action === 'post') || 
+                ($action === 'deletePost') || 
+                ($action === 'modifyPost') || 
+                ($action === 'modifiedPost') || 
+                ($action === 'deleteUser') || 
+                ($action === 'modifyUser') || 
+                ($action === 'modifiedUser') || 
+                ($action === 'addComment') || 
+                ($action === 'addedComment')) 
+                {
 
                 $uri = (explode('-', $this->request->getUri()));
 
