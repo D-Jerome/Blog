@@ -3,19 +3,23 @@
 namespace App\Controller;
 
 use App\Model\Manager\CommentManager;
-use BaseController;
+
 use Framework\Application;
-use Framework\Session;
+use Framework\BaseController;
 
 class Comment extends BaseController
 {
 
     public function postOfComment($id)
     {
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+        if (null !== ($user)) {
+
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId()
+            ];
+        }
 
         $comments = (new CommentManager(Application::getDatasource()));
 

@@ -22,10 +22,12 @@ class Post extends BaseController
         foreach ($statementPosts as $statementPost) {
             $statementPost->username = current($posts->getPostUsername($statementPost->getUserId()));
         }
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
         $this->view('admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
@@ -40,10 +42,12 @@ class Post extends BaseController
     {
         $category = new CategoryManager(Application::getDatasource());
         $statementCategories = $category->getAll();
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
         $this->view('add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
@@ -54,10 +58,12 @@ class Post extends BaseController
         $request = new Request("/blog-project/");
 
         $post->insertNewPost($request->getParams());
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
 
         $statement = '';
@@ -69,10 +75,12 @@ class Post extends BaseController
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
 
         $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
@@ -100,9 +108,11 @@ class Post extends BaseController
             //update date
             echo 'modification';
         }
+        $user = $this->session->getUser();
         $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
+            'name' => $user->getUsername(),
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
         ];
         $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
@@ -119,9 +129,11 @@ class Post extends BaseController
             //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
+        $user = $this->session->getUser();
         $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
+            'name' => $user->getUsername(),
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
         ];
 
         $this->view('add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
@@ -134,10 +146,12 @@ class Post extends BaseController
         $request = new Request("/blog-project/");
 
         $comment->insertNewComment($request->getParams());
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);

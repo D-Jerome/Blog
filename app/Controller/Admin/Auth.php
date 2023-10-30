@@ -10,11 +10,14 @@ class Auth extends BaseController
 {
     public function loggedIn()
     {
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
-        return $this->view(Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
+
+        return $this->view('' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
     public function logout()

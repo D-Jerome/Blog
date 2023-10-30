@@ -17,10 +17,13 @@ class User extends BaseController
         // foreach ($statementUsers as $statementUser){
         //     $statementUser->username = current($posts->getPostUsername($statementPost->getUserId())) ;
         // }
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
+
         $this->view('admin.users.html.twig', ['registredUsers' => $statementUsers, 'authUser' => $user]);
     }
 
@@ -32,11 +35,12 @@ class User extends BaseController
         $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
 
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth'),
-            'role' => Session::getSessionByKey('roleName')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
         $this->view('modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
@@ -55,11 +59,12 @@ class User extends BaseController
 
 
         $statement = $users->getById($id);
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth'),
-            'role' => Session::getSessionByKey('roleName')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
         $this->view('modify.user.html.twig', ['users' => $statement, 'roles' => $statementRoles, 'authUser' => $user]);
     }
@@ -82,10 +87,11 @@ class User extends BaseController
     {
         $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
+        $user = $this->session->getUser();
         $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth'),
-            'role' => Session::getSessionByKey('roleName')
+            'name' => $user->getUsername(),
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
         ];
 
         $this->view('add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
@@ -98,9 +104,11 @@ class User extends BaseController
 
         $return = $user->insertNewUser($request->getParams());
         //verif si pas erreur
+        $user = $this->session->getUser();
         $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
+            'name' => $user->getUsername(),
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
         ];
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);

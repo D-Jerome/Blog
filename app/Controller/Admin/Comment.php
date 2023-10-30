@@ -13,10 +13,12 @@ class Comment extends BaseController
 
     public function comments()
     {
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
 
         $comments = (new CommentManager(Application::getDatasource()));
 

@@ -6,13 +6,13 @@ class AuthUser
 {
     protected int $id;
     protected int $role;
-    protected string $pseudo;
+    protected string $username;
 
-    public function __construct(int $id, int $role, string $pseudo)
+    public function __construct(int $id, int $role, string $username )
     {
         $this->id = $id;
         $this->role = $role;
-        $this->pseudo = $pseudo;
+        $this->username = $username;
     }
 
     public function getId(): int
@@ -25,9 +25,9 @@ class AuthUser
         return  $this->role;
     }
 
-    public function getPseudo(): string
+    public function getUsername(): string
     {
-        return  $this->pseudo;
+        return  $this->username;
     }
 
     public function getRoleName(): string

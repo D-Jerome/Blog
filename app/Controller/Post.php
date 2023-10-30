@@ -6,7 +6,6 @@ use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
 use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
 use Framework\Application;
-use Framework\Session;
 use \PDO;
 
 
@@ -27,10 +26,13 @@ class Post extends BaseController
             $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+        if (null !== $user) {
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId()
+            ];
+        }
 
         $this->view('posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
@@ -49,11 +51,13 @@ class Post extends BaseController
             //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
-
+        $user = $this->session->getUser();
+        if (null !== $user) {
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId()
+            ];
+        }
         $this->view('post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
@@ -106,19 +110,28 @@ class Post extends BaseController
         $query = http_build_query($get);
         $pages['previousUri'] = $uri . '?page=' . ($currentPage - 1) . $query;
         $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
+        $user = $this->session->getUser();
+        if (null !== $user) {
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId()
+            ];
+        }
 
         $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
     public function admin()
     {
-        $user = [
-            'name' => Session::getSessionByKey('authName'),
-            'id' => Session::getSessionByKey('auth')
-        ];
-        return $this->view('' . Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        $user = $this->session->getUser();
+        if (null !== $user) {
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
+        }
+
+
+        return $this->view('' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 }

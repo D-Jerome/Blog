@@ -72,11 +72,12 @@ class User extends BaseController
     public function signUp()
     {
         $user = $this->session->getUser();
-        $user = [
-            'name' => $user->getPseudo(),
-            'id' => $user->getId()
-        ];
-
+        if (null !== $user) {
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId()
+            ];
+        }
         $this->view('signup.html.twig', ['error' => false, 'authUser' => $user]);
     }
 

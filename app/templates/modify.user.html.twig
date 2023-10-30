@@ -24,7 +24,7 @@
                     <label id="email">email:</label>
                     <input class="form-control" id="email" name="email" value="{{ user.email }}">
                 </div>
-                {% if authUser.role == "admin" %}
+                {% if authUser.roleName == "admin" %}
                     <div class="form-group bg-light">
                     Role:
                     {% for role in roles %}

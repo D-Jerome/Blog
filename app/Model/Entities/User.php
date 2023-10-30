@@ -9,6 +9,7 @@ class User extends Entity
 	protected string $email;
 	protected string $password;
 	protected $createdAt;
+	protected string $uuidPicture;
 	protected int $roleId;
 	protected string $roleName;
 	protected bool $active;
@@ -36,6 +37,11 @@ class User extends Entity
 	public function getCreatedAt()
 	{
 		return $this->createdAt;
+	}
+
+	public function uuidPicture()
+	{
+		return $this->uuidPicture;
 	}
 
 	public function getRoleId()
