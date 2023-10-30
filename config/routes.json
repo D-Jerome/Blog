@@ -9,6 +9,15 @@
         ]
     },
     {
+        "path" : "/",
+        "controller" : "App\\Controller\\Home",
+        "action" : "home",
+        "method" : "GET",
+        "authorize": [
+            "all"
+        ]
+    },
+    {
         "path" : "/post",
         "controller" : "App\\Controller\\Post",
         "action" : "posts",
@@ -152,7 +161,6 @@
             "admin",
             "editor",
             "visitor"
-
         ]             
     },
     {
@@ -189,9 +197,18 @@
         ]             
     },
     {
-        "path" : "/admin/user/delete/{:username}{:userId}",
+        "path" : "/admin/user/disable/{:username}{:userId}",
         "controller" : "App\\Controller\\Admin\\User",
-        "action" : "deleteUser",
+        "action" : "disableUser",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]             
+    },
+    {
+        "path" : "/admin/user/enable/{:username}{:userId}",
+        "controller" : "App\\Controller\\Admin\\User",
+        "action" : "enableUser",
         "method" : "GET",
         "authorize": [
             "admin"

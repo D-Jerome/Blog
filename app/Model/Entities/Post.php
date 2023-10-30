@@ -51,21 +51,19 @@ class Post extends Entity
 	{
 		return substr($this->content, 0, 60) . '...';
 	}
-		
+
 	public function getCategories(): ?array
-    {
-        return $this->categories;
-    }
+	{
+		return $this->categories;
+	}
 
 	public function getCountComments(): int
 	{
 		return $this->countComments;
 	}
-	
+
 	public function getUsername(): string
 	{
 		return $this->username;
 	}
-
-
 }

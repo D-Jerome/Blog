@@ -16,21 +16,15 @@ class Comment extends BaseController
             'name' => Session::getSessionByKey('authName'),
             'id' => Session::getSessionByKey('auth')
         ];
-        
+
         $comments = (new CommentManager(Application::getDatasource()));
-        
+
         $statementComments = $comments->getCommentsByUserId($user['id']);
-        
+
         foreach ($statementComments as $statementComment) {
             $statementComment->username = current($comments->getCommentUsername($user['id']));
-
         }
-        
-        $this->view('admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]); 
-        
+
+        $this->view('admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]);
     }
-
-    
-
-
 }

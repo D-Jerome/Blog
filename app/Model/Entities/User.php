@@ -11,6 +11,7 @@ class User extends Entity
 	protected $createdAt;
 	protected int $roleId;
 	protected string $roleName;
+	protected bool $active;
 
 	public function getId()
 	{
@@ -41,9 +42,14 @@ class User extends Entity
 	{
 		return $this->roleId;
 	}
-	
+
 	public function getRoleName()
 	{
 		return $this->roleName;
+	}
+
+	public function getActive()
+	{
+		return $this->active;
 	}
 }

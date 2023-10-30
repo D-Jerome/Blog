@@ -15,11 +15,11 @@ class PDOConnection
 
     public static function getInstance(array $datasource)
     {
-        
+
         if (empty(self::$pdoInstance) || (!isset(self::$pdoInstance))) {
             self::$pdoInstance = new PDOConnection($datasource);
         }
-        
+
         return self::$pdoInstance->dbConnect;
     }
 
@@ -29,18 +29,18 @@ class PDOConnection
         if (isset($datasource['host'])) {
             $dsn .= $datasource['host'];
         }
-        if (isset($datasource['dbname'])){
+        if (isset($datasource['dbname'])) {
             $dsn .= "; " . $datasource['dbname'];
         }
         if (isset($datasource['port'])) {
             $dsn .= "; " . $datasource['port'];
         }
-    
-        $this->dbConnect = new PDO($dsn, $datasource['username'], $datasource['password'] ,[
+
+        $this->dbConnect = new PDO($dsn, $datasource['username'], $datasource['password'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
         ]);
 
-        $this->dbConnect->setAttribute(PDO::ATTR_CASE,PDO::CASE_NATURAL);
+        $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
     }
 }

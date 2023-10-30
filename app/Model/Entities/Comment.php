@@ -32,15 +32,14 @@ class Comment extends Entity
 	{
 		return $this->postId;
 	}
-		
+
 	public function getUserId()
-    {
-        return $this->userId;
-    }
+	{
+		return $this->userId;
+	}
 
 	public function getUsername()
-    {
-        return $this->username;
-    }
-
+	{
+		return $this->username;
+	}
 }

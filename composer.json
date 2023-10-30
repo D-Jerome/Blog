@@ -16,6 +16,7 @@
         "twig/twig": "^3.0",
         "fakerphp/faker": "^1.23",
         "filp/whoops": "^2.15",
-        "symfony/var-dumper": "^6.3"
+        "symfony/var-dumper": "^6.3",
+        "tinymce/tinymce": "^6.7"
     }
 }

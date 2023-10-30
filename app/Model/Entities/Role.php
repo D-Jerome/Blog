@@ -6,8 +6,8 @@ class Role extends Entity
 {
 	protected ?int $id;
 	protected ?string $role;
-	
-	
+
+
 
 	public function getId()
 	{
@@ -18,5 +18,4 @@ class Role extends Entity
 	{
 		return $this->role;
 	}
-
 }

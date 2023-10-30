@@ -4,7 +4,7 @@ namespace App\Model\Entities;
 
 abstract class Entity
 {
-    
+
 
     /* avec le getter qui va bien */
     public function __get($name)
@@ -18,14 +18,14 @@ abstract class Entity
     /* après on fait pareil avec le setter */
     public function __set($name, $value)
     {
-        
-               
-        if (property_exists($this,$name)) {
+
+
+        if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */
             $this->$name = $value;
         } else if (false !== strpos($name, '_')) {
             /* et traduire le snake_case en camelCase */
-            
+
             $this->__set($this->snakeCaseToCamelCase($name), $value);
         }
     }
@@ -35,7 +35,7 @@ abstract class Entity
     protected function snakeCaseToCamelCase($str)
     {
         $upperCamelCase = str_replace('_', '', ucwords($str, '_'));
-        
+
         return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
     }
 

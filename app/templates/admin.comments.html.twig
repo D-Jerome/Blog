@@ -2,7 +2,11 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block content %}    
-<h1>Administration des commentaires</h1>         
+{% if authUser.roleName == "admin" %}
+    <h1>Administration des commentaires</h1>
+{% else %}
+    <h1>Mes commentaires</h1>             
+{% endif %}
             <a href="/blog-project/admin/comment/new" class="btn btn-primary">Ajouter un commentaire</a>
             <table class="table">
                 <thead>

@@ -7,7 +7,7 @@ class Category extends Entity
 	protected ?int $id;
 	protected ?string $name;
 	protected ?string $slug;
-	
+
 
 	public function getId()
 	{
@@ -23,5 +23,4 @@ class Category extends Entity
 	{
 		return $this->slug;
 	}
-
 }

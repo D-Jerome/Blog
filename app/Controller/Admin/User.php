@@ -28,80 +28,83 @@ class User extends BaseController
     {
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($id);
-        
-        $roles= new RoleManager(Application::getDatasource());
+
+        $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
 
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth'),
-            'role'=> Session::getSessionByKey('roleName')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth'),
+            'role' => Session::getSessionByKey('roleName')
         ];
-       
-        $this->view('modify.user.html.twig', ['user' => $statementUser , 'roles' => $statementRoles , 'authUser' => $user]);
 
+        $this->view('modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
     public function modifiedUser($id)
     {
         $users = new UserManager(Application::getDatasource());
         $request = new Request("/blog-project/");
-       
-        $roles= new RoleManager(Application::getDatasource());
+
+        $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
-       
+
         $return = $users->updateUser($request->getParams());
-       
+
         $param = $request->getParams();
 
-  
+
         $statement = $users->getById($id);
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth'),
-            'role'=> Session::getSessionByKey('roleName')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth'),
+            'role' => Session::getSessionByKey('roleName')
         ];
-       
-        $this->view('modify.user.html.twig', ['users' => $statement , 'roles' => $statementRoles , 'authUser' => $user]);
 
+        $this->view('modify.user.html.twig', ['users' => $statement, 'roles' => $statementRoles, 'authUser' => $user]);
     }
-    
-    public function deleteUser($id)
+
+    public function disableUser(int $id)
     {
-        
-        (new UserManager(Application::getDatasource()))->delete($id);
-        header('Location: /blog-project/admin/user');
+
+        (new UserManager(Application::getDatasource()))->disable($id);
+        header('Location: /blog-project/admin/users');
+    }
+
+    public function enableUser(int $id)
+    {
+
+        (new UserManager(Application::getDatasource()))->enable($id);
+        header('Location: /blog-project/admin/users');
     }
 
     public function addUser()
     {
-        $roles= new RoleManager(Application::getDatasource());
+        $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
         $user = [
             'name' => Session::getSessionByKey('authName'),
             'id' => Session::getSessionByKey('auth'),
             'role' => Session::getSessionByKey('roleName')
         ];
-            
-        $this->view('add.user.html.twig', ['roles' => $statementRoles , 'authUser' => $user ]);
 
+        $this->view('add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
     }
 
     public function addedUser()
-    {      
+    {
         $user = new UserManager(Application::getDatasource());
         $request = new Request("/blog-project/");
-    
+
         $return = $user->insertNewUser($request->getParams());
         //verif si pas erreur
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 
         $this->view('modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
-
     }
 }

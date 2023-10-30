@@ -13,11 +13,15 @@ CREATE TABLE role (
 
 CREATE TABLE user (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    pseudo VARCHAR(255) NOT NULL,
     email VARCHAR(60) NOT NULL,
+    picture VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL,
     role_id INT UNSIGNED DEFAULT '3',
+    active BOOL DEFAULT 'true'
     PRIMARY KEY (id),
     CONSTRAINT fk_role
         FOREIGN KEY (role_id)
@@ -32,6 +36,7 @@ CREATE TABLE post (
     slug VARCHAR(255) NOT NULL,
     content TEXT(650000) NOT NULL,
     created_at DATETIME NOT NULL,
+    last_modification DATETIME,
     user_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_post
@@ -77,4 +82,22 @@ CREATE TABLE comment (
         ON UPDATE NO ACTION
 );
 
+CREATE TABLE validation (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    type VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_user_comment
+        FOREIGN KEY (user_id)
+        REFERENCES  user (id)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT fk_post_comment
+        FOREIGN KEY (post_id)
+        REFERENCES  post (id)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION
+);
 

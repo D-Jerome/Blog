@@ -1,19 +1,20 @@
-{% extends './layouts/default.html.twig' %}
+{% extends './layouts/errors.html.twig' %}
 
 {% block login %}
 {% if authUser.id != false  %}
-
-<div class="btn-group dropstart">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+<div class="nav-item  dropstart col-3 me-2">
+            <ul class="navbar-nav justify-content-end">
+<div class="btn-group ">
+    <button type="button" class="btn btn-secondary dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
     {{ authUser.name }}
     </button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}-{{ authUser.id }}">Profil</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="/blog-project/admin/logged">Administration</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item bg-danger" href="/blog-project/logout">Deconnexion</a></li>
-    </ul>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}-{{ authUser.id }}">Profil</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/blog-project/admin/logged">Administration</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item bg-danger" href="/blog-project/logout">Deconnexion</a>
+    </div>
 </div>
 {% else %}
     <ul class="navbar-nav">

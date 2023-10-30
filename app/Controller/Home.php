@@ -10,16 +10,16 @@ class Home extends BaseController
 {
     public function home()
     {
-       
-        if (isset($_GET['auth'])){
-           return $this->view('home.html.twig',['error' => true]);        
+
+        if (isset($_GET['auth'])) {
+            return $this->view('home.html.twig', ['error' => true]);
         }
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-  
-        $this->view('home.html.twig',[ 'authUser' => $user]);
+
+        $this->view('home.html.twig', ['authUser' => $user]);
     }
 
     public function login()

@@ -20,47 +20,46 @@ class Post extends BaseController
         $posts = new PostManager(Application::getDatasource());
 
         $statementPosts = $posts->getAll();
-        
-        foreach ($statementPosts as $statementPost){
-            
-            $statementPost->categories =  $posts->getCategoriesById($statementPost->id) ;
-            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);       
-            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId())) ;
-            
+
+        foreach ($statementPosts as $statementPost) {
+
+            $statementPost->categories =  $posts->getCategoriesById($statementPost->id);
+            $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
+            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-        
-        $this->view('posts.html.twig', ['posts' => $statementPosts , 'authUser' => $user ]);
+
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
 
 
     public function post(int $id)
     {
-       // $username=Session::getUsername();
+        // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
         $comment = new CommentManager(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
-        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId())) ;
-        foreach ($statementComments as $statementComment){
+        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        foreach ($statementComments as $statementComment) {
             //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-        
+
         $this->view('post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
     public function postsPaged()
     {
-       //$username=Session::getUsername();
+        //$username=Session::getUsername();
         $orderBy = 'created_at';
         $dir = 'DESC';
         $perPage = $_GET['perPage'] ?? 8;
@@ -69,13 +68,13 @@ class Post extends BaseController
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage);
-        foreach ($statementPosts as $statementPost){
-            
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id) ;
+        foreach ($statementPosts as $statementPost) {
+
+            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId())) ;
+            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
-        
+
         $count = count($posts->getAll());
 
         if ($currentPage >= (ceil(($count / $perPage)))) {
@@ -108,24 +107,18 @@ class Post extends BaseController
         $pages['previousUri'] = $uri . '?page=' . ($currentPage - 1) . $query;
         $pages['nextUri'] = $uri . '?page=' . ($currentPage + 1) . $query;
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
 
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages , 'authUser' => $user]);
+        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
     public function admin()
     {
         $user = [
-            'name'=> Session::getSessionByKey('authName'),
-            'id'=> Session::getSessionByKey('auth')
+            'name' => Session::getSessionByKey('authName'),
+            'id' => Session::getSessionByKey('auth')
         ];
-                return $this->view(''. Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
-               
-        
+        return $this->view('' . Session::getSessionByKey('roleName') . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
-
-   
-
-
 }

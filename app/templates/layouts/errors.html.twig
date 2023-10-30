@@ -1,0 +1,15 @@
+{% extends './layouts/default.html.twig' %}
+
+{% block errors %}
+    {% if error.active %}
+        <div class="alert alert-danger">
+        <br>
+        Error : {{ error.message }}<br>
+        <br>
+        Error Code : {{ error.code }}<br>
+        
+        </div>
+    {% else %}
+        <div class="container mt-5"></div>
+    {% endif %}    
+{% endblock %}

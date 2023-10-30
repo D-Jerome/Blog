@@ -4,7 +4,7 @@
 {% block content %}    
 <h1>Administration des utilisateurs</h1>         
             <a href="/blog-project/admin/user/new" class="btn btn-primary">Ajouter</a>
-            <table class="table">
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -17,14 +17,22 @@
                 </thead>
                 <tbody>
                     {% for registredUser in registredUsers %}
+                    {% if registredUser.active %}
                     <tr>
+                    {% else %}
+                    <tr class="table-info" >
+                    {% endif %}
                         <th scope="row">{{ registredUser.id }}</th>
                         <td>{{ registredUser.username }}</td>
                         <td>{{ registredUser.email }}</td>
                         <td>{{ registredUser.createdAt }}</td>
                         <td>{{ registredUser.roleId }}</td>
                         <td><a href="/blog-project/admin/user/modify/{{ registredUser.username }}-{{ registredUser.id }}" class="btn btn-warning">Modifier</a> 
-                        <a href="/blog-project/admin/user/delete/{{ registredUser.username }}-{{ registredUser.id }}" class="btn btn-danger">Supprimer</a> </td>
+                        {% if registredUser.active %}
+                            <a href="/blog-project/admin/user/disable/{{ registredUser.username }}-{{ registredUser.id }}" class="btn btn-danger">Désactiver</a> </td>
+                        {% else %}
+                            <a href="/blog-project/admin/user/enable/{{ registredUser.username }}-{{ registredUser.id }}" class="btn btn-success">Activer</a> </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

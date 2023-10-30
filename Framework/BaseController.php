@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Framework\Security\Session;
 use \Twig\Environment;
 use \Twig\Loader\FilesystemLoader;
 
@@ -9,13 +10,12 @@ use \Twig\Loader\FilesystemLoader;
 class BaseController
 {
     protected Environment $twig;
+    protected Session $session;
 
     public function __construct()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
 
+        $this->session = new Session();
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
         $this->twig = new Environment($loader, [
             // 'cache' => __DIR__ . '/../app/var/cache',
@@ -29,17 +29,17 @@ class BaseController
 
     public function isAuthorize(array $authRoles)
     {
-        if (Session::checkSessionKey('auth')) {
-           
-            if (in_array(Session::getSessionByKey('roleName'), $authRoles) || in_array('all', $authRoles )) {
-                return true;
-            }
-        }
 
-        if (in_array('all', $authRoles)) {
-
+        if (in_array('all', $authRoles, true)) {
             return true;
         }
-        return false;
+
+        $user = $this->session->getUser();
+        if ($user === null) {
+            return false;
+        }
+
+
+        return in_array($user->getRoleName(), $authRoles, true);
     }
 }

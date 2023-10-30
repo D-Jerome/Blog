@@ -22,35 +22,34 @@ class Router
     }
 
     public function findRoute(Request $request): ?Route
-    {
-
-
+    {       
+      
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
 
-
                 $pattern = $this->decodePattern('~^' . $route->getPath() . '$~');
-
-
+                
                 if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
-                                        
+
                     $matches = array_merge([
                         'slug' => '',
                         'postId' => '',
                         'commentId' => '',
                         'username' => '',
                         'userId' => ''
-                        ], $matches);
-                    
+                    ], $matches);
+
                     if ($this->validateRoute($matches)) {
-                        
+                     
                         return $route;
+
                     }
                 } elseif ($route->getPath() === $request->getUri()) {
                     return $route;
                 }
             }
         }
+       
         return null;
     }
 
@@ -90,7 +89,7 @@ class Router
                 $valid = true;
             }
         }
-        if ( '' !== ($sanitizeMatches['commentId']) && '' !== ($sanitizeMatches['postId'])) {
+        if ('' !== ($sanitizeMatches['commentId']) && '' !== ($sanitizeMatches['postId'])) {
             $comments = new CommentManager(Application::getDatasource());
             if ($comments->verifyCoupleCommentIdPostId($sanitizeMatches['postId'], $sanitizeMatches['commentId']) === 1) {
                 $valid = true;
@@ -99,7 +98,7 @@ class Router
         if ('' !== ($sanitizeMatches['username']) && '' !== ($sanitizeMatches['userId'])) {
             $users = new UserManager(Application::getDatasource());
             if ($users->verifyCoupleUsernameUserId($sanitizeMatches['userId'], $sanitizeMatches['username']) === 1) {
-                
+
                 $valid = true;
             }
         }
