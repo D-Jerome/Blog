@@ -116,7 +116,7 @@
     {
         "path" : "/admin/post/modify/{:slug}{:postId}",
         "controller" : "App\\Controller\\Admin\\Post",
-        "action" : "updatedPost",
+        "action" : "modifiedPost",
         "method" : "POST",
         "authorize": [
             "admin",

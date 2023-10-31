@@ -14,7 +14,7 @@
                                 {% endfor %}   
                             </div>
                         <p class="text-muted text-white ">Par {{ post.username }} le {{ post.createdAt }}</p>
-                        <p class="card-text">{{ post.excerptContent }} </p>
+                        <p class="card-text">{{ post.excerptContent | raw }} </p>
                         <a href="/blog-project/post/{{ post.slug }}-{{ post.id }}" class="btn btn-primary">Voir plus</a>
                     </div>
                     <button type="button" class="btn btn-light mx-auto">
