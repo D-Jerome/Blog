@@ -5,10 +5,10 @@ namespace Framework\Security;
 class AuthUser
 {
     protected int $id;
-    protected int $role;
+    protected string $role;
     protected string $username;
 
-    public function __construct(int $id, int $role, string $username )
+    public function __construct(int $id, string $role, string $username )
     {
         $this->id = $id;
         $this->role = $role;
@@ -20,7 +20,7 @@ class AuthUser
         return  $this->id;
     }
 
-    public function getRole(): int
+    public function getRole(): string
     {
         return  $this->role;
     }

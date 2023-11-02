@@ -12,7 +12,7 @@ class Comment extends Entity
 	protected $modifiedAt;
 	protected bool $publishState;
     protected $publishAt; 
-	protected int $publishUserId;
+	protected ?int $publishUserId;
 	protected int $postId;
 	protected int $userId;
 	protected string $username;

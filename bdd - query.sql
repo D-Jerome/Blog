@@ -15,7 +15,7 @@ CREATE TABLE user (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
-    pseudo VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(60) NOT NULL,
     picture VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE post (
         FOREIGN KEY (publish_user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON UPDATE NO ACTION
 );
 
 CREATE TABLE post_category (
@@ -82,7 +82,7 @@ CREATE TABLE comment (
     publish_at DATETIME,
     publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user_comment,
+    CONSTRAINT fk_user_comment
         FOREIGN KEY (user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
@@ -96,5 +96,5 @@ CREATE TABLE comment (
         FOREIGN KEY (publish_user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON UPDATE NO ACTION
 );

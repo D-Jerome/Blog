@@ -74,7 +74,9 @@ class User extends BaseController
         $user = $this->session->getUser();
         if (null !== $user) {
             $user = [
-                'name' => $user->getUsername(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'username' => $user->getUsername(),
                 'id' => $user->getId()
             ];
         }

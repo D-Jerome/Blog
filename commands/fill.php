@@ -30,22 +30,38 @@ $pdo->exec("INSERT INTO role (role) VALUES ('visitor') ");
 $passadmin = password_hash('admin', PASSWORD_BCRYPT);
 $passeditor = password_hash('editor', PASSWORD_BCRYPT);
 $passvisitor = password_hash('visitor', PASSWORD_BCRYPT);
+$passTestInactive = password_hash('testinactive', PASSWORD_BCRYPT);
 
-$pdo->exec("INSERT INTO user SET username='admin', password='$passadmin' , email='{$faker->email()}' , created_at='{$faker->date()} {$faker->time()}'");
 
-$pdo->exec("INSERT INTO user SET username='editor', password='$passeditor' , email='{$faker->email()}' , created_at='{$faker->date()} {$faker->time()}'");
+$pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='{$faker->lastname()}', username='admin', password='$passadmin' , email='{$faker->email()}' , picture = '{$faker->image(null, 640, 480)}' , created_at='{$faker->date()} {$faker->time()}', role_id = '1'");
 
-$pdo->exec("INSERT INTO user SET username='visitor', password='$passvisitor' , email='{$faker->email()}' , created_at='{$faker->date()} {$faker->time()}'");
+$pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='{$faker->lastname()}', username='editor', password='$passeditor' , email='{$faker->email()}', picture = '{$faker->image(null, 640, 480)}', created_at='{$faker->date()} {$faker->time()}', role_id = '2'");
 
-for ($i = 0; $i < 50; $i++) {
+$pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='{$faker->lastname()}', username='visitor', password='$passvisitor' , email='{$faker->email()}', picture = '{$faker->image(null, 640, 480)}', created_at='{$faker->date()} {$faker->time()}'");
+
+$pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='{$faker->lastname()}', username='testinactive', password='$passTestInactive' , email='{$faker->email()}', picture = '{$faker->image(null, 640, 480)}' , created_at='{$faker->date()} {$faker->time()}', active = false ");
+
+for ($i = 0; $i < 25; $i++) {
     $pdo->exec("
         INSERT INTO post 
         SET 
             name='{$faker->sentence()}',
             slug='{$faker->slug()}', 
             created_at='{$faker->date()} {$faker->time()}', 
-            content='{$faker->paragraphs(rand(3, 15), true)}', 
-            user_id='{$faker->numberBetween(1, 3)}'
+            content= '<p>{$faker->paragraphs(rand(3, 6), true)}</p> <div class=\'border bg-success\'>{$faker->paragraphs(rand(3, 6), true)}</div>', 
+            user_id='{$faker->numberBetween(1, 4)}'
+    ");
+    $posts[] = $pdo->lastInsertId();
+}
+for ($i = 0; $i < 25; $i++) {
+    $pdo->exec("
+        INSERT INTO post 
+        SET 
+            name='{$faker->sentence()}',
+            slug='{$faker->slug()}', 
+            created_at='{$faker->date()} {$faker->time()}', 
+            content='{$faker->randomhtml()}', 
+            user_id='{$faker->numberBetween(1, 4)}'
     ");
     $posts[] = $pdo->lastInsertId();
 }
@@ -77,8 +93,8 @@ for ($i = 0; $i < 50; $i++) {
         INSERT INTO comment 
         SET 
             created_at='{$faker->date()} {$faker->time()}', 
-            content='{$faker->paragraphs(rand(1, 4), true)}', 
+            content= '<p class=\'border bg-danger\'>{$faker->paragraphs(rand(3, 6), true)}</p> <div>{$faker->paragraphs(rand(3, 6), true)}</div>',  
             post_id='{$faker->numberBetween(1, 50)}', 
-            user_id = '{$faker->numberBetween(1, 3)}';");
+            user_id = '{$faker->numberBetween(1, 4)}';");
     $comments[] = $pdo->lastInsertId();
 }

@@ -13,8 +13,8 @@ class Post extends Entity
 	protected $createdAt;
 	protected $modifiedAt;
 	protected bool $publishState;
-    protected $publishAt; 
-	protected int $publishUserId;
+    protected mixed $publishAt; 
+	protected ?int $publishUserId;
 	protected string $excerptContent;
 	protected array $categories = [];
 	protected int $countComments;

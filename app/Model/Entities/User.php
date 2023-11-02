@@ -5,11 +5,13 @@ namespace App\Model\Entities;
 class User extends Entity
 {
 	protected int $id;
+	protected string $firstname;
+	protected string $lastname;
 	protected string $username;
 	protected string $email;
 	protected string $password;
 	protected $createdAt;
-	protected string $uuidPicture;
+	protected string $picture;
 	protected int $roleId;
 	protected string $roleName;
 	protected bool $active;
@@ -17,6 +19,16 @@ class User extends Entity
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	public function getFirstname()
+	{
+		return $this->firstname;
+	}
+
+	public function getLastname()
+	{
+		return $this->lastname;
 	}
 
 	public function getUsername()
@@ -39,9 +51,9 @@ class User extends Entity
 		return $this->createdAt;
 	}
 
-	public function uuidPicture()
+	public function picture()
 	{
-		return $this->uuidPicture;
+		return $this->picture;
 	}
 
 	public function getRoleId()
