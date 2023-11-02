@@ -36,14 +36,22 @@ CREATE TABLE post (
     slug VARCHAR(255) NOT NULL,
     content TEXT(650000) NOT NULL,
     created_at DATETIME NOT NULL,
-    last_modification DATETIME,
+    modified_at DATETIME,
     user_id INT UNSIGNED NOT NULL,
+    publish_state BOOL NOT NULL DEFAULT 'false',
+    publish_at DATETIME,
+    publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_post
         FOREIGN KEY (user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
-        ON UPDATE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT fk_user_publish_post
+        FOREIGN KEY (publish_user_id)
+        REFERENCES  user (id)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
 );
 
 CREATE TABLE post_category (
@@ -69,8 +77,12 @@ CREATE TABLE comment (
     created_at DATETIME NOT NULL,
     post_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
+    modified_at DATETIME,
+    publish_state BOOL NOT NULL DEFAULT false,
+    publish_at DATETIME,
+    publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user_comment
+    CONSTRAINT fk_user_comment,
         FOREIGN KEY (user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
@@ -79,25 +91,10 @@ CREATE TABLE comment (
         FOREIGN KEY (post_id)
         REFERENCES  post (id)
         ON DELETE CASCADE
-        ON UPDATE NO ACTION
-);
-
-CREATE TABLE validation (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    type VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL,
-    post_id INT UNSIGNED NOT NULL,
-    user_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_user_comment
-        FOREIGN KEY (user_id)
+        ON UPDATE NO ACTION,
+    CONSTRAINT fk_user_publish_comment
+        FOREIGN KEY (publish_user_id)
         REFERENCES  user (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT fk_post_comment
-        FOREIGN KEY (post_id)
-        REFERENCES  post (id)
-        ON DELETE CASCADE
-        ON UPDATE NO ACTION
 );
-

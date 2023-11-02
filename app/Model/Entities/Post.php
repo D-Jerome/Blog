@@ -10,7 +10,11 @@ class Post extends Entity
 	protected string $name;
 	protected string $slug;
 	protected string $content;
-	protected  $createdAt;
+	protected $createdAt;
+	protected $modifiedAt;
+	protected bool $publishState;
+    protected $publishAt; 
+	protected int $publishUserId;
 	protected string $excerptContent;
 	protected array $categories = [];
 	protected int $countComments;
@@ -42,6 +46,11 @@ class Post extends Entity
 		return $this->createdAt;
 	}
 
+	public function getModifiedAt()
+	{
+		return $this->ModifiedAt;
+	}
+
 	public function getUserId(): int
 	{
 		return $this->userId;
@@ -65,5 +74,20 @@ class Post extends Entity
 	public function getUsername(): string
 	{
 		return $this->username;
+	}
+
+	public function getPublishState()
+	{
+		return $this->publishState;
+	}
+	
+	public function getPublishAt()
+	{
+		return $this->publishAt;
+	}
+
+	public function getPublishUserId()
+	{
+		return $this->publishUserId;
 	}
 }

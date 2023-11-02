@@ -22,10 +22,15 @@ class Comment extends BaseController
 
         $comments = (new CommentManager(Application::getDatasource()));
 
-        $statementComments = $comments->getCommentsByUserId($user['id']);
-
+        if ($user['roleName'] === "admin"){
+            $statementComments = $comments->getAll();
+            
+        }else{
+            $statementComments = $comments->getCommentsByUserId($user['id']);
+        }
+        
         foreach ($statementComments as $statementComment) {
-            $statementComment->username = current($comments->getCommentUsername($user['id']));
+            $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
 
         $this->view('admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]);

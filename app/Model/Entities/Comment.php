@@ -9,6 +9,10 @@ class Comment extends Entity
 	protected int $id;
 	protected string $content;
 	protected $createdAt;
+	protected $modifiedAt;
+	protected bool $publishState;
+    protected $publishAt; 
+	protected int $publishUserId;
 	protected int $postId;
 	protected int $userId;
 	protected string $username;
@@ -28,6 +32,11 @@ class Comment extends Entity
 		return $this->createdAt;
 	}
 
+	public function getModifiedAt()
+	{
+		return $this->ModifiedAt;
+	}
+
 	public function getPostId()
 	{
 		return $this->postId;
@@ -41,5 +50,20 @@ class Comment extends Entity
 	public function getUsername()
 	{
 		return $this->username;
+	}
+
+	public function getPublishState()
+	{
+		return $this->publishState;
+	}
+	
+	public function getPublishAt()
+	{
+		return $this->publishAt;
+	}
+
+	public function getPublishUserId()
+	{
+		return $this->publishUserId;
 	}
 }

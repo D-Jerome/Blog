@@ -38,23 +38,47 @@ $pdo->exec("INSERT INTO user SET username='editor', password='$passeditor' , ema
 $pdo->exec("INSERT INTO user SET username='visitor', password='$passvisitor' , email='{$faker->email()}' , created_at='{$faker->date()} {$faker->time()}'");
 
 for ($i = 0; $i < 50; $i++) {
-    $pdo->exec("INSERT INTO post SET name='{$faker->sentence()}', slug='{$faker->slug()}', created_at='{$faker->date()} {$faker->time()}', content='{$faker->paragraphs(rand(3, 15), true)}', user_id='{$faker->numberBetween(1, 3)}'");
+    $pdo->exec("
+        INSERT INTO post 
+        SET 
+            name='{$faker->sentence()}',
+            slug='{$faker->slug()}', 
+            created_at='{$faker->date()} {$faker->time()}', 
+            content='{$faker->paragraphs(rand(3, 15), true)}', 
+            user_id='{$faker->numberBetween(1, 3)}'
+    ");
     $posts[] = $pdo->lastInsertId();
 }
 
 for ($i = 0; $i < 5; $i++) {
-    $pdo->exec("INSERT INTO category SET name='{$faker->word(3)}', slug='{$faker->slug()}'");
+    $pdo->exec("
+        INSERT INTO category 
+        SET 
+            name='{$faker->word(3)}', 
+            slug='{$faker->slug()}'
+    ");
     $categories[] = $pdo->lastInsertId();
 }
 
 foreach ($posts as $post) {
     $randomCategories = $faker->randomElements($categories, rand(0, count($categories)));
     foreach ($randomCategories as $category) {
-        $pdo->exec("INSERT INTO post_category SET post_id=$post , category_id=$category");
+        $pdo->exec("
+            INSERT INTO post_category 
+            SET 
+                post_id=$post , 
+                category_id=$category
+        ");
     }
 }
 
 for ($i = 0; $i < 50; $i++) {
-    $pdo->exec("INSERT INTO comment SET created_at='{$faker->date()} {$faker->time()}', content='{$faker->paragraphs(rand(1, 4), true)}', post_id='{$faker->numberBetween(1, 50)}', user_id = '{$faker->numberBetween(1, 3)}';");
+    $pdo->exec("
+        INSERT INTO comment 
+        SET 
+            created_at='{$faker->date()} {$faker->time()}', 
+            content='{$faker->paragraphs(rand(1, 4), true)}', 
+            post_id='{$faker->numberBetween(1, 50)}', 
+            user_id = '{$faker->numberBetween(1, 3)}';");
     $comments[] = $pdo->lastInsertId();
 }
