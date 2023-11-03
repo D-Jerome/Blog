@@ -2,8 +2,9 @@
 
 {% extends './layouts/connection.html.twig' %}
 
-{% block content %} {% for post in posts %}
-            
+{% block content %} 
+    {% for post in posts %}
+        {% if post.publishState == true %}
             <div class="col-md-12">            
                 <div class="card mb-3 bg-primary bg-gradient text-light">
                     <div class="card-body">
@@ -22,8 +23,8 @@
                     </button>
                 </div>
             </div>
-
-{% endfor %}
+        {% endif %}    
+    {% endfor %}
 {% endblock %}
 {% block page %}
 {% if pages.previousActive %}

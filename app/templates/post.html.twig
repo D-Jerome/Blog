@@ -16,15 +16,29 @@
             <h2> Commentaires </h2>
             {% endif %}
             {% for comment in comments %}
-            
-            <div class="col">            
-                <div class="card mb-3 bg-white bg-gradient ">
-                    <div class="card-body">
-                        <p class="car-title badge bg-primary text-light">par {{ comment.username }} le {{ comment.createdAt }}</p>
-                        <p class="card-text">{{ comment.content | raw }} </p>
+                {% if comment.publishState == true %}
+                    <div class="col">            
+                        <div class="card mb-3 bg-white bg-gradient ">
+                            <div class="card-body">
+                                <p class="car-title badge bg-primary text-light">par {{ comment.username }} le {{ comment.createdAt }}</p>
+                                <p class="card-text">{{ comment.content | raw }} </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% else %}
+                    {% if authUser.roleName == 'admin' %}
+                    <div class="col bg-danger">            
+                        <div class="card mb-3 bg-white bg-gradient ">
+                            <div class="card-body">
+                                <p class="car-title badge bg-primary text-light">par {{ comment.username }} le {{ comment.createdAt }}</p>
+                                <p class="card-text">{{ comment.content | raw }} </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% endif %}
+                {% endif %}    
+
             {% endfor %}
             <a href="/blog-project/admin/comment/add/{{ post.slug }}-{{ post.id }}" class="btn btn-primary mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
             <div class="container col-4 bg-danger-subtle {% if authUser.id != false %} invisible {% endif %} rounded border border-dark">

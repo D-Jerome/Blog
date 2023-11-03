@@ -5,13 +5,13 @@ namespace Framework\Security;
 class AuthUser
 {
     protected int $id;
-    protected string $role;
+    protected string $roleName;
     protected string $username;
 
-    public function __construct(int $id, string $role, string $username )
+    public function __construct(int $id, string $roleName, string $username )
     {
         $this->id = $id;
-        $this->role = $role;
+        $this->roleName = $roleName;
         $this->username = $username;
     }
 
@@ -20,9 +20,9 @@ class AuthUser
         return  $this->id;
     }
 
-    public function getRole(): string
+    public function getRoleName(): string
     {
-        return  $this->role;
+        return  $this->roleName;
     }
 
     public function getUsername(): string
@@ -30,12 +30,4 @@ class AuthUser
         return  $this->username;
     }
 
-    public function getRoleName(): string
-    {
-        return match ($this->role) {
-            1 => 'admin',
-            2 => 'editor',
-            3 => 'visitor'
-        };
-    }
 }

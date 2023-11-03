@@ -29,17 +29,21 @@ class BaseController
 
     public function isAuthorize(array $authRoles)
     {
-
+        
         if (in_array('all', $authRoles, true)) {
             return true;
         }
-
+        
         $user = $this->session->getUser();
+
         if ($user === null) {
             return false;
         }
 
+        if (!in_array($user->getRoleName(), $authRoles, true)){
+            return false;
+        }
+        return true;
 
-        return in_array($user->getRoleName(), $authRoles, true);
     }
 }

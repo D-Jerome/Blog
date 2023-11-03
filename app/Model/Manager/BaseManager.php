@@ -2,8 +2,9 @@
 
 namespace App\Model\Manager;
 
+use Framework\Helpers\Text;
 use App\Model\PDOConnection;
-use PropertyNotFoundException;
+use Framework\Exception\PropertyNotFoundException;
 
 abstract class BaseManager
 {
@@ -81,30 +82,35 @@ abstract class BaseManager
         $req->execute($boundParam);
     }
 
+
     public function update($obj, $param)
     {
+       
         $sql = "UPDATE " . $this->table . " SET ";
+        $countParam = count($param);
+        $i = 0;
         foreach ($param as $paramName => $paramValue) {
+            $i++;
             if ($paramName !== 'id') {
-                $sql = $sql . $paramName . " = ?, ";
+                $sql = $sql . Text::camelCaseToSnakeCase($paramName) . " = :" . Text::camelCaseToSnakeCase($paramName);
+            }
+            if ($i !== $countParam){
+                $sql = $sql . ", ";
             }
         }
-        $sql = $sql . " WHERE id = ? ";
+        $sql = $sql . " WHERE id = :id ";
         $req = $this->dbConnect->prepare($sql);
-
-        $param[] = 'id';
-        $boundParam = array();
-        foreach ($param as $paramName => $paramValue) {
-            if ($paramName !== 'id' || $paramName !== 0) {
-
-                if (property_exists($obj, $paramName)) {
-                    $boundParam[$paramName] = $paramValue;
-                } else {
-                    throw new PropertyNotFoundException($this->object, $paramName);
-                }
-            }
+        $param['id'] = $obj->getId() ;
+        $boundParam = [];
+        foreach ($param as $paramName => $paramValue) {        
+            if (property_exists($obj, $paramName)) {
+                $boundParam[Text::camelCaseToSnakeCase($paramName)] = $paramValue;
+            } else {
+                throw new PropertyNotFoundException($this->object, $paramName);
+            } 
         }
-
+        
+       // dd($sql,$boundParam);
         $req->execute($boundParam);
     }
 
@@ -119,4 +125,6 @@ abstract class BaseManager
             return false;
         }
     }
+
+
 }

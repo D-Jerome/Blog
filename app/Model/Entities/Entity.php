@@ -39,6 +39,8 @@ abstract class Entity
         return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
     }
 
+    
+
     // public function __isset($property) {
     //     return isset($this->$property);
     //    }

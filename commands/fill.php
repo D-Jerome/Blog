@@ -60,7 +60,7 @@ for ($i = 0; $i < 25; $i++) {
             name='{$faker->sentence()}',
             slug='{$faker->slug()}', 
             created_at='{$faker->date()} {$faker->time()}', 
-            content='{$faker->randomhtml()}', 
+            content='<p class=\'border bg-warning\'>{$faker->paragraphs(rand(3, 6), true)}</p> <div class=\'border bg-success\'>{$faker->paragraphs(rand(3, 6), true)}</div>', 
             user_id='{$faker->numberBetween(1, 4)}'
     ");
     $posts[] = $pdo->lastInsertId();

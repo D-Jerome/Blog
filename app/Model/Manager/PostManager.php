@@ -34,9 +34,9 @@ class PostManager extends BaseManager
     public function getCountCommentsByPostId(int $id)
     {
         $statement = $this->dbConnect->prepare('
-            SELECT(com.id) FROM comment com 
+            SELECT (com.id) FROM comment com 
             INNER JOIN post p ON com.post_id = p.id 
-            WHERE p.id = ? 
+            WHERE com.publish_state = true and p.id = ? 
             ');
         $statement->execute([$id]);
         return $statement->rowcount();
@@ -96,4 +96,31 @@ class PostManager extends BaseManager
             $query->execute();
         }
     }
+   
+    public function unpublish(int $id): void
+    {
+        $query = $this->dbConnect->prepare('
+            UPDATE ' . $this->table . ' 
+            SET 
+                publish_state = false
+            WHERE id = :id 
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+
+    public function publish(int $id): void
+    {
+        $query = $this->dbConnect->prepare('
+            UPDATE ' . $this->table . ' 
+            SET 
+                publish_state = true
+            WHERE id = :id 
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+    
 }

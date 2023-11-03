@@ -73,6 +73,33 @@
         ]
     },
     {
+        "path" : "/admin/moderation/posts",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "moderationPosts",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/post/unpublish/{:slug}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "unpublishPost",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/post/publish/{:slug}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Post",
+        "action" : "publishPost",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
         "path" : "/admin/comments",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "comments",
@@ -84,13 +111,63 @@
         ]
     },
     {
+        "path" : "/admin/moderation/comments",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "moderationComments",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/comment/unpublish/{:commentId}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "unpublishComment",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/comment/publish/{:commentId}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "publishComment",
+        "method" : "GET",
+        "authorize": [
+            "admin"
+        ]
+    },
+    {
+        "path" : "/admin/comment/modify/{:commentId}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "modifyComment",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ] 
+    },
+    {
+        "path" : "/admin/comment/modify/{:commentId}{:postId}",
+        "controller" : "App\\Controller\\Admin\\Comment",
+        "action" : "modifiedComment",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor"
+        ]           
+    },
+    {
         "path" : "/admin",
         "controller" : "App\\Controller\\Admin\\Auth",
         "action" : "loggedIn",
         "method" : "GET",
         "authorize": [
             "admin",
-            "editor"
+            "editor",
+            "visitor"
             
         ]
     },

@@ -37,22 +37,24 @@ class User extends BaseController
 
         if (password_verify($_POST['password'], $user->password)) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
+            $user->roleName = ($users->getRoleById($user->getRoleId()))->getRole();
             $this->session->connect($user);
             // Session::setSessionValue('auth', $user->getId()) ;
             // Session::setSessionValue('role', $user->getRoleId());
             // Session::setSessionValue('authName', $user->getUsername());
             // Session::setSessionValue('roleName', ($users->getRoleById($user->getRoleId()))->getRole());
-
-            $user->roleName = ($users->getRoleById($user->getRoleId()))->getRole();
+            
+            
 
             header('Location: /blog-project/admin/logged');
 
             $user = [
                 'name' => $user->getUsername(),
-                'id' => $user->getId()
+                'id' => $user->getId(),
+                'role' => $user->getRoleName()
             ];
             //     si nok : renvoi sur page de login avec message d'erreur
-
+            
         } else {
             return $this->view('login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
         }
@@ -74,10 +76,10 @@ class User extends BaseController
         $user = $this->session->getUser();
         if (null !== $user) {
             $user = [
-                'firstname' => $user->getFirstname(),
-                'lastname' => $user->getLastname(),
+                
                 'username' => $user->getUsername(),
-                'id' => $user->getId()
+                'id' => $user->getId(),
+                'role' => $user->getRoleName()
             ];
         }
         $this->view('signup.html.twig', ['error' => false, 'authUser' => $user]);

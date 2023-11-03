@@ -92,4 +92,30 @@ class CommentManager extends BaseManager
         $query->execute();
         return $query->rowCount();
     }
+
+    public function unpublish(int $id): void
+    {
+        $query = $this->dbConnect->prepare('
+            UPDATE ' . $this->table . ' 
+            SET 
+                publish_state = false
+            WHERE id = :id 
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+
+    public function publish(int $id): void
+    {
+        $query = $this->dbConnect->prepare('
+            UPDATE ' . $this->table . ' 
+            SET 
+                publish_state = true
+            WHERE id = :id 
+        ');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
 }

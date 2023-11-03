@@ -33,7 +33,6 @@ class Post extends BaseController
 
     public function deletePost($id)
     {
-
         (new PostManager(Application::getDatasource()))->delete($id);
         header('Location: /blog-project/admin');
     }
@@ -89,31 +88,33 @@ class Post extends BaseController
     public function modifiedPost($id)
     {
         $post = new PostManager(Application::getDatasource());
-
+        $params=[];
         $statement = $post->getById($id);
-        $modification = false;
+
         // dd($_POST, $statement);
-        if ($_POST['content'] != $statement->getContent()) {
-            echo 'corps'; //update du content
-            $modification = true;
+        if ($_POST['content'] !== $statement->getContent()) {   
+            $params['content']= $_POST['content'];
         }
         // dd($_POST['name'], $statement->getName());
         if ($_POST['name'] !== $statement->getName()) {
-            echo 'titre';
+            $params['name']= $_POST['name'];
+        }
+        if (null !== $params) {
+            $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
+            $params['publishState'] = 0;
+           
+            $post->update($statement, $params); 
+        }
 
-            //update du name
-            $modification = true;
-        }
-        if ($modification) {
-            //update date
-            echo 'modification';
-        }
         $user = $this->session->getUser();
         $user = [
             'name' => $user->getUsername(),
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
+
+        $post = new PostManager(Application::getDatasource());
+        $statement = $post->getById($id);
         $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
@@ -146,6 +147,8 @@ class Post extends BaseController
         $request = new Request("/blog-project/");
 
         $comment->insertNewComment($request->getParams());
+        //Message de prise en compte et de validation du commentaire par l'administrateur
+        
         $user = $this->session->getUser();
             $user = [
                 'name' => $user->getUsername(),
@@ -157,5 +160,89 @@ class Post extends BaseController
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
         Header("Location: /blog-project/post/$slug-$id");
+    }
+
+    public function moderationPosts()
+    {
+        $posts = new PostManager(Application::getDatasource());
+
+        $statementPosts = $posts->getAll();
+        foreach ($statementPosts as $statementPost) {
+            $statementPost->username = current($posts->getPostUsername($statementPost->getUserId()));
+        }
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
+
+
+        $this->view('admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
+    }
+
+    
+    
+    public function moderatePost($id)
+    {
+        $post = new PostManager(Application::getDatasource());
+
+        $statement = $post->getById($id);
+        $user = $this->session->getUser();
+            $user = [
+                'name' => $user->getUsername(),
+                'id' => $user->getId(),
+                'roleName' => $user->getRoleName()
+            ];
+
+
+        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+    }
+
+    public function moderatedPost($id)
+    {
+        $post = new PostManager(Application::getDatasource());
+        $params=[];
+        $statement = $post->getById($id);
+
+        // dd($_POST, $statement);
+        if ($_POST['content'] !== $statement->getContent()) {   
+            $params['content']= $_POST['content'];
+        }
+        // dd($_POST['name'], $statement->getName());
+        if ($_POST['name'] !== $statement->getName()) {
+            $params['name']= $_POST['name'];
+        }
+        if (null !== $params) {
+            $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
+            $params['publishState'] = 0;
+           
+            $post->update($statement, $params); 
+        }
+
+        $user = $this->session->getUser();
+        $user = [
+            'name' => $user->getUsername(),
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
+        ];
+
+        $post = new PostManager(Application::getDatasource());
+        $statement = $post->getById($id);
+        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+    }
+
+    public function unpublishPost(int $id)
+    {
+
+        (new PostManager(Application::getDatasource()))->unpublish($id);
+        header('Location: /blog-project/admin/moderation/posts');
+    }
+
+    public function publishPost(int $id)
+    {
+
+        (new PostManager(Application::getDatasource()))->publish($id);
+        header('Location: /blog-project/admin/moderation/posts');
     }
 }

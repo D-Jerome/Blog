@@ -44,16 +44,23 @@ final class Application
                     ($action === 'deletePost') ||
                     ($action === 'modifyPost') ||
                     ($action === 'modifiedPost') ||
+                    ($action === 'unpublishPost') ||
+                    ($action === 'publishPost') ||
                     ($action === 'disableUser') ||
                     ($action === 'enableUser') ||
                     ($action === 'modifyUser') ||
                     ($action === 'modifiedUser') ||
                     ($action === 'addComment') ||
-                    ($action === 'addedComment')
+                    ($action === 'addedComment') ||
+                    ($action === 'deleteComment') ||
+                    ($action === 'modifyComment') ||
+                    ($action === 'modifiedComment') ||
+                    ($action === 'unpublishComment') ||
+                    ($action === 'publishComment') 
                 ) {
 
                     $uri = (explode('-', $this->request->getUri()));
-
+                  
                     $id = current(array_filter($uri, function ($num) {
                         return is_numeric($num) == true;
                     }));
