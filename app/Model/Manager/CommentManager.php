@@ -19,7 +19,7 @@ class CommentManager extends BaseManager
     {
         $statement = $this->dbConnect->prepare('
             SELECT * FROM comment com 
-            WHERE com.post_id = ?
+            WHERE com.post_id = ? and com.publish_state = true
             ');
 
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -32,7 +32,7 @@ class CommentManager extends BaseManager
     {
         $statement = $this->dbConnect->prepare('
             SELECT com.id FROM comment com 
-            WHERE p.id = ?
+            WHERE p.id = ? and com.publish_state = true
             ');
         $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
