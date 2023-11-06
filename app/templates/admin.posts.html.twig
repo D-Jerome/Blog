@@ -16,8 +16,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for post in posts %}
+                {% for post in posts %}
+                {% if comment.publishState != false %}
                     <tr>
+                {% else %}
+                    <tr class="table-danger" >
+                {% endif %}
                         <th scope="row">{{ post.id }}</th>
                         <td>{{ post.name }}</td>
                         <td>{{ post.excerptContent | raw }}</td>
@@ -26,7 +30,7 @@
                         <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
                         <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
                 </tbody>
                 </table>
 {% endblock %}
