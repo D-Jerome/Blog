@@ -40,7 +40,7 @@
                 {% endif %}    
 
             {% endfor %}
-            <a href="/blog-project/admin/comment/add/{{ post.slug }}-{{ post.id }}" class="btn btn-primary mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
+            <a href="/blog-project/admin/comment/add/{{ post.slug }}/{{ post.id }}" class="btn btn-primary mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
             <div class="container col-4 bg-danger-subtle {% if authUser.id != false %} invisible {% endif %} rounded border border-dark">
                 <a href="/blog-project/signup" class="btn btn-warning  btn-outline-primary mx-auto p-2 mt-3 w-100" >Inscrivez-vous</a>      
                 <div class="col-1 mx-auto p-2">ou</div>

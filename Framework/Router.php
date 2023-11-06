@@ -21,88 +21,67 @@ class Router
         }
     }
 
-    public function findRoute(Request $request): ?Route
-    {       
-      
+    public function findRoute(Request $request): ?Route 
+    {
+
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
-
-                $pattern = $this->decodePattern('~^' . $route->getPath() . '$~');
-                
-                if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
-
-                    $matches = array_merge([
-                        'slug' => '',
-                        'postId' => '',
-                        'commentId' => '',
-                        'username' => '',
-                        'userId' => ''
-                    ], $matches);
-
-                    if ($this->validateRoute($matches)) {
-                     
-                        return $route;
-
+                preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
+                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());         
+                $routeMatcher = str_replace('/', '\/', $routeMatcher);
+                if (preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
+                    $paramsValues = [];
+                    foreach ($paramNames[1] as $key => $names) {
+                        $paramsValues[$names] = $params[$key + 1][0];
                     }
+                   // if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
+
+                        $paramsValues = array_merge([
+                            'slug' => '',
+                            'postId' => '',
+                            'commentId' => '',
+                            'username' => '',
+                            'userId'  => ''
+                        ], $paramsValues);
+
+                        if ($this->validateRoute($paramsValues)) {
+                            return $route;
+                        }
                 } elseif ($route->getPath() === $request->getUri()) {
                     return $route;
                 }
+                
             }
         }
-       
         return null;
-    }
-
-    private function decodePattern(string $pattern): string
-    {
-        $routePattern = [
-            '~{:slug}~',
-            '~{:postId}~',
-            '~{:commentId}~',
-            '~{:username}~',
-            '~{:userId}~'
-        ];
-        $routeReplacement = [
-            '(?<slug>([\D]{1,}-){1,})',
-            '(?<postId>[\d]{1,})',
-            '(?<commentId>[\d]{1,}-)',
-            '(?<username>[\w]{1,}-)',
-            '(?<userId>[\d]{1,})'
-        ];
-
-        return preg_replace($routePattern, $routeReplacement, $pattern);
     }
 
     private function validateRoute(array $matches): bool
     {
-        $sanitizeMatches = [];
+
         $valid = false;
-        //verifier en base si slug correspond au postId
-        //verifier en base si CommentId correspond au PostId
-        foreach ($matches as $k => $match) {
-            $sanitizeMatches[$k] = Text::sanitizeMatches($match);
-        }
-
-        if ('' !== ($sanitizeMatches['slug']) && '' !== ($sanitizeMatches['postId'])) {
+       
+        if ('' !== ($matches['slug']) && '' !== ($matches['postId']) && is_numeric($matches['postId'])) {
             $posts = new PostManager(Application::getDatasource());
-            if ($posts->verifyCoupleIdSlug($sanitizeMatches['postId'], $sanitizeMatches['slug']) === 1) {
+            if ($posts->verifyCoupleIdSlug($matches['postId'], $matches['slug']) === 1) {
                 $valid = true;
             }
         }
-        if ('' !== ($sanitizeMatches['commentId']) && '' !== ($sanitizeMatches['postId'])) {
+        
+        if ('' !== ($matches['commentId']) && '' !== ($matches['postId']) && is_numeric($matches['commentId'])) {
             $comments = new CommentManager(Application::getDatasource());
-            if ($comments->verifyCoupleCommentIdPostId($sanitizeMatches['postId'], $sanitizeMatches['commentId']) === 1) {
+            if ($comments->verifyCoupleCommentIdPostId($matches['postId'], $matches['commentId']) === 1) {
                 $valid = true;
             }
         }
-        if ('' !== ($sanitizeMatches['username']) && '' !== ($sanitizeMatches['userId'])) {
+        if ('' !== ($matches['username']) && '' !== ($matches['userId'])  && is_numeric($matches['userId'])) {
             $users = new UserManager(Application::getDatasource());
-            if ($users->verifyCoupleUsernameUserId($sanitizeMatches['userId'], $sanitizeMatches['username']) === 1) {
+            if ($users->verifyCoupleUsernameUserId($matches['userId'], $matches['username']) === 1) {
 
                 $valid = true;
             }
         }
-        if ('' === ($sanitizeMatches['postId']) && '' === ($sanitizeMatches['commentId']) && '' === ($sanitizeMatches['userId'])) {
+        if ('' === ($matches['postId']) && '' === ($matches['commentId']) && '' === ($matches['userId'])) {
             $valid = true;
         }
 

@@ -159,7 +159,7 @@ class Post extends BaseController
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
-        Header("Location: /blog-project/post/$slug-$id");
+        Header("Location: /blog-project/post/$slug/$id");
     }
 
     public function moderationPosts()

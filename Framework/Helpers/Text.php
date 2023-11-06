@@ -10,11 +10,6 @@ class Text
         
     }
 
-    public static function sanitizeMatches(string $string): string
-    {
-        return rtrim($string,'-'); 
-    }
-
     public static function camelCaseToSnakeCase(string $string): string
     {
 

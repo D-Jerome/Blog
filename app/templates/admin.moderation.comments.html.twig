@@ -24,11 +24,11 @@
                         <td>{{ comment.content | raw }}</td>
                         <td>{{ comment.createdAt }}</td>
                         <td>{{ comment.username }}</td>
-                        <td><a href="/blog-project/admin/comment/modify/{{ comment.id }}-{{ comment.postId }}" class="btn btn-warning">Modifier</a> 
+                        <td><a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning">Modifier</a> 
                         {% if comment.publishState != false %}
-                            <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}-{{ comment.postId }}" class="btn btn-danger">Désactiver</a> </td>
+                            <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-danger">Désactiver</a> </td>
                         {% else %}
-                            <a href="/blog-project/admin/comment/publish/{{ comment.id }}-{{ comment.postId }}" class="btn btn-success">Activer</a> </td>
+                            <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-success">Activer</a> </td>
                         {% endif %}
                     </tr>
                     {% endfor %}

@@ -27,7 +27,7 @@
         ]
     },
     {
-        "path" : "/post/{:slug}{:postId}",
+        "path" : "/post/{slug}/{postId}",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",
@@ -82,7 +82,7 @@
         ]
     },
     {
-        "path" : "/admin/post/unpublish/{:slug}{:postId}",
+        "path" : "/admin/post/unpublish/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "unpublishPost",
         "method" : "GET",
@@ -91,7 +91,7 @@
         ]
     },
     {
-        "path" : "/admin/post/publish/{:slug}{:postId}",
+        "path" : "/admin/post/publish/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "publishPost",
         "method" : "GET",
@@ -120,7 +120,7 @@
         ]
     },
     {
-        "path" : "/admin/comment/unpublish/{:commentId}{:postId}",
+        "path" : "/admin/comment/unpublish/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "unpublishComment",
         "method" : "GET",
@@ -129,7 +129,7 @@
         ]
     },
     {
-        "path" : "/admin/comment/publish/{:commentId}{:postId}",
+        "path" : "/admin/comment/publish/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "publishComment",
         "method" : "GET",
@@ -138,7 +138,7 @@
         ]
     },
     {
-        "path" : "/admin/comment/modify/{:commentId}{:postId}",
+        "path" : "/admin/comment/modify/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "modifyComment",
         "method" : "GET",
@@ -149,7 +149,7 @@
         ] 
     },
     {
-        "path" : "/admin/comment/modify/{:commentId}{:postId}",
+        "path" : "/admin/comment/modify/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "modifiedComment",
         "method" : "POST",
@@ -172,7 +172,7 @@
         ]
     },
     {
-        "path" : "/admin/post/delete/{:slug}{:postId}",
+        "path" : "/admin/post/delete/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "deletePost",
         "method" : "GET",
@@ -181,7 +181,7 @@
         ]
     },
     {
-        "path" : "/admin/post/modify/{:slug}{:postId}",
+        "path" : "/admin/post/modify/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "modifyPost",
         "method" : "GET",
@@ -191,7 +191,7 @@
         ] 
     },
     {
-        "path" : "/admin/post/modify/{:slug}{:postId}",
+        "path" : "/admin/post/modify/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "modifiedPost",
         "method" : "POST",
@@ -252,7 +252,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/modify/{:username}{:userId}",
+        "path" : "/admin/user/modify/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "modifyUser",
         "method" : "GET",
@@ -263,7 +263,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/modify/{:username}{:userId}",
+        "path" : "/admin/user/modify/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "modifiedUser",
         "method" : "POST",
@@ -274,7 +274,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/disable/{:username}{:userId}",
+        "path" : "/admin/user/disable/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "disableUser",
         "method" : "GET",
@@ -283,7 +283,7 @@
         ]             
     },
     {
-        "path" : "/admin/user/enable/{:username}{:userId}",
+        "path" : "/admin/user/enable/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "enableUser",
         "method" : "GET",
@@ -310,7 +310,7 @@
         ] 
     },
     {
-        "path" : "/admin/comment/add/{:slug}{:postId}",
+        "path" : "/admin/comment/add/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "addComment",
         "method" : "GET",
@@ -321,7 +321,7 @@
         ] 
     },
     {
-        "path" : "/admin/comment/add/{:slug}{:postId}",
+        "path" : "/admin/comment/add/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "addedComment",
         "method" : "POST",
@@ -332,7 +332,7 @@
         ] 
     },
     {
-        "path" : "/post/{:commentId}{:postId}",
+        "path" : "/post/{commentId}/{postId}",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
         "method" : "GET",

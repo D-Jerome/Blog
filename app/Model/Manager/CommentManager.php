@@ -95,6 +95,7 @@ class CommentManager extends BaseManager
 
     public function unpublish(int $id): void
     {
+       
         $query = $this->dbConnect->prepare('
             UPDATE ' . $this->table . ' 
             SET 

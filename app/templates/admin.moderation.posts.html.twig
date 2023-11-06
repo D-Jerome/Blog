@@ -26,11 +26,11 @@
                         <td>{{ post.content | raw }}</td>
                         <td>{{ post.createdAt }}</td>
                         <td>{{ post.username }}</td>
-                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}-{{ post.id }}" class="btn btn-warning">Modifier</a> 
+                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
                         {% if post.publishState != false %}
-                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}-{{ post.id }}" class="btn btn-danger">Désactiver</a> </td>
+                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Désactiver</a> </td>
                         {% else %}
-                            <a href="/blog-project/admin/post/publish/{{ post.slug }}-{{ post.id }}" class="btn btn-success">Activer</a> </td>
+                            <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn btn-success">Activer</a> </td>
                         {% endif %}
                     </tr>
                     {% endfor %}

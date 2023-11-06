@@ -40,9 +40,19 @@ abstract class BaseManager
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
-    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page)
+    public function getAllPublish()
+    {
+        $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table ." WHERE publish_state = true");
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    }
+
+    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page , ?bool $publish)
     {
         $sql = 'SELECT * FROM ' . $this->table;
+        if ($publish) {
+            $sql .= ' WHERE publish_state = '. $publish;
+        }        
         if (isset($field)) {
             $sql .= ' ORDER BY ' . $field;
         }

@@ -69,9 +69,10 @@ class Post extends BaseController
         $perPage = $_GET['perPage'] ?? 8;
         $currentPage = $_GET['page'] ?? 1;
         $currentPage = (int)$currentPage;
+        $publish = true;
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage);
+        $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage, $publish );
         foreach ($statementPosts as $statementPost) {
 
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
@@ -79,13 +80,20 @@ class Post extends BaseController
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
 
-        $count = count($posts->getAll());
+        if ($publish){
+            $count = count($posts->getAllPublish());        
+        } else {
+            $count = count($posts->getAll());
+        }    
 
-        if ($currentPage >= (ceil(($count / $perPage)))) {
+        
+        if ((int)(ceil(($count / $perPage))) === 1 ) {
+            $pages['nextActive'] =false;
+            $pages['previousActive'] = false;
+        }elseif ($currentPage >= (ceil(($count / $perPage)))) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
         } elseif ($currentPage === 1) {
-
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
         } else {

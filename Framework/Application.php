@@ -24,11 +24,11 @@ final class Application
         $msgErr = false;
         try {
             $foundRoute = $this->router->findRoute($this->request);
+            
             if (null === $foundRoute) {
                 throw new NoRouteFoundException;
             }
-
-
+          
             $controller = $foundRoute->getController();
             $action =  $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
@@ -39,38 +39,43 @@ final class Application
             }
 
             if ($route->isAuthorize($authRoles)) {
-                //à refactoriser
-                if (($action === 'post') ||
-                    ($action === 'deletePost') ||
-                    ($action === 'modifyPost') ||
-                    ($action === 'modifiedPost') ||
-                    ($action === 'unpublishPost') ||
-                    ($action === 'publishPost') ||
-                    ($action === 'disableUser') ||
-                    ($action === 'enableUser') ||
-                    ($action === 'modifyUser') ||
-                    ($action === 'modifiedUser') ||
-                    ($action === 'addComment') ||
-                    ($action === 'addedComment') ||
-                    ($action === 'deleteComment') ||
-                    ($action === 'modifyComment') ||
-                    ($action === 'modifiedComment') ||
-                    ($action === 'unpublishComment') ||
-                    ($action === 'publishComment') 
-                ) {
+           
+                if (preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
+                    
+                    $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
+                    $routeMatcher = str_replace('/', '\/', $routeMatcher);
+                    if (preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
+                        $paramsValues = [];
+                        foreach ($paramNames[1] as $key => $names) {
+                            $paramsValues[$names] = $params[$key + 1][0];
+                        }
+                        // if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
 
-                    $uri = (explode('-', $this->request->getUri()));
-                  
-                    $id = current(array_filter($uri, function ($num) {
-                        return is_numeric($num) == true;
-                    }));
-
+                        $paramsValues = array_merge([
+                            'slug' => '',
+                            'postId' => '',
+                            'commentId' => '',
+                            'username' => '',
+                            'userId'  => ''
+                        ], $paramsValues);
+                        
+                        switch (true) {
+                            case (('' !== $paramsValues['postId']) && ('' === $paramsValues['commentId']) && ('' === $paramsValues['userId'])):
+                                $id = $paramsValues['postId'];
+                                break;
+                            case (('' !== $paramsValues['postId']) && ('' !== $paramsValues['commentId']) && ('' === $paramsValues['userId'])):
+                                $id = $paramsValues['commentId'];
+                                break;
+                            case (('' === $paramsValues['postId']) && ('' ===$paramsValues['commentId']) && ('' !== $paramsValues['userId'])):
+                                $id = $paramsValues['userId'];
+                                break;
+                        }
+                    }    
                     $route->$action($id);
                 } else {
                     $route->$action();
                 }
-                //
-
+                
             }
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
