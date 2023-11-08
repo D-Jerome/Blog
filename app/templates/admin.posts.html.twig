@@ -27,8 +27,10 @@
                         <td>{{ post.excerptContent | raw }}</td>
                         <td>{{ post.createdAt }}</td>
                         <td>{{ post.username }}</td>
-                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
-                        <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Supprimer</a> </td>
+                        <td>
+                            <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
+                            <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Supprimer</a> 
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

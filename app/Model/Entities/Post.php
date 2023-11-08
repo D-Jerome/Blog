@@ -58,7 +58,11 @@ class Post extends Entity
 
 	public function getExcerptContent()
 	{
-		return substr($this->content, 0, 60) . '...';
+		$excerpt = substr($this->content, 0, 60) . '...';
+		if (str_contains($excerpt, "<img title=")){
+			$excerpt =  substr($this->content, 0, strpos($this->content, "<img title=")) . '...';
+		}
+		return $excerpt;
 	}
 
 	public function getCategories(): ?array

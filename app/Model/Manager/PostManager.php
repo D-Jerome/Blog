@@ -2,7 +2,7 @@
 
 namespace App\Model\Manager;
 
-
+use App\Model\Entities\Category;
 use App\Model\Entities\Post;
 use DateTime;
 use Framework\Application;
@@ -24,11 +24,37 @@ class PostManager extends BaseManager
             SELECT c.* FROM category c 
             INNER JOIN post_category pc ON pc.category_id = c.id 
             INNER JOIN post p ON pc.post_id = p.id 
-            WHERE p.id = ?
+            WHERE p.id = ? 
             ');
-        $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
+        $statement->setFetchMode(PDO::FETCH_CLASS, Category::class );
         $statement->execute([$id]);
         return $statement->fetchAll();
+    }
+
+    public function getPostsbyCategory(Category $category)
+    {
+        
+        
+            $query = $this->dbConnect->prepare('
+            SELECT p.* FROM post p 
+            INNER JOIN post_category pc ON pc.post_id = p.id 
+            WHERE pc.category_id = ? and p.publish_state = true
+            ORDER BY p.created_at DESC
+            LIMIT 3
+            ');
+            $query->setFetchMode(PDO::FETCH_CLASS, $this->object);
+            $query->execute([$category->getId()]);
+            $statementByCategories = $query->fetchAll();
+            foreach ($statementByCategories as $statementByCategory) {
+
+                $statementByCategory->categories =  $this->getCategoriesById($statementByCategory->id);
+                $statementByCategory->countComments = (int)$this->getCountCommentsByPostId($statementByCategory->id);
+                $statementByCategory->username =  current($this->getPostUsername($statementByCategory->getUserId()));
+            
+            }
+        return $statementByCategories;   
+        
+        
     }
 
     public function getCountCommentsByPostId(int $id)

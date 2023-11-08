@@ -51,6 +51,14 @@ class Comment extends Entity
 	{
 		return $this->username;
 	}
+	public function getExcerptContent()
+	{
+		$excerpt = substr($this->content, 0, 60) . '...';
+		if (str_contains($excerpt, "<img title=")){
+			$excerpt =  substr($this->content, 0, strpos($this->content, "<img title=")) . '...';
+		}
+		return $excerpt;
+	}
 
 	public function getPublishState()
 	{

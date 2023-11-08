@@ -33,7 +33,7 @@ class Post extends BaseController
                 'id' => $user->getId()
             ];
         }
-
+        
         $this->view('posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
@@ -47,8 +47,9 @@ class Post extends BaseController
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        $statementPost->categories = $post->getCategoriesById($statementPost->id);
+        
         foreach ($statementComments as $statementComment) {
-            //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
         $user = $this->session->getUser();

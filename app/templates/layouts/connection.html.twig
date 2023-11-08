@@ -2,29 +2,26 @@
 
 {% block login %}
 {% if authUser.id != false  %}
-<div class="nav-item  dropstart col-3 me-2">
-            <ul class="navbar-nav justify-content-end">
-<div class="btn-group ">
-    <button type="button" class="btn btn-secondary dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-    {{ authUser.name }}
-    </button>
-    <div class="dropdown-menu">
-        <a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}/{{ authUser.id }}">Profil</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/blog-project/admin/logged">Administration</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item bg-danger" href="/blog-project/logout">Deconnexion</a>
-    </div>
-</div>
+    <li class="nav-item dropstart col-6 me-2 my-auto">
+        <a  class="btn btn-secondary dropdown-toggle float-end" href="#" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ authUser.name }}
+        </a>    
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}/{{ authUser.id }}">Profil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/blog-project/admin/logged">Administration</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-bg-danger bg-gradient" href="/blog-project/logout">Deconnexion</a></li>
+        </ul>
+    </li>
 {% else %}
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a href="/blog-project/signup" class="nav-link">Inscrivez-vous</a>
-        </li>
-        <li class="nav-item">
-            <a href="/blog-project/login" class="nav-link">Identifiez-vous</a>
-        </li>    
-    </ul>    
+    <li class="nav-item">
+        <a class="btn text-bg-primary btn-success rounded nav-link px-lg-3 py-3 py-lg-4 " href="/blog-project/signup" class="nav-link">Inscrivez-vous</a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-warning nav-link px-lg-3 py-3 py-lg-4 " href="/blog-project/login" class="nav-link">Identifiez-vous</a>
+    </li>    
+    
 {% endif %}
 
 {% endblock %}

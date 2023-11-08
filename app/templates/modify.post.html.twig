@@ -2,6 +2,26 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block content %} 
+            <header class="masthead" style="background-image: url('')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>Modification de l'article :<br>
+                            {{ post.name }}</h1>
+                            <h2 class="subheading">{% for category in post.categories %}                 
+                                    <span class="badge text-bg-primary bg-gradient">{{ category.name }}</span>
+                                {% endfor %}   </h2>
+                            <span class="meta">
+                                Posté par
+                                <span class="text-primary">{{ post.username }}</span>
+                                le {{ post.createdAt }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
             <h1>Modification d'article</h1>            
             <div class="col-md-10">            
                 <div class="card mb-3 bg-secondary bg-gradient text-light">
