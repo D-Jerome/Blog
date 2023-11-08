@@ -130,6 +130,10 @@ class Post extends BaseController
             //dd($statementComment->getUserId());
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
+        $statementPost->categories = $post->getCategoriesById($statementPost->id);
+        $statementPost->countComments = $post->getCountCommentsByPostId($statementPost->id);
+        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        
         $user = $this->session->getUser();
         $user = [
             'name' => $user->getUsername(),

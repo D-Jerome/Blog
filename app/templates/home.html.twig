@@ -23,11 +23,11 @@
             </div>
         </div>
     </header>
-    <div class="accordion accordion-flush" id="accordionFlush">
+    <div class="accordion accordion-flush accordion-color" id="accordionFlush">
     {% for category in categories %} 
-        <div class="accordion-item bg-light">
+        <div class="accordion-item bg-light m-2">
             <h2 class="accordion-header">
-            <button class="accordion-button text-bg-primary  gb-gradient  rounded-pill collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ category.id }}" aria-expanded="false" aria-controls="flush-collapse{{ category.id }}">
+            <button class="accordion-button text-bg-primary bg-gradient rounded-pill collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ category.id }}" aria-expanded="false" aria-controls="flush-collapse{{ category.id }}">
                 {{ category.name }}
             </button>
             </h2>
