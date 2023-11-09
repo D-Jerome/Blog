@@ -8,12 +8,9 @@ class User extends Entity
 	protected string $firstname;
 	protected string $lastname;
 	protected string $username;
-	protected ?string $description;
 	protected string $email;
 	protected string $password;
 	protected $createdAt;
-	protected ?string $picture;
-	protected ?string $file;
 	protected int $roleId;
 	protected string $roleName;
 	protected bool $active;
@@ -38,11 +35,6 @@ class User extends Entity
 		return $this->username;
 	}
 
-	public function getDescription()
-	{
-		return $this->description;
-	}
-
 	public function getEmail()
 	{
 		return $this->email;
@@ -57,17 +49,6 @@ class User extends Entity
 	{
 		return $this->createdAt;
 	}
-
-	public function picture()
-	{
-		return $this->picture;
-	}
-
-	public function file()
-	{
-		return $this->file;
-	}
-
 
 	public function getRoleId()
 	{

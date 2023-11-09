@@ -38,13 +38,13 @@ class UserManager extends BaseManager
         
         if (isset($params['roleId'])) {
             $query = $this->dbConnect->prepare('
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, description, email , password, picture, file, created_at, role_id ) 
-                VALUES (:firstname, :lastname, :username, :description, :email , :password, :picture, :file, :created_at, :role_id)
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , file, created_at, role_id ) 
+                VALUES (:firstname, :lastname, :username, :email , :password, :created_at, :role_id)
             ');
         } else {
             $query = $this->dbConnect->prepare('
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, description, email , password, picture, file, created_at ) 
-                VALUES (:firstname, :lastname, :username, :description, :email , :password, :picture, :file, :created_at)
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , password, created_at ) 
+                VALUES (:firstname, :lastname, :username, :email , :password, :created_at)
             ');
         }
 
@@ -60,11 +60,8 @@ class UserManager extends BaseManager
         $query->bindParam(':firstname', $params['firstname']);
         $query->bindParam(':lastname', $params['lastname']);
         $query->bindParam(':username', $params['username']);
-        $query->bindParam(':description', $params['description']);
         $query->bindParam(':email', $params['email']);
         $query->bindParam(':password', $password);
-        $query->bindParam(':picture', $params['picture']['name']);
-        $query->bindParam(':file', $params['file']['name']);
         $query->bindParam(':created_at', $created_at);
         if (isset($params['roleId'])) {
             $query->bindParam(':role_id', $params['roleId']);

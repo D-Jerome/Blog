@@ -120,14 +120,6 @@ class User extends BaseController
             unset($postdatas['confirmPassword']);
             $this->view('signup.html.twig', ['error' => true, 'data' => $postdatas]);
         } else {
-           
-            $target_picture = "../img/" . basename ($_FILES["picture"]["name"]);
-            
-            move_uploaded_file($_FILES["picture"]["tmp_name"], $target_picture);
-            $target_file = "uploads/file/" . basename ($_FILES["file"]["name"]);
-            move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
-            
-            
             $users->insertNewUser($postdatas);
             $mail = new Mail(Application::getEmailSource());
             $mail->sendMailToUser($users->getByUsername($postdatas['username']));
