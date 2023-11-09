@@ -9,9 +9,9 @@
         ]
     },
     {
-        "path" : "/",
-        "controller" : "App\\Controller\\Home",
-        "action" : "home",
+        "path" : "/posts-category",
+        "controller" : "App\\Controller\\Post",
+        "action" : "postsByCategory",
         "method" : "GET",
         "authorize": [
             "all"

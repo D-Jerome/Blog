@@ -66,7 +66,7 @@ class User extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        $this->view('modify.user.html.twig', ['users' => $statement, 'roles' => $statementRoles, 'authUser' => $user]);
+            header('Location: /blog-project/admin');
     }
 
     public function disableUser(int $id)

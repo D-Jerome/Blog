@@ -31,7 +31,7 @@ class Mail
 
     }
     
-    public function sendMail(User $user)
+    public function sendMailToUser(User $user)
     {
         $mail = new PHPMailer(true);
         //Server settings
@@ -66,5 +66,54 @@ class Mail
         } else {
             echo 'Message has been sent.';
         }
+    }
+
+    public function sendMailToAdmin(array $contact)
+    {
+        $mail = new PHPMailer(true);
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
+        $mail->isSMTP();                                            
+        $mail->Host       = $this->host;                     
+        $mail->SMTPAuth   = $this->smtpAuth;                 
+        $mail->Username   = $this->userName;                 
+        $mail->Password   = $this->password;                
+        $mail->SMTPSecure = $this->smtpSecure;            
+        $mail->Port       = $this->port;                     
+
+        //Recipients
+        $mail->setFrom($this->fromAddress, $this->fromName);
+        $mail->addAddress("server@server.com", "Admin Server");     
+        $mail->addReplyTo("no-reply@servewr.com", "No-Reply");
+
+        //Attachments
+        // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Message de contact';
+        $mail->Body    = '
+                        Bonjour Jérôme, <br>
+                        Voici un nouveau message d\'un utilisateur. <br>
+                        <br>
+                        Message de : ' . $contact['name'] . '<br>
+                        Email : ' . $contact['email'] . '<br>
+                        Message : ' . $contact['message'] . '<br>
+                        ';
+        $mail->AltBody = '
+                        Bonjour Jérôme, 
+                        Voici un nouveau message d\'un utilisateur.
+                        Message de : ' . $contact['name'] . '
+                        Email : ' . $contact['email'] . '
+                        Message : ' . $contact['message'] . '
+                        ';
+        
+        if (!$mail->send()) {
+            echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent.';
+        }
+        
     }
 }

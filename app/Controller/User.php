@@ -130,7 +130,7 @@ class User extends BaseController
             
             $users->insertNewUser($postdatas);
             $mail = new Mail(Application::getEmailSource());
-            $mail->sendMail($users->getByUsername($postdatas['username']));
+            $mail->sendMailToUser($users->getByUsername($postdatas['username']));
             header('Location: /blog-project/');
         }
     }
