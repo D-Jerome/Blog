@@ -18,6 +18,7 @@
         "filp/whoops": "^2.15",
         "symfony/var-dumper": "^6.3",
         "tinymce/tinymce": "^6.7",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "phpmailer/phpmailer": "^6.8"
     }
 }

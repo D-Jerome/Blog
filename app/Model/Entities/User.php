@@ -8,12 +8,12 @@ class User extends Entity
 	protected string $firstname;
 	protected string $lastname;
 	protected string $username;
-	protected string $description;
+	protected ?string $description;
 	protected string $email;
 	protected string $password;
 	protected $createdAt;
-	protected string $picture;
-	protected string $file;
+	protected ?string $picture;
+	protected ?string $file;
 	protected int $roleId;
 	protected string $roleName;
 	protected bool $active;

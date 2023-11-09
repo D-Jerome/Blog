@@ -7,9 +7,30 @@
             <div class="col-md-10 border border-dark"> 
                 <form action="" method="post">
                 <div class="form-group">
+                    <label id="firstname">Identifiant</label>
+                    <input class="form-control" type="text" id="firstname"  name="firstname" value="">
+                </div>
+                <div class="form-group">
+                    <label id="lastname">Identifiant</label>
+                    <input class="form-control" type="text" id="lastname"  name="lastname" value="">
+                </div>
+                <div class="form-group">
                     <label id="username">Identifiant</label>
                     <input class="form-control" type="text" id="username"  name="username" value="">
                 </div>
+                <div class="col-md-6">
+                                <input class="form-control" id="image" type="file" accept="image/*" name="image" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" id="image1" type="file" accept="image/*" name="image1" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" id="image2" type="file" accept="image/*" name="image2" />
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" id="attach_file" type="file" accept="image/*" name="attach_file" />
+                            </div>
+
                 {% if authUser.roleName == "admin" %}
                     <div class="form-group bg-light">
                     Role:

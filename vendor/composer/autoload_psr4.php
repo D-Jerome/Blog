@@ -15,6 +15,7 @@ return array(
     'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Framework\\' => array($baseDir . '/Framework'),
     'Faker\\' => array($vendorDir . '/fakerphp/faker/src/Faker'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),

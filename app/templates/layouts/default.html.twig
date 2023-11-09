@@ -24,7 +24,7 @@
      <script>
       tinymce.init({
         selector: 'textarea#content',
-        plugins: 'a11ychecker advcode advlist advtable anchor autocorrect autolink autoresize autosave casechange charmap checklist code codesample directionality editimage emoticons export footnotes formatpainter fullscreen help image importcss inlinecss insertdatetime link linkchecker lists media mediaembed mentions mergetags nonbreaking pagebreak pageembed permanentpen powerpaste preview quickbars save searchreplace table tableofcontents template tinydrive tinymcespellchecker typography visualblocks visualchars wordcount',
+        plugins: 'a11ychecker advcode advlist advtable anchor autocorrect autolink autoresize autosave casechange charmap checklist code codesample directionality editimage emoticons export footnotes formatpainter fullscreen help image importcss inlinecss insertdatetime link linkchecker lists media mediaembed mentions nonbreaking pagebreak pageembed permanentpen powerpaste preview quickbars save searchreplace table tableofcontents advtemplate tinydrive tinymcespellchecker typography visualblocks visualchars wordcount',
         toolbar: 'undo redo | image | blocks | forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | checklist bullist numlist | indent outdent | wordcount',
         branding: false,
         elementpath: false,
@@ -74,7 +74,7 @@
 </head>
 
 <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light " id="navbarResponsive">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light ">
         <div class="container px-4 px-lg-5">   
                 <a href="/blog-project/" class="navbar-brand">Mon Projet 5</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/A-propos">Contact</a></li>
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/post" class="nav-link">Tous les Posts</a></li>
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/post/list" class="nav-link">Articles</a></li>
-                    {% block login %}?{% endblock %}
+                    {% block login %}{% endblock %}
                 </ul>
             </div>
         </div>

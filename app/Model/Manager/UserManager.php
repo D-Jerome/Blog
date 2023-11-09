@@ -35,16 +35,16 @@ class UserManager extends BaseManager
 
     public function insertNewUser(array $params)
     {
-
+        
         if (isset($params['roleId'])) {
             $query = $this->dbConnect->prepare('
-                INSERT INTO ' . $this->table . '(username, email , password, created_at, role_id ) 
-                VALUES (:username, :email , :password, :created_at, :role_id)
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, description, email , password, picture, file, created_at, role_id ) 
+                VALUES (:firstname, :lastname, :username, :description, :email , :password, :picture, :file, :created_at, :role_id)
             ');
         } else {
             $query = $this->dbConnect->prepare('
-                INSERT INTO ' . $this->table . '(username, email , password, created_at ) 
-                VALUES (:username, :email , :password, :created_at)
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, description, email , password, picture, file, created_at ) 
+                VALUES (:firstname, :lastname, :username, :description, :email , :password, :picture, :file, :created_at)
             ');
         }
 
@@ -56,9 +56,15 @@ class UserManager extends BaseManager
 
         $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
 
+        
+        $query->bindParam(':firstname', $params['firstname']);
+        $query->bindParam(':lastname', $params['lastname']);
         $query->bindParam(':username', $params['username']);
+        $query->bindParam(':description', $params['description']);
         $query->bindParam(':email', $params['email']);
         $query->bindParam(':password', $password);
+        $query->bindParam(':picture', $params['picture']['name']);
+        $query->bindParam(':file', $params['file']['name']);
         $query->bindParam(':created_at', $created_at);
         if (isset($params['roleId'])) {
             $query->bindParam(':role_id', $params['roleId']);

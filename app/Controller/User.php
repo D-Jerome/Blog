@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-
 use App\Model\Manager\UserManager;
 use Exception;
-use Framework\{Application, Request};
+use Framework\{Application, Mail, Request};
 use Framework\BaseController;
 use Framework\Exception\PasswordPolicyException;
 use Framework\Exception\UnauthorizeValueException;
@@ -43,8 +42,8 @@ class User extends BaseController
             // Session::setSessionValue('role', $user->getRoleId());
             // Session::setSessionValue('authName', $user->getUsername());
             // Session::setSessionValue('roleName', ($users->getRoleById($user->getRoleId()))->getRole());
-            
-            
+
+
 
             header('Location: /blog-project/admin/logged');
 
@@ -54,7 +53,7 @@ class User extends BaseController
                 'role' => $user->getRoleName()
             ];
             //     si nok : renvoi sur page de login avec message d'erreur
-            
+
         } else {
             return $this->view('login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
         }
@@ -76,7 +75,7 @@ class User extends BaseController
         $user = $this->session->getUser();
         if (null !== $user) {
             $user = [
-                
+
                 'username' => $user->getUsername(),
                 'id' => $user->getId(),
                 'role' => $user->getRoleName()
@@ -121,7 +120,17 @@ class User extends BaseController
             unset($postdatas['confirmPassword']);
             $this->view('signup.html.twig', ['error' => true, 'data' => $postdatas]);
         } else {
+           
+            $target_picture = "../img/" . basename ($_FILES["picture"]["name"]);
+            
+            move_uploaded_file($_FILES["picture"]["tmp_name"], $target_picture);
+            $target_file = "uploads/file/" . basename ($_FILES["file"]["name"]);
+            move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
+            
+            
             $users->insertNewUser($postdatas);
+            $mail = new Mail(Application::getEmailSource());
+            $mail->sendMail($users->getByUsername($postdatas['username']));
             header('Location: /blog-project/');
         }
     }

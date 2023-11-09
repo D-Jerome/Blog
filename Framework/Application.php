@@ -88,4 +88,9 @@ final class Application
     {
         return self::$config['database'];
     }
+
+    public static function getEmailSource()
+    {
+        return self::$config['email'];
+    }
 }
