@@ -18,7 +18,12 @@ final class Application
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
     }
-
+    
+    /**
+     * router of application
+     *
+     * @return void
+     */
     public function run()
     {
         $msgErr = false;
@@ -56,7 +61,7 @@ final class Application
                             'postId' => '',
                             'commentId' => '',
                             'username' => '',
-                            'userId'  => ''
+                            'userId'  => '',
                         ], $paramsValues);
                         
                         switch (true) {
@@ -70,7 +75,7 @@ final class Application
                                 $id = $paramsValues['userId'];
                                 break;
                         }
-                    }    
+                    }   //endif 
                     $route->$action($id);
                 } else {
                     $route->$action();

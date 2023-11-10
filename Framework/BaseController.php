@@ -40,7 +40,7 @@ class BaseController
             return false;
         }
 
-        if (!in_array($user->getRoleName(), $authRoles, true)){
+        if (!in_array($user->getRoleName(), $authRoles, true)) {
             return false;
         }
         return true;
