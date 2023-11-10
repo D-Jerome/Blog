@@ -33,11 +33,12 @@ class Comment extends BaseController
             $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
 
-        $this->view('admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]);
+        $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]);
     }
 
     public function modifyComment($id)
     {
+        
         $comments = new CommentManager(Application::getDatasource());
 
         $statement = $comments->getById($id);
@@ -48,7 +49,7 @@ class Comment extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        $this->view('modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
     public function modifiedComment($id)
@@ -77,7 +78,7 @@ class Comment extends BaseController
 
         $comments = new CommentManager(Application::getDatasource());
         $statement = $comments->getById($id);
-        $this->view('modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
     public function moderationComments()
@@ -96,7 +97,7 @@ class Comment extends BaseController
             ];
 
           
-        $this->view('admin.moderation.comments.html.twig', ['comments' => $statementComments, 'authUser' => $user]);
+        $this->view('backoffice/admin.moderation.comments.html.twig', ['comments' => $statementComments, 'authUser' => $user]);
     }
 
     public function moderateComment($id)
@@ -112,7 +113,7 @@ class Comment extends BaseController
             ];
 
 
-        $this->view('modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
     public function moderatedComment($id)
@@ -142,7 +143,7 @@ class Comment extends BaseController
 
         $comment = new PostManager(Application::getDatasource());
         $statement = $comment->getById($id);
-        $this->view('modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
     public function unpublishComment(int $id)

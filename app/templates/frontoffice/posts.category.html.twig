@@ -14,7 +14,7 @@
     <header class="masthead" style="background-image: url('')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="col-md-10 col-lg-8 col-xl-7 text-center">
                     <div class="post-heading">
                         <h1 >Derniers articles par catégories</h1>
                         <hr>
@@ -23,7 +23,7 @@
             </div>
         </div>
     </header>
-    <div class="accordion accordion-flush accordion-color" id="accordionFlush">
+    <div class="accordion accordion-flush" id="accordionFlush">
     {% for category in categories %} 
         <div class="accordion-item bg-light m-2">
             <h2 class="accordion-header">
@@ -61,6 +61,7 @@
                 {% endfor %}
             {% endfor %}
              </div> 
-        </div>         
+        </div>          
     {% endfor %}
+    </div>
 {% endblock %}

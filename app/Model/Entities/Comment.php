@@ -54,10 +54,11 @@ class Comment extends Entity
 	public function getExcerptContent()
 	{
 		$excerpt = substr($this->content, 0, 60) . '...';
-		if (str_contains($excerpt, "<img title=")){
-			$excerpt =  substr($this->content, 0, strpos($this->content, "<img title=")) . '...';
+		if (str_contains($excerpt, "<img ")){
+			$excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
 		}
 		return $excerpt;
+		
 	}
 
 	public function getPublishState()

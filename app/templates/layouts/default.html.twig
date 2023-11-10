@@ -24,7 +24,7 @@
      <script>
       tinymce.init({
         selector: 'textarea#content',
-        plugins: 'a11ychecker advcode advlist advtable anchor autocorrect autolink autoresize autosave casechange charmap checklist code codesample directionality editimage emoticons export footnotes formatpainter fullscreen help image importcss inlinecss insertdatetime link linkchecker lists media mediaembed mentions nonbreaking pagebreak pageembed permanentpen powerpaste preview quickbars save searchreplace table tableofcontents advtemplate tinydrive tinymcespellchecker typography visualblocks visualchars wordcount',
+        plugins: 'a11ychecker advcode advlist advtable anchor autocorrect autolink autoresize autosave casechange charmap checklist code codesample directionality editimage emoticons export footnotes formatpainter fullscreen help image importcss inlinecss insertdatetime link linkchecker lists media mediaembed mentions nonbreaking pagebreak pageembed permanentpen powerpaste preview quickbars save searchreplace table tableofcontents advtemplate tinymcespellchecker typography visualblocks visualchars wordcount',
         toolbar: 'undo redo | image | blocks | forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | checklist bullist numlist | indent outdent | wordcount',
         branding: false,
         elementpath: false,
@@ -34,8 +34,12 @@
         min_height: 200,
         height: 300,
         resize: true,
+        image_class_list: [
+                            {title: 'responsive', value: 'w-100 h-100'}
+                        ],
+        
   /* enable automatic uploads of images represented by blob or data URIs*/
-        automatic_uploads: true,
+        
         file_picker_types: 'image file media',
         /* and here's our custom image picker*/
         file_picker_callback: (cb, value, meta) => {

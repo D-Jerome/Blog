@@ -28,7 +28,7 @@ class Post extends BaseController
                 'id' => $user->getId(),
                 'roleName' => $user->getRoleName()
             ];
-        $this->view('admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
+        $this->view('backoffice/admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
     public function deletePost($id)
@@ -48,14 +48,14 @@ class Post extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        $this->view('add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
+        $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
 
     public function addedPost()
     {
         $post = new PostManager(Application::getDatasource());
         $request = new Request("/blog-project/");
-
+    
         $post->insertNewPost($request->getParams());
         $user = $this->session->getUser();
             $user = [
@@ -66,14 +66,16 @@ class Post extends BaseController
 
 
         $statement = '';
-        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
     public function modifyPost($id)
     {
         $post = new PostManager(Application::getDatasource());
 
-        $statement = $post->getById($id);
+        $statementPost = $post->getById($id);
+        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $user = $this->session->getUser();
             $user = [
                 'name' => $user->getUsername(),
@@ -82,7 +84,7 @@ class Post extends BaseController
             ];
 
 
-        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
     }
 
     public function modifiedPost($id)
@@ -115,7 +117,7 @@ class Post extends BaseController
 
         $post = new PostManager(Application::getDatasource());
         $statement = $post->getById($id);
-        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
     public function addComment($id)
@@ -141,7 +143,7 @@ class Post extends BaseController
             'roleName' => $user->getRoleName()
         ];
 
-        $this->view('add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        $this->view('backoffice/add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
     public function addedComment($id)
@@ -182,7 +184,7 @@ class Post extends BaseController
             ];
 
 
-        $this->view('admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
+        $this->view('backoffice/admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
     
@@ -200,7 +202,7 @@ class Post extends BaseController
             ];
 
 
-        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
     public function moderatedPost($id)
@@ -233,7 +235,7 @@ class Post extends BaseController
 
         $post = new PostManager(Application::getDatasource());
         $statement = $post->getById($id);
-        $this->view('modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
     public function unpublishPost(int $id)

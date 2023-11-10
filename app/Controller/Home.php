@@ -29,7 +29,7 @@ class Home extends BaseController
 
         $user = $this->session->getUser();
         if (null === $user) {
-            return $this->view('home.html.twig', ['error' => false]);
+            return $this->view('frontoffice/home.html.twig', ['error' => false]);
         }
 
         $user = [
@@ -38,7 +38,7 @@ class Home extends BaseController
         ];
 
 
-        return $this->view('home.html.twig', [  'authUser' => $user]);
+        return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
     }
 
     public function homeContact()

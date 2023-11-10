@@ -31,9 +31,13 @@
                             <td>{{ comment.createdAt }}</td>
                             <td>{{ comment.username }}</td>
                             <td><a href="/blog-project/post/{{ comment.id }}/{{ comment.postId }}" class="btn btn-secondary ">Voir le post</a> 
-                            <a href="/blog-project/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning ">Modifier</a>
+                            <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning ">Modifier</a>
                             {% if authUser.roleName == "admin" %}
-                                <a href="/blog-project/comment/activate/{{ comment.id }}/{{ comment.postId }}" class="btn btn-danger ">Désactiver</a>
+                                {% if comment.publishState != false %}
+                                    <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-danger">Désactiver</a> </td>
+                                {% else %}
+                                    <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-success">Activer</a> </td>
+                                {% endif %}
                             {% endif %}
                             </td>
                         </tr>

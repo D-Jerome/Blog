@@ -3,20 +3,15 @@
 
 {% block content %}    
 <h1>Panneau d'administration</h1>
-<div class="container">    
-            <a href="/blog-project/admin/posts" class="btn btn-secondary">Posts</a> 
+<div class="container m-4-md row gap-1">    
+            <a href="/blog-project/admin/posts" class="btn btn-secondary ">Posts</a> 
             <a href="/blog-project/admin/users" class="btn btn-secondary">Utilisateurs</a> 
             <a href="/blog-project/admin/comments" class="btn btn-secondary">Commentaires</a>
 </div>
 <hr>
-<h1>Modération des informations</h1>
-<div class="container">    
+<h2>Modération des informations</h2>
+<div class="container m-4-md row gap-1">    
             <a href="/blog-project/admin/moderation/posts" class="btn btn-success">Posts</a> 
             <a href="/blog-project/admin/moderation/comments" class="btn btn-outline-success">Commentaires</a> 
 </div>
-
-
-
-
-
 {% endblock %}

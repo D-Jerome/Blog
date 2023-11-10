@@ -24,7 +24,7 @@ class User extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        $this->view('admin.users.html.twig', ['registredUsers' => $statementUsers, 'authUser' => $user]);
+        $this->view('backoffice/admin.users.html.twig', ['registredUsers' => $statementUsers, 'authUser' => $user]);
     }
 
     public function modifyUser($id)
@@ -42,7 +42,7 @@ class User extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        $this->view('modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
     public function modifiedUser($id)
@@ -94,7 +94,7 @@ class User extends BaseController
             'roleName' => $user->getRoleName()
         ];
 
-        $this->view('add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
     }
 
     public function addedUser()
@@ -113,6 +113,6 @@ class User extends BaseController
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 
-        $this->view('modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
     }
 }

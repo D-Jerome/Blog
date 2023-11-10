@@ -17,7 +17,7 @@ class Auth extends BaseController
                 'roleName' => $user->getRoleName()
             ];
 
-        return $this->view('' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        return $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
     public function logout()

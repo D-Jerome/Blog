@@ -20,11 +20,11 @@ class User extends BaseController
         if (null === ($user)) {
             $user = [];
 
-            return $this->view('login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
         }
         if (false === ($user->getActive())) {
             $user = [];
-            return $this->view('login.html.twig', ['error' => true, 'login' => true, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => true, 'authUser' => $user]);
         }
         // Verifier si le mot de passe correspond a l'utilisateur
         //     si ok : Mise en place de session de connexion pour l'utilisateur
@@ -55,7 +55,7 @@ class User extends BaseController
             //     si nok : renvoi sur page de login avec message d'erreur
 
         } else {
-            return $this->view('login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
         }
     }
 
@@ -67,7 +67,7 @@ class User extends BaseController
         }
         //afficher page de connection
 
-        $this->view('login.html.twig', ['error' => false, 'authUser' => $user]);
+        $this->view('frontoffice/login.html.twig', ['error' => false, 'authUser' => $user]);
     }
 
     public function signUp()
@@ -81,7 +81,7 @@ class User extends BaseController
                 'role' => $user->getRoleName()
             ];
         }
-        $this->view('signup.html.twig', ['error' => false, 'authUser' => $user]);
+        $this->view('frontoffice/signup.html.twig', ['error' => false, 'authUser' => $user]);
     }
 
     public function validationSignUp()
@@ -118,7 +118,7 @@ class User extends BaseController
         if ($error) {
             unset($postdatas['password']);
             unset($postdatas['confirmPassword']);
-            $this->view('signup.html.twig', ['error' => true, 'data' => $postdatas]);
+            $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);
         } else {
             $users->insertNewUser($postdatas);
             $mail = new Mail(Application::getEmailSource());

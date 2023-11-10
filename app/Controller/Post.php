@@ -38,14 +38,14 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         if (null === $user) {
-            return $this->view('posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
+            return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
         }
 
         $user = [
             'name' => $user->getUsername(),
             'id' => $user->getId()
         ];
-        return $this->view('posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
+        return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
     
      /**
@@ -72,7 +72,7 @@ class Post extends BaseController
             ];
         }
         
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
+        $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
 
@@ -102,7 +102,7 @@ class Post extends BaseController
                 'id' => $user->getId()
             ];
         }
-        $this->view('post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        $this->view('frontoffice/post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
     public function postsPaged()
@@ -164,7 +164,7 @@ class Post extends BaseController
                 'id' => $user->getId()
             ];
         }
-        $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
+        $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
     public function admin()
     {
@@ -176,6 +176,6 @@ class Post extends BaseController
                 'roleName' => $user->getRoleName()
             ];
         }
-        return $this->view('' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 }

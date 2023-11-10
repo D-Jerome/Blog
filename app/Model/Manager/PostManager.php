@@ -111,16 +111,18 @@ class PostManager extends BaseManager
         $query->execute();
 
         $postId = $this->dbConnect->lastInsertId();
-        $categories = $params['categoryId'];
-        foreach ($categories as $category) {
-            $query = $this->dbConnect->prepare('
-                INSERT INTO post_category (post_id, category_id) 
-                VALUES (:post_id , :category_id)
-                ');
-            $query->bindParam(':post_id', $postId);
-            $query->bindParam(':category_id', $category);
-            $query->execute();
-        }
+        if (isset($params['categoryId'])){
+            $categories = $params['categoryId'];
+            foreach ($categories as $category) {
+                $query = $this->dbConnect->prepare('
+                    INSERT INTO post_category (post_id, category_id) 
+                    VALUES (:post_id , :category_id)
+                    ');
+                $query->bindParam(':post_id', $postId);
+                $query->bindParam(':category_id', $category);
+                $query->execute();
+            }
+        }    
     }
    
     public function unpublish(int $id): void
