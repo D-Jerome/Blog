@@ -14,23 +14,19 @@ class Post extends BaseController
     public function postsByCategory()
     {
         //recherche des 3 derniers articles par catégories
-
         $categories = new CategoryManager(Application::getDatasource());
         $statementCategories = $categories->getAll();
         $posts = new PostManager(Application::getDatasource());
         $postsByCategories = null;
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
-
             foreach ($statementPostsByCategory as $statementPost) {
-
                 $statementPost->categories =  [$statementCategory];
                 $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
                 $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
             }
             $postsByCategories =  array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
         }
-
 
         $user = $this->session->getUser();
         if (null !== $user) {
@@ -49,21 +45,21 @@ class Post extends BaseController
             'name' => $user->getUsername(),
             'id' => $user->getId()
         ];
-
-
         return $this->view('posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
-
+    
+     /**
+     * posts : recovers all informations for each publish article for display
+     *
+     * @param  int $id
+     * @return void
+     */
     public function posts()
     {
         //$username=Session::getUsername();
-
         $posts = new PostManager(Application::getDatasource());
-
         $statementPosts = $posts->getAll();
-
         foreach ($statementPosts as $statementPost) {
-
             $statementPost->categories =  $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
@@ -80,7 +76,13 @@ class Post extends BaseController
     }
 
 
-
+    
+    /**
+     * post : recovers article's informations (in @param) for display
+     *
+     * @param  int $id
+     * @return void
+     */
     public function post(int $id)
     {
         // $username=Session::getUsername();
@@ -90,7 +92,6 @@ class Post extends BaseController
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
-        
         foreach ($statementComments as $statementComment) {
             $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
         }
@@ -117,29 +118,27 @@ class Post extends BaseController
         $pages = [];
         $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage, $publish );
         foreach ($statementPosts as $statementPost) {
-
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
-
+        
         if ($publish){
             $count = count($posts->getAllPublish());        
         } else {
             $count = count($posts->getAll());
         }    
-
-        
+       
         if ((int)(ceil(($count / $perPage))) === 1 ) {
             $pages['nextActive'] =false;
             $pages['previousActive'] = false;
         }elseif ($currentPage >= (ceil(($count / $perPage)))) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
-        } elseif ($currentPage === 1) {
+        }elseif ($currentPage === 1) {
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
-        } else {
+        }else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
         }
@@ -147,14 +146,11 @@ class Post extends BaseController
         $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         $get = $_GET;
         unset($get['page']);
-
         $query = http_build_query($get);
         if (!empty($query)) {
             $uri = $uri . '?' . $query;
         }
-
         //pagination
-
         $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         $get = $_GET;
         unset($get['page']);
@@ -168,7 +164,6 @@ class Post extends BaseController
                 'id' => $user->getId()
             ];
         }
-
         $this->view('posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
     public function admin()
@@ -181,8 +176,6 @@ class Post extends BaseController
                 'roleName' => $user->getRoleName()
             ];
         }
-
-
         return $this->view('' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 }

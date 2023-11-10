@@ -1,3 +1,12 @@
+-- Enable client program to communicate with the server using utf8 character set
+SET NAMES 'utf8';
+
+DROP DATABASE IF EXISTS `blog`;
+-- Set the default charset to utf8 for internationalization, use case-insensitive (ci) collation
+CREATE DATABASE IF NOT EXISTS `blog` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `blog`;
+
+
 CREATE TABLE category (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -20,7 +29,7 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL,
     role_id INT UNSIGNED DEFAULT '3',
-    active BOOL DEFAULT 'true'
+    active BOOL DEFAULT TRUE
     PRIMARY KEY (id),
     CONSTRAINT fk_role
         FOREIGN KEY (role_id)
@@ -37,7 +46,7 @@ CREATE TABLE post (
     created_at DATETIME NOT NULL,
     modified_at DATETIME,
     user_id INT UNSIGNED NOT NULL,
-    publish_state BOOL NOT NULL DEFAULT 'false',
+    publish_state BOOL NOT NULL DEFAULT FALSE,
     publish_at DATETIME,
     publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
@@ -77,7 +86,7 @@ CREATE TABLE comment (
     post_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     modified_at DATETIME,
-    publish_state BOOL NOT NULL DEFAULT false,
+    publish_state BOOL NOT NULL DEFAULT FALSE,
     publish_at DATETIME,
     publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
