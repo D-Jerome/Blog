@@ -1,8 +1,7 @@
 
 <?php
 
-
-require('app/bootstrap.php');
+require 'app/bootstrap.php';
 
 use Framework\Application;
 use Framework\BaseManager;
