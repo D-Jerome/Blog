@@ -31,7 +31,7 @@
                     <div class="card-title border border-dark text-center bg-primary-subtle p-2 rounded-pill">
                         Posté par
                         <span class="text-danger">{{ comment.username }}</span>
-                        le {{ comment.createdAt }}
+                        le {{ comment.createdAt | format_datetime(locale='fr') }}
                     </div>
                     <p class="card-text">{{ comment.content | raw }} </p>
                 </div>

@@ -15,7 +15,7 @@
                             <span class="meta">
                                 Posté par
                                 <span class="text-primary">{{ post.username }}</span>
-                                le {{ post.createdAt }}
+                                le {{ post.createdAt | format_datetime(locale='fr') }}
                             </span>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                     <div class="col">            
                         <div class="card mb-3 bg-white bg-gradient ">
                             <div class="card-body">
-                                <p class="car-title badge text-bg-primary">par {{ comment.username }} le {{ comment.createdAt }}</p>
+                                <p class="car-title badge text-bg-primary">par {{ comment.username }} le {{ comment.createdAt | format_datetime(locale='fr')}}</p>
                                 <p class="card-text img-fluid">{{ comment.content | raw }} </p>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                     <div class="col bg-danger">            
                         <div class="card mb-3 bg-white bg-gradient ">
                             <div class="card-body">
-                                <p class="car-title badge text-bg-primary">par {{ comment.username }} le {{ comment.createdAt }}</p>
+                                <p class="car-title badge text-bg-primary">par {{ comment.username }} le {{ comment.createdAt | format_datetime(locale='fr')}}</p>
                                 <p class="card-text">{{ comment.content | raw }} </p>
                             </div>
                         </div>

@@ -15,7 +15,7 @@ class User extends BaseController
     public function loginAuth()
     {
         $users = (new UserManager(Application::getDatasource()));
-        $user = $users->getByUsername($_POST['login']);
+        $user = $users->getByUsername($this->getRoute()->getParams()['login']);
 
         if (null === ($user)) {
             $user = [];
@@ -34,7 +34,7 @@ class User extends BaseController
 
         // Verifier si le mot de passe correspond a l'utilisateur
 
-        if (password_verify($_POST['password'], $user->password)) {
+        if (password_verify($this->getRoute()->getParams()['password'], $user->password)) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
             $user->roleName = ($users->getRoleById($user->getRoleId()))->getRole();
             $this->session->connect($user);

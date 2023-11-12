@@ -28,7 +28,7 @@
                             <span class="badge text-bg-primary bg-gradient">{{ category.name }}</span>
                         {% endfor %}   
                     </div>
-                        <p class="text-muted text-white ">Par <span class="text-primary">{{ post.username }}</span> le {{ post.createdAt }}</p>
+                        <p class="text-muted text-white ">Par <span class="text-primary">{{ post.username }}</span> le {{ post.createdAt | format_datetime(locale='fr') }}</p>
                         <p class="card-text ">{{ post.excerptContent | raw }} </p>
                         <hr>
                         <a href="/blog-project/post/{{ post.slug }}/{{ post.id }}"  class="d-grid btn btn-primary position-relative">

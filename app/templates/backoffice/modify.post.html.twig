@@ -15,7 +15,7 @@
                             <span class="meta">
                                 Posté par
                                 <span class="text-primary">{{ post.username }}</span>
-                                le {{ post.createdAt }}
+                                le {{ post.createdAt | format_datetime(locale='fr')  }}
                             </span>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                 <div class="card mb-3 bg-secondary bg-gradient text-light">
                     <div class="card-body">
                         <h5 class="car-title text-warning">{{ post.name }}</h5>
-                        <p class="text-muted text-white bg-light">{{ post.createdAt }}</p>
+                        <p class="text-muted text-white bg-light">{{ post.createdAt | format_datetime(locale='fr') }}</p>
                         <p class="card-text">{{ post.content | raw }} </p>
                     </div>
                 </div>

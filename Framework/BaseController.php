@@ -5,6 +5,9 @@ namespace Framework;
 use Framework\Security\Session;
 use \Twig\Environment;
 use \Twig\Loader\FilesystemLoader;
+use Twig\Extra\Intl\IntlExtension;
+
+
 
 
 class BaseController
@@ -21,6 +24,7 @@ class BaseController
         $this->twig = new Environment($loader, [
             // 'cache' => __DIR__ . '/../app/var/cache',
         ]);
+        $this->twig->addExtension(new IntlExtension());
         $this->route= $route;
     }
 

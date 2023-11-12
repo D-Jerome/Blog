@@ -42,6 +42,7 @@ class Comment extends BaseController
         $comments = new CommentManager(Application::getDatasource());
 
         $statement = $comments->getById($id);
+ 
         $statement->username = current($comments->getCommentUsername($statement->getUserId()));
 
         $user = $this->session->getUser();
@@ -59,12 +60,14 @@ class Comment extends BaseController
         $comments = new CommentManager(Application::getDatasource());
         $params=[];
         $statement = $comments->getById($id);
-
+        
         // dd($_POST, $statement);
-        if ($_POST['content'] !== $statement->getContent()) {   
-            $params['content']= $_POST['content'];
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+           
+            $params['content']= $this->getRoute()->getParams()['content'];
         }
         if (null !== $params) {
+            
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
            
@@ -80,6 +83,8 @@ class Comment extends BaseController
 
         $comments = new CommentManager(Application::getDatasource());
         $statement = $comments->getById($id);
+        $statement->username = current($comments->getCommentUsername($statement->getUserId()));
+        
         $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
@@ -125,8 +130,8 @@ class Comment extends BaseController
         $statement = $comment->getById($id);
 
         // dd($_POST, $statement);
-        if ($_POST['content'] !== $statement->getContent()) {   
-            $params['content']= $_POST['content'];
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+            $params['content']= $this->getRoute()->getParams()['content'];
         }
         
         if (null !== $params) {

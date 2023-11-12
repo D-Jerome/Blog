@@ -72,7 +72,6 @@ class Post extends BaseController
     public function modifyPost($id)
     {
         $post = new PostManager(Application::getDatasource());
-        dd( $_GET, $_POST);
         $statementPost = $post->getById($id);
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
@@ -94,12 +93,12 @@ class Post extends BaseController
         $statement = $post->getById($id);
 
         // dd($_POST, $statement);
-        if ($_POST['content'] !== $statement->getContent()) {   
-            $params['content']= $_POST['content'];
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+            $params['content']= $this->getRoute()->getParams()['content'];
         }
         // dd($_POST['name'], $statement->getName());
-        if ($_POST['name'] !== $statement->getName()) {
-            $params['name']= $_POST['name'];
+        if ($this->getRoute()->getParams()['name'] !== $statement->getName()) {
+            $params['name']= $this->getRoute()->getParams()['name'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
@@ -212,12 +211,12 @@ class Post extends BaseController
         $statement = $post->getById($id);
 
         // dd($_POST, $statement);
-        if ($_POST['content'] !== $statement->getContent()) {   
-            $params['content']= $_POST['content'];
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+            $params['content']= $this->getRoute()->getParams()['content'];
         }
         // dd($_POST['name'], $statement->getName());
-        if ($_POST['name'] !== $statement->getName()) {
-            $params['name']= $_POST['name'];
+        if ($this->getRoute()->getParams()['name'] !== $statement->getName()) {
+            $params['name']= $this->getRoute()->getParams()['name'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
