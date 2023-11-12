@@ -133,4 +133,16 @@ class User extends BaseController
 
         header('Location: /blog-project/');
     }
+
+    public function forgetPwd()
+    {
+        $this->view('frontoffice/forget.pwd.html.twig', ['error' => false]);
+    }
+    public function sendUserConnectionMail()
+    {
+        
+
+        $this->view('frontoffice/home.html.twig', ['error' => false]);
+    }
+
 }

@@ -33,11 +33,11 @@ final class Application
             if (null === $foundRoute) {
                 throw new NoRouteFoundException;
             }
-          
+            
             $controller = $foundRoute->getController();
             $action =  $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
-            $route = new $controller;
+            $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {
                 header('Location: /blog-project/?auth=0');
@@ -97,5 +97,10 @@ final class Application
     public static function getEmailSource()
     {
         return self::$config['email'];
+    }
+
+    public static function getBaseUrl()
+    {
+        return self::$config['baseUrl'];
     }
 }

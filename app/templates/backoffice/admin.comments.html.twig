@@ -2,12 +2,31 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block content %}    
-{% if authUser.roleName == "admin" %}
-    <h1>Administration des commentaires</h1>
-{% else %}
-    <h1>Mes commentaires</h1>             
-{% endif %}
-            <a href="/blog-project/admin/comment/new" class="btn btn-primary">Ajouter un commentaire</a>
+
+{% if error %}
+    <div class="col-10 alert alert-danger " role="alert">
+        <h4 class="alert-heading">Connexion impossible</h4>
+        <hr>
+        <p class="mb-0">Authorisation requise</p>
+    </div>
+    
+{% endif %} 
+<header class="masthead" style="background-image: url('/blog-project/public/img/blogwcloud.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                <div class="post-heading">
+                    {% if authUser.roleName == "admin" %}
+                        <h1>Administration des commentaires</h1>
+                    {% else %}
+                        <h1>Mes commentaires</h1>             
+                    {% endif %}
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</header> 
             <table class="table">
                 <thead>
                     <tr>
@@ -43,5 +62,5 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-                </table>
+            </table>
 {% endblock %}

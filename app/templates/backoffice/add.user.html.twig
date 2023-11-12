@@ -2,35 +2,43 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block content %} 
-            <h1>Création d'un nouvel utilisateur</h1>            
+            {% if error %}
+    <div class="col-10 alert alert-danger " role="alert">
+        <h4 class="alert-heading">Connexion impossible</h4>
+        <hr>
+        <p class="mb-0">Authorisation requise</p>
+    </div>
+    
+{% endif %} 
+<header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                <div class="post-heading">
+                     <h1>Création d'un nouvel utilisateur</h1>  
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+                     
             
             <div class="col-md-10 border border-dark"> 
                 <form action="" method="post">
                 <div class="form-group">
-                    <label id="firstname">Identifiant</label>
+                    <label id="firstname">Prénom</label>
                     <input class="form-control" type="text" id="firstname"  name="firstname" value="">
                 </div>
                 <div class="form-group">
-                    <label id="lastname">Identifiant</label>
+                    <label id="lastname">Nom</label>
                     <input class="form-control" type="text" id="lastname"  name="lastname" value="">
                 </div>
                 <div class="form-group">
                     <label id="username">Identifiant</label>
                     <input class="form-control" type="text" id="username"  name="username" value="">
                 </div>
-                <div class="col-md-6">
-                                <input class="form-control" id="image" type="file" accept="image/*" name="image" />
-                            </div>
-                            <div class="col-md-6">
-                                <input class="form-control" id="image1" type="file" accept="image/*" name="image1" />
-                            </div>
-                            <div class="col-md-6">
-                                <input class="form-control" id="image2" type="file" accept="image/*" name="image2" />
-                            </div>
-                            <div class="col-md-6">
-                                <input class="form-control" id="attach_file" type="file" accept="image/*" name="attach_file" />
-                            </div>
-
+    
                 {% if authUser.roleName == "admin" %}
                     <div class="form-group bg-light">
                     Role:

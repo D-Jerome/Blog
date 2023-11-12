@@ -45,9 +45,12 @@ class Router
                         ], $paramsValues);
 
                         if ($this->validateRoute($paramsValues)) {
+                            $route->setParams($request->getParams());
                             return $route;
+
                         }
                 } elseif ($route->getPath() === $request->getUri()) {
+                    $route->setParams($request->getParams());
                     return $route;
                 }
                 

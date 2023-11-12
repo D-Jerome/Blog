@@ -2,18 +2,42 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block content %} 
-            <h1>Modification de l'utilisateur</h1>            
-            <div class="col-md-12">            
-                <div class="card mb-3 bg-secondary bg-gradient text-light">
-                    <div class="card-body">
-                        <h5 class="card-title ">{{ user.username }}</h5>
-                        <p class="text-white ">depuis le {{ user.createdAt }}</p>
-                        <pclass="card-text">{{ user.email }} </p>
-                    </div>
+             {% if error %}
+    <div class="col-10 alert alert-danger " role="alert">
+        <h4 class="alert-heading">Connexion impossible</h4>
+        <hr>
+        <p class="mb-0">Authorisation requise</p>
+    </div>
+    
+{% endif %} 
+<header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                <div class="post-heading">
+                     <h1>Modification de l'utilisateur</h1>  
+                    <hr>
                 </div>
             </div>
+        </div>
+    </div>
+</header>
+<h2 class="col-12">Bonjour {{ authUser.name }} </h2>
+<main role="main" class="site-content">
+    <div class="col-md-6 mx-auto">            
+        <div class="card mx-auto mb-3 text-bg-dark bg-gradient">
+            <div class="card-body">
+                <h5 class="card-title ">{{ user.username }}</h5>
+                <p class="text-white ">depuis le {{ user.createdAt }}</p>
+                <p class="card-text">{{ user.email }} </p>
+            </div>
+        </div>
+    </div>    
+ 
+             
+           
             
-            <div class="col-md-6 mx-auto border border-dark"> 
+            <div class="col-md-6 mx-auto p-3 border border-dark"> 
                 <form action="" method="post">
                 <input type="hidden" id="id"  name="id" value="{{ user.id }}">
                 <div class="form-group my-3">
@@ -38,5 +62,5 @@
                 <button type="submit" class="btn btn-primary my-3">Modifier</button>
                 </form> 
             </div>    
-
+    </main>
 {% endblock %}

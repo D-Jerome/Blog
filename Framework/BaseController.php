@@ -11,8 +11,9 @@ class BaseController
 {
     protected Environment $twig;
     protected Session $session;
+    protected Route $route;
 
-    public function __construct()
+    public function __construct(Route $route)
     {
 
         $this->session = new Session();
@@ -20,11 +21,17 @@ class BaseController
         $this->twig = new Environment($loader, [
             // 'cache' => __DIR__ . '/../app/var/cache',
         ]);
+        $this->route= $route;
+    }
+
+    protected function getRoute()
+    {
+        return $this->route;
     }
 
     protected function view(string $template, array $params)
     {
-        echo $this->twig->render($template, $params);
+         echo $this->twig->render($template, $params);
     }
 
     public function isAuthorize(array $authRoles)
@@ -46,4 +53,5 @@ class BaseController
         return true;
 
     }
+
 }

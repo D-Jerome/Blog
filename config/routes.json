@@ -36,15 +36,6 @@
         ]
     },
     {
-        "path" : "/post/list",
-        "controller" : "App\\Controller\\Post",
-        "action" : "postsPaged",
-        "method" : "GET",
-        "authorize": [
-            "all"
-        ]
-    },
-    {
         "path" : "/post",
         "controller" : "App\\Controller\\Post",
         "action" : "post",
@@ -369,7 +360,30 @@
             "visitor",
             "all"
         ]             
+    },
+    {
+        "path" : "/login/forget",
+        "controller" : "App\\Controller\\User",
+        "action" : "forgetPwd",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
+    },
+    {
+        "path" : "/login/forget",
+        "controller" : "App\\Controller\\User",
+        "action" : "sendUserConnectioMail",
+        "method" : "POST",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]             
     }
-
 
 ]

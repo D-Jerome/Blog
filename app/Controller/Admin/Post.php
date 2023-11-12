@@ -72,7 +72,7 @@ class Post extends BaseController
     public function modifyPost($id)
     {
         $post = new PostManager(Application::getDatasource());
-
+        dd( $_GET, $_POST);
         $statementPost = $post->getById($id);
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);

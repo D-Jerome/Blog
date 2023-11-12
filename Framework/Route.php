@@ -12,6 +12,8 @@ class Route
     protected string $controller;
     protected string $action;
     protected array $authRoles;
+    protected array $params;
+
 
     public function __construct(string $path, string $method, string $controller, string $action, array $authRoles)
     {
@@ -20,6 +22,7 @@ class Route
         $this->controller = $controller;
         $this->action = $action;
         $this->authRoles = $authRoles;
+      
     }
 
     public function getPath()
@@ -45,5 +48,15 @@ class Route
     public function getAuthRoles()
     {
         return $this->authRoles;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 }

@@ -42,6 +42,8 @@ class Comment extends BaseController
         $comments = new CommentManager(Application::getDatasource());
 
         $statement = $comments->getById($id);
+        $statement->username = current($comments->getCommentUsername($statement->getUserId()));
+
         $user = $this->session->getUser();
             $user = [
                 'name' => $user->getUsername(),

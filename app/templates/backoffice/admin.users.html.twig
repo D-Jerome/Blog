@@ -1,40 +1,39 @@
 
 {% extends './layouts/connection.html.twig' %}
 
-{% block content %}    
-<h1>Administration des utilisateurs</h1>         
-            <a href="/blog-project/admin/user/new" class="btn btn-primary">Ajouter</a>
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Identifiant</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Enregistré le </th>
-                        <th scope="col">Role</th>
-                        <th scope="col"> </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for registredUser in registredUsers %}
-                    {% if registredUser.active %}
-                    <tr>
-                    {% else %}
-                    <tr class="table-info" >
-                    {% endif %}
-                        <th scope="row">{{ registredUser.id }}</th>
-                        <td>{{ registredUser.username }}</td>
-                        <td>{{ registredUser.email }}</td>
-                        <td>{{ registredUser.createdAt }}</td>
-                        <td>{{ registredUser.roleId }}</td>
-                        <td><a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-warning">Modifier</a> 
+{% block content %} 
+    <header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="post-heading">
+                        <h1>Administration des utilisateurs</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>        
+    <h2 class="col-12">Bonjour {{ authUser.name }} </h2>
+    <main role="main" class="site-content">
+    <a href="/blog-project/admin/user/new" class="btn btn-primary d-block">Ajouter</a>           
+        <div class="col-12 my-3 d-flex flex-wrap" >  
+            {% for registredUser in registredUsers %}       
+                <div class="card col-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ registredUser.username }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ registredUser.email }}</h6>
+                        <p class="card-text">{{ registredUser.createdAt }}</p>
+                        <p class="card-text">{{ registredUser.roleId }}</p>
+                        
+                        <a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-warning" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a> 
                         {% if registredUser.active %}
-                            <a href="/blog-project/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-danger">Désactiver</a> </td>
+                            <a href="/blog-project/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-danger" title="Désactiver"><i class="fa-regular fa-rectangle-xmark"></i></a>
                         {% else %}
-                            <a href="/blog-project/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-success">Activer</a> </td>
+                            <a href="/blog-project/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-success" title="Activer"><i class="fa-solid fa-check"></i></a>
                         {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+                    </div>
+                </div>    
+            {% endfor %}   
+        </div>           
+    </main>
 {% endblock %}
