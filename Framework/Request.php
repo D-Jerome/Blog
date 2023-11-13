@@ -23,8 +23,8 @@ class Request
         $this->params = $_GET ?: $_POST;
         $this->uri = str_replace($baseUrl, '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->method = $_SERVER['REQUEST_METHOD'];
-        
-    } //end __construct
+
+    }//end __construct
 
     
     /**

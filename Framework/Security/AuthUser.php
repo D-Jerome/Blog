@@ -24,7 +24,7 @@ class AuthUser
         $this->id = $id;
         $this->roleName = $roleName;
         $this->username = $username;
-    } //end __construct
+    }//end __construct
 
         
     /**

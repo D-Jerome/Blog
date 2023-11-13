@@ -33,7 +33,8 @@ class BaseController
         ]);
         $this->twig->addExtension(new IntlExtension());
         $this->route= $route;
-    } //end __construct
+   
+    }//end __construct
 
         
     /**

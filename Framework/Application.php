@@ -8,16 +8,26 @@ use Framework\Exception\NoRouteFoundException;
 
 final class Application
 {
+    
     private Request $request;
+    
     private Router $router;
+    
     private static array $config;
-
+    
+   
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         self::$config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
-    }
+    
+    }//end __construct
     
 
     /**
@@ -60,13 +70,15 @@ final class Application
                         if (stripos($paramsKey, $typeObj . 'id') >= 0 && stripos($paramsKey, $typeObj . 'id') !== FALSE ) {
                             $id = $paramsValues[$paramsKey];
                         }
-                    }
+                    
+                    }//end if
                     $route->$action($id);
                 } else {
                     $route->$action();
-                }
                 
-            }
+                }//end if
+                
+            }//end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
         } catch (MultipleRouteFoundException $e) {
@@ -106,4 +118,6 @@ final class Application
     {
         return self::$config['baseUrl'];
     }
+
+
 }
