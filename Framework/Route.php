@@ -12,7 +12,7 @@ class Route
     protected string $controller;
     protected string $action;
     protected array $authRoles;
-    protected array $params;
+    protected array $params=[];
 
 
     public function __construct(string $path, string $method, string $controller, string $action, array $authRoles)
@@ -22,6 +22,7 @@ class Route
         $this->controller = $controller;
         $this->action = $action;
         $this->authRoles = $authRoles;
+   
       
     }
 

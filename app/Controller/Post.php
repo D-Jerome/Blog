@@ -123,7 +123,7 @@ class Post extends BaseController
             ];
         }
 
-        $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
+        return $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
 
 
@@ -153,7 +153,7 @@ class Post extends BaseController
                 'id' => $user->getId()
             ];
         }
-        $this->view('frontoffice/post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        return $this->view('frontoffice/post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 

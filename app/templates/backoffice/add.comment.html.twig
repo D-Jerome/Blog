@@ -24,7 +24,7 @@
                             <span class="meta">
                                 Posté par
                                 <span class="text-primary">{{ post.username }}</span>
-                                le {{ post.createdAt }}
+                                le {{ post.createdAt | format_datetime(locale='fr') }}
                             </span>
                         <p class="card-text">{{ post.content | raw }} </p>
                     

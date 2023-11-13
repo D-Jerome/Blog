@@ -323,15 +323,6 @@
         ] 
     },
     {
-        "path" : "/post/{commentId}/{postId}",
-        "controller" : "App\\Controller\\Post",
-        "action" : "post",
-        "method" : "GET",
-        "authorize": [
-            "all"
-        ]
-    },
-    {
         "path" : "/signup",
         "controller" : "App\\Controller\\User",
         "action" : "signUp",

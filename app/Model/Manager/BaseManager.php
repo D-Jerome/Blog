@@ -136,5 +136,4 @@ abstract class BaseManager
         }
     }
 
-
 }

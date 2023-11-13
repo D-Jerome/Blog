@@ -80,7 +80,7 @@ class CommentManager extends BaseManager
         $query->execute();
     }
 
-    public function verifyCoupleCommentIdPostId(int $postId, int $commentId): int
+    public function verifyCouple(int $postId,  int $commentId): int
     {
         $query = $this->dbConnect->prepare('
             SELECT id FROM ' . $this->table . '

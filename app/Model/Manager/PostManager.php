@@ -79,7 +79,7 @@ class PostManager extends BaseManager
         return $query->fetch();
     }
 
-    public function verifyCoupleIdSlug(int $id, string $slug): int
+    public function verifyCouple(int $id, string $slug): int
     {
 
         $query = $this->dbConnect->prepare('

@@ -1,0 +1,18 @@
+<?php 
+ 
+namespace Framework;
+
+class SystemMessages{
+    
+    protected $messages = array(
+          0 => "Some Error Message");
+
+    
+    
+    
+    
+    public function getMessage($id)
+    {
+        return $this->messages[$id];
+    }
+ }

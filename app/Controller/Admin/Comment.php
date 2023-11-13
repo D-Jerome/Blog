@@ -32,8 +32,8 @@ class Comment extends BaseController
         foreach ($statementComments as $statementComment) {
             $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
-
-        $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments,  'authUser' => $user]);
+        $statementPosts = (new PostManager(Application::getDatasource()))->getAll();
+        $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments, 'posts' =>$statementPosts, 'authUser' => $user]);
     }
 
     public function modifyComment($id)

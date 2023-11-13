@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ registredUser.username }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ registredUser.email }}</h6>
-                        <p class="card-text">{{ registredUser.createdAt }}</p>
+                        <p class="card-text">{{ registredUser.createdAt | format_datetime(locale='fr') }}</p>
                         <p class="card-text">{{ registredUser.roleId }}</p>
                         
                         <a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="btn btn-warning" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a> 

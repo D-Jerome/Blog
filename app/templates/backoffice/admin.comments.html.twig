@@ -47,17 +47,16 @@
                    
                             <th scope="row">{{ comment.id }}</th>
                             <td>{{ comment.content | raw }}</td>
-                            <td>{{ comment.createdAt }}</td>
+                            <td>{{ comment.createdAt | format_datetime(locale='fr') }}</td>
                             <td>{{ comment.username }}</td>
-                            <td><a href="/blog-project/post/{{ comment.id }}/{{ comment.postId }}" class="btn btn-secondary ">Voir le post</a> 
-                            <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning ">Modifier</a>
-                            {% if authUser.roleName == "admin" %}
-                                {% if comment.publishState != false %}
-                                    <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-danger">Désactiver</a> </td>
-                                {% else %}
-                                    <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-success">Activer</a> </td>
-                                {% endif %}
-                            {% endif %}
+                            <td>
+                                {% for post in posts %}
+                                    {% if comment.postId == post.id %}
+                                    <a href="/blog-project/post/{{ post.slug }}/{{ comment.postId }}" class="btn btn-secondary" title="Voir le post"><i class="fa-regular fa-newspaper"></i></a> 
+                                    {% endif %}
+                                    
+                                {% endfor %}
+                                <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning " title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

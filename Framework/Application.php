@@ -29,53 +29,39 @@ final class Application
         $msgErr = false;
         try {
             $foundRoute = $this->router->findRoute($this->request);
-            
             if (null === $foundRoute) {
                 throw new NoRouteFoundException;
             }
-            
             $controller = $foundRoute->getController();
             $action =  $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
             $route = new $controller($foundRoute);
-
             if (!$route->isAuthorize($authRoles)) {
                 header('Location: /blog-project/?auth=0');
             }
 
             if ($route->isAuthorize($authRoles)) {
            
+             
                 if (preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
                     
                     $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
+                    
                     if (preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                         $paramsValues = [];
                         foreach ($paramNames[1] as $key => $names) {
                             $paramsValues[$names] = $params[$key + 1][0];
                         }
-                        // if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
+                        $paramsKeys = array_keys($paramsValues);
+                        foreach ($paramsKeys as $paramsKey) {
+                            if (stripos($paramsKey, 'id') !== 0 && (stripos($paramsKey, 'id'))) {
 
-                        $paramsValues = array_merge([
-                            'slug' => '',
-                            'postId' => '',
-                            'commentId' => '',
-                            'username' => '',
-                            'userId'  => '',
-                        ], $paramsValues);
-                        
-                        switch (true) {
-                            case (('' !== $paramsValues['postId']) && ('' === $paramsValues['commentId']) && ('' === $paramsValues['userId'])):
-                                $id = $paramsValues['postId'];
-                                break;
-                            case (('' !== $paramsValues['postId']) && ('' !== $paramsValues['commentId']) && ('' === $paramsValues['userId'])):
-                                $id = $paramsValues['commentId'];
-                                break;
-                            case (('' === $paramsValues['postId']) && ('' ===$paramsValues['commentId']) && ('' !== $paramsValues['userId'])):
-                                $id = $paramsValues['userId'];
-                                break;
+                                $id = $paramsValues[$paramsKey];
+                            }
                         }
-                    }   //endif 
+                       
+                    }   
                     $route->$action($id);
                 } else {
                     $route->$action();

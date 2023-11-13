@@ -29,64 +29,60 @@ class Router
                 preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
                 $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());         
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
+                
+                if ($route->getPath() === $request->getUri()) {
+                    $route->setParams($request->getParams());
+                    
+                    return $route;
+                }
+                
                 if (preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
-                   // if (preg_match($pattern, $request->getUri(), $matches, PREG_UNMATCHED_AS_NULL)) {
-
-                        $paramsValues = array_merge([
-                            'slug' => '',
-                            'postId' => '',
-                            'commentId' => '',
-                            'username' => '',
-                            'userId'  => ''
-                        ], $paramsValues);
-
-                        if ($this->validateRoute($paramsValues)) {
+                     
+                        $typeControllerObj = substr($route->getController(),strrpos($route->getController(),"\\") +1);
+                        if ($this->validateRoute($typeControllerObj ,$paramsValues)) {
                             $route->setParams($request->getParams());
                             return $route;
-
                         }
-                } elseif ($route->getPath() === $request->getUri()) {
-                    $route->setParams($request->getParams());
-                    return $route;
-                }
-                
+                    }     
             }
         }
         return null;
     }
 
-    private function validateRoute(array $matches): bool
+    private function validateRoute(string $typeObj, array $matches): bool
     {
-
+        // dd($matches);
         $valid = false;
-       
-        if ('' !== ($matches['slug']) && '' !== ($matches['postId']) && is_numeric($matches['postId'])) {
-            $posts = new PostManager(Application::getDatasource());
-            if ($posts->verifyCoupleIdSlug($matches['postId'], $matches['slug']) === 1) {
+        $matchesKey = array_keys($matches);
+        
+        $objectManagerName = "App\\Model\\Manager\\" . $typeObj . "Manager";
+        if ('' !== ($matches[$matchesKey[0]]) && '' !== ($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
+            $objectManager = new $objectManagerName(Application::getDatasource());
+            if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
             }
         }
         
-        if ('' !== ($matches['commentId']) && '' !== ($matches['postId']) && is_numeric($matches['commentId'])) {
-            $comments = new CommentManager(Application::getDatasource());
-            if ($comments->verifyCoupleCommentIdPostId($matches['postId'], $matches['commentId']) === 1) {
-                $valid = true;
-            }
-        }
-        if ('' !== ($matches['username']) && '' !== ($matches['userId'])  && is_numeric($matches['userId'])) {
-            $users = new UserManager(Application::getDatasource());
-            if ($users->verifyCoupleUsernameUserId($matches['userId'], $matches['username']) === 1) {
+        // if ('' !== ($matches['commentId']) && '' !== ($matches['postId']) && is_numeric($matches['commentId'])) {
+        //     $comments = new CommentManager(Application::getDatasource());
+        //     if ($comments->verifyCoupleCommentIdPostId($matches['postId'], $matches['commentId']) === 1) {
+        //         $valid = true;
+        //     }
+        // }
+        // if ('' !== ($matches['username']) && '' !== ($matches['userId'])  && is_numeric($matches['userId'])) {
+        //     $users = new UserManager(Application::getDatasource());
+        //     if ($users->verifyCoupleUsernameUserId($matches['userId'], $matches['username']) === 1) {
 
-                $valid = true;
-            }
-        }
-        if ('' === ($matches['postId']) && '' === ($matches['commentId']) && '' === ($matches['userId'])) {
-            $valid = true;
-        }
+        //         $valid = true;
+        //     }
+        // }
+        // if ('' === ($matches['postId']) && '' === ($matches['commentId']) && '' === ($matches['userId'])) {
+        //     $valid = true;
+        // }
 
         return $valid;
     }

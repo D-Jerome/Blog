@@ -96,7 +96,7 @@ class UserManager extends BaseManager
         return $actualUser->getId();
     }
 
-    public function verifyCoupleUsernameUserId(int $id, string $string): int
+    public function verifyCouple(int $id, string $string): int
     {
 
         $query = $this->dbConnect->prepare('

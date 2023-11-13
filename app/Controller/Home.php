@@ -60,10 +60,4 @@ class Home extends BaseController
 
 
     }
-
-
-    public function login()
-    {
-        echo "je suis la page de login";
-    }
 }

@@ -28,7 +28,7 @@
         <div class="card mx-auto mb-3 text-bg-dark bg-gradient">
             <div class="card-body">
                 <h5 class="card-title ">{{ user.username }}</h5>
-                <p class="text-white ">depuis le {{ user.createdAt }}</p>
+                <p class="text-white ">depuis le {{ user.createdAt | format_datetime(locale='fr') }}</p>
                 <p class="card-text">{{ user.email }} </p>
             </div>
         </div>

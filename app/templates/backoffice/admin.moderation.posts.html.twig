@@ -26,11 +26,11 @@
                         <td><div class="clearfix">{{ post.content | raw }}</div></td>
                         <td>{{ post.createdAt | format_datetime(locale='fr') }}</td>
                         <td>{{ post.username }}</td>
-                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
+                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
                         {% if post.publishState != false %}
-                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Désactiver</a> </td>
+                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn btn-danger" title="Désactiver"><i class="fa-regular fa-rectangle-xmark"></i></a>
                         {% else %}
-                            <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn btn-success">Activer</a> </td>
+                            <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn btn-success" title="Activer"><i class="fa-solid fa-check"></i></a>
                         {% endif %}
                     </tr>
                     {% endfor %}
