@@ -22,7 +22,7 @@ class Route
 
     
     /**
-     * __construct : Construct Route 
+     * __construct : Construct Route
      *
      * @param  string $path
      * @param  string $method
@@ -38,39 +38,70 @@ class Route
         $this->controller = $controller;
         $this->action = $action;
         $this->authRoles = $authRoles;
-    }
+    
+    } //end __construct
 
-
+    
+    /**
+     * getPath
+     *
+     * @return void
+     */
     public function getPath()
     {
         return $this->path;
     }
 
-
+    
+    /**
+     * getMethod
+     *
+     * @return void
+     */
     public function getMethod()
     {
         return $this->method;
     }
 
-
+    
+    /**
+     * getController
+     *
+     * @return void
+     */
     public function getController()
     {
         return $this->controller;
     }
 
-
+    
+    /**
+     * getAction
+     *
+     * @return void
+     */
     public function getAction()
     {
         return $this->action;
     }
 
-
+    
+    /**
+     * getAuthRoles
+     *
+     * @return void
+     */
     public function getAuthRoles()
     {
-        return $this->authRoles;
+        return $this->authRoles;   
     }
 
-
+    
+    /**
+     * getParams
+     *
+     * @return void
+     */
     public function getParams()
     {
         return $this->params;
@@ -87,4 +118,6 @@ class Route
     {
         $this->params = $params;
     }
+
+
 }
