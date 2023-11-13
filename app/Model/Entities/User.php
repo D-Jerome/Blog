@@ -6,28 +6,28 @@ use DateTime;
 
 class User extends Entity
 {
-	
+
 	protected int $id;
-	
+
 	protected string $firstname;
-	
+
 	protected string $lastname;
-	
+
 	protected string $username;
-	
+
 	protected string $email;
-	
+
 	protected string $password;
-	
+
 	protected $createdAt;
-	
+
 	protected int $roleId;
-	
+
 	protected string $roleName;
-	
+
 	protected bool $active;
 
-	
+
 	/**
 	 * getId
 	 *
@@ -38,7 +38,7 @@ class User extends Entity
 		return $this->id;
 	}
 
-	
+
 	/**
 	 * getFirstname
 	 *
@@ -48,8 +48,8 @@ class User extends Entity
 	{
 		return $this->firstname;
 	}
-	
-	
+
+
 	/**
 	 * getLastname
 	 *
@@ -59,8 +59,8 @@ class User extends Entity
 	{
 		return $this->lastname;
 	}
-	
-	
+
+
 	/**
 	 * getUsername
 	 *
@@ -71,7 +71,7 @@ class User extends Entity
 		return $this->username;
 	}
 
-		
+
 	/**
 	 * getEmail
 	 *
@@ -82,7 +82,7 @@ class User extends Entity
 		return $this->email;
 	}
 
-		
+
 	/**
 	 * getPassword
 	 *
@@ -93,7 +93,7 @@ class User extends Entity
 		return $this->password;
 	}
 
-		
+
 	/**
 	 * getCreatedAt
 	 *
@@ -104,7 +104,7 @@ class User extends Entity
 		return $this->createdAt;
 	}
 
-		
+
 	/**
 	 * getRoleId
 	 *
@@ -115,7 +115,7 @@ class User extends Entity
 		return $this->roleId;
 	}
 
-		
+
 	/**
 	 * getRoleName
 	 *
@@ -126,7 +126,7 @@ class User extends Entity
 		return $this->roleName;
 	}
 
-		
+
 	/**
 	 * getActive
 	 *
@@ -137,5 +137,5 @@ class User extends Entity
 		return $this->active;
 	}
 
-	
+
 }

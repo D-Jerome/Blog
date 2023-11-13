@@ -4,12 +4,12 @@ namespace App\Model\Entities;
 
 class Role extends Entity
 {
-	
+
 	protected ?int $id;
-	
+
 	protected ?string $role;
 
-	
+
 	/**
 	 * getId
 	 *
@@ -20,7 +20,7 @@ class Role extends Entity
 		return $this->id;
 	}
 
-	
+
 	/**
 	 * getRole
 	 *
@@ -31,5 +31,5 @@ class Role extends Entity
 		return $this->role;
 	}
 
-	
+
 }

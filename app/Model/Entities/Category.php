@@ -5,12 +5,12 @@ namespace App\Model\Entities;
 class Category extends Entity
 {
 	protected ?int $id;
-	
+
 	protected ?string $name;
-	
+
 	protected ?string $slug;
 
-	
+
 	/**
 	 * getId
 	 *
@@ -21,7 +21,7 @@ class Category extends Entity
 		return $this->id;
 	}
 
-	
+
 	/**
 	 * getName
 	 *
@@ -32,7 +32,7 @@ class Category extends Entity
 		return $this->name;
 	}
 
-	
+
 	/**
 	 * getSlug
 	 *
@@ -43,5 +43,5 @@ class Category extends Entity
 		return $this->slug;
 	}
 
-	
+
 }

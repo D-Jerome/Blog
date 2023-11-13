@@ -12,9 +12,9 @@ use Framework\Session;
 
 class Post extends BaseController
 {
-    
+
     /**
-     * posts: Show page with all published posts 
+     * posts: Show page with all published posts
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class Post extends BaseController
         $this->view('backoffice/admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
-    
+
     /**
      * deletePost
      *
@@ -48,7 +48,7 @@ class Post extends BaseController
         header('Location: /blog-project/admin');
     }
 
-    
+
     /**
      * addPost
      *
@@ -68,7 +68,7 @@ class Post extends BaseController
         $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
 
-        
+
     /**
      * addedPost
      *
@@ -78,7 +78,7 @@ class Post extends BaseController
     {
         $post = new PostManager(Application::getDatasource());
         $request = new Request("/blog-project/");
-    
+
         $post->insertNewPost($request->getParams());
         $user = $this->session->getUser();
             $user = [
@@ -92,7 +92,7 @@ class Post extends BaseController
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-        
+
     /**
      * modifyPost
      *
@@ -115,7 +115,7 @@ class Post extends BaseController
 
         $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
     }
-    
+
     /**
      * modifiedPost
      *
@@ -129,7 +129,7 @@ class Post extends BaseController
         $statement = $post->getById($id);
 
         // dd($_POST, $statement);
-        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
             $params['content']= $this->getRoute()->getParams()['content'];
         }
         // dd($_POST['name'], $statement->getName());
@@ -139,8 +139,8 @@ class Post extends BaseController
         if (null !== $params) {
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
-           
-            $post->update($statement, $params); 
+
+            $post->update($statement, $params);
         }
 
         $user = $this->session->getUser();
@@ -155,7 +155,7 @@ class Post extends BaseController
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    
+
     /**
      * addComment
      *
@@ -177,7 +177,7 @@ class Post extends BaseController
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $statementPost->countComments = $post->getCountCommentsByPostId($statementPost->id);
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
-        
+
         $user = $this->session->getUser();
         $user = [
                  'name' => $user->getUsername(),
@@ -188,7 +188,7 @@ class Post extends BaseController
         $this->view('backoffice/add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
-    
+
     /**
      * addedComment
      *
@@ -203,7 +203,7 @@ class Post extends BaseController
 
         $comment->insertNewComment($request->getParams());
         //Message de prise en compte et de validation du commentaire par l'administrateur
-        
+
         $user = $this->session->getUser();
             $user = [
                      'name' => $user->getUsername(),
@@ -217,7 +217,7 @@ class Post extends BaseController
         Header("Location: /blog-project/post/$slug/$id");
     }
 
-        
+
     /**
      * moderationPosts
      *
@@ -242,8 +242,8 @@ class Post extends BaseController
         $this->view('backoffice/admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
-    
-        
+
+
     /**
      * moderatePost
      *
@@ -266,7 +266,7 @@ class Post extends BaseController
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-        
+
     /**
      * moderatedPost
      *
@@ -280,7 +280,7 @@ class Post extends BaseController
         $statement = $post->getById($id);
 
         // dd($_POST, $statement);
-        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
             $params['content']= $this->getRoute()->getParams()['content'];
         }
         // dd($_POST['name'], $statement->getName());
@@ -290,8 +290,8 @@ class Post extends BaseController
         if (null !== $params) {
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
-           
-            $post->update($statement, $params); 
+
+            $post->update($statement, $params);
         }
 
         $user = $this->session->getUser();
@@ -306,7 +306,7 @@ class Post extends BaseController
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    
+
     /**
      * unpublishPost
      *
@@ -320,7 +320,7 @@ class Post extends BaseController
         header('Location: /blog-project/admin/moderation/posts');
     }
 
-    
+
     /**
      * publishPost
      *

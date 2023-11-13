@@ -9,31 +9,31 @@ class Post extends Entity
 {
 
 	protected int $id;
-	
+
 	protected string $name;
-	
+
 	protected string $slug;
-	
+
 	protected string $content;
-	
+
 	protected $createdAt;
-	
+
 	protected $modifiedAt;
-	
+
 	protected bool $publishState;
-    
-	protected mixed $publishAt; 
-	
+
+	protected mixed $publishAt;
+
 	protected ?int $publishUserId;
-	
+
 	protected string $excerptContent;
-	
+
 	protected array $categories = [];
-	
+
 	protected int $countComments;
-	
+
 	protected int $userId;
-	
+
 	protected string $username;
 
 
@@ -47,7 +47,7 @@ class Post extends Entity
 		return $this->id;
 	}
 
-		
+
 	/**
 	 * getName
 	 *
@@ -58,7 +58,7 @@ class Post extends Entity
 		return $this->name;
 	}
 
-		
+
 	/**
 	 * getSlug
 	 *
@@ -69,7 +69,7 @@ class Post extends Entity
 		return $this->slug;
 	}
 
-		
+
 	/**
 	 * getContent
 	 *
@@ -80,7 +80,7 @@ class Post extends Entity
 		return $this->content;
 	}
 
-		
+
 	/**
 	 * getCreatedAt
 	 *
@@ -91,7 +91,7 @@ class Post extends Entity
 		return $this->createdAt;
 	}
 
-		
+
 	/**
 	 * getModifiedAt
 	 *
@@ -102,7 +102,7 @@ class Post extends Entity
 		return $this->ModifiedAt;
 	}
 
-		
+
 	/**
 	 * getUserId
 	 *
@@ -113,7 +113,7 @@ class Post extends Entity
 		return $this->userId;
 	}
 
-		
+
 	/**
 	 * getExcerptContent
 	 *
@@ -128,7 +128,7 @@ class Post extends Entity
 		return $excerpt;
 	}
 
-		
+
 	/**
 	 * getCategories
 	 *
@@ -139,7 +139,7 @@ class Post extends Entity
 		return $this->categories;
 	}
 
-		
+
 	/**
 	 * getCountComments
 	 *
@@ -150,7 +150,7 @@ class Post extends Entity
 		return $this->countComments;
 	}
 
-		
+
 	/**
 	 * getUsername
 	 *
@@ -161,7 +161,7 @@ class Post extends Entity
 		return $this->username;
 	}
 
-		
+
 	/**
 	 * getPublishState
 	 *
@@ -171,8 +171,8 @@ class Post extends Entity
 	{
 		return $this->publishState;
 	}
-	
-		
+
+
 	/**
 	 * getPublishAt
 	 *
@@ -183,7 +183,7 @@ class Post extends Entity
 		return $this->publishAt;
 	}
 
-		
+
 	/**
 	 * getPublishUserId
 	 *

@@ -19,7 +19,7 @@ abstract class Entity
         }
     }
 
-        
+
     /**
      * __set
      *
@@ -39,7 +39,7 @@ abstract class Entity
         }
     }
 
-    
+
     /**
      * snakeCaseToCamelCase
      *
@@ -53,5 +53,5 @@ abstract class Entity
         return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
     }
 
-    
+
 }

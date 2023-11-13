@@ -7,27 +7,27 @@ use PDO;
 
 class Comment extends Entity
 {
-	
+
 	protected int $id;
-	
+
 	protected string $content;
-	
+
 	protected $createdAt;
-	
+
 	protected $modifiedAt;
-	
+
 	protected bool $publishState;
-    
+
 	protected $publishAt;
-	
+
 	protected ?int $publishUserId;
-	
+
 	protected int $postId;
-	
+
 	protected int $userId;
-	
+
 	protected string $username;
-	
+
 	/**
 	 * getId
 	 *
@@ -37,7 +37,7 @@ class Comment extends Entity
 	{
 		return $this->id;
 	}
-	
+
 
 	/**
 	 * getContent
@@ -48,8 +48,8 @@ class Comment extends Entity
 	{
 		return $this->content;
 	}
-	
-	
+
+
 	/**
 	 * getCreatedAt
 	 *
@@ -59,8 +59,8 @@ class Comment extends Entity
 	{
 		return $this->createdAt;
 	}
-	
-	
+
+
 	/**
 	 * getModifiedAt
 	 *
@@ -70,8 +70,8 @@ class Comment extends Entity
 	{
 		return $this->ModifiedAt;
 	}
-	
-	
+
+
 	/**
 	 * getPostId
 	 *
@@ -81,8 +81,8 @@ class Comment extends Entity
 	{
 		return $this->postId;
 	}
-	
-	
+
+
 	/**
 	 * getUserId
 	 *
@@ -92,8 +92,8 @@ class Comment extends Entity
 	{
 		return $this->userId;
 	}
-	
-	
+
+
 	/**
 	 * getUsername
 	 *
@@ -104,7 +104,7 @@ class Comment extends Entity
 		return $this->username;
 	}
 
-	
+
 	/**
 	 * getExcerptContent
 	 *
@@ -118,8 +118,8 @@ class Comment extends Entity
 		}
 		return $excerpt;
 	}
-	
-	
+
+
 	/**
 	 * getPublishState
 	 *
@@ -129,8 +129,8 @@ class Comment extends Entity
 	{
 		return $this->publishState;
 	}
-		
-	
+
+
 	/**
 	 * getPublishAt
 	 *
@@ -141,7 +141,7 @@ class Comment extends Entity
 		return $this->publishAt;
 	}
 
-		
+
 	/**
 	 * getPublishUserId
 	 *
@@ -152,5 +152,5 @@ class Comment extends Entity
 		return $this->publishUserId;
 	}
 
-	
+
 }
