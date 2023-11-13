@@ -19,6 +19,7 @@ final class Application
         $this->router = new Router();
     }
     
+
     /**
      * router of application
      *
@@ -73,16 +74,19 @@ final class Application
         }
     }
 
+
     public static function getDatasource()
     {
         return self::$config['database'];
     }
+
 
     public static function getEmailSource()
     {
         return self::$config['email'];
     }
 
+    
     public static function getBaseUrl()
     {
         return self::$config['baseUrl'];

@@ -20,6 +20,13 @@ class Router
         }
     }
 
+    
+    /**
+     * findRoute: compare and match route and request
+     *
+     * @param  Request $request
+     * @return Route
+     */
     public function findRoute(Request $request): ?Route 
     {
         foreach ($this->routes as $route) {
@@ -27,37 +34,40 @@ class Router
                 preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
                 $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());         
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
-                
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
                     return $route;
                 }
-                
                 if (preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
-                     
-                    $typeControllerObj = substr($route->getController(),strrpos($route->getController(),"\\") + 1);
-                    if ($this->validateRoute($typeControllerObj ,$paramsValues)) {
+                    $typeControllerObj = substr($route->getController(),strrpos($route->getController(),'\\') + 1);
+                    if ($this->validateRoute($typeControllerObj ,$paramsValues) === TRUE ) {
                         $route->setParams($request->getParams());
                         return $route;
                     }
                 }     
-            }
+            } //endif
         }
         return null;
     }
+    
 
+    /**
+     * validateRoute: verify the Existance of page and return Ture or False
+     *
+     * @param  string $typeObj
+     * @param  array $matches
+     * @return bool
+     */
     private function validateRoute(string $typeObj, array $matches): bool
     {
-        // dd($matches);
         $valid = false;
-        $matchesKey = array_keys($matches);
-        
-        $objectManagerName = "App\\Model\\Manager\\". $typeObj ."Manager";
-        if ('' !== ($matches[$matchesKey[0]]) && '' !== ($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
+        $matchesKey = array_keys($matches);    
+        $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
+        if ( !empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = new $objectManagerName(Application::getDatasource());
             if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
@@ -65,4 +75,6 @@ class Router
         }
         return $valid;
     }
+
+    
 }
