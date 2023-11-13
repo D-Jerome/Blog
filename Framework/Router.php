@@ -12,7 +12,6 @@ class Router
 
     protected array $routes;
 
-
     public function __construct()
     {
         $routes = json_decode(file_get_contents(__DIR__ . '/../config/routes.json'), true);
@@ -23,7 +22,6 @@ class Router
 
     public function findRoute(Request $request): ?Route 
     {
-
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
                 preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
@@ -32,7 +30,6 @@ class Router
                 
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
-                    
                     return $route;
                 }
                 
@@ -42,12 +39,12 @@ class Router
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
                      
-                        $typeControllerObj = substr($route->getController(),strrpos($route->getController(),"\\") +1);
-                        if ($this->validateRoute($typeControllerObj ,$paramsValues)) {
-                            $route->setParams($request->getParams());
-                            return $route;
-                        }
-                    }     
+                    $typeControllerObj = substr($route->getController(),strrpos($route->getController(),"\\") + 1);
+                    if ($this->validateRoute($typeControllerObj ,$paramsValues)) {
+                        $route->setParams($request->getParams());
+                        return $route;
+                    }
+                }     
             }
         }
         return null;
@@ -59,31 +56,13 @@ class Router
         $valid = false;
         $matchesKey = array_keys($matches);
         
-        $objectManagerName = "App\\Model\\Manager\\" . $typeObj . "Manager";
+        $objectManagerName = "App\\Model\\Manager\\". $typeObj ."Manager";
         if ('' !== ($matches[$matchesKey[0]]) && '' !== ($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = new $objectManagerName(Application::getDatasource());
             if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
             }
         }
-        
-        // if ('' !== ($matches['commentId']) && '' !== ($matches['postId']) && is_numeric($matches['commentId'])) {
-        //     $comments = new CommentManager(Application::getDatasource());
-        //     if ($comments->verifyCoupleCommentIdPostId($matches['postId'], $matches['commentId']) === 1) {
-        //         $valid = true;
-        //     }
-        // }
-        // if ('' !== ($matches['username']) && '' !== ($matches['userId'])  && is_numeric($matches['userId'])) {
-        //     $users = new UserManager(Application::getDatasource());
-        //     if ($users->verifyCoupleUsernameUserId($matches['userId'], $matches['username']) === 1) {
-
-        //         $valid = true;
-        //     }
-        // }
-        // if ('' === ($matches['postId']) && '' === ($matches['commentId']) && '' === ($matches['userId'])) {
-        //     $valid = true;
-        // }
-
         return $valid;
     }
 }

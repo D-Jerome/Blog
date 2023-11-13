@@ -48,20 +48,18 @@ final class Application
                     $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
                     
-                    if (preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
-                        $paramsValues = [];
-                        foreach ($paramNames[1] as $key => $names) {
-                            $paramsValues[$names] = $params[$key + 1][0];
+                    preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
+                    $paramsValues = [];
+                    foreach ($paramNames[1] as $key => $names) {
+                        $paramsValues[$names] = $params[$key + 1][0];
+                    }
+                    $typeObj = strtolower(substr($controller,strrpos($controller,"\\") +1));
+                    $paramsKeys = array_keys($paramsValues);
+                    foreach ($paramsKeys as $paramsKey) {
+                        if (stripos($paramsKey, $typeObj . 'id') >= 0 && stripos($paramsKey, $typeObj . 'id') !== FALSE ) {
+                            $id = $paramsValues[$paramsKey];
                         }
-                        $paramsKeys = array_keys($paramsValues);
-                        foreach ($paramsKeys as $paramsKey) {
-                            if (stripos($paramsKey, 'id') !== 0 && (stripos($paramsKey, 'id'))) {
-
-                                $id = $paramsValues[$paramsKey];
-                            }
-                        }
-                       
-                    }   
+                    }
                     $route->$action($id);
                 } else {
                     $route->$action();

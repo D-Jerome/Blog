@@ -11,7 +11,7 @@ class Comment extends Entity
 	protected $createdAt;
 	protected $modifiedAt;
 	protected bool $publishState;
-    protected $publishAt; 
+    protected $publishAt;
 	protected ?int $publishUserId;
 	protected int $postId;
 	protected int $userId;
@@ -58,7 +58,6 @@ class Comment extends Entity
 			$excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
 		}
 		return $excerpt;
-		
 	}
 
 	public function getPublishState()
