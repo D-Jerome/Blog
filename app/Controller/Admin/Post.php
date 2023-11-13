@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Post as ControllerPost;
 use App\Model\Manager\CategoryManager;
 use App\Model\Manager\{PostManager, CommentManager};
 use Framework\Application;
@@ -13,8 +12,13 @@ use Framework\Session;
 
 class Post extends BaseController
 {
-
-    public function posts()
+    
+    /**
+     * posts: Show page with all published posts 
+     *
+     * @return void
+     */
+    public function posts(): void
     {
 
         $posts = (new PostManager(Application::getDatasource()));
@@ -24,33 +28,52 @@ class Post extends BaseController
         }
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
         $this->view('backoffice/admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
-    public function deletePost($id)
+    
+    /**
+     * deletePost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function deletePost(int $id): void
     {
         (new PostManager(Application::getDatasource()))->delete($id);
         header('Location: /blog-project/admin');
     }
 
-    public function addPost()
+    
+    /**
+     * addPost
+     *
+     * @return void
+     */
+    public function addPost(): void
     {
         $category = new CategoryManager(Application::getDatasource());
         $statementCategories = $category->getAll();
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
         $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
 
+        
+    /**
+     * addedPost
+     *
+     * @return void
+     */
     public function addedPost()
     {
         $post = new PostManager(Application::getDatasource());
@@ -59,17 +82,24 @@ class Post extends BaseController
         $post->insertNewPost($request->getParams());
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
 
         $statement = '';
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    public function modifyPost($id)
+        
+    /**
+     * modifyPost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifyPost(int $id)
     {
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
@@ -77,16 +107,22 @@ class Post extends BaseController
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
 
         $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
     }
-
-    public function modifiedPost($id)
+    
+    /**
+     * modifiedPost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifiedPost(int $id)
     {
         $post = new PostManager(Application::getDatasource());
         $params=[];
@@ -109,17 +145,24 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $post = new PostManager(Application::getDatasource());
         $statement = $post->getById($id);
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    public function addComment($id)
+    
+    /**
+     * addComment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function addComment(int $id): void
     {
         // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
@@ -137,15 +180,22 @@ class Post extends BaseController
         
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $this->view('backoffice/add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
-    public function addedComment($id)
+    
+    /**
+     * addedComment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function addedComment(int $id): void
     {
 
         $comment = new CommentManager(Application::getDatasource());
@@ -156,10 +206,10 @@ class Post extends BaseController
         
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
@@ -167,7 +217,13 @@ class Post extends BaseController
         Header("Location: /blog-project/post/$slug/$id");
     }
 
-    public function moderationPosts()
+        
+    /**
+     * moderationPosts
+     *
+     * @return void
+     */
+    public function moderationPosts(): void
     {
         $posts = new PostManager(Application::getDatasource());
 
@@ -177,34 +233,47 @@ class Post extends BaseController
         }
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
 
         $this->view('backoffice/admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
     
-    
-    public function moderatePost($id)
+        
+    /**
+     * moderatePost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function moderatePost(int $id): void
     {
         $post = new PostManager(Application::getDatasource());
 
         $statement = $post->getById($id);
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
 
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    public function moderatedPost($id)
+        
+    /**
+     * moderatedPost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function moderatedPost(int $id): void
     {
         $post = new PostManager(Application::getDatasource());
         $params=[];
@@ -227,27 +296,43 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $post = new PostManager(Application::getDatasource());
         $statement = $post->getById($id);
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
     }
 
-    public function unpublishPost(int $id)
+    
+    /**
+     * unpublishPost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function unpublishPost(int $id): void
     {
 
         (new PostManager(Application::getDatasource()))->unpublish($id);
         header('Location: /blog-project/admin/moderation/posts');
     }
 
-    public function publishPost(int $id)
+    
+    /**
+     * publishPost
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function publishPost(int $id): void
     {
 
         (new PostManager(Application::getDatasource()))->publish($id);
         header('Location: /blog-project/admin/moderation/posts');
     }
+
+
 }

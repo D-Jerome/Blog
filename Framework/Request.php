@@ -41,7 +41,7 @@ class Request
     /**
      * getMethod
      *
-     * @return void
+     * @return string
      */
     public function getMethod(): string
     {
@@ -52,7 +52,7 @@ class Request
     /**
      * getParams
      *
-     * @return void
+     * @return array
      */
     public function getParams(): array
     {
