@@ -74,19 +74,34 @@ final class Application
         }
     }
 
-
+    
+    /**
+     * getDatasource : get the config information of database in array
+     *
+     * @return array
+     */
     public static function getDatasource()
     {
         return self::$config['database'];
     }
 
-
+    
+    /**
+     * getEmailSource: get the config information of email in array
+     *
+     * @return array
+     */
     public static function getEmailSource()
     {
         return self::$config['email'];
     }
 
-    
+        
+    /**
+     * getBaseUrl: get the config information of base Url address in
+     *
+     * @return string
+     */
     public static function getBaseUrl()
     {
         return self::$config['baseUrl'];

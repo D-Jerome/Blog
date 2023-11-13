@@ -45,9 +45,9 @@ class Route
     /**
      * getPath
      *
-     * @return void
+     * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -56,9 +56,9 @@ class Route
     /**
      * getMethod
      *
-     * @return void
+     * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -67,9 +67,9 @@ class Route
     /**
      * getController
      *
-     * @return void
+     * @return string
      */
-    public function getController()
+    public function getController(): string
     {
         return $this->controller;
     }
@@ -78,9 +78,9 @@ class Route
     /**
      * getAction
      *
-     * @return void
+     * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -89,9 +89,9 @@ class Route
     /**
      * getAuthRoles
      *
-     * @return void
+     * @return array
      */
-    public function getAuthRoles()
+    public function getAuthRoles(): array
     {
         return $this->authRoles;   
     }
@@ -100,9 +100,9 @@ class Route
     /**
      * getParams
      *
-     * @return void
+     * @return array
      */
-    public function getParams()
+    public function getParams(): array
     {
         return $this->params;
     }
@@ -114,7 +114,7 @@ class Route
      * @param  array $params
      * @return void
      */
-    public function setParams(array $params)
+    public function setParams(array $params): void
     {
         $this->params = $params;
     }

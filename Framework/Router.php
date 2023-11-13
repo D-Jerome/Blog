@@ -11,14 +11,20 @@ class Router
 {
 
     protected array $routes;
-
+    
+    
+    /**
+     * __construct : Construct all routes of config file
+     *
+     * @return void
+     */
     public function __construct()
     {
         $routes = json_decode(file_get_contents(__DIR__ . '/../config/routes.json'), true);
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
-    }
+    } //end _construct
 
     
     /**
@@ -27,17 +33,18 @@ class Router
      * @param  Request $request
      * @return Route
      */
-    public function findRoute(Request $request): ?Route 
+    public function findRoute(Request $request): ?Route
     {
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
                 preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
-                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());         
+                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());     
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
                     return $route;
                 }
+
                 if (preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
@@ -48,9 +55,10 @@ class Router
                         $route->setParams($request->getParams());
                         return $route;
                     }
-                }     
+                } //end if
+
             } //endif
-        }
+        } //end foreach
         return null;
     }
     
@@ -67,12 +75,14 @@ class Router
         $valid = false;
         $matchesKey = array_keys($matches);    
         $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
-        if ( !empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
+        if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = new $objectManagerName(Application::getDatasource());
             if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
             }
-        }
+
+        } //end if
+
         return $valid;
     }
 
