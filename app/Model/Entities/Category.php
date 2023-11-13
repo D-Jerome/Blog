@@ -5,22 +5,43 @@ namespace App\Model\Entities;
 class Category extends Entity
 {
 	protected ?int $id;
+	
 	protected ?string $name;
+	
 	protected ?string $slug;
 
-
-	public function getId()
+	
+	/**
+	 * getId
+	 *
+	 * @return int
+	 */
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
-	public function getName()
+	
+	/**
+	 * getName
+	 *
+	 * @return string
+	 */
+	public function getName(): string
 	{
 		return $this->name;
 	}
 
-	public function getSlug()
+	
+	/**
+	 * getSlug
+	 *
+	 * @return string
+	 */
+	public function getSlug(): string
 	{
 		return $this->slug;
 	}
+
+	
 }

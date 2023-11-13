@@ -10,27 +10,51 @@ class Mail
 {
     
     private string $host;                     
+    
     private bool $smtpAuth;                       
+    
     private string $userName;                    
+    
     private string $password;                            
+    
     private string $smtpSecure;     
+    
     private string $port;                            
+    
     private string $fromAddress;
+    
     private ?string $fromName;
+    
     private string $replyToAddress;
+    
     private ?string $replyToName;
+    
     private ?string $ccAddress;
+    
     private ?string $bccAddress;
     
-
-    public function __construct($config)
+    
+    /**
+     * __construct : each data of email config
+     *
+     * @param  array $config
+     * @return void
+     */
+    public function __construct(array $config)
     {
         foreach ($config as $key => $value){
             $this->$key = $value;
         }
 
-    }
+    } //end __construct
     
+        
+    /**
+     * sendMailToUser : send Email to User
+     *
+     * @param  User $user
+     * @return void
+     */
     public function sendMailToUser(User $user)
     {
         $mail = new PHPMailer(true);
@@ -66,8 +90,16 @@ class Mail
         } else {
             echo 'Message has been sent.';
         }
+
     }
 
+        
+    /**
+     * sendMailToAdmin : send email to admin
+     *
+     * @param  array $contact
+     * @return void
+     */
     public function sendMailToAdmin(array $contact)
     {
         $mail = new PHPMailer(true);
@@ -116,4 +148,6 @@ class Mail
         }
         
     }
+
+
 }

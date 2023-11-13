@@ -2,60 +2,122 @@
 
 namespace App\Model\Entities;
 
+use DateTime;
 use PDO;
 
 class Post extends Entity
 {
 	protected int $id;
+	
 	protected string $name;
+	
 	protected string $slug;
+	
 	protected string $content;
+	
 	protected $createdAt;
+	
 	protected $modifiedAt;
+	
 	protected bool $publishState;
-    protected mixed $publishAt; 
+    
+	protected mixed $publishAt; 
+	
 	protected ?int $publishUserId;
+	
 	protected string $excerptContent;
+	
 	protected array $categories = [];
+	
 	protected int $countComments;
+	
 	protected int $userId;
+	
 	protected string $username;
 
-	public function getId()
+		
+	/**
+	 * getId
+	 *
+	 * @return int
+	 */
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
-	public function getName()
+		
+	/**
+	 * getName
+	 *
+	 * @return string
+	 */
+	public function getName(): string
 	{
 		return $this->name;
 	}
 
-	public function getSlug()
+		
+	/**
+	 * getSlug
+	 *
+	 * @return string
+	 */
+	public function getSlug(): string
 	{
 		return $this->slug;
 	}
 
-	public function getContent()
+		
+	/**
+	 * getContent
+	 *
+	 * @return string
+	 */
+	public function getContent(): string
 	{
 		return $this->content;
 	}
 
-	public function getCreatedAt()
+		
+	/**
+	 * getCreatedAt
+	 *
+	 * @return DateTime
+	 */
+	public function getCreatedAt(): DateTime
 	{
 		return $this->createdAt;
 	}
 
-	public function getModifiedAt()
+		
+	/**
+	 * getModifiedAt
+	 *
+	 * @return DateTime
+	 */
+	public function getModifiedAt(): DateTime
 	{
 		return $this->ModifiedAt;
 	}
 
+		
+	/**
+	 * getUserId
+	 *
+	 * @return int
+	 */
 	public function getUserId(): int
 	{
 		return $this->userId;
 	}
 
+		
+	/**
+	 * getExcerptContent
+	 *
+	 * @return void
+	 */
 	public function getExcerptContent()
 	{
 		$excerpt = substr($this->content, 0, 60) . '...';
@@ -65,33 +127,71 @@ class Post extends Entity
 		return $excerpt;
 	}
 
+		
+	/**
+	 * getCategories
+	 *
+	 * @return array
+	 */
 	public function getCategories(): ?array
 	{
 		return $this->categories;
 	}
 
+		
+	/**
+	 * getCountComments
+	 *
+	 * @return int
+	 */
 	public function getCountComments(): int
 	{
 		return $this->countComments;
 	}
 
+		
+	/**
+	 * getUsername
+	 *
+	 * @return string
+	 */
 	public function getUsername(): string
 	{
 		return $this->username;
 	}
 
-	public function getPublishState()
+		
+	/**
+	 * getPublishState
+	 *
+	 * @return bool
+	 */
+	public function getPublishState(): bool
 	{
 		return $this->publishState;
 	}
 	
-	public function getPublishAt()
+		
+	/**
+	 * getPublishAt
+	 *
+	 * @return DateTime
+	 */
+	public function getPublishAt(): DateTime
 	{
 		return $this->publishAt;
 	}
 
-	public function getPublishUserId()
+		
+	/**
+	 * getPublishUserId
+	 *
+	 * @return int
+	 */
+	public function getPublishUserId(): int
 	{
 		return $this->publishUserId;
 	}
+
+
 }

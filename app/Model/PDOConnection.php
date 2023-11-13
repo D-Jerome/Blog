@@ -9,10 +9,18 @@ use PhpParser\json_decode;
 
 class PDOConnection
 {
+    
     private $dbConnect;
+    
     private static $pdoInstance;
 
-
+    
+    /**
+     * getInstance : create instance pdo if no set
+     *
+     * @param  array $datasource
+     * @return void
+     */
     public static function getInstance(array $datasource)
     {
 
@@ -23,7 +31,14 @@ class PDOConnection
         return self::$pdoInstance->dbConnect;
     }
 
-    private function __construct($datasource)
+    
+    /**
+     * __construct
+     *
+     * @param  array $datasource
+     * @return void
+     */
+    private function __construct(array $datasource)
     {
         $dsn = $datasource['dbtype'];
         if (isset($datasource['host'])) {
@@ -42,5 +57,7 @@ class PDOConnection
         ]);
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-    }
+    } //end __construct
+
+    
 }

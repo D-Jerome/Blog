@@ -2,66 +2,140 @@
 
 namespace App\Model\Entities;
 
+use DateTime;
+
 class User extends Entity
 {
+	
 	protected int $id;
+	
 	protected string $firstname;
+	
 	protected string $lastname;
+	
 	protected string $username;
+	
 	protected string $email;
+	
 	protected string $password;
+	
 	protected $createdAt;
+	
 	protected int $roleId;
+	
 	protected string $roleName;
+	
 	protected bool $active;
 
-	public function getId()
+	
+	/**
+	 * getId
+	 *
+	 * @return int
+	 */
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
-	public function getFirstname()
+	
+	/**
+	 * getFirstname
+	 *
+	 * @return string
+	 */
+	public function getFirstname(): string
 	{
 		return $this->firstname;
 	}
-
-	public function getLastname()
+	
+	
+	/**
+	 * getLastname
+	 *
+	 * @return string
+	 */
+	public function getLastname(): string
 	{
 		return $this->lastname;
 	}
-
-	public function getUsername()
+	
+	
+	/**
+	 * getUsername
+	 *
+	 * @return string
+	 */
+	public function getUsername(): string
 	{
 		return $this->username;
 	}
 
-	public function getEmail()
+		
+	/**
+	 * getEmail
+	 *
+	 * @return string
+	 */
+	public function getEmail(): string
 	{
 		return $this->email;
 	}
 
-	public function getPassword()
+		
+	/**
+	 * getPassword
+	 *
+	 * @return string
+	 */
+	public function getPassword(): string
 	{
 		return $this->password;
 	}
 
-	public function getCreatedAt()
+		
+	/**
+	 * getCreatedAt
+	 *
+	 * @return DateTime
+	 */
+	public function getCreatedAt(): DateTime
 	{
 		return $this->createdAt;
 	}
 
-	public function getRoleId()
+		
+	/**
+	 * getRoleId
+	 *
+	 * @return int
+	 */
+	public function getRoleId(): int
 	{
 		return $this->roleId;
 	}
 
-	public function getRoleName()
+		
+	/**
+	 * getRoleName
+	 *
+	 * @return string
+	 */
+	public function getRoleName(): string
 	{
 		return $this->roleName;
 	}
 
-	public function getActive()
+		
+	/**
+	 * getActive
+	 *
+	 * @return bool
+	 */
+	public function getActive(): bool
 	{
 		return $this->active;
 	}
+
+	
 }
