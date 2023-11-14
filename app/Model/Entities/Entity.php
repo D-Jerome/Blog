@@ -23,11 +23,11 @@ abstract class Entity
     /**
      * __set
      *
-     * @param string $name
-     * @param  string $value
+     * @param string|null $name
+     * @param   $value Multiple types of values
      * @return void
      */
-    public function __set(string $name, string $value)
+    public function __set(?string $name, $value): void
     {
         if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */

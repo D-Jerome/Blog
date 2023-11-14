@@ -10,7 +10,13 @@ use Framework\Session;
 
 class User extends BaseController
 {
-    function userList()
+
+    /**
+     * userList: show list of user
+     *
+     * @return void
+     */
+    function userList(): void
     {
         $users = (new UserManager(Application::getDatasource()));
         $statementUsers = $users->getAll();
@@ -27,7 +33,14 @@ class User extends BaseController
         $this->view('backoffice/admin.users.html.twig', ['registredUsers' => $statementUsers, 'authUser' => $user]);
     }
 
-    public function modifyUser($id)
+
+    /**
+     * modifyUser
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifyUser(int $id): void
     {
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($id);
@@ -45,59 +58,87 @@ class User extends BaseController
         $this->view('backoffice/modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
-    public function modifiedUser($id)
+
+    /**
+     * modifiedUser: action of user modification
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifiedUser(int $id): void
     {
         $users = new UserManager(Application::getDatasource());
         $request = new Request("/blog-project/");
 
         $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
+        $users->updateUser($request->getParams());
 
-        $return = $users->updateUser($request->getParams());
-
-        $param = $request->getParams();
-
-
-        $statement = $users->getById($id);
+        $users->getById($id);
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                        'name' => $user->getUsername(),
+                        'id' => $user->getId(),
+                        'roleName' => $user->getRoleName()
+                    ];
 
             header('Location: /blog-project/admin');
     }
 
-    public function disableUser(int $id)
+
+    /**
+     * disableUser
+     *
+     * @param  int $id Id's user to disable
+     * @return void
+     */
+    public function disableUser(int $id): void
     {
 
         (new UserManager(Application::getDatasource()))->disable($id);
         header('Location: /blog-project/admin/users');
     }
 
-    public function enableUser(int $id)
-    {
 
+    /**
+     * enableUser
+     *
+     * @param  int $id Id's user to enable
+     * @return void
+     */
+    public function enableUser(int $id): void
+    {
         (new UserManager(Application::getDatasource()))->enable($id);
         header('Location: /blog-project/admin/users');
     }
 
+
+    /**
+     * addUser: show page to add user
+     *
+     * @return void
+     */
     public function addUser()
     {
         $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $this->view('backoffice/add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
     }
 
-    public function addedUser()
+
+    /**
+     * addedUser: action after validate form => insert new user
+     *
+     * @return void
+     */
+    public function addedUser(): void
     {
         $user = new UserManager(Application::getDatasource());
         $request = new Request("/blog-project/");
@@ -106,13 +147,15 @@ class User extends BaseController
         //verif si pas erreur
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                    'name' => $user->getUsername(),
+                    'id' => $user->getId(),
+                    'roleName' => $user->getRoleName()
+                ];
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 
         $this->view('backoffice/modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
     }
+
+
 }

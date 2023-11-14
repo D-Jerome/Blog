@@ -84,6 +84,11 @@ class User extends BaseController
         $this->view('frontoffice/signup.html.twig', ['error' => false, 'authUser' => $user]);
     }
 
+    /**
+     * validationSignUp : Verify information of sign up
+     *
+     * @return void
+     */
     public function validationSignUp()
     {
         $error = false;
@@ -127,6 +132,12 @@ class User extends BaseController
         }
     }
 
+
+    /**
+     * logout : Destroy session
+     *
+     * @return void
+     */
     public function logout()
     {
         session_destroy();
@@ -134,14 +145,25 @@ class User extends BaseController
         header('Location: /blog-project/');
     }
 
+
+    /**
+     * forgetPwd : show for to obtain connection information
+     *
+     * @return void
+     */
     public function forgetPwd()
     {
         $this->view('frontoffice/forget.pwd.html.twig', ['error' => false]);
     }
+
+
+    /**
+     * sendUserConnectionMail
+     *
+     * @return void
+     */
     public function sendUserConnectionMail()
     {
-        
-
         $this->view('frontoffice/home.html.twig', ['error' => false]);
     }
 

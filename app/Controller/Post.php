@@ -52,11 +52,12 @@ class Post extends BaseController
         ];
         return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
-    
+
+
      /**
      * posts : recovers all informations for each publish article for display with paging
      *
-     * 
+     *
      * @return void
      */
     public function posts()
@@ -65,7 +66,7 @@ class Post extends BaseController
         $orderBy = 'created_at';
         $dir = 'DESC';
         $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
-        
+
         $currentPage = ($this->getRoute()->getParams())['page'] ?? 1;
         $currentPage = (int)$currentPage;
         $publish = true;
@@ -77,13 +78,13 @@ class Post extends BaseController
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
-        
+
         if ($publish){
-            $count = count($posts->getAllPublish());        
+            $count = count($posts->getAllPublish());
         } else {
             $count = count($posts->getAll());
-        }    
-       
+        }//enf id
+
         if ((int)(ceil(($count / $perPage))) === 1 ) {
             $pages['nextActive'] =false;
             $pages['previousActive'] = false;
@@ -96,8 +97,8 @@ class Post extends BaseController
         }else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
-        } 
-        
+        }//end if
+
         $temp=($this->getRoute()->getParams());
         unset($temp['page']);
         $this->getRoute()->setParams($temp);
@@ -106,28 +107,27 @@ class Post extends BaseController
             $uri = Application::getBaseUrl(). $this->getRoute()->getPath() . '?' . $query;
         }
         //pagination
-        
+
         $temp=($this->getRoute()->getParams());
         unset($temp['page']);
         $this->getRoute()->setParams($temp);
         $query = http_build_query($this->getRoute()->getParams());
         $pages['previousUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage - 1) . $query;
         $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
-     
+
         $user = $this->session->getUser();
-        
+
         if (null !== $user) {
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId()
-            ];
+                        'name' => $user->getUsername(),
+                        'id' => $user->getId()
+                    ];
         }
 
         return $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
     }
 
 
-    
     /**
      * post : recovers article's informations (in @param) for display
      *
@@ -157,19 +157,23 @@ class Post extends BaseController
     }
 
 
-  
-
-
+    /**
+     * admin : administration role panel for user
+     *
+     * @return void
+     */
     public function admin()
     {
         $user = $this->session->getUser();
         if (null !== $user) {
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                        'name' => $user->getUsername(),
+                        'id' => $user->getId(),
+                        'roleName' => $user->getRoleName()
+                    ];
         }
         return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
+
+    
 }

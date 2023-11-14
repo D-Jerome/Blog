@@ -11,24 +11,27 @@ use Framework\Session;
 class Comment extends BaseController
 {
 
+
+    /**
+     * comments: show comments of user
+     *      or show all comments for admin
+     *
+     * @return void
+     */
     public function comments()
     {
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
-
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
         $comments = (new CommentManager(Application::getDatasource()));
-
         if ($user['roleName'] === "admin"){
             $statementComments = $comments->getAll();
-            
         }else{
             $statementComments = $comments->getCommentsByUserId($user['id']);
-        }
-        
+        }//end if
         foreach ($statementComments as $statementComment) {
             $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
@@ -36,58 +39,76 @@ class Comment extends BaseController
         $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments, 'posts' =>$statementPosts, 'authUser' => $user]);
     }
 
-    public function modifyComment($id)
-    {
-        
-        $comments = new CommentManager(Application::getDatasource());
 
+    /**
+     * modifyComment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifyComment(int $id): void
+    {
+
+        $comments = new CommentManager(Application::getDatasource());
         $statement = $comments->getById($id);
- 
         $statement->username = current($comments->getCommentUsername($statement->getUserId()));
 
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
         $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
-    public function modifiedComment($id)
+
+    /**
+     * modifiedComment: action after modification of comment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function modifiedComment(int $id): void
     {
         $comments = new CommentManager(Application::getDatasource());
         $params=[];
         $statement = $comments->getById($id);
-        
+
         // dd($_POST, $statement);
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
-           
+
             $params['content']= $this->getRoute()->getParams()['content'];
         }
         if (null !== $params) {
-            
+
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
-           
+
             $comments->update($statement, $params); 
         }
 
         $user = $this->session->getUser();
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $comments = new CommentManager(Application::getDatasource());
         $statement = $comments->getById($id);
         $statement->username = current($comments->getCommentUsername($statement->getUserId()));
-        
+
         $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
 
+
+    /**
+     * moderationComments; prepare view to moderate comments
+     *
+     * @return void
+     */
     public function moderationComments()
     {
         $comments = new CommentManager(Application::getDatasource());
@@ -98,71 +119,39 @@ class Comment extends BaseController
         }
         $user = $this->session->getUser();
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
+                     'name' => $user->getUsername(),
+                     'id' => $user->getId(),
+                     'roleName' => $user->getRoleName()
+                    ];
 
-          
         $this->view('backoffice/admin.moderation.comments.html.twig', ['comments' => $statementComments, 'authUser' => $user]);
     }
 
-    public function moderateComment($id)
+
+    /**
+     * unpublishComment: action of unpublish comment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function unpublishComment(int $id): void
     {
-        $comment = new CommentManager(Application::getDatasource());
-
-        $statement = $comment->getById($id);
-        $user = $this->session->getUser();
-            $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'roleName' => $user->getRoleName()
-            ];
-
-
-        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
-    }
-
-    public function moderatedComment($id)
-    {
-        $comment = new CommentManager(Application::getDatasource());
-        $params=[];
-        $statement = $comment->getById($id);
-
-        // dd($_POST, $statement);
-        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
-            $params['content']= $this->getRoute()->getParams()['content'];
-        }
-        
-        if (null !== $params) {
-            $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
-            $params['publishState'] = 0;
-           
-            $comment->update($statement, $params); 
-        }
-
-        $user = $this->session->getUser();
-        $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
-
-        $comment = new PostManager(Application::getDatasource());
-        $statement = $comment->getById($id);
-        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
-    }
-
-    public function unpublishComment(int $id)
-    {
-
         (new CommentManager(Application::getDatasource()))->unpublish($id);
         header('Location: /blog-project/admin/moderation/comments');
     }
 
-    public function publishComment(int $id)
+
+    /**
+     * publishComment: action of publish comment
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function publishComment(int $id): void
     {
         (new CommentManager(Application::getDatasource()))->publish($id);
         header('Location: /blog-project/admin/moderation/comments');
     }
+
+
 }

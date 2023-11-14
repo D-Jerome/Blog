@@ -16,13 +16,13 @@ class Post extends Entity
 
 	protected string $content;
 
-	protected $createdAt;
+	protected string $createdAt;
 
-	protected $modifiedAt;
+	protected ?string $modifiedAt;
 
 	protected bool $publishState;
 
-	protected mixed $publishAt;
+	protected ?string $publishAt;
 
 	protected ?int $publishUserId;
 
@@ -84,9 +84,9 @@ class Post extends Entity
 	/**
 	 * getCreatedAt
 	 *
-	 * @return DateTime
+	 * @return string
 	 */
-	public function getCreatedAt(): DateTime
+	public function getCreatedAt(): string
 	{
 		return $this->createdAt;
 	}
@@ -95,9 +95,9 @@ class Post extends Entity
 	/**
 	 * getModifiedAt
 	 *
-	 * @return DateTime
+	 * @return string
 	 */
-	public function getModifiedAt(): DateTime
+	public function getModifiedAt(): string
 	{
 		return $this->ModifiedAt;
 	}
@@ -176,9 +176,9 @@ class Post extends Entity
 	/**
 	 * getPublishAt
 	 *
-	 * @return DateTime
+	 * @return string
 	 */
-	public function getPublishAt(): DateTime
+	public function getPublishAt(): string
 	{
 		return $this->publishAt;
 	}

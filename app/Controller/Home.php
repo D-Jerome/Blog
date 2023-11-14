@@ -14,6 +14,12 @@ use Framework\Session;
 
 class Home extends BaseController
 {
+
+    /**
+     * home
+     *
+     * @return view
+     */
     public function home()
     {
         //recherche des 3 derniers articles par catégories
@@ -22,9 +28,9 @@ class Home extends BaseController
         $user = $this->session->getUser();
         if (null !== $user) {
             $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId()
-            ];
+                        'name' => $user->getUsername(),
+                        'id' => $user->getId()
+                    ];
         }
 
         $user = $this->session->getUser();
@@ -33,15 +39,19 @@ class Home extends BaseController
         }
 
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId()
-        ];
-
-
-        return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
+                    'name' => $user->getUsername(),
+                    'id' => $user->getId()
+                ];
+        $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
     }
 
-    public function homeContact()
+
+    /**
+     * homeContact
+     *
+     * @return void
+     */
+    public function homeContact(): void
     {
         $error = false;
         $postdatas = (new Request('blog-project'))->getParams();
@@ -51,13 +61,12 @@ class Home extends BaseController
                 die("valeurs non authorisées");
                 $error = true;
                 //throw Exception;
-            } 
+            }
         }
         $mail = new Mail(Application::getEmailSource());
         $mail->sendMailToAdmin($postdatas);
         header('Location: /blog-project/');
-
-
-
     }
+
+
 }

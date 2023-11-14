@@ -12,13 +12,13 @@ class Comment extends Entity
 
 	protected string $content;
 
-	protected $createdAt;
+	protected string $createdAt;
 
-	protected $modifiedAt;
+	protected ?string $modifiedAt;
 
 	protected bool $publishState;
 
-	protected $publishAt;
+	protected ?string $publishAt;
 
 	protected ?int $publishUserId;
 
@@ -55,7 +55,7 @@ class Comment extends Entity
 	 *
 	 * @return DateTime
 	 */
-	public function getCreatedAt(): DateTime
+	public function getCreatedAt(): string
 	{
 		return $this->createdAt;
 	}
@@ -66,7 +66,7 @@ class Comment extends Entity
 	 *
 	 * @return DateTime
 	 */
-	public function getModifiedAt(): DateTime
+	public function getModifiedAt(): string
 	{
 		return $this->ModifiedAt;
 	}
@@ -134,9 +134,9 @@ class Comment extends Entity
 	/**
 	 * getPublishAt
 	 *
-	 * @return DateTime
+	 * @return string
 	 */
-	public function getPublishAt(): DateTime
+	public function getPublishAt(): string
 	{
 		return $this->publishAt;
 	}

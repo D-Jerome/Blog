@@ -8,7 +8,13 @@ use Framework\Session;
 
 class Auth extends BaseController
 {
-    public function loggedIn()
+
+    /**
+     * loggedIn: show user administration panel
+     *
+     * @return void
+     */
+    public function loggedIn(): void
     {
         $user = $this->session->getUser();
             $user = [
@@ -16,14 +22,21 @@ class Auth extends BaseController
                 'id' => $user->getId(),
                 'roleName' => $user->getRoleName()
             ];
-
-        return $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
-    public function logout()
+
+    /**
+     * logout m destroy session
+     *
+     * @return void
+     */
+    public function logout(): void
     {
         session_destroy();
 
         header('Location: /blog-project/');
     }
+
+
 }
