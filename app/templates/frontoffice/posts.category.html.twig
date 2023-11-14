@@ -9,8 +9,6 @@
     </div>
     
 {% endif %} 
-<h2 class="col-12">Bonjour {{ authUser.name }} </h2>
-
     <header class="masthead" style="background-image: url('/blog-project/public/img/category.jpg')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -23,6 +21,7 @@
             </div>
         </div>
     </header>
+    
     <div class="accordion accordion-flush" id="accordionFlush">
     {% for category in categories %} 
         <div class="accordion-item bg-light m-2">

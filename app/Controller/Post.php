@@ -6,11 +6,12 @@ use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
 use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
 use Framework\Application;
-use \PDO;
-
+use Framework\Helpers\FilterBuilder;
+use Framework\Helpers\Text;
+use PDO;
 
 class Post extends BaseController
-{    
+{
     /**
      * postsByCategory : 3 most recent Posts by category
      *
@@ -54,17 +55,21 @@ class Post extends BaseController
     }
 
 
-     /**
-     * posts : recovers all informations for each publish article for display with paging
-     *
-     *
-     * @return void
-     */
+    /**
+    * posts : recovers all informations for each publish article for display with paging
+    *
+    *
+    * @return void
+    */
     public function posts()
     {
-        //$username=Session::getUsername();
-        $orderBy = 'created_at';
-        $dir = 'DESC';
+        $filter = new FilterBuilder(Application::getFilter());
+        $sortList = $filter->getSort();
+        $dirList = $filter->getDir();
+        $categoriesList = $filter->getCategories();
+        $categoriesNameList = $filter->getCategoriesNames();
+        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? Text::camelCaseToSnakeCase(($this->getRoute()->getParams())['sort']) : Text::camelCaseToSnakeCase('createdAt');
+        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
         $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
 
         $currentPage = ($this->getRoute()->getParams())['page'] ?? 1;
@@ -72,34 +77,34 @@ class Post extends BaseController
         $publish = true;
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statementPosts = $posts->getAllOrderLimit($orderBy, $dir, $perPage, $currentPage, $publish );
+        $statementPosts = $posts->getAllOrderLimit($sortBy, $sortDir, $perPage, $currentPage, $publish);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
 
-        if ($publish){
+        if ($publish) {
             $count = count($posts->getAllPublish());
         } else {
             $count = count($posts->getAll());
         }//enf id
 
-        if ((int)(ceil(($count / $perPage))) === 1 ) {
-            $pages['nextActive'] =false;
+        if ((int)(ceil(($count / $perPage))) === 1) {
+            $pages['nextActive'] = false;
             $pages['previousActive'] = false;
-        }elseif ($currentPage >= (ceil(($count / $perPage)))) {
+        } elseif ($currentPage >= (ceil(($count / $perPage)))) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
-        }elseif ($currentPage === 1) {
+        } elseif ($currentPage === 1) {
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
-        }else {
+        } else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
         }//end if
 
-        $temp=($this->getRoute()->getParams());
+        $temp = ($this->getRoute()->getParams());
         unset($temp['page']);
         $this->getRoute()->setParams($temp);
         $query = http_build_query($this->getRoute()->getParams());
@@ -108,7 +113,7 @@ class Post extends BaseController
         }
         //pagination
 
-        $temp=($this->getRoute()->getParams());
+        $temp = ($this->getRoute()->getParams());
         unset($temp['page']);
         $this->getRoute()->setParams($temp);
         $query = http_build_query($this->getRoute()->getParams());
@@ -116,17 +121,24 @@ class Post extends BaseController
         $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
 
         $user = $this->session->getUser();
-
+        
         if (null !== $user) {
             $user = [
                         'name' => $user->getUsername(),
                         'id' => $user->getId()
                     ];
         }
-
-        return $this->view('frontoffice/posts.html.twig', ['posts' => $statementPosts, 'pages' => $pages, 'authUser' => $user]);
+        return $this->view('frontoffice/posts.html.twig', [
+                'posts' => $statementPosts,
+                'sort' => $sortList,
+                'dir' => $dirList,
+                'categories' => $categoriesList ,
+                'categoriesNames' => $categoriesNameList,
+                'pages' => $pages,
+                'authUser' => $user]);
     }
 
+   
 
     /**
      * post : recovers article's informations (in @param) for display
@@ -175,5 +187,5 @@ class Post extends BaseController
         return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
-    
+
 }

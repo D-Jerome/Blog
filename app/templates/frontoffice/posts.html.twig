@@ -1,8 +1,8 @@
 
 
-{% extends './layouts/connection.html.twig' %}
+{% extends './layouts/filter.html.twig' %}
 
-{% block content %} 
+{% block content %}
     <header class="masthead" style="background-image: url('/blog-project/public/img/home-bg.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -15,18 +15,17 @@
                 </div>
             </div>
         </header>
+
     {% for post in posts %}
         {% if post.publishState == true %}
              <article class="mb-4 ">
-                      
                 <div class="row gx-4 gx-lg-5 justify-content-center">
-                  
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <h2>{{ post.name }}</h2>
                     <div>
-                        {% for category in post.categories %}                 
+                        {% for category in post.categories %}
                             <span class="badge text-bg-primary bg-gradient">{{ category.name }}</span>
-                        {% endfor %}   
+                        {% endfor %}
                     </div>
                         <p class="text-muted text-white ">Par <span class="text-primary">{{ post.username }}</span> le {{ post.createdAt | format_datetime(locale='fr') }}</p>
                         <p class="card-text ">{{ post.excerptContent | raw }} </p>
@@ -38,14 +37,14 @@
                                     99+
                                 {% else %}
                                     {{ post.countComments }}
-                                {% endif %}     
+                                {% endif %}
                                 <span class="visually-hidden">Commentaires</span>
                             </span>
                         </a>
                     </div>
                 </div>
             </article>
-        {% endif %}    
+        {% endif %}
     {% endfor %}
 {% endblock %}
 {% block page %}

@@ -99,9 +99,12 @@
     {% block errors %}?{% endblock %}
         
         <div class="container mt-5"><hr>
+        {% block filterBlock %}{% endblock %}
             <div class="row justify-content-center">
-
-        {% block content %}{% endblock %}
+ 
+        {% block content %} 
+       
+        {% endblock %}
             </div>
          {% block page %}{% endblock %}
         </div>

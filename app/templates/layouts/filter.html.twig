@@ -1,0 +1,52 @@
+{% extends './layouts/connection.html.twig' %}
+
+{% block filterBlock %}     
+{% if sort %} 
+    <a class="btn btn-primary border border-dark" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button" aria-controls="offcanvasfilter">Filtrer</a>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasFilterLabel">Filtrer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>    
+        <div class="offcanvas-body">
+            <form action="/blog-project/post" method="get">
+                <div class="container-fluid btn-group ">
+                    <div >
+                        <div class="btn-group-vertical border border-light gap-1" role="group" aria-label="Vertical radio toggle button group">
+                        {% for key, value in sort %}
+                                <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}">
+                                <label class="btn btn-primary" for="sort-{{ key }}">{{ value }}</label>
+                        {% endfor %}
+                        </div>
+                        <div class="btn-group m-1">
+                        {% if dir %}
+                            <div class="btn-group gap-1" role="group" aria-label="Basic radio toggle button group">
+                            {% for key, value in dir %}
+                                    <input class="btn-check m-1" type="radio" value="{{ key }}" name="dir" id="dir-{{ key }}">
+                                    <label class="btn btn-outline-primary" for="dir-{{ key }}">{{ value }}</label>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                        {% if categories %}
+                            <select class="form-select m-1" aria-label="categoriesSelect">
+                            <option selected>---</option>
+                            {% for categoryName in categoriesNames %}
+                                <option value="{{ categoryName.id }}">{{ categoryName.name }}</option>
+
+                            {% endfor %}
+
+                            </select>
+                        {% endif %} 
+
+                        <div class=" mt-2 text-center" >
+                            <button type="submit" class="btn btn-outline-success w-100">Valider</button>
+                        </div> 
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endif %}         
+{% endblock %}        
+

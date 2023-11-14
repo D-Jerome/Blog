@@ -9,6 +9,15 @@
         ]
     },
     {
+        "path" : "/",
+        "controller" : "App\\Controller\\Home",
+        "action" : "homeContact",
+        "method" : "POST",
+        "authorize": [
+            "all"
+        ]
+    },
+    {
         "path" : "/posts-category",
         "controller" : "App\\Controller\\Post",
         "action" : "postsByCategory",
@@ -137,7 +146,7 @@
             "admin",
             "editor",
             "visitor"
-        ] 
+        ]
     },
     {
         "path" : "/admin/comment/modify/{commentId}/{postId}",
@@ -148,7 +157,7 @@
             "admin",
             "editor",
             "visitor"
-        ]           
+        ]
     },
     {
         "path" : "/admin",
@@ -159,7 +168,6 @@
             "admin",
             "editor",
             "visitor"
-            
         ]
     },
     {
@@ -179,7 +187,7 @@
         "authorize": [
             "admin",
             "editor"
-        ] 
+        ]
     },
     {
         "path" : "/admin/post/modify/{slug}/{postId}",
@@ -189,7 +197,7 @@
         "authorize": [
             "admin",
             "editor"
-        ]           
+        ]
     },
     {
         "path" : "/admin/post/new",
@@ -199,7 +207,7 @@
         "authorize": [
             "admin",
             "editor"
-        ] 
+        ]
     },
     {
         "path" : "/admin/post/new",
@@ -209,7 +217,7 @@
         "authorize": [
             "admin",
             "editor"
-        ] 
+        ]
     },
     {
         "path" : "/login",
@@ -218,7 +226,7 @@
         "method" : "POST",
         "authorize": [
             "all"
-        ]   
+        ]
     },
     {
         "path" : "/admin/logged",
@@ -229,7 +237,7 @@
             "admin",
             "editor",
             "visitor"
-        ]             
+        ]
     },
     {
         "path" : "/admin/users",
@@ -238,9 +246,7 @@
         "method" : "GET",
         "authorize": [
             "admin"
-            
-           
-        ]             
+        ]
     },
     {
         "path" : "/admin/user/modify/{username}/{userId}",
@@ -248,10 +254,10 @@
         "action" : "modifyUser",
         "method" : "GET",
         "authorize": [
-            "admin",           
+            "admin",
             "editor",
             "visitor"
-        ]             
+        ]
     },
     {
         "path" : "/admin/user/modify/{username}/{userId}",
@@ -259,10 +265,10 @@
         "action" : "modifiedUser",
         "method" : "POST",
         "authorize": [
-            "admin",           
+            "admin",
             "editor",
             "visitor"
-        ]             
+        ]
     },
     {
         "path" : "/admin/user/disable/{username}/{userId}",
@@ -271,7 +277,7 @@
         "method" : "GET",
         "authorize": [
             "admin"
-        ]             
+        ]
     },
     {
         "path" : "/admin/user/enable/{username}/{userId}",
@@ -280,7 +286,7 @@
         "method" : "GET",
         "authorize": [
             "admin"
-        ]             
+        ]
     },
     {
         "path" : "/admin/user/new",
@@ -289,7 +295,7 @@
         "method" : "GET",
         "authorize": [
             "admin"
-        ] 
+        ]
     },
     {
         "path" : "/admin/user/new",
@@ -298,7 +304,7 @@
         "method" : "POST",
         "authorize": [
             "admin"
-        ] 
+        ]
     },
     {
         "path" : "/admin/comment/add/{slug}/{postId}",
@@ -309,7 +315,7 @@
             "admin",
             "editor",
             "visitor"
-        ] 
+        ]
     },
     {
         "path" : "/admin/comment/add/{slug}/{postId}",
@@ -320,7 +326,7 @@
             "admin",
             "editor",
             "visitor"
-        ] 
+        ]
     },
     {
         "path" : "/signup",
@@ -329,7 +335,7 @@
         "method" : "GET",
         "authorize": [
             "all"
-        ] 
+        ]
     },
     {
         "path" : "/signup",
@@ -338,7 +344,7 @@
         "method" : "POST",
         "authorize": [
             "all"
-        ] 
+        ]
     },
     {
         "path" : "/logout",
@@ -350,7 +356,7 @@
             "editor",
             "visitor",
             "all"
-        ]             
+        ]
     },
     {
         "path" : "/login/forget",
@@ -362,7 +368,7 @@
             "editor",
             "visitor",
             "all"
-        ]             
+        ]
     },
     {
         "path" : "/login/forget",
@@ -374,7 +380,7 @@
             "editor",
             "visitor",
             "all"
-        ]             
+        ]
     }
 
 ]

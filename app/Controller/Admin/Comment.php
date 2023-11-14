@@ -10,8 +10,6 @@ use Framework\Session;
 
 class Comment extends BaseController
 {
-
-
     /**
      * comments: show comments of user
      *      or show all comments for admin
@@ -21,22 +19,22 @@ class Comment extends BaseController
     public function comments()
     {
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
         $comments = (new CommentManager(Application::getDatasource()));
-        if ($user['roleName'] === "admin"){
+        if ($user['roleName'] === "admin") {
             $statementComments = $comments->getAll();
-        }else{
+        } else {
             $statementComments = $comments->getCommentsByUserId($user['id']);
         }//end if
         foreach ($statementComments as $statementComment) {
             $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
         $statementPosts = (new PostManager(Application::getDatasource()))->getAll();
-        $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments, 'posts' =>$statementPosts, 'authUser' => $user]);
+        $this->view('backoffice/admin.comments.html.twig', ['comments' => $statementComments, 'posts' => $statementPosts, 'authUser' => $user]);
     }
 
 
@@ -54,11 +52,11 @@ class Comment extends BaseController
         $statement->username = current($comments->getCommentUsername($statement->getUserId()));
 
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
@@ -73,20 +71,20 @@ class Comment extends BaseController
     public function modifiedComment(int $id): void
     {
         $comments = new CommentManager(Application::getDatasource());
-        $params=[];
+        $params = [];
         $statement = $comments->getById($id);
 
         // dd($_POST, $statement);
-        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {   
+        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
 
-            $params['content']= $this->getRoute()->getParams()['content'];
+            $params['content'] = $this->getRoute()->getParams()['content'];
         }
         if (null !== $params) {
 
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
 
-            $comments->update($statement, $params); 
+            $comments->update($statement, $params);
         }
 
         $user = $this->session->getUser();
@@ -118,11 +116,11 @@ class Comment extends BaseController
             $statementComment->username = current($comments->getCommentUsername($statementComment->getUserId()));
         }
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $this->view('backoffice/admin.moderation.comments.html.twig', ['comments' => $statementComments, 'authUser' => $user]);
     }

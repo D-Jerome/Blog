@@ -25,5 +25,19 @@
         "replyToName" : "info",
         "ccAddress" : "cc@example.com",
         "bccAddress" : "bcc@example.com"
+    },
+    "filter" : {
+        "sort" : {
+            "name" : "Titre",
+            "createdAt" : "Crée le",
+            "modifiedAt" : "Dernière Modification"
+        },
+        "dir" : {
+            "ASC" : "Croissant",
+            "DESC" : "Décroissant"
+        },
+        "categories" : {
+            "categories" : "Catégorie" 
+        }
     }
 }    

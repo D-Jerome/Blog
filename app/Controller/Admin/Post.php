@@ -9,10 +9,8 @@ use Framework\BaseController;
 use Framework\Request;
 use Framework\Session;
 
-
 class Post extends BaseController
 {
-
     /**
      * posts: Show page with all published posts
      *
@@ -27,11 +25,11 @@ class Post extends BaseController
             $statementPost->username = current($posts->getPostUsername($statementPost->getUserId()));
         }
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
         $this->view('backoffice/admin.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
     }
 
@@ -59,11 +57,11 @@ class Post extends BaseController
         $category = new CategoryManager(Application::getDatasource());
         $statementCategories = $category->getAll();
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
@@ -81,11 +79,11 @@ class Post extends BaseController
 
         $post->insertNewPost($request->getParams());
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
 
         $statement = '';
@@ -106,11 +104,11 @@ class Post extends BaseController
         $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
 
         $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
@@ -125,16 +123,16 @@ class Post extends BaseController
     public function modifiedPost(int $id)
     {
         $post = new PostManager(Application::getDatasource());
-        $params=[];
+        $params = [];
         $statement = $post->getById($id);
 
         // dd($_POST, $statement);
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
-            $params['content']= $this->getRoute()->getParams()['content'];
+            $params['content'] = $this->getRoute()->getParams()['content'];
         }
         // dd($_POST['name'], $statement->getName());
         if ($this->getRoute()->getParams()['name'] !== $statement->getName()) {
-            $params['name']= $this->getRoute()->getParams()['name'];
+            $params['name'] = $this->getRoute()->getParams()['name'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
@@ -205,11 +203,11 @@ class Post extends BaseController
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
@@ -232,11 +230,11 @@ class Post extends BaseController
             $statementPost->username = current($posts->getPostUsername($statementPost->getUserId()));
         }
         $user = $this->session->getUser();
-            $user = [
-                     'name' => $user->getUsername(),
-                     'id' => $user->getId(),
-                     'roleName' => $user->getRoleName()
-                    ];
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
 
 
         $this->view('backoffice/admin.moderation.posts.html.twig', ['posts' => $statementPosts, 'authUser' => $user]);
