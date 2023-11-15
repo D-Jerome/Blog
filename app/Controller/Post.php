@@ -63,28 +63,30 @@ class Post extends BaseController
     */
     public function posts()
     {
-        $filter = new FilterBuilder(Application::getFilter());
+        $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $sortList = $filter->getSort();
         $dirList = $filter->getDir();
-        $categoriesList = $filter->getCategories();
-        $categoriesNameList = $filter->getCategoriesNames();
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? Text::camelCaseToSnakeCase(($this->getRoute()->getParams())['sort']) : Text::camelCaseToSnakeCase('createdAt');
+        $list = $filter->getList();
+        $listNames = $filter->getListNames();
+
+        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
         $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
 
         $currentPage = ($this->getRoute()->getParams())['page'] ?? 1;
         $currentPage = (int)$currentPage;
-        $publish = true;
+        $sqlParams = [ "publish_state" => true];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $statementPosts = $posts->getAllOrderLimit($sortBy, $sortDir, $perPage, $currentPage, $publish);
+        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
 
-        if ($publish) {
+        if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
         } else {
             $count = count($posts->getAll());
@@ -104,24 +106,19 @@ class Post extends BaseController
             $pages['previousActive'] = true;
         }//end if
 
+        //pagination
         $temp = ($this->getRoute()->getParams());
         unset($temp['page']);
         $this->getRoute()->setParams($temp);
         $query = http_build_query($this->getRoute()->getParams());
         if (!empty($query)) {
-            $uri = Application::getBaseUrl(). $this->getRoute()->getPath() . '?' . $query;
+            $query = "&$query";
         }
-        //pagination
-
-        $temp = ($this->getRoute()->getParams());
-        unset($temp['page']);
-        $this->getRoute()->setParams($temp);
-        $query = http_build_query($this->getRoute()->getParams());
         $pages['previousUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage - 1) . $query;
         $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
 
         $user = $this->session->getUser();
-        
+
         if (null !== $user) {
             $user = [
                         'name' => $user->getUsername(),
@@ -132,13 +129,15 @@ class Post extends BaseController
                 'posts' => $statementPosts,
                 'sort' => $sortList,
                 'dir' => $dirList,
-                'categories' => $categoriesList ,
-                'categoriesNames' => $categoriesNameList,
+                'sortDir' => $sortDir,
+                'sortBy' => $sortBy,
+                'list' => $list ,
+                'listNames' => $listNames,
                 'pages' => $pages,
                 'authUser' => $user]);
     }
 
-   
+
 
     /**
      * post : recovers article's informations (in @param) for display

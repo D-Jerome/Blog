@@ -8,12 +8,11 @@ use Framework\Exception\PropertyNotFoundException;
 
 abstract class BaseManager
 {
-
     public object $dbConnect;
     protected string $table;
-    public  $object;
+    public $object;
 
-    public function __construct(string $table,  $objectName, $datasource)
+    public function __construct(string $table, $objectName, $datasource)
     {
 
         $this->table = $table;
@@ -40,6 +39,21 @@ abstract class BaseManager
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
+
+    /**
+     * getAllOneField : collect all information on the field
+     *
+     * @param  string $field : name of field to list
+     * @return array
+     */
+    public function getAllToList(string $field): array
+    {
+        $query = $this->dbConnect->prepare("SELECT $field FROM " . $this->table);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
     public function getAllPublish()
     {
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table ." WHERE publish_state = true");
@@ -47,12 +61,19 @@ abstract class BaseManager
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
-    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page , ?bool $publish)
+    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params)
     {
         $sql = 'SELECT * FROM ' . $this->table;
-        if ($publish) {
-            $sql .= ' WHERE publish_state = '. $publish;
-        }        
+        if (!empty($params)) {
+            $sql .= ' WHERE ';
+            $i = 0;
+            foreach ($params as $k => $value){
+                if ($i !== 0 ){
+                    $sql .= ' AND ';
+                }
+                $sql .= $k .' = '. $value;
+            }
+        }
         if (isset($field)) {
             $sql .= ' ORDER BY ' . $field;
         }
@@ -95,7 +116,7 @@ abstract class BaseManager
 
     public function update($obj, $param)
     {
-       
+
         $sql = "UPDATE " . $this->table . " SET ";
         $countParam = count($param);
         $i = 0;
@@ -104,7 +125,7 @@ abstract class BaseManager
             if ($paramName !== 'id') {
                 $sql = $sql . Text::camelCaseToSnakeCase($paramName) . " = :" . Text::camelCaseToSnakeCase($paramName);
             }
-            if ($i !== $countParam){
+            if ($i !== $countParam) {
                 $sql = $sql . ", ";
             }
         }
@@ -112,15 +133,15 @@ abstract class BaseManager
         $req = $this->dbConnect->prepare($sql);
         $param['id'] = $obj->getId() ;
         $boundParam = [];
-        foreach ($param as $paramName => $paramValue) {        
+        foreach ($param as $paramName => $paramValue) {
             if (property_exists($obj, $paramName)) {
                 $boundParam[Text::camelCaseToSnakeCase($paramName)] = $paramValue;
             } else {
                 throw new PropertyNotFoundException($this->object, $paramName);
-            } 
+            }
         }
-        
-       // dd($sql,$boundParam);
+
+        // dd($sql,$boundParam);
         $req->execute($boundParam);
     }
 

@@ -9,35 +9,38 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>    
         <div class="offcanvas-body">
-            <form action="/blog-project/post" method="get">
+            <form action="" method="get">
                 <div class="container-fluid btn-group ">
                     <div >
                         <div class="btn-group-vertical border border-light gap-1" role="group" aria-label="Vertical radio toggle button group">
                         {% for key, value in sort %}
-                                <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}">
-                                <label class="btn btn-primary" for="sort-{{ key }}">{{ value }}</label>
+                                <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}"{% if sortBy == key %} checked {% endif %}>
+                                <label class="btn btn-outline-primary" for="sort-{{ key }}">{{ value }}</label>
                         {% endfor %}
                         </div>
+
+                        {% if list %}
+                            <div class="">
+                        {% else %}
+                            <div class="d-none">
+                        {% endif %} 
+                                <select class="form-select m-1" aria-label="itemsSelect">
+                                <option selected>---</option>
+                                {% for item in listNames %}
+                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
                         <div class="btn-group m-1">
                         {% if dir %}
                             <div class="btn-group gap-1" role="group" aria-label="Basic radio toggle button group">
                             {% for key, value in dir %}
-                                    <input class="btn-check m-1" type="radio" value="{{ key }}" name="dir" id="dir-{{ key }}">
+                                    <input class="btn-check m-1" type="radio" value="{{ key }}" name="dir" id="dir-{{ key }}" {% if sortDir == key %} checked {% endif %}>
                                     <label class="btn btn-outline-primary" for="dir-{{ key }}">{{ value }}</label>
                             {% endfor %}
                             </div>
                         {% endif %}
                         </div>
-                        {% if categories %}
-                            <select class="form-select m-1" aria-label="categoriesSelect">
-                            <option selected>---</option>
-                            {% for categoryName in categoriesNames %}
-                                <option value="{{ categoryName.id }}">{{ categoryName.name }}</option>
-
-                            {% endfor %}
-
-                            </select>
-                        {% endif %} 
 
                         <div class=" mt-2 text-center" >
                             <button type="submit" class="btn btn-outline-success w-100">Valider</button>

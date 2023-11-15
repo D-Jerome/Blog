@@ -11,25 +11,27 @@ class FilterBuilder
 
     private array $dir;
 
-    private array $categories;
+    private ?array $list = null ;
 
-    private array $categoriesNames;
+    private ?array $listNames = null ;
 
 
     /**
      * __construct : Construct filter data
      *
+     * @param string $typeObj : Name of the object to list
      * @param  array $config
      * @return void
      */
-    public function __construct(array $config)
+    public function __construct(array $config, string $typeObj)
     {
-        $this->sort = $config['sort'];
+        $this->sort = $config[$typeObj]['sort'];
         $this->dir = $config['dir'];
-        if ($config['categories']) {
-            $this->categories = $config['categories'];
-            $categories = new CategoryManager(Application::getDatasource());
-            $this->categoriesNames = $categories->getAll();
+        if (!empty($config[$typeObj]['list'])) {
+            $this->list = $config[$typeObj]['list'];
+            $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
+            $listNames = new  $objectManagerName(Application::getDatasource());
+            $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
         }
     }//end __construct
 
@@ -59,21 +61,21 @@ class FilterBuilder
     /**
      * getCategories : Type and FR translate
      *
-     * @return array
+     * @return array|null
      */
-    public function getCategories(): array
+    public function getList(): ?array
     {
-        return $this->categories;
+        return $this->list;
     }
 
 
     /**
      * getCategoriesNames: names of each category
      *
-     * @return array
+     * @return array|null
      */
-    public function getCategoriesNames(): array
+    public function getListNames(): ?array
     {
-        return $this->categoriesNames;
+        return $this->listNames;
     }
 }

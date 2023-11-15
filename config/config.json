@@ -27,17 +27,52 @@
         "bccAddress" : "bcc@example.com"
     },
     "filter" : {
-        "sort" : {
-            "name" : "Titre",
-            "createdAt" : "Crée le",
-            "modifiedAt" : "Dernière Modification"
-        },
         "dir" : {
             "ASC" : "Croissant",
             "DESC" : "Décroissant"
         },
-        "categories" : {
-            "categories" : "Catégorie" 
+        "post" : {
+            "sort" : {
+                "name" : "Titre",
+                "createdAt" : "Crée le",
+                "modifiedAt" : "Dernière Modification",
+                "categories" : "Catégorie" 
+            },
+            "list" : {
+                "Category" : "name"
+            }
+        },
+        "admin.post" : {
+            "sort" : {
+                "name" : "Titre",
+                "createdAt" : "Crée le",
+                "modifiedAt" : "Dernière Modification",
+                "categories" : "Catégorie" 
+            },
+            "list" : {
+                "Category" : "name"
+            }
+        },
+        "user" : {
+            "sort" : {
+                "username" : "Identifiant",
+                "createdAt" : "Inscrit le",
+                "active" : "Actif",
+                "role"  : "Role"
+            },
+            "list" : {
+                "Role" : "role"
+            }
+        },
+        "admin.comment" : {
+            "sort" : {
+                "user" : "utilisateur",
+                "PublishAt" : "Publié le",
+                "PublihState": "Publié",
+                "ModifiedAt": "Modifié le"
+            },
+            "list" : {}
         }
+
     }
-}    
+}
