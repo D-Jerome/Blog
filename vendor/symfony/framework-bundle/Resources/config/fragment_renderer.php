@@ -22,50 +22,56 @@ use Symfony\Component\HttpKernel\Fragment\SsiFragmentRenderer;
 return static function (ContainerConfigurator $container) {
     $container->parameters()
         ->set('fragment.renderer.hinclude.global_template', null)
-        ->set('fragment.path', '/_fragment')
-    ;
+        ->set('fragment.path', '/_fragment');
 
     $container->services()
         ->set('fragment.handler', LazyLoadingFragmentHandler::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('fragment renderer locator'),
                 service('request_stack'),
                 param('kernel.debug'),
-            ])
+                ]
+        )
 
         ->set('fragment.uri_generator', FragmentUriGenerator::class)
-            ->args([param('fragment.path'), service('uri_signer'), service('request_stack')])
+        ->args([param('fragment.path'), service('uri_signer'), service('request_stack')])
         ->alias(FragmentUriGeneratorInterface::class, 'fragment.uri_generator')
 
         ->set('fragment.renderer.inline', InlineFragmentRenderer::class)
-            ->args([service('http_kernel'), service('event_dispatcher')])
-            ->call('setFragmentPath', [param('fragment.path')])
-            ->tag('kernel.fragment_renderer', ['alias' => 'inline'])
+        ->args([service('http_kernel'), service('event_dispatcher')])
+        ->call('setFragmentPath', [param('fragment.path')])
+        ->tag('kernel.fragment_renderer', ['alias' => 'inline'])
 
         ->set('fragment.renderer.hinclude', HIncludeFragmentRenderer::class)
-            ->args([
+        ->args(
+            [
                 service('twig')->nullOnInvalid(),
                 service('uri_signer'),
                 param('fragment.renderer.hinclude.global_template'),
-            ])
-            ->call('setFragmentPath', [param('fragment.path')])
+                ]
+        )
+        ->call('setFragmentPath', [param('fragment.path')])
 
         ->set('fragment.renderer.esi', EsiFragmentRenderer::class)
-            ->args([
+        ->args(
+            [
                 service('esi')->nullOnInvalid(),
                 service('fragment.renderer.inline'),
                 service('uri_signer'),
-            ])
-            ->call('setFragmentPath', [param('fragment.path')])
-            ->tag('kernel.fragment_renderer', ['alias' => 'esi'])
+                ]
+        )
+        ->call('setFragmentPath', [param('fragment.path')])
+        ->tag('kernel.fragment_renderer', ['alias' => 'esi'])
 
         ->set('fragment.renderer.ssi', SsiFragmentRenderer::class)
-            ->args([
+        ->args(
+            [
                 service('ssi')->nullOnInvalid(),
                 service('fragment.renderer.inline'),
                 service('uri_signer'),
-            ])
-            ->call('setFragmentPath', [param('fragment.path')])
-            ->tag('kernel.fragment_renderer', ['alias' => 'ssi'])
-    ;
+                ]
+        )
+        ->call('setFragmentPath', [param('fragment.path')])
+        ->tag('kernel.fragment_renderer', ['alias' => 'ssi']);
 };

@@ -57,7 +57,8 @@ class LintCommand extends Command
             ->addOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())))
             ->addOption('show-deprecations', null, InputOption::VALUE_NONE, 'Show deprecations as errors')
             ->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command lints a template and outputs to STDOUT
 the first encountered syntax error.
 
@@ -75,8 +76,7 @@ Or of a whole directory:
   <info>php %command.full_name% dirname --format=json</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -106,18 +106,20 @@ EOF
         }
 
         if ($showDeprecations) {
-            $prevErrorHandler = set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-                if (\E_USER_DEPRECATED === $level) {
-                    $templateLine = 0;
-                    if (preg_match('/ at line (\d+)[ .]/', $message, $matches)) {
-                        $templateLine = $matches[1];
+            $prevErrorHandler = set_error_handler(
+                static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
+                    if (\E_USER_DEPRECATED === $level) {
+                        $templateLine = 0;
+                        if (preg_match('/ at line (\d+)[ .]/', $message, $matches)) {
+                            $templateLine = $matches[1];
+                        }
+
+                        throw new Error($message, $templateLine);
                     }
 
-                    throw new Error($message, $templateLine);
+                    return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
                 }
-
-                return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
-            });
+            );
         }
 
         try {
@@ -209,15 +211,17 @@ EOF
     {
         $errors = 0;
 
-        array_walk($filesInfo, function (&$v) use (&$errors) {
-            $v['file'] = (string) $v['file'];
-            unset($v['template']);
-            if (!$v['valid']) {
-                $v['message'] = $v['exception']->getMessage();
-                unset($v['exception']);
-                ++$errors;
+        array_walk(
+            $filesInfo, function (&$v) use (&$errors) {
+                $v['file'] = (string) $v['file'];
+                unset($v['template']);
+                if (!$v['valid']) {
+                    $v['message'] = $v['exception']->getMessage();
+                    unset($v['exception']);
+                    ++$errors;
+                }
             }
-        });
+        );
 
         $output->writeln(json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
@@ -245,12 +249,14 @@ EOF
         }
 
         foreach ($this->getContext($template, $line) as $lineNumber => $code) {
-            $output->text(sprintf(
-                '%s %-6s %s',
-                $lineNumber === $line ? '<error> >> </error>' : '    ',
-                $lineNumber,
-                $code
-            ));
+            $output->text(
+                sprintf(
+                    '%s %-6s %s',
+                    $lineNumber === $line ? '<error> >> </error>' : '    ',
+                    $lineNumber,
+                    $code
+                )
+            );
             if ($lineNumber === $line) {
                 $output->text(sprintf('<error> >> %s</error> ', $exception->getRawMessage()));
             }

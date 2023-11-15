@@ -37,10 +37,10 @@ class Name
         }
 
         switch (str_replace('_', '', $name)) {
-            case 'firstname':
-                return static function () use ($generator) {
+        case 'firstname':
+            return static function () use ($generator) {
                     return $generator->firstName;
-                };
+            };
 
             case 'lastname':
                 return static function () use ($generator) {
@@ -107,10 +107,10 @@ class Name
 
             case 'country':
                 switch ($size) {
-                    case 2:
-                        return static function () use ($generator) {
+                case 2:
+                    return static function () use ($generator) {
                             return $generator->countryCode;
-                        };
+                    };
 
                     case 3:
                         return static function () use ($generator) {

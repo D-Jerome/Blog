@@ -201,12 +201,14 @@ class EntityPopulator
                 try {
                     $value = is_callable($format) ? $format($insertedEntities, $obj) : $format;
                 } catch (\InvalidArgumentException $ex) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Failed to generate a value for %s::%s: %s',
-                        get_class($obj),
-                        $field,
-                        $ex->getMessage(),
-                    ));
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'Failed to generate a value for %s::%s: %s',
+                            get_class($obj),
+                            $field,
+                            $ex->getMessage(),
+                        )
+                    );
                 }
                 // Try a standard setter if it's available, otherwise fall back on reflection
                 $setter = sprintf('set%s', ucfirst($field));
@@ -234,9 +236,9 @@ class EntityPopulator
     {
         $repository = $manager->getRepository(get_class($obj));
         $result = $repository->createQueryBuilder('e')
-                ->select(sprintf('e.%s', $column))
-                ->getQuery()
-                ->execute();
+            ->select(sprintf('e.%s', $column))
+            ->getQuery()
+            ->execute();
         $ids = array_map('current', $result->toArray());
 
         do {

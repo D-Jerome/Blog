@@ -42,10 +42,12 @@ final class ApplyTokenParser extends AbstractTokenParser
         $body = $this->parser->subparse([$this, 'decideApplyEnd'], true);
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new Node([
+        return new Node(
+            [
             new SetNode(true, $ref, $body, $lineno, $this->getTag()),
             new PrintNode($filter, $lineno, $this->getTag()),
-        ]);
+            ]
+        );
     }
 
     public function decideApplyEnd(Token $token): bool

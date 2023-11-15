@@ -70,12 +70,14 @@ class MongoDbSessionHandler extends AbstractSessionHandler
 
         $this->mongo = $mongo;
 
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'id_field' => '_id',
             'data_field' => 'data',
             'time_field' => 'time',
             'expiry_field' => 'expires_at',
-        ], $options);
+            ], $options
+        );
         $this->ttl = $this->options['ttl'] ?? null;
     }
 
@@ -86,18 +88,22 @@ class MongoDbSessionHandler extends AbstractSessionHandler
 
     protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
     {
-        $this->getCollection()->deleteOne([
+        $this->getCollection()->deleteOne(
+            [
             $this->options['id_field'] => $sessionId,
-        ]);
+            ]
+        );
 
         return true;
     }
 
     public function gc(int $maxlifetime): int|false
     {
-        return $this->getCollection()->deleteMany([
+        return $this->getCollection()->deleteMany(
+            [
             $this->options['expiry_field'] => ['$lt' => new UTCDateTime()],
-        ])->getDeletedCount();
+            ]
+        )->getDeletedCount();
     }
 
     protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
@@ -138,10 +144,12 @@ class MongoDbSessionHandler extends AbstractSessionHandler
 
     protected function doRead(#[\SensitiveParameter] string $sessionId): string
     {
-        $dbData = $this->getCollection()->findOne([
+        $dbData = $this->getCollection()->findOne(
+            [
             $this->options['id_field'] => $sessionId,
             $this->options['expiry_field'] => ['$gte' => new UTCDateTime()],
-        ]);
+            ]
+        );
 
         if (null === $dbData) {
             return '';

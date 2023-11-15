@@ -65,12 +65,15 @@ class DebugCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::OPTIONAL, 'The template name'),
                 new InputOption('filter', null, InputOption::VALUE_REQUIRED, 'Show details for all entries matching this filter'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'text'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command outputs a list of twig functions,
 filters, globals and tests.
 
@@ -90,8 +93,7 @@ The command lists everything that contains the word date.
 
 The command lists everything in a machine readable json format.
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -349,13 +351,15 @@ EOF
             }
 
             // format args
-            $args = array_map(function (\ReflectionParameter $param) {
-                if ($param->isDefaultValueAvailable()) {
-                    return $param->getName().' = '.json_encode($param->getDefaultValue());
-                }
+            $args = array_map(
+                function (\ReflectionParameter $param) {
+                    if ($param->isDefaultValueAvailable()) {
+                        return $param->getName().' = '.json_encode($param->getDefaultValue());
+                    }
 
-                return $param->getName();
-            }, $args);
+                    return $param->getName();
+                }, $args
+            );
 
             return $args;
         }
@@ -407,15 +411,17 @@ EOF
         if ($this->twigDefaultPath && $this->projectDir) {
             $folders = glob($this->twigDefaultPath.'/bundles/*', \GLOB_ONLYDIR);
             $relativePath = ltrim(substr($this->twigDefaultPath.'/bundles/', \strlen($this->projectDir)), \DIRECTORY_SEPARATOR);
-            $bundleNames = array_reduce($folders, function ($carry, $absolutePath) use ($relativePath) {
-                if (str_starts_with($absolutePath, $this->projectDir)) {
-                    $name = basename($absolutePath);
-                    $path = ltrim($relativePath.$name, \DIRECTORY_SEPARATOR);
-                    $carry[$name] = $path;
-                }
+            $bundleNames = array_reduce(
+                $folders, function ($carry, $absolutePath) use ($relativePath) {
+                    if (str_starts_with($absolutePath, $this->projectDir)) {
+                        $name = basename($absolutePath);
+                        $path = ltrim($relativePath.$name, \DIRECTORY_SEPARATOR);
+                        $carry[$name] = $path;
+                    }
 
-                return $carry;
-            }, $bundleNames);
+                    return $carry;
+                }, $bundleNames
+            );
         }
 
         if ($notFoundBundles = array_diff_key($bundleNames, $this->bundlesMetadata)) {

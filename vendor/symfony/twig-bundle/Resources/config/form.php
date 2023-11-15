@@ -18,13 +18,12 @@ use Symfony\Component\Form\FormRenderer;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.extension.form', FormExtension::class)
-            ->args([service('translator')->nullOnInvalid()])
+        ->args([service('translator')->nullOnInvalid()])
 
         ->set('twig.form.engine', TwigRendererEngine::class)
-            ->args([param('twig.form.resources'), service('twig')])
+        ->args([param('twig.form.resources'), service('twig')])
 
         ->set('twig.form.renderer', FormRenderer::class)
-            ->args([service('twig.form.engine'), service('security.csrf.token_manager')->nullOnInvalid()])
-            ->tag('twig.runtime')
-    ;
+        ->args([service('twig.form.engine'), service('security.csrf.token_manager')->nullOnInvalid()])
+        ->tag('twig.runtime');
 };

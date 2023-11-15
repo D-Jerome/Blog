@@ -53,9 +53,11 @@ final class BlockTokenParser extends AbstractTokenParser
                 }
             }
         } else {
-            $body = new Node([
+            $body = new Node(
+                [
                 new PrintNode($this->parser->getExpressionParser()->parseExpression(), $lineno),
-            ]);
+                ]
+            );
         }
         $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
 

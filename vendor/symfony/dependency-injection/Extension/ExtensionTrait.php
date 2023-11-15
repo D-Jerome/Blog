@@ -54,7 +54,8 @@ trait ExtensionTrait
     {
         $buildDir = $container->getParameter('kernel.build_dir');
         $locator = new FileLocator();
-        $resolver = new LoaderResolver([
+        $resolver = new LoaderResolver(
+            [
             new XmlFileLoader($container, $locator, $env),
             new YamlFileLoader($container, $locator, $env),
             new IniFileLoader($container, $locator, $env),
@@ -62,7 +63,8 @@ trait ExtensionTrait
             new GlobFileLoader($container, $locator, $env),
             new DirectoryLoader($container, $locator, $env),
             new ClosureLoader($container, $env),
-        ]);
+            ]
+        );
 
         return new DelegatingLoader($resolver);
     }

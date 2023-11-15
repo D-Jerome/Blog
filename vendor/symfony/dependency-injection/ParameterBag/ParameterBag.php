@@ -231,28 +231,30 @@ class ParameterBag implements ParameterBagInterface
             return $this->resolved ? $this->get($key) : $this->resolveValue($this->get($key), $resolving);
         }
 
-        return preg_replace_callback('/%%|%([^%\s]+)%/', function ($match) use ($resolving, $value) {
-            // skip %%
-            if (!isset($match[1])) {
-                return '%%';
-            }
+        return preg_replace_callback(
+            '/%%|%([^%\s]+)%/', function ($match) use ($resolving, $value) {
+                // skip %%
+                if (!isset($match[1])) {
+                    return '%%';
+                }
 
-            $key = $match[1];
-            if (isset($resolving[$key])) {
-                throw new ParameterCircularReferenceException(array_keys($resolving));
-            }
+                $key = $match[1];
+                if (isset($resolving[$key])) {
+                    throw new ParameterCircularReferenceException(array_keys($resolving));
+                }
 
-            $resolved = $this->get($key);
+                $resolved = $this->get($key);
 
-            if (!\is_string($resolved) && !is_numeric($resolved)) {
-                throw new RuntimeException(sprintf('A string value must be composed of strings and/or numbers, but found parameter "%s" of type "%s" inside string value "%s".', $key, get_debug_type($resolved), $value));
-            }
+                if (!\is_string($resolved) && !is_numeric($resolved)) {
+                    throw new RuntimeException(sprintf('A string value must be composed of strings and/or numbers, but found parameter "%s" of type "%s" inside string value "%s".', $key, get_debug_type($resolved), $value));
+                }
 
-            $resolved = (string) $resolved;
-            $resolving[$key] = true;
+                $resolved = (string) $resolved;
+                $resolving[$key] = true;
 
-            return $this->isResolved() ? $resolved : $this->resolveString($resolved, $resolving);
-        }, $value);
+                return $this->isResolved() ? $resolved : $this->resolveString($resolved, $resolving);
+            }, $value
+        );
     }
 
     /**

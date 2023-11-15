@@ -35,8 +35,10 @@
             "sort" : {
                 "name" : "Titre",
                 "createdAt" : "Crée le",
-                "modifiedAt" : "Dernière Modification",
-                "categories" : "Catégorie" 
+                "modifiedAt" : "Dernière Modification"
+            },
+            "listSelect" : {
+                "categories" : "Catégorie"
             },
             "list" : {
                 "Category" : "name"
@@ -47,17 +49,18 @@
                 "name" : "Titre",
                 "createdAt" : "Crée le",
                 "modifiedAt" : "Dernière Modification",
-                "categories" : "Catégorie" 
+                "publishState" : "Publié"
             },
-            "list" : {
-                "Category" : "name"
-            }
+            "listSelect" : {},
+            "list" : {}
         },
-        "user" : {
+        "admin.user" : {
             "sort" : {
                 "username" : "Identifiant",
                 "createdAt" : "Inscrit le",
-                "active" : "Actif",
+                "active" : "Actif"
+            },
+            "listSelect" : {
                 "role"  : "Role"
             },
             "list" : {
@@ -69,8 +72,9 @@
                 "user" : "utilisateur",
                 "PublishAt" : "Publié le",
                 "PublihState": "Publié",
-                "ModifiedAt": "Modifié le"
+                "ModifiedAt": "Dernière modification"
             },
+            "listSelect" : {},
             "list" : {}
         }
 

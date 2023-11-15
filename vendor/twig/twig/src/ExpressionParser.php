@@ -50,9 +50,13 @@ class ExpressionParser
 
     private $parser;
     private $env;
-    /** @var array<string, array{precedence: int, class: class-string<AbstractUnary>}> */
+    /**
+     * @var array<string, array{precedence: int, class: class-string<AbstractUnary>}> 
+     */
     private $unaryOperators;
-    /** @var array<string, array{precedence: int, class: class-string<AbstractBinary>, associativity: self::OPERATOR_*}> */
+    /**
+     * @var array<string, array{precedence: int, class: class-string<AbstractBinary>, associativity: self::OPERATOR_*}> 
+     */
     private $binaryOperators;
 
     public function __construct(Parser $parser, Environment $env)
@@ -212,77 +216,77 @@ class ExpressionParser
     {
         $token = $this->parser->getCurrentToken();
         switch ($token->getType()) {
-            case /* Token::NAME_TYPE */ 5:
-                $this->parser->getStream()->next();
-                switch ($token->getValue()) {
-                    case 'true':
-                    case 'TRUE':
-                        $node = new ConstantExpression(true, $token->getLine());
-                        break;
-
-                    case 'false':
-                    case 'FALSE':
-                        $node = new ConstantExpression(false, $token->getLine());
-                        break;
-
-                    case 'none':
-                    case 'NONE':
-                    case 'null':
-                    case 'NULL':
-                        $node = new ConstantExpression(null, $token->getLine());
-                        break;
-
-                    default:
-                        if ('(' === $this->parser->getCurrentToken()->getValue()) {
-                            $node = $this->getFunctionNode($token->getValue(), $token->getLine());
-                        } else {
-                            $node = new NameExpression($token->getValue(), $token->getLine());
-                        }
-                }
+        case /* Token::NAME_TYPE */ 5:
+            $this->parser->getStream()->next();
+            switch ($token->getValue()) {
+            case 'true':
+            case 'TRUE':
+                $node = new ConstantExpression(true, $token->getLine());
                 break;
 
-            case /* Token::NUMBER_TYPE */ 6:
-                $this->parser->getStream()->next();
-                $node = new ConstantExpression($token->getValue(), $token->getLine());
+            case 'false':
+            case 'FALSE':
+                $node = new ConstantExpression(false, $token->getLine());
                 break;
 
-            case /* Token::STRING_TYPE */ 7:
-            case /* Token::INTERPOLATION_START_TYPE */ 10:
-                $node = $this->parseStringExpression();
+            case 'none':
+            case 'NONE':
+            case 'null':
+            case 'NULL':
+                $node = new ConstantExpression(null, $token->getLine());
                 break;
 
-            case /* Token::OPERATOR_TYPE */ 8:
-                if (preg_match(Lexer::REGEX_NAME, $token->getValue(), $matches) && $matches[0] == $token->getValue()) {
-                    // in this context, string operators are variable names
-                    $this->parser->getStream()->next();
-                    $node = new NameExpression($token->getValue(), $token->getLine());
-                    break;
-                }
-
-                if (isset($this->unaryOperators[$token->getValue()])) {
-                    $class = $this->unaryOperators[$token->getValue()]['class'];
-                    if (!\in_array($class, [NegUnary::class, PosUnary::class])) {
-                        throw new SyntaxError(sprintf('Unexpected unary operator "%s".', $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
-                    }
-
-                    $this->parser->getStream()->next();
-                    $expr = $this->parsePrimaryExpression();
-
-                    $node = new $class($expr, $token->getLine());
-                    break;
-                }
-
-                // no break
             default:
-                if ($token->test(/* Token::PUNCTUATION_TYPE */ 9, '[')) {
-                    $node = $this->parseArrayExpression();
-                } elseif ($token->test(/* Token::PUNCTUATION_TYPE */ 9, '{')) {
-                    $node = $this->parseHashExpression();
-                } elseif ($token->test(/* Token::OPERATOR_TYPE */ 8, '=') && ('==' === $this->parser->getStream()->look(-1)->getValue() || '!=' === $this->parser->getStream()->look(-1)->getValue())) {
-                    throw new SyntaxError(sprintf('Unexpected operator of value "%s". Did you try to use "===" or "!==" for strict comparison? Use "is same as(value)" instead.', $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
+                if ('(' === $this->parser->getCurrentToken()->getValue()) {
+                    $node = $this->getFunctionNode($token->getValue(), $token->getLine());
                 } else {
-                    throw new SyntaxError(sprintf('Unexpected token "%s" of value "%s".', Token::typeToEnglish($token->getType()), $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
+                    $node = new NameExpression($token->getValue(), $token->getLine());
                 }
+            }
+            break;
+
+        case /* Token::NUMBER_TYPE */ 6:
+            $this->parser->getStream()->next();
+            $node = new ConstantExpression($token->getValue(), $token->getLine());
+            break;
+
+        case /* Token::STRING_TYPE */ 7:
+        case /* Token::INTERPOLATION_START_TYPE */ 10:
+            $node = $this->parseStringExpression();
+            break;
+
+        case /* Token::OPERATOR_TYPE */ 8:
+            if (preg_match(Lexer::REGEX_NAME, $token->getValue(), $matches) && $matches[0] == $token->getValue()) {
+                // in this context, string operators are variable names
+                $this->parser->getStream()->next();
+                $node = new NameExpression($token->getValue(), $token->getLine());
+                break;
+            }
+
+            if (isset($this->unaryOperators[$token->getValue()])) {
+                $class = $this->unaryOperators[$token->getValue()]['class'];
+                if (!\in_array($class, [NegUnary::class, PosUnary::class])) {
+                    throw new SyntaxError(sprintf('Unexpected unary operator "%s".', $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
+                }
+
+                $this->parser->getStream()->next();
+                $expr = $this->parsePrimaryExpression();
+
+                $node = new $class($expr, $token->getLine());
+                break;
+            }
+
+            // no break
+        default:
+            if ($token->test(/* Token::PUNCTUATION_TYPE */ 9, '[')) {
+                $node = $this->parseArrayExpression();
+            } elseif ($token->test(/* Token::PUNCTUATION_TYPE */ 9, '{')) {
+                $node = $this->parseHashExpression();
+            } elseif ($token->test(/* Token::OPERATOR_TYPE */ 8, '=') && ('==' === $this->parser->getStream()->look(-1)->getValue() || '!=' === $this->parser->getStream()->look(-1)->getValue())) {
+                throw new SyntaxError(sprintf('Unexpected operator of value "%s". Did you try to use "===" or "!==" for strict comparison? Use "is same as(value)" instead.', $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
+            } else {
+                throw new SyntaxError(sprintf('Unexpected token "%s" of value "%s".', Token::typeToEnglish($token->getType()), $token->getValue()), $token->getLine(), $this->parser->getStream()->getSourceContext());
+            }
         }
 
         return $this->parsePostfixExpression($node);
@@ -432,48 +436,48 @@ class ExpressionParser
     public function getFunctionNode($name, $line)
     {
         switch ($name) {
-            case 'parent':
-                $this->parseArguments();
-                if (!\count($this->parser->getBlockStack())) {
-                    throw new SyntaxError('Calling "parent" outside a block is forbidden.', $line, $this->parser->getStream()->getSourceContext());
+        case 'parent':
+            $this->parseArguments();
+            if (!\count($this->parser->getBlockStack())) {
+                throw new SyntaxError('Calling "parent" outside a block is forbidden.', $line, $this->parser->getStream()->getSourceContext());
+            }
+
+            if (!$this->parser->getParent() && !$this->parser->hasTraits()) {
+                throw new SyntaxError('Calling "parent" on a template that does not extend nor "use" another template is forbidden.', $line, $this->parser->getStream()->getSourceContext());
+            }
+
+            return new ParentExpression($this->parser->peekBlockStack(), $line);
+        case 'block':
+            $args = $this->parseArguments();
+            if (\count($args) < 1) {
+                throw new SyntaxError('The "block" function takes one argument (the block name).', $line, $this->parser->getStream()->getSourceContext());
+            }
+
+            return new BlockReferenceExpression($args->getNode(0), \count($args) > 1 ? $args->getNode(1) : null, $line);
+        case 'attribute':
+            $args = $this->parseArguments();
+            if (\count($args) < 2) {
+                throw new SyntaxError('The "attribute" function takes at least two arguments (the variable and the attributes).', $line, $this->parser->getStream()->getSourceContext());
+            }
+
+            return new GetAttrExpression($args->getNode(0), $args->getNode(1), \count($args) > 2 ? $args->getNode(2) : null, Template::ANY_CALL, $line);
+        default:
+            if (null !== $alias = $this->parser->getImportedSymbol('function', $name)) {
+                $arguments = new ArrayExpression([], $line);
+                foreach ($this->parseArguments() as $n) {
+                    $arguments->addElement($n);
                 }
 
-                if (!$this->parser->getParent() && !$this->parser->hasTraits()) {
-                    throw new SyntaxError('Calling "parent" on a template that does not extend nor "use" another template is forbidden.', $line, $this->parser->getStream()->getSourceContext());
-                }
+                $node = new MethodCallExpression($alias['node'], $alias['name'], $arguments, $line);
+                $node->setAttribute('safe', true);
 
-                return new ParentExpression($this->parser->peekBlockStack(), $line);
-            case 'block':
-                $args = $this->parseArguments();
-                if (\count($args) < 1) {
-                    throw new SyntaxError('The "block" function takes one argument (the block name).', $line, $this->parser->getStream()->getSourceContext());
-                }
+                return $node;
+            }
 
-                return new BlockReferenceExpression($args->getNode(0), \count($args) > 1 ? $args->getNode(1) : null, $line);
-            case 'attribute':
-                $args = $this->parseArguments();
-                if (\count($args) < 2) {
-                    throw new SyntaxError('The "attribute" function takes at least two arguments (the variable and the attributes).', $line, $this->parser->getStream()->getSourceContext());
-                }
+            $args = $this->parseArguments(true);
+            $class = $this->getFunctionNodeClass($name, $line);
 
-                return new GetAttrExpression($args->getNode(0), $args->getNode(1), \count($args) > 2 ? $args->getNode(2) : null, Template::ANY_CALL, $line);
-            default:
-                if (null !== $alias = $this->parser->getImportedSymbol('function', $name)) {
-                    $arguments = new ArrayExpression([], $line);
-                    foreach ($this->parseArguments() as $n) {
-                        $arguments->addElement($n);
-                    }
-
-                    $node = new MethodCallExpression($alias['node'], $alias['name'], $arguments, $line);
-                    $node->setAttribute('safe', true);
-
-                    return $node;
-                }
-
-                $args = $this->parseArguments(true);
-                $class = $this->getFunctionNodeClass($name, $line);
-
-                return new $class($name, $args, $line);
+            return new $class($name, $args, $line);
         }
     }
 
@@ -486,12 +490,11 @@ class ExpressionParser
         $type = Template::ANY_CALL;
         if ('.' == $token->getValue()) {
             $token = $stream->next();
-            if (
-                /* Token::NAME_TYPE */ 5 == $token->getType()
-                ||
-                /* Token::NUMBER_TYPE */ 6 == $token->getType()
-                ||
-                (/* Token::OPERATOR_TYPE */ 8 == $token->getType() && preg_match(Lexer::REGEX_NAME, $token->getValue()))
+            if (/* Token::NAME_TYPE */ 5 == $token->getType()
+                
+                /* Token::NUMBER_TYPE */ || 6 == $token->getType()
+                
+                || (/* Token::OPERATOR_TYPE */ 8 == $token->getType() && preg_match(Lexer::REGEX_NAME, $token->getValue()))
             ) {
                 $arg = new ConstantExpression($token->getValue(), $lineno);
 
@@ -826,8 +829,8 @@ class ExpressionParser
     private function checkConstantExpression(Node $node): bool
     {
         if (!($node instanceof ConstantExpression || $node instanceof ArrayExpression
-            || $node instanceof NegUnary || $node instanceof PosUnary
-        )) {
+            || $node instanceof NegUnary || $node instanceof PosUnary            )
+        ) {
             return false;
         }
 

@@ -208,7 +208,9 @@ class YamlFileLoader extends FileLoader
 
         $this->setCurrentDir(\dirname($path));
 
-        /** @var RouteCollection[] $imported */
+        /**
+ * @var RouteCollection[] $imported 
+*/
         $imported = $this->import($config['resource'], $type, false, $file, $exclude) ?: [];
 
         if (!\is_array($imported)) {

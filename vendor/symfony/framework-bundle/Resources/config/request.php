@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\EventListener\AddRequestFormatsListener;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('request.add_request_formats_listener', AddRequestFormatsListener::class)
-            ->args([abstract_arg('formats')])
-            ->tag('kernel.event_subscriber')
-    ;
+        ->args([abstract_arg('formats')])
+        ->tag('kernel.event_subscriber');
 };

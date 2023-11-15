@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -33,10 +33,13 @@ class DegradedUuidBuilder implements UuidBuilderInterface
     private TimeConverterInterface $timeConverter;
 
     /**
-     * @param NumberConverterInterface $numberConverter The number converter to
-     *     use when constructing the DegradedUuid
-     * @param TimeConverterInterface|null $timeConverter The time converter to use
-     *     for converting timestamps extracted from a UUID to Unix timestamps
+     * @param NumberConverterInterface    $numberConverter The number converter to
+     *                                                     use when constructing
+     *                                                     the DegradedUuid
+     * @param TimeConverterInterface|null $timeConverter   The time converter to use
+     *                                                     for converting timestamps
+     *                                                     extracted from a UUID to
+     *                                                     Unix timestamps
      */
     public function __construct(
         private NumberConverterInterface $numberConverter,
@@ -49,7 +52,7 @@ class DegradedUuidBuilder implements UuidBuilderInterface
      * Builds and returns a DegradedUuid
      *
      * @param CodecInterface $codec The codec to use for building this DegradedUuid instance
-     * @param string $bytes The byte string from which to construct a UUID
+     * @param string         $bytes The byte string from which to construct a UUID
      *
      * @return DegradedUuid The DegradedUuidBuild returns an instance of Ramsey\Uuid\DegradedUuid
      *

@@ -44,13 +44,15 @@ class ExpressionRequestMatcher extends RequestMatcher
             throw new \LogicException('Unable to match the request as the expression language is not available. Try running "composer require symfony/expression-language".');
         }
 
-        return $this->language->evaluate($this->expression, [
+        return $this->language->evaluate(
+            $this->expression, [
             'request' => $request,
             'method' => $request->getMethod(),
             'path' => rawurldecode($request->getPathInfo()),
             'host' => $request->getHost(),
             'ip' => $request->getClientIp(),
             'attributes' => $request->attributes->all(),
-        ]) && parent::matches($request);
+            ]
+        ) && parent::matches($request);
     }
 }

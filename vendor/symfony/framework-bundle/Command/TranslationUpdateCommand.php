@@ -78,7 +78,8 @@ class TranslationUpdateCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('locale', InputArgument::REQUIRED, 'The locale'),
                 new InputArgument('bundle', InputArgument::OPTIONAL, 'The bundle name or directory where to load the messages'),
                 new InputOption('prefix', null, InputOption::VALUE_OPTIONAL, 'Override the default prefix', '__'),
@@ -89,8 +90,10 @@ class TranslationUpdateCommand extends Command
                 new InputOption('domain', null, InputOption::VALUE_OPTIONAL, 'Specify the domain to extract'),
                 new InputOption('sort', null, InputOption::VALUE_OPTIONAL, 'Return list of messages sorted alphabetically (only works with --dump-messages)', 'asc'),
                 new InputOption('as-tree', null, InputOption::VALUE_OPTIONAL, 'Dump the messages as a tree-like structure: The given value defines the level where to switch to inline YAML'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command extracts translation strings from templates
 of a given bundle or the default translations directory. It can display them or merge
 the new ones into the translation files.
@@ -118,8 +121,7 @@ You can dump a tree-like structure using the yaml format with <comment>--as-tree
     <info>php %command.full_name% --force --format=yaml --as-tree=3 en AcmeBundle</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -156,7 +158,9 @@ EOF
             return 1;
         }
 
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
 
         // Define Root Paths
@@ -301,7 +305,9 @@ EOF
             return;
         }
 
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
         if ($input->mustSuggestArgumentValuesFor('bundle')) {
             $bundles = [];
@@ -319,10 +325,12 @@ EOF
         }
 
         if ($input->mustSuggestOptionValuesFor('format')) {
-            $suggestions->suggestValues(array_merge(
-                $this->writer->getFormats(),
-                array_keys(self::FORMATS)
-            ));
+            $suggestions->suggestValues(
+                array_merge(
+                    $this->writer->getFormats(),
+                    array_keys(self::FORMATS)
+                )
+            );
 
             return;
         }

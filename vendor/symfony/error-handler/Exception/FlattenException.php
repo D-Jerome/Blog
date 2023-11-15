@@ -93,7 +93,8 @@ class FlattenException
 
         if (!$cloner ??= $defaultCloner) {
             $cloner = $defaultCloner = new VarCloner();
-            $cloner->addCasters([
+            $cloner->addCasters(
+                [
                 \Throwable::class => function (\Throwable $e, array $a, Stub $s, bool $isNested): array {
                     if (!$isNested) {
                         unset($a[Caster::PREFIX_PROTECTED.'message']);
@@ -106,7 +107,8 @@ class FlattenException
 
                     return $a;
                 },
-            ]);
+                ]
+            );
         }
 
         return $e->setDataRepresentation($cloner->cloneVar($throwable));

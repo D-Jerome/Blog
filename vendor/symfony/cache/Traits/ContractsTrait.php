@@ -82,32 +82,36 @@ trait ContractsTrait
 
         $this->callbackWrapper ??= LockRegistry::compute(...);
 
-        return $this->contractsGet($pool, $key, function (CacheItem $item, bool &$save) use ($pool, $callback, $setMetadata, &$metadata, $key) {
-            // don't wrap nor save recursive calls
-            if (isset($this->computing[$key])) {
-                $value = $callback($item, $save);
-                $save = false;
+        return $this->contractsGet(
+            $pool, $key, function (CacheItem $item, bool &$save) use ($pool, $callback, $setMetadata, &$metadata, $key) {
+                // don't wrap nor save recursive calls
+                if (isset($this->computing[$key])) {
+                    $value = $callback($item, $save);
+                    $save = false;
 
-                return $value;
-            }
+                    return $value;
+                }
 
-            $this->computing[$key] = $key;
-            $startTime = microtime(true);
+                $this->computing[$key] = $key;
+                $startTime = microtime(true);
 
-            if (!isset($this->callbackWrapper)) {
-                $this->setCallbackWrapper($this->setCallbackWrapper(null));
-            }
+                if (!isset($this->callbackWrapper)) {
+                    $this->setCallbackWrapper($this->setCallbackWrapper(null));
+                }
 
-            try {
-                $value = ($this->callbackWrapper)($callback, $item, $save, $pool, function (CacheItem $item) use ($setMetadata, $startTime, &$metadata) {
+                try {
+                    $value = ($this->callbackWrapper)(
+                        $callback, $item, $save, $pool, function (CacheItem $item) use ($setMetadata, $startTime, &$metadata) {
+                            $setMetadata($item, $startTime, $metadata);
+                        }, $this->logger ?? null
+                    );
                     $setMetadata($item, $startTime, $metadata);
-                }, $this->logger ?? null);
-                $setMetadata($item, $startTime, $metadata);
 
-                return $value;
-            } finally {
-                unset($this->computing[$key]);
-            }
-        }, $beta, $metadata, $this->logger ?? null);
+                    return $value;
+                } finally {
+                    unset($this->computing[$key]);
+                }
+            }, $beta, $metadata, $this->logger ?? null
+        );
     }
 }

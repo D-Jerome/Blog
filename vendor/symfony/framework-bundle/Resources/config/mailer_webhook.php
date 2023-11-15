@@ -20,12 +20,11 @@ return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('mailer.payload_converter.mailgun', MailgunPayloadConverter::class)
         ->set('mailer.webhook.request_parser.mailgun', MailgunRequestParser::class)
-            ->args([service('mailer.payload_converter.mailgun')])
+        ->args([service('mailer.payload_converter.mailgun')])
         ->alias(MailgunRequestParser::class, 'mailer.webhook.request_parser.mailgun')
 
         ->set('mailer.payload_converter.postmark', PostmarkPayloadConverter::class)
         ->set('mailer.webhook.request_parser.postmark', PostmarkRequestParser::class)
-            ->args([service('mailer.payload_converter.postmark')])
-        ->alias(PostmarkRequestParser::class, 'mailer.webhook.request_parser.postmark')
-    ;
+        ->args([service('mailer.payload_converter.postmark')])
+        ->alias(PostmarkRequestParser::class, 'mailer.webhook.request_parser.postmark');
 };

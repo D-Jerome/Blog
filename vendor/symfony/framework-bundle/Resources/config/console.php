@@ -59,102 +59,127 @@ use Symfony\Component\Validator\Command\DebugCommand as ValidatorDebugCommand;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('console.error_listener', ErrorListener::class)
-            ->args([
+        ->args(
+            [
                 service('logger')->nullOnInvalid(),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'console'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'console'])
 
         ->set('console.suggest_missing_package_subscriber', SuggestMissingPackageSubscriber::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->set('console.command.about', AboutCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.assets_install', AssetsInstallCommand::class)
-            ->args([
+        ->args(
+            [
                 service('filesystem'),
                 param('kernel.project_dir'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_clear', CacheClearCommand::class)
-            ->args([
+        ->args(
+            [
                 service('cache_clearer'),
                 service('filesystem'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_pool_clear', CachePoolClearCommand::class)
-            ->args([
+        ->args(
+            [
                 service('cache.global_clearer'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_pool_prune', CachePoolPruneCommand::class)
-            ->args([
+        ->args(
+            [
                 [],
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_pool_invalidate_tags', CachePoolInvalidateTagsCommand::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('cache.taggable', 'pool'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_pool_delete', CachePoolDeleteCommand::class)
-            ->args([
+        ->args(
+            [
                 service('cache.global_clearer'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_pool_list', CachePoolListCommand::class)
-            ->args([
+        ->args(
+            [
                 null,
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.cache_warmup', CacheWarmupCommand::class)
-            ->args([
+        ->args(
+            [
                 service('cache_warmer'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.config_debug', ConfigDebugCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.config_dump_reference', ConfigDumpReferenceCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.container_debug', ContainerDebugCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.container_lint', ContainerLintCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.debug_autowiring', DebugAutowiringCommand::class)
-            ->args([
+        ->args(
+            [
                 null,
                 service('debug.file_link_formatter')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.dotenv_debug', DotenvDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 param('kernel.environment'),
                 param('kernel.project_dir'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.event_dispatcher_debug', EventDispatcherDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('event_dispatcher.dispatcher', 'name'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_consume_messages', ConsumeMessagesCommand::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Routable message bus'),
                 service('messenger.receiver_locator'),
                 service('event_dispatcher'),
@@ -164,31 +189,39 @@ return static function (ContainerConfigurator $container) {
                 [], // Bus names
                 service('messenger.rate_limiter_locator')->nullOnInvalid(),
                 null,
-            ])
-            ->tag('console.command')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('console.command')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('console.command.messenger_setup_transports', SetupTransportsCommand::class)
-            ->args([
+        ->args(
+            [
                 service('messenger.receiver_locator'),
                 [], // Receiver names
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_debug', MessengerDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 [], // Message to handlers mapping
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_stop_workers', StopWorkersCommand::class)
-            ->args([
+        ->args(
+            [
                 service('cache.messenger.restart_workers_signal'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_failed_messages_retry', FailedMessagesRetryCommand::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Default failure receiver name'),
                 abstract_arg('Receivers'),
                 service('messenger.routable_message_bus'),
@@ -196,61 +229,77 @@ return static function (ContainerConfigurator $container) {
                 service('logger')->nullOnInvalid(),
                 service('messenger.transport.native_php_serializer')->nullOnInvalid(),
                 null,
-            ])
-            ->tag('console.command')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('console.command')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('console.command.messenger_failed_messages_show', FailedMessagesShowCommand::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Default failure receiver name'),
                 abstract_arg('Receivers'),
                 service('messenger.transport.native_php_serializer')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_failed_messages_remove', FailedMessagesRemoveCommand::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Default failure receiver name'),
                 abstract_arg('Receivers'),
                 service('messenger.transport.native_php_serializer')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.messenger_stats', StatsCommand::class)
-            ->args([
+        ->args(
+            [
                 service('messenger.receiver_locator'),
                 abstract_arg('Receivers names'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.scheduler_debug', SchedulerDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('scheduler.schedule_provider', 'name'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.router_debug', RouterDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('router'),
                 service('debug.file_link_formatter')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.router_match', RouterMatchCommand::class)
-            ->args([
+        ->args(
+            [
                 service('router'),
                 tagged_iterator('routing.expression_language_provider'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.serializer_debug', SerializerDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('serializer.mapping.class_metadata_factory'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.translation_debug', TranslationDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('translator'),
                 service('translation.reader'),
                 service('translation.extractor'),
@@ -259,11 +308,13 @@ return static function (ContainerConfigurator $container) {
                 [], // Translator paths
                 [], // Twig paths
                 param('kernel.enabled_locales'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.translation_extract', TranslationUpdateCommand::class)
-            ->args([
+        ->args(
+            [
                 service('translation.writer'),
                 service('translation.reader'),
                 service('translation.extractor'),
@@ -273,98 +324,120 @@ return static function (ContainerConfigurator $container) {
                 [], // Translator paths
                 [], // Twig paths
                 param('kernel.enabled_locales'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.validator_debug', ValidatorDebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('validator'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.translation_pull', TranslationPullCommand::class)
-            ->args([
+        ->args(
+            [
                 service('translation.provider_collection'),
                 service('translation.writer'),
                 service('translation.reader'),
                 param('kernel.default_locale'),
                 [], // Translator paths
                 [], // Enabled locales
-            ])
-            ->tag('console.command', ['command' => 'translation:pull'])
+                ]
+        )
+        ->tag('console.command', ['command' => 'translation:pull'])
 
         ->set('console.command.translation_push', TranslationPushCommand::class)
-            ->args([
+        ->args(
+            [
                 service('translation.provider_collection'),
                 service('translation.reader'),
                 [], // Translator paths
                 [], // Enabled locales
-            ])
-            ->tag('console.command', ['command' => 'translation:push'])
+                ]
+        )
+        ->tag('console.command', ['command' => 'translation:push'])
 
         ->set('console.command.workflow_dump', WorkflowDumpCommand::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('workflow', 'name'),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.xliff_lint', XliffLintCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.yaml_lint', YamlLintCommand::class)
-            ->tag('console.command')
+        ->tag('console.command')
 
         ->set('console.command.form_debug', \Symfony\Component\Form\Command\DebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('form.registry'),
                 [], // All form types namespaces are stored here by FormPass
                 [], // All services form types are stored here by FormPass
                 [], // All type extensions are stored here by FormPass
                 [], // All type guessers are stored here by FormPass
                 service('debug.file_link_formatter')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_set', SecretsSetCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_remove', SecretsRemoveCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_generate_key', SecretsGenerateKeysCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->ignoreOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_list', SecretsListCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->ignoreOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_decrypt_to_local', SecretsDecryptToLocalCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->ignoreOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('console.command.secrets_encrypt_from_local', SecretsEncryptFromLocalCommand::class)
-            ->args([
+        ->args(
+            [
                 service('secrets.vault'),
                 service('secrets.local_vault')->ignoreOnInvalid(),
-            ])
-            ->tag('console.command')
-    ;
+                ]
+        )
+        ->tag('console.command');
 };

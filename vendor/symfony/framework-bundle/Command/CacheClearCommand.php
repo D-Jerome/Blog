@@ -51,19 +51,21 @@ class CacheClearCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputOption('no-warmup', '', InputOption::VALUE_NONE, 'Do not warm up the cache'),
                 new InputOption('no-optional-warmers', '', InputOption::VALUE_NONE, 'Skip optional cache warmers (faster)'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command clears and warms up the application cache for a given environment
 and debug mode:
 
   <info>php %command.full_name% --env=dev</info>
   <info>php %command.full_name% --env=prod --no-debug</info>
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

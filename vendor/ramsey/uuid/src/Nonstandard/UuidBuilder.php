@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -31,9 +31,11 @@ class UuidBuilder implements UuidBuilderInterface
 {
     /**
      * @param NumberConverterInterface $numberConverter The number converter to
-     *     use when constructing the Nonstandard\Uuid
-     * @param TimeConverterInterface $timeConverter The time converter to use
-     *     for converting timestamps extracted from a UUID to Unix timestamps
+     *                                                  use when constructing the Nonstandard\Uuid
+     * @param TimeConverterInterface   $timeConverter   The time converter to use
+     *                                                  for converting timestamps
+     *                                                  extracted from a UUID to
+     *                                                  Unix timestamps
      */
     public function __construct(
         private NumberConverterInterface $numberConverter,
@@ -45,7 +47,7 @@ class UuidBuilder implements UuidBuilderInterface
      * Builds and returns a Nonstandard\Uuid
      *
      * @param CodecInterface $codec The codec to use for building this instance
-     * @param string $bytes The byte string from which to construct a UUID
+     * @param string         $bytes The byte string from which to construct a UUID
      *
      * @return Uuid The Nonstandard\UuidBuilder returns an instance of
      *     Nonstandard\Uuid

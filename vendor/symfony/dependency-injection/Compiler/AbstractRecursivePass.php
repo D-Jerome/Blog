@@ -128,7 +128,10 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
 
         if (\is_string($factory = $definition->getFactory())) {
             if (str_starts_with($factory, '@=')) {
-                return new \ReflectionFunction(static function (...$args) {});
+                return new \ReflectionFunction(
+                    static function (...$args) {
+                    }
+                );
             }
 
             if (!\function_exists($factory)) {
@@ -212,7 +215,10 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
 
         if (!$r->hasMethod($method)) {
             if ($r->hasMethod('__call') && ($r = $r->getMethod('__call')) && $r->isPublic()) {
-                return new \ReflectionMethod(static function (...$arguments) {}, '__invoke');
+                return new \ReflectionMethod(
+                    static function (...$arguments) {
+                    }, '__invoke'
+                );
             }
 
             throw new RuntimeException(sprintf('Invalid service "%s": method "%s()" does not exist.', $this->currentId, $class !== $this->currentId ? $class.'::'.$method : $method));
@@ -234,20 +240,22 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
             }
 
             $providers = $this->container->getExpressionLanguageProviders();
-            $this->expressionLanguage = new ExpressionLanguage(null, $providers, function (string $arg): string {
-                if ('""' === substr_replace($arg, '', 1, -1)) {
-                    $id = stripcslashes(substr($arg, 1, -1));
-                    $this->inExpression = true;
-                    $arg = $this->processValue(new Reference($id));
-                    $this->inExpression = false;
-                    if (!$arg instanceof Reference) {
-                        throw new RuntimeException(sprintf('"%s::processValue()" must return a Reference when processing an expression, "%s" returned for service("%s").', static::class, get_debug_type($arg), $id));
+            $this->expressionLanguage = new ExpressionLanguage(
+                null, $providers, function (string $arg): string {
+                    if ('""' === substr_replace($arg, '', 1, -1)) {
+                        $id = stripcslashes(substr($arg, 1, -1));
+                        $this->inExpression = true;
+                        $arg = $this->processValue(new Reference($id));
+                        $this->inExpression = false;
+                        if (!$arg instanceof Reference) {
+                            throw new RuntimeException(sprintf('"%s::processValue()" must return a Reference when processing an expression, "%s" returned for service("%s").', static::class, get_debug_type($arg), $id));
+                        }
+                        $arg = sprintf('"%s"', $arg);
                     }
-                    $arg = sprintf('"%s"', $arg);
-                }
 
-                return sprintf('$this->get(%s)', $arg);
-            });
+                    return sprintf('$this->get(%s)', $arg);
+                }
+            );
         }
 
         return $this->expressionLanguage;

@@ -101,27 +101,27 @@ class DSNConfigurator
     private function applyConfig(PHPMailer $mailer, $config)
     {
         switch ($config['scheme']) {
-            case 'mail':
-                $mailer->isMail();
-                break;
-            case 'sendmail':
-                $mailer->isSendmail();
-                break;
-            case 'qmail':
-                $mailer->isQmail();
-                break;
-            case 'smtp':
-            case 'smtps':
-                $mailer->isSMTP();
-                $this->configureSMTP($mailer, $config);
-                break;
-            default:
-                throw new Exception(
-                    sprintf(
-                        'Invalid scheme: "%s". Allowed values: "mail", "sendmail", "qmail", "smtp", "smtps".',
-                        $config['scheme']
-                    )
-                );
+        case 'mail':
+            $mailer->isMail();
+            break;
+        case 'sendmail':
+            $mailer->isSendmail();
+            break;
+        case 'qmail':
+            $mailer->isQmail();
+            break;
+        case 'smtp':
+        case 'smtps':
+            $mailer->isSMTP();
+            $this->configureSMTP($mailer, $config);
+            break;
+        default:
+            throw new Exception(
+                sprintf(
+                    'Invalid scheme: "%s". Allowed values: "mail", "sendmail", "qmail", "smtp", "smtps".',
+                    $config['scheme']
+                )
+            );
         }
 
         if (isset($config['query'])) {
@@ -196,23 +196,23 @@ class DSNConfigurator
             }
 
             switch ($key) {
-                case 'AllowEmpty':
-                case 'SMTPAutoTLS':
-                case 'SMTPKeepAlive':
-                case 'SingleTo':
-                case 'UseSendmailOptions':
-                case 'do_verp':
-                case 'DKIM_copyHeaderFields':
-                    $mailer->$key = (bool) $value;
-                    break;
-                case 'Priority':
-                case 'SMTPDebug':
-                case 'WordWrap':
-                    $mailer->$key = (int) $value;
-                    break;
-                default:
-                    $mailer->$key = $value;
-                    break;
+            case 'AllowEmpty':
+            case 'SMTPAutoTLS':
+            case 'SMTPKeepAlive':
+            case 'SingleTo':
+            case 'UseSendmailOptions':
+            case 'do_verp':
+            case 'DKIM_copyHeaderFields':
+                $mailer->$key = (bool) $value;
+                break;
+            case 'Priority':
+            case 'SMTPDebug':
+            case 'WordWrap':
+                $mailer->$key = (int) $value;
+                break;
+            default:
+                $mailer->$key = $value;
+                break;
             }
         }
     }

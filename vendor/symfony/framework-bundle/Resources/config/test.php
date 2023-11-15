@@ -23,37 +23,44 @@ return static function (ContainerConfigurator $container) {
 
     $container->services()
         ->set('test.client', KernelBrowser::class)
-            ->args([
+        ->args(
+            [
                 service('kernel'),
                 param('test.client.parameters'),
                 service('test.client.history'),
                 service('test.client.cookiejar'),
-            ])
-            ->share(false)
-            ->public()
+                ]
+        )
+        ->share(false)
+        ->public()
 
         ->set('test.client.history', History::class)->share(false)
         ->set('test.client.cookiejar', CookieJar::class)->share(false)
 
         ->set('test.session.listener', SessionListener::class)
-            ->args([
-                service_locator([
+        ->args(
+            [
+                service_locator(
+                    [
                     'session_factory' => service('session.factory')->ignoreOnInvalid(),
-                ]),
+                    ]
+                ),
                 param('kernel.debug'),
                 param('session.storage.options'),
-            ])
-            ->tag('kernel.event_subscriber')
+                ]
+        )
+        ->tag('kernel.event_subscriber')
 
         ->set('test.service_container', TestContainer::class)
-            ->args([
+        ->args(
+            [
                 service('kernel'),
                 'test.private_services_locator',
-            ])
-            ->public()
+                ]
+        )
+        ->public()
 
         ->set('test.private_services_locator', ServiceLocator::class)
-            ->args([abstract_arg('callable collection')])
-            ->public()
-    ;
+        ->args([abstract_arg('callable collection')])
+        ->public();
 };

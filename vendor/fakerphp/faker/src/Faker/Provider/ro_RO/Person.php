@@ -138,8 +138,7 @@ class Person extends \Faker\Provider\Person
         $cnp = (string) $this->getGenderDigit($date, $gender, $isResident)
             . $date->format('ymd')
             . $countyCode
-            . static::numerify('##%')
-        ;
+            . static::numerify('##%');
 
         $checksum = $this->getChecksumDigit($cnp);
 
@@ -161,19 +160,19 @@ class Person extends \Faker\Provider\Person
         $baseDate = \Faker\Provider\DateTime::dateTimeBetween("first day of January {$dateOfBirthParts[0]}", "last day of December {$dateOfBirthParts[0]}");
 
         switch (count($dateOfBirthParts)) {
-            case 1:
-                $dateOfBirthParts[] = $baseDate->format('m');
-                //don't break, we need the day also
-                // no break
-            case 2:
-                $dateOfBirthParts[] = $baseDate->format('d');
-                //don't break, next line will
-                // no break
-            case 3:
-                break;
+        case 1:
+            $dateOfBirthParts[] = $baseDate->format('m');
+            //don't break, we need the day also
+            // no break
+        case 2:
+            $dateOfBirthParts[] = $baseDate->format('d');
+            //don't break, next line will
+            // no break
+        case 3:
+            break;
 
-            default:
-                throw new \InvalidArgumentException("Invalid date of birth - must be null or in the 'Y-m-d', 'Y-m', 'Y' format");
+        default:
+            throw new \InvalidArgumentException("Invalid date of birth - must be null or in the 'Y-m-d', 'Y-m', 'Y' format");
         }
 
         if ($dateOfBirthParts[0] < 1800 || $dateOfBirthParts[0] > 2099) {

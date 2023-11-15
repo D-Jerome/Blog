@@ -84,7 +84,7 @@ abstract class IntegrationTestCase extends TestCase
 
     /**
      * @dataProvider getLegacyTests
-     * @group legacy
+     * @group        legacy
      */
     public function testLegacyIntegration($file, $message, $condition, $templates, $exception, $outputs, $deprecation = '')
     {
@@ -157,10 +157,12 @@ abstract class IntegrationTestCase extends TestCase
         $loader = new ArrayLoader($templates);
 
         foreach ($outputs as $i => $match) {
-            $config = array_merge([
+            $config = array_merge(
+                [
                 'cache' => false,
                 'strict_variables' => true,
-            ], $match[2] ? eval($match[2].';') : []);
+                ], $match[2] ? eval($match[2].';') : []
+            );
             $twig = new Environment($loader, $config);
             $twig->addGlobal('global', 'global');
             foreach ($this->getRuntimeLoaders() as $runtimeLoader) {
@@ -190,15 +192,17 @@ abstract class IntegrationTestCase extends TestCase
 
             $deprecations = [];
             try {
-                $prevHandler = set_error_handler(function ($type, $msg, $file, $line, $context = []) use (&$deprecations, &$prevHandler) {
-                    if (\E_USER_DEPRECATED === $type) {
-                        $deprecations[] = $msg;
+                $prevHandler = set_error_handler(
+                    function ($type, $msg, $file, $line, $context = []) use (&$deprecations, &$prevHandler) {
+                        if (\E_USER_DEPRECATED === $type) {
+                            $deprecations[] = $msg;
 
-                        return true;
+                            return true;
+                        }
+
+                        return $prevHandler ? $prevHandler($type, $msg, $file, $line, $context) : false;
                     }
-
-                    return $prevHandler ? $prevHandler($type, $msg, $file, $line, $context) : false;
-                });
+                );
 
                 $template = $twig->load('index.twig');
             } catch (\Exception $e) {

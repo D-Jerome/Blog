@@ -66,33 +66,37 @@ class Hydrator
         };
 
         switch ($class) {
-            case 'stdClass':
-                return $baseHydrator;
+        case 'stdClass':
+            return $baseHydrator;
 
-            case 'ErrorException':
-                return $baseHydrator->bindTo(null, new class() extends \ErrorException {
-                });
+        case 'ErrorException':
+            return $baseHydrator->bindTo(
+                null, new class() extends \ErrorException {
+                }
+            );
 
-            case 'TypeError':
-                return $baseHydrator->bindTo(null, new class() extends \Error {
-                });
+        case 'TypeError':
+            return $baseHydrator->bindTo(
+                null, new class() extends \Error {
+                }
+            );
 
-            case 'SplObjectStorage':
-                return static function ($properties, $objects) {
-                    foreach ($properties as $name => $values) {
-                        if ("\0" === $name) {
-                            foreach ($values as $i => $v) {
-                                for ($j = 0; $j < \count($v); ++$j) {
-                                    $objects[$i]->attach($v[$j], $v[++$j]);
-                                }
-                            }
-                            continue;
-                        }
+        case 'SplObjectStorage':
+            return static function ($properties, $objects) {
+                foreach ($properties as $name => $values) {
+                    if ("\0" === $name) {
                         foreach ($values as $i => $v) {
-                            $objects[$i]->$name = $v;
+                            for ($j = 0; $j < \count($v); ++$j) {
+                                $objects[$i]->attach($v[$j], $v[++$j]);
+                            }
                         }
+                        continue;
                     }
-                };
+                    foreach ($values as $i => $v) {
+                        $objects[$i]->$name = $v;
+                    }
+                }
+            };
         }
 
         if (!class_exists($class) && !interface_exists($class, false) && !trait_exists($class, false)) {
@@ -101,22 +105,22 @@ class Hydrator
         $classReflector = new \ReflectionClass($class);
 
         switch ($class) {
-            case 'ArrayIterator':
-            case 'ArrayObject':
-                $constructor = $classReflector->getConstructor()->invokeArgs(...);
+        case 'ArrayIterator':
+        case 'ArrayObject':
+            $constructor = $classReflector->getConstructor()->invokeArgs(...);
 
-                return static function ($properties, $objects) use ($constructor) {
-                    foreach ($properties as $name => $values) {
-                        if ("\0" !== $name) {
-                            foreach ($values as $i => $v) {
-                                $objects[$i]->$name = $v;
-                            }
+            return static function ($properties, $objects) use ($constructor) {
+                foreach ($properties as $name => $values) {
+                    if ("\0" !== $name) {
+                        foreach ($values as $i => $v) {
+                            $objects[$i]->$name = $v;
                         }
                     }
-                    foreach ($properties["\0"] ?? [] as $i => $v) {
-                        $constructor($objects[$i], $v);
-                    }
-                };
+                }
+                foreach ($properties["\0"] ?? [] as $i => $v) {
+                    $constructor($objects[$i], $v);
+                }
+            };
         }
 
         if (!$classReflector->isInternal()) {
@@ -168,30 +172,34 @@ class Hydrator
         })->bindTo(new \stdClass());
 
         switch ($class) {
-            case 'stdClass':
-                return $baseHydrator;
+        case 'stdClass':
+            return $baseHydrator;
 
-            case 'ErrorException':
-                return $baseHydrator->bindTo(new \stdClass(), new class() extends \ErrorException {
-                });
+        case 'ErrorException':
+            return $baseHydrator->bindTo(
+                new \stdClass(), new class() extends \ErrorException {
+                }
+            );
 
-            case 'TypeError':
-                return $baseHydrator->bindTo(new \stdClass(), new class() extends \Error {
-                });
+        case 'TypeError':
+            return $baseHydrator->bindTo(
+                new \stdClass(), new class() extends \Error {
+                }
+            );
 
-            case 'SplObjectStorage':
-                return static function ($properties, $object) {
-                    foreach ($properties as $name => &$value) {
-                        if ("\0" !== $name) {
-                            $object->$name = $value;
-                            $object->$name = &$value;
-                            continue;
-                        }
-                        for ($i = 0; $i < \count($value); ++$i) {
-                            $object->attach($value[$i], $value[++$i]);
-                        }
+        case 'SplObjectStorage':
+            return static function ($properties, $object) {
+                foreach ($properties as $name => &$value) {
+                    if ("\0" !== $name) {
+                        $object->$name = $value;
+                        $object->$name = &$value;
+                        continue;
                     }
-                };
+                    for ($i = 0; $i < \count($value); ++$i) {
+                        $object->attach($value[$i], $value[++$i]);
+                    }
+                }
+            };
         }
 
         if (!class_exists($class) && !interface_exists($class, false) && !trait_exists($class, false)) {
@@ -200,20 +208,20 @@ class Hydrator
         $classReflector = new \ReflectionClass($class);
 
         switch ($class) {
-            case 'ArrayIterator':
-            case 'ArrayObject':
-                $constructor = $classReflector->getConstructor()->invokeArgs(...);
+        case 'ArrayIterator':
+        case 'ArrayObject':
+            $constructor = $classReflector->getConstructor()->invokeArgs(...);
 
-                return static function ($properties, $object) use ($constructor) {
-                    foreach ($properties as $name => &$value) {
-                        if ("\0" === $name) {
-                            $constructor($object, $value);
-                        } else {
-                            $object->$name = $value;
-                            $object->$name = &$value;
-                        }
+            return static function ($properties, $object) use ($constructor) {
+                foreach ($properties as $name => &$value) {
+                    if ("\0" === $name) {
+                        $constructor($object, $value);
+                    } else {
+                        $object->$name = $value;
+                        $object->$name = &$value;
                     }
-                };
+                }
+            };
         }
 
         if (!$classReflector->isInternal()) {

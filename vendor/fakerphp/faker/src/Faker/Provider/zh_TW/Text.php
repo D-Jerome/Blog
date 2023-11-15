@@ -876,20 +876,20 @@ EOT;
             $ord = ord($chars[$i]);
 
             switch (true) {
-                case $ord > 251:
-                    $temp .= $chars[++$i];
-                    // no break
-                case $ord > 247:
-                    $temp .= $chars[++$i];
-                    // no break
-                case $ord > 239:
-                    $temp .= $chars[++$i];
-                    // no break
-                case $ord > 223:
-                    $temp .= $chars[++$i];
-                    // no break
-                case $ord > 191:
-                    $temp .= $chars[++$i];
+            case $ord > 251:
+                $temp .= $chars[++$i];
+                // no break
+            case $ord > 247:
+                $temp .= $chars[++$i];
+                // no break
+            case $ord > 239:
+                $temp .= $chars[++$i];
+                // no break
+            case $ord > 223:
+                $temp .= $chars[++$i];
+                // no break
+            case $ord > 191:
+                $temp .= $chars[++$i];
             }
 
             $encoding[] = $temp;

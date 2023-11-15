@@ -18,13 +18,12 @@ use Symfony\Component\Lock\Strategy\ConsensusStrategy;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('lock.store.combined.abstract', CombinedStore::class)->abstract()
-            ->args([abstract_arg('List of stores'), service('lock.strategy.majority')])
+        ->args([abstract_arg('List of stores'), service('lock.strategy.majority')])
 
         ->set('lock.strategy.majority', ConsensusStrategy::class)
 
         ->set('lock.factory.abstract', LockFactory::class)->abstract()
-            ->args([abstract_arg('Store')])
-            ->call('setLogger', [service('logger')->ignoreOnInvalid()])
-            ->tag('monolog.logger', ['channel' => 'lock'])
-    ;
+        ->args([abstract_arg('Store')])
+        ->call('setLogger', [service('logger')->ignoreOnInvalid()])
+        ->tag('monolog.logger', ['channel' => 'lock']);
 };

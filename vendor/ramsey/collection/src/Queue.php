@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -25,8 +25,8 @@ use function array_key_first;
  * This class provides a basic implementation of `QueueInterface`, to minimize
  * the effort required to implement this interface.
  *
- * @template T
- * @extends AbstractArray<T>
+ * @template   T
+ * @extends    AbstractArray<T>
  * @implements QueueInterface<T>
  */
 class Queue extends AbstractArray implements QueueInterface
@@ -38,8 +38,8 @@ class Queue extends AbstractArray implements QueueInterface
      * Constructs a queue object of the specified type, optionally with the
      * specified data.
      *
-     * @param string $queueType The type or class name associated with this queue.
-     * @param array<array-key, T> $data The initial items to store in the queue.
+     * @param string              $queueType The type or class name associated with this queue.
+     * @param array<array-key, T> $data      The initial items to store in the queue.
      */
     public function __construct(private readonly string $queueType, array $data = [])
     {

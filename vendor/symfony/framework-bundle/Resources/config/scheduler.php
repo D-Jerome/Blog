@@ -16,10 +16,11 @@ use Symfony\Component\Scheduler\Messenger\SchedulerTransportFactory;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('scheduler.messenger_transport_factory', SchedulerTransportFactory::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('scheduler.schedule_provider', 'name'),
                 service('clock'),
-            ])
-            ->tag('messenger.transport_factory')
-    ;
+                ]
+        )
+        ->tag('messenger.transport_factory');
 };

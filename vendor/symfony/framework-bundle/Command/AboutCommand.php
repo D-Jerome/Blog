@@ -34,21 +34,23 @@ class AboutCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command displays information about the current Symfony project.
 
 The <info>PHP</info> section displays important configuration that could affect your application. The values might
 be different between web and CLI.
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
 
         if (method_exists($kernel, 'getBuildDir')) {

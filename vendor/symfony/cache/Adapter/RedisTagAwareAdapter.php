@@ -94,29 +94,31 @@ class RedisTagAwareAdapter extends AbstractTagAwareAdapter
         }
 
         // While pipeline isn't supported on RedisCluster, other setups will at least benefit from doing this in one op
-        $results = $this->pipeline(static function () use ($serialized, $lifetime, $addTagData, $delTagData, $failed) {
-            // Store cache items, force a ttl if none is set, as there is no MSETEX we need to set each one
-            foreach ($serialized as $id => $value) {
-                yield 'setEx' => [
+        $results = $this->pipeline(
+            static function () use ($serialized, $lifetime, $addTagData, $delTagData, $failed) {
+                // Store cache items, force a ttl if none is set, as there is no MSETEX we need to set each one
+                foreach ($serialized as $id => $value) {
+                    yield 'setEx' => [
                     $id,
                     0 >= $lifetime ? self::DEFAULT_CACHE_TTL : $lifetime,
                     $value,
-                ];
-            }
+                    ];
+                }
 
-            // Add and Remove Tags
-            foreach ($addTagData as $tagId => $ids) {
-                if (!$failed || $ids = array_diff($ids, $failed)) {
-                    yield 'sAdd' => array_merge([$tagId], $ids);
+                // Add and Remove Tags
+                foreach ($addTagData as $tagId => $ids) {
+                    if (!$failed || $ids = array_diff($ids, $failed)) {
+                        yield 'sAdd' => array_merge([$tagId], $ids);
+                    }
+                }
+
+                foreach ($delTagData as $tagId => $ids) {
+                    if (!$failed || $ids = array_diff($ids, $failed)) {
+                        yield 'sRem' => array_merge([$tagId], $ids);
+                    }
                 }
             }
-
-            foreach ($delTagData as $tagId => $ids) {
-                if (!$failed || $ids = array_diff($ids, $failed)) {
-                    yield 'sRem' => array_merge([$tagId], $ids);
-                }
-            }
-        });
+        );
 
         foreach ($results as $id => $result) {
             // Skip results of SADD/SREM operations, they'll be 1 or 0 depending on if set value already existed or not
@@ -149,11 +151,13 @@ class RedisTagAwareAdapter extends AbstractTagAwareAdapter
             return v:sub(14, 13 + v:byte(13) + v:byte(12) * 256 + v:byte(11) * 65536)
 EOLUA;
 
-        $results = $this->pipeline(function () use ($ids, $lua) {
-            foreach ($ids as $id) {
-                yield 'eval' => $this->redis instanceof \Predis\ClientInterface ? [$lua, 1, $id] : [$lua, [$id], 1];
+        $results = $this->pipeline(
+            function () use ($ids, $lua) {
+                foreach ($ids as $id) {
+                    yield 'eval' => $this->redis instanceof \Predis\ClientInterface ? [$lua, 1, $id] : [$lua, [$id], 1];
+                }
             }
-        });
+        );
 
         foreach ($results as $id => $result) {
             if ($result instanceof \RedisException || $result instanceof \Relay\Exception || $result instanceof ErrorInterface) {
@@ -172,12 +176,14 @@ EOLUA;
 
     protected function doDeleteTagRelations(array $tagData): bool
     {
-        $results = $this->pipeline(static function () use ($tagData) {
-            foreach ($tagData as $tagId => $idList) {
-                array_unshift($idList, $tagId);
-                yield 'sRem' => $idList;
+        $results = $this->pipeline(
+            static function () use ($tagData) {
+                foreach ($tagData as $tagId => $idList) {
+                    array_unshift($idList, $tagId);
+                    yield 'sRem' => $idList;
+                }
             }
-        });
+        );
         foreach ($results as $result) {
             // no-op
         }
@@ -220,17 +226,19 @@ EOLUA;
             return redis.call('SSCAN', '{'..id..'}'..id, '0', 'COUNT', 5000)
 EOLUA;
 
-        $results = $this->pipeline(function () use ($tagIds, $lua) {
-            if ($this->redis instanceof \Predis\ClientInterface) {
-                $prefix = $this->redis->getOptions()->prefix ? $this->redis->getOptions()->prefix->getPrefix() : '';
-            } elseif (\is_array($prefix = $this->redis->getOption($this->redis instanceof Relay ? Relay::OPT_PREFIX : \Redis::OPT_PREFIX) ?? '')) {
-                $prefix = current($prefix);
-            }
+        $results = $this->pipeline(
+            function () use ($tagIds, $lua) {
+                if ($this->redis instanceof \Predis\ClientInterface) {
+                    $prefix = $this->redis->getOptions()->prefix ? $this->redis->getOptions()->prefix->getPrefix() : '';
+                } elseif (\is_array($prefix = $this->redis->getOption($this->redis instanceof Relay ? Relay::OPT_PREFIX : \Redis::OPT_PREFIX) ?? '')) {
+                    $prefix = current($prefix);
+                }
 
-            foreach ($tagIds as $id) {
-                yield 'eval' => $this->redis instanceof \Predis\ClientInterface ? [$lua, 1, $id, $prefix] : [$lua, [$id, $prefix], 1];
+                foreach ($tagIds as $id) {
+                    yield 'eval' => $this->redis instanceof \Predis\ClientInterface ? [$lua, 1, $id, $prefix] : [$lua, [$id, $prefix], 1];
+                }
             }
-        });
+        );
 
         $lua = <<<'EOLUA'
             redis.replicate_commands()
@@ -265,9 +273,11 @@ EOLUA;
                     $evalArgs = [$lua, $evalArgs, 1];
                 }
 
-                $results = $this->pipeline(function () use ($evalArgs) {
-                    yield 'eval' => $evalArgs;
-                });
+                $results = $this->pipeline(
+                    function () use ($evalArgs) {
+                        yield 'eval' => $evalArgs;
+                    }
+                );
 
                 foreach ($results as [$cursor, $ids]) {
                     // no-op

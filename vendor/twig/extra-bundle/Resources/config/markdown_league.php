@@ -26,6 +26,5 @@ return static function (ContainerConfigurator $container) {
         ->factory($service('twig.markdown.league_common_mark_converter_factory'))
 
         ->set('twig.markdown.default', LeagueMarkdown::class)
-        ->args([$service('twig.markdown.league_common_mark_converter')])
-    ;
+        ->args([$service('twig.markdown.league_common_mark_converter')]);
 };

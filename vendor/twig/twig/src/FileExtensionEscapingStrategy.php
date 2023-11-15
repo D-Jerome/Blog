@@ -44,17 +44,17 @@ class FileExtensionEscapingStrategy
         $extension = pathinfo($name, \PATHINFO_EXTENSION);
 
         switch ($extension) {
-            case 'js':
-                return 'js';
+        case 'js':
+            return 'js';
 
-            case 'css':
-                return 'css';
+        case 'css':
+            return 'css';
 
-            case 'txt':
-                return false;
+        case 'txt':
+            return false;
 
-            default:
-                return 'html';
+        default:
+            return 'html';
         }
     }
 }

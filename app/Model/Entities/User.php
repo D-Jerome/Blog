@@ -7,135 +7,135 @@ use DateTime;
 class User extends Entity
 {
 
-	protected int $id;
+    protected int $id;
 
-	protected string $firstname;
+    protected string $firstname;
 
-	protected string $lastname;
+    protected string $lastname;
 
-	protected string $username;
+    protected string $username;
 
-	protected string $email;
+    protected string $email;
 
-	protected string $password;
+    protected string $password;
 
-	protected string $createdAt;
+    protected string $createdAt;
 
-	protected int $roleId;
+    protected int $roleId;
 
-	protected string $roleName;
+    protected string $roleName;
 
-	protected bool $active;
-
-
-	/**
-	 * getId
-	 *
-	 * @return int
-	 */
-	public function getId(): int
-	{
-		return $this->id;
-	}
+    protected bool $active;
 
 
-	/**
-	 * getFirstname
-	 *
-	 * @return string
-	 */
-	public function getFirstname(): string
-	{
-		return $this->firstname;
-	}
+    /**
+     * getId
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
 
-	/**
-	 * getLastname
-	 *
-	 * @return string
-	 */
-	public function getLastname(): string
-	{
-		return $this->lastname;
-	}
+    /**
+     * getFirstname
+     *
+     * @return string
+     */
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
 
 
-	/**
-	 * getUsername
-	 *
-	 * @return string
-	 */
-	public function getUsername(): string
-	{
-		return $this->username;
-	}
+    /**
+     * getLastname
+     *
+     * @return string
+     */
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
 
 
-	/**
-	 * getEmail
-	 *
-	 * @return string
-	 */
-	public function getEmail(): string
-	{
-		return $this->email;
-	}
+    /**
+     * getUsername
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
 
 
-	/**
-	 * getPassword
-	 *
-	 * @return string
-	 */
-	public function getPassword(): string
-	{
-		return $this->password;
-	}
+    /**
+     * getEmail
+     *
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 
 
-	/**
-	 * getCreatedAt
-	 *
-	 * @return string
-	 */
-	public function getCreatedAt(): string
-	{
-		return $this->createdAt;
-	}
+    /**
+     * getPassword
+     *
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 
 
-	/**
-	 * getRoleId
-	 *
-	 * @return int
-	 */
-	public function getRoleId(): int
-	{
-		return $this->roleId;
-	}
+    /**
+     * getCreatedAt
+     *
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
 
 
-	/**
-	 * getRoleName
-	 *
-	 * @return string
-	 */
-	public function getRoleName(): string
-	{
-		return $this->roleName;
-	}
+    /**
+     * getRoleId
+     *
+     * @return int
+     */
+    public function getRoleId(): int
+    {
+        return $this->roleId;
+    }
 
 
-	/**
-	 * getActive
-	 *
-	 * @return bool
-	 */
-	public function getActive(): bool
-	{
-		return $this->active;
-	}
+    /**
+     * getRoleName
+     *
+     * @return string
+     */
+    public function getRoleName(): string
+    {
+        return $this->roleName;
+    }
+
+
+    /**
+     * getActive
+     *
+     * @return bool
+     */
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
 
 
 }

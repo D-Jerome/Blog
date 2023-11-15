@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -27,7 +28,8 @@ class JsonResponseHandler extends Handler
 
     /**
      * Returns errors[[]] instead of error[] to be in compliance with the json:api spec
-     * @param bool $jsonApi Default is false
+     *
+     * @param  bool $jsonApi Default is false
      * @return static
      */
     public function setJsonApi($jsonApi = false)
@@ -37,7 +39,7 @@ class JsonResponseHandler extends Handler
     }
 
     /**
-     * @param  bool|null  $returnFrames
+     * @param  bool|null $returnFrames
      * @return bool|static
      */
     public function addTraceToOutput($returnFrames = null)

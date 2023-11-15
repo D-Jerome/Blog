@@ -161,15 +161,17 @@ class ErrorHandler
      */
     public static function call(callable $function, mixed ...$arguments): mixed
     {
-        set_error_handler(static function (int $type, string $message, string $file, int $line) {
-            if (__FILE__ === $file) {
-                $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-                $file = $trace[2]['file'] ?? $file;
-                $line = $trace[2]['line'] ?? $line;
-            }
+        set_error_handler(
+            static function (int $type, string $message, string $file, int $line) {
+                if (__FILE__ === $file) {
+                    $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+                    $file = $trace[2]['file'] ?? $file;
+                    $line = $trace[2]['line'] ?? $line;
+                }
 
-            throw new \ErrorException($message, 0, $type, $file, $line);
-        });
+                throw new \ErrorException($message, 0, $type, $file, $line);
+            }
+        );
 
         try {
             return $function(...$arguments);
@@ -185,12 +187,14 @@ class ErrorHandler
             $this->setDefaultLogger($bootstrappingLogger);
         }
         $traceReflector = new \ReflectionProperty(\Exception::class, 'trace');
-        $this->configureException = \Closure::bind(static function ($e, $trace, $file = null, $line = null) use ($traceReflector) {
-            $traceReflector->setValue($e, $trace);
-            $e->file = $file ?? $e->file;
-            $e->line = $line ?? $e->line;
-        }, null, new class() extends \Exception {
-        });
+        $this->configureException = \Closure::bind(
+            static function ($e, $trace, $file = null, $line = null) use ($traceReflector) {
+                $traceReflector->setValue($e, $trace);
+                $e->file = $file ?? $e->file;
+                $e->line = $line ?? $e->line;
+            }, null, new class() extends \Exception {
+            }
+        );
         $this->debug = $debug;
     }
 
@@ -634,7 +638,11 @@ class ErrorHandler
 
         if ($exit && self::$exitCode) {
             $exitCode = self::$exitCode;
-            register_shutdown_function('register_shutdown_function', function () use ($exitCode) { exit($exitCode); });
+            register_shutdown_function(
+                'register_shutdown_function', function () use ($exitCode) {
+                    exit($exitCode); 
+                }
+            );
         }
     }
 

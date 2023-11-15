@@ -16,10 +16,11 @@ use Symfony\Component\HttpClient\DataCollector\HttpClientDataCollector;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('data_collector.http_client', HttpClientDataCollector::class)
-            ->tag('data_collector', [
+        ->tag(
+            'data_collector', [
                 'template' => '@WebProfiler/Collector/http_client.html.twig',
                 'id' => 'http_client',
                 'priority' => 250,
-            ])
-    ;
+                ]
+        );
 };

@@ -113,9 +113,11 @@ class ReflectionCaster
             ];
         } elseif ($c instanceof \ReflectionUnionType || $c instanceof \ReflectionIntersectionType) {
             $a[$prefix.'allowsNull'] = $c->allowsNull();
-            self::addMap($a, $c, [
+            self::addMap(
+                $a, $c, [
                 'types' => 'getTypes',
-            ]);
+                ]
+            );
         } else {
             $a[$prefix.'allowsNull'] = $c->allowsNull();
         }
@@ -128,10 +130,12 @@ class ReflectionCaster
      */
     public static function castAttribute(\ReflectionAttribute $c, array $a, Stub $stub, bool $isNested)
     {
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'name' => 'getName',
             'arguments' => 'getArguments',
-        ]);
+            ]
+        );
 
         return $a;
     }
@@ -156,11 +160,13 @@ class ReflectionCaster
         ];
         if ($trace = $c->getTrace(\DEBUG_BACKTRACE_IGNORE_ARGS)) {
             $function = new \ReflectionGenerator($c->getExecutingGenerator());
-            array_unshift($trace, [
+            array_unshift(
+                $trace, [
                 'function' => 'yield',
                 'file' => $function->getExecutingFile(),
                 'line' => $function->getExecutingLine(),
-            ]);
+                ]
+            );
             $trace[] = $frame;
             $a[$prefix.'trace'] = new TraceStub($trace, false, 0, -1, -1);
         } else {
@@ -185,11 +191,13 @@ class ReflectionCaster
             $a[$prefix.'modifiers'] = implode(' ', $n);
         }
 
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'extends' => 'getParentClass',
             'implements' => 'getInterfaceNames',
             'constants' => 'getReflectionConstants',
-        ]);
+            ]
+        );
 
         foreach ($c->getProperties() as $n) {
             $a[$prefix.'properties'][$n->name] = $n;
@@ -215,12 +223,14 @@ class ReflectionCaster
     {
         $prefix = Caster::PREFIX_VIRTUAL;
 
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'returnsReference' => 'returnsReference',
             'returnType' => 'getReturnType',
             'class' => \PHP_VERSION_ID >= 80111 ? 'getClosureCalledClass' : 'getClosureScopeClass',
             'this' => 'getClosureThis',
-        ]);
+            ]
+        );
 
         if (isset($a[$prefix.'returnType'])) {
             $v = $a[$prefix.'returnType'];
@@ -299,12 +309,14 @@ class ReflectionCaster
     {
         $prefix = Caster::PREFIX_VIRTUAL;
 
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'position' => 'getPosition',
             'isVariadic' => 'isVariadic',
             'byReference' => 'isPassedByReference',
             'allowsNull' => 'allowsNull',
-        ]);
+            ]
+        );
 
         self::addAttributes($a, $c, $prefix);
 
@@ -363,7 +375,8 @@ class ReflectionCaster
      */
     public static function castExtension(\ReflectionExtension $c, array $a, Stub $stub, bool $isNested)
     {
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'version' => 'getVersion',
             'dependencies' => 'getDependencies',
             'iniEntries' => 'getIniEntries',
@@ -372,7 +385,8 @@ class ReflectionCaster
             'constants' => 'getConstants',
             'functions' => 'getFunctions',
             'classes' => 'getClasses',
-        ]);
+            ]
+        );
 
         return $a;
     }
@@ -382,12 +396,14 @@ class ReflectionCaster
      */
     public static function castZendExtension(\ReflectionZendExtension $c, array $a, Stub $stub, bool $isNested)
     {
-        self::addMap($a, $c, [
+        self::addMap(
+            $a, $c, [
             'version' => 'getVersion',
             'author' => 'getAuthor',
             'copyright' => 'getCopyright',
             'url' => 'getURL',
-        ]);
+            ]
+        );
 
         return $a;
     }

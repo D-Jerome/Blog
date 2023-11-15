@@ -54,127 +54,130 @@ use Twig\TemplateWrapper;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig', Environment::class)
-            ->args([service('twig.loader'), abstract_arg('Twig options')])
-            ->call('addGlobal', ['app', service('twig.app_variable')])
-            ->call('addRuntimeLoader', [service('twig.runtime_loader')])
-            ->configurator([service('twig.configurator.environment'), 'configure'])
-            ->tag('container.preload', ['class' => FilesystemCache::class])
-            ->tag('container.preload', ['class' => CoreExtension::class])
-            ->tag('container.preload', ['class' => EscaperExtension::class])
-            ->tag('container.preload', ['class' => OptimizerExtension::class])
-            ->tag('container.preload', ['class' => StagingExtension::class])
-            ->tag('container.preload', ['class' => ExtensionSet::class])
-            ->tag('container.preload', ['class' => Template::class])
-            ->tag('container.preload', ['class' => TemplateWrapper::class])
+        ->args([service('twig.loader'), abstract_arg('Twig options')])
+        ->call('addGlobal', ['app', service('twig.app_variable')])
+        ->call('addRuntimeLoader', [service('twig.runtime_loader')])
+        ->configurator([service('twig.configurator.environment'), 'configure'])
+        ->tag('container.preload', ['class' => FilesystemCache::class])
+        ->tag('container.preload', ['class' => CoreExtension::class])
+        ->tag('container.preload', ['class' => EscaperExtension::class])
+        ->tag('container.preload', ['class' => OptimizerExtension::class])
+        ->tag('container.preload', ['class' => StagingExtension::class])
+        ->tag('container.preload', ['class' => ExtensionSet::class])
+        ->tag('container.preload', ['class' => Template::class])
+        ->tag('container.preload', ['class' => TemplateWrapper::class])
 
         ->alias('Twig_Environment', 'twig')
-            ->deprecate('symfony/twig-bundle', '6.3', 'The "%alias_id%" service alias is deprecated, use "'.Environment::class.'" or "twig" instead.')
+        ->deprecate('symfony/twig-bundle', '6.3', 'The "%alias_id%" service alias is deprecated, use "'.Environment::class.'" or "twig" instead.')
         ->alias(Environment::class, 'twig')
 
         ->set('twig.app_variable', AppVariable::class)
-            ->call('setEnvironment', [param('kernel.environment')])
-            ->call('setDebug', [param('kernel.debug')])
-            ->call('setTokenStorage', [service('security.token_storage')->ignoreOnInvalid()])
-            ->call('setRequestStack', [service('request_stack')->ignoreOnInvalid()])
-            ->call('setLocaleSwitcher', [service('translation.locale_switcher')->ignoreOnInvalid()])
+        ->call('setEnvironment', [param('kernel.environment')])
+        ->call('setDebug', [param('kernel.debug')])
+        ->call('setTokenStorage', [service('security.token_storage')->ignoreOnInvalid()])
+        ->call('setRequestStack', [service('request_stack')->ignoreOnInvalid()])
+        ->call('setLocaleSwitcher', [service('translation.locale_switcher')->ignoreOnInvalid()])
 
         ->set('twig.template_iterator', TemplateIterator::class)
-            ->args([service('kernel'), abstract_arg('Twig paths'), param('twig.default_path'), abstract_arg('File name pattern')])
+        ->args([service('kernel'), abstract_arg('Twig paths'), param('twig.default_path'), abstract_arg('File name pattern')])
 
         ->set('twig.template_cache_warmer', TemplateCacheWarmer::class)
-            ->args([service(ContainerInterface::class), service('twig.template_iterator')])
-            ->tag('kernel.cache_warmer')
-            ->tag('container.service_subscriber', ['id' => 'twig'])
+        ->args([service(ContainerInterface::class), service('twig.template_iterator')])
+        ->tag('kernel.cache_warmer')
+        ->tag('container.service_subscriber', ['id' => 'twig'])
 
         ->set('twig.loader.native_filesystem', FilesystemLoader::class)
-            ->args([[], param('kernel.project_dir')])
-            ->tag('twig.loader')
+        ->args([[], param('kernel.project_dir')])
+        ->tag('twig.loader')
 
         ->set('twig.loader.chain', ChainLoader::class)
 
         ->set('twig.extension.profiler', ProfilerExtension::class)
-            ->args([service('twig.profile'), service('debug.stopwatch')->ignoreOnInvalid()])
+        ->args([service('twig.profile'), service('debug.stopwatch')->ignoreOnInvalid()])
 
         ->set('twig.profile', Profile::class)
 
         ->set('data_collector.twig', TwigDataCollector::class)
-            ->args([service('twig.profile'), service('twig')])
-            ->tag('data_collector', ['template' => '@WebProfiler/Collector/twig.html.twig', 'id' => 'twig', 'priority' => 257])
+        ->args([service('twig.profile'), service('twig')])
+        ->tag('data_collector', ['template' => '@WebProfiler/Collector/twig.html.twig', 'id' => 'twig', 'priority' => 257])
 
         ->set('twig.extension.trans', TranslationExtension::class)
-            ->args([service('translator')->nullOnInvalid()])
-            ->tag('twig.extension')
+        ->args([service('translator')->nullOnInvalid()])
+        ->tag('twig.extension')
 
         ->set('twig.extension.assets', AssetExtension::class)
-            ->args([service('assets.packages')])
+        ->args([service('assets.packages')])
 
         ->set('twig.extension.code', CodeExtension::class)
-            ->args([service('debug.file_link_formatter')->ignoreOnInvalid(), param('kernel.project_dir'), param('kernel.charset')])
-            ->tag('twig.extension')
+        ->args([service('debug.file_link_formatter')->ignoreOnInvalid(), param('kernel.project_dir'), param('kernel.charset')])
+        ->tag('twig.extension')
 
         ->set('twig.extension.routing', RoutingExtension::class)
-            ->args([service('router')])
+        ->args([service('router')])
 
         ->set('twig.extension.yaml', YamlExtension::class)
 
         ->set('twig.extension.debug.stopwatch', StopwatchExtension::class)
-            ->args([service('debug.stopwatch')->ignoreOnInvalid(), param('kernel.debug')])
+        ->args([service('debug.stopwatch')->ignoreOnInvalid(), param('kernel.debug')])
 
         ->set('twig.extension.expression', ExpressionExtension::class)
 
         ->set('twig.extension.htmlsanitizer', HtmlSanitizerExtension::class)
-            ->args([tagged_locator('html_sanitizer', 'sanitizer')])
+        ->args([tagged_locator('html_sanitizer', 'sanitizer')])
 
         ->set('twig.extension.httpkernel', HttpKernelExtension::class)
 
         ->set('twig.runtime.httpkernel', HttpKernelRuntime::class)
-            ->args([service('fragment.handler'), service('fragment.uri_generator')->ignoreOnInvalid()])
+        ->args([service('fragment.handler'), service('fragment.uri_generator')->ignoreOnInvalid()])
 
         ->set('twig.extension.httpfoundation', HttpFoundationExtension::class)
-            ->args([service('url_helper')])
+        ->args([service('url_helper')])
 
         ->set('twig.extension.debug', DebugExtension::class)
 
         ->set('twig.extension.weblink', WebLinkExtension::class)
-            ->args([service('request_stack')])
+        ->args([service('request_stack')])
 
         ->set('twig.translation.extractor', TwigExtractor::class)
-            ->args([service('twig')])
-            ->tag('translation.extractor', ['alias' => 'twig'])
+        ->args([service('twig')])
+        ->tag('translation.extractor', ['alias' => 'twig'])
 
         ->set('workflow.twig_extension', WorkflowExtension::class)
-            ->args([service('.workflow.registry')])
+        ->args([service('.workflow.registry')])
 
         ->set('twig.configurator.environment', EnvironmentConfigurator::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('date format, set in TwigExtension'),
                 abstract_arg('interval format, set in TwigExtension'),
                 abstract_arg('timezone, set in TwigExtension'),
                 abstract_arg('decimals, set in TwigExtension'),
                 abstract_arg('decimal point, set in TwigExtension'),
                 abstract_arg('thousands separator, set in TwigExtension'),
-            ])
+                ]
+        )
 
         ->set('twig.runtime_loader', ContainerRuntimeLoader::class)
-            ->args([abstract_arg('runtime locator')])
+        ->args([abstract_arg('runtime locator')])
 
         ->set('twig.error_renderer.html', TwigErrorRenderer::class)
-            ->decorate('error_renderer.html')
-            ->args([
+        ->decorate('error_renderer.html')
+        ->args(
+            [
                 service('twig'),
                 service('twig.error_renderer.html.inner'),
                 inline_service('bool')
                     ->factory([TwigErrorRenderer::class, 'isDebug'])
                     ->args([service('request_stack'), param('kernel.debug')]),
-            ])
+                ]
+        )
 
         ->set('twig.runtime.serializer', SerializerRuntime::class)
-            ->args([service('serializer')])
+        ->args([service('serializer')])
 
         ->set('twig.extension.serializer', SerializerExtension::class)
 
         ->set('controller.template_attribute_listener', TemplateAttributeListener::class)
-            ->args([service('twig')])
-            ->tag('kernel.event_subscriber')
-    ;
+        ->args([service('twig')])
+        ->tag('kernel.event_subscriber');
 };

@@ -46,7 +46,8 @@ final class SecretsGenerateKeysCommand extends Command
         $this
             ->addOption('local', 'l', InputOption::VALUE_NONE, 'Update the local vault.')
             ->addOption('rotate', 'r', InputOption::VALUE_NONE, 'Re-encrypt existing secrets with the newly generated keys.')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command generates a new encryption key.
 
     <info>%command.full_name%</info>
@@ -57,8 +58,7 @@ existing secrets.
 
     <info>%command.full_name% --rotate</info>
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

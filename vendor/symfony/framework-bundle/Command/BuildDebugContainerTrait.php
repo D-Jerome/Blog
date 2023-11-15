@@ -40,22 +40,26 @@ trait BuildDebugContainerTrait
         }
 
         if (!$kernel->isDebug() || !$kernel->getContainer()->getParameter('debug.container.dump') || !(new ConfigCache($kernel->getContainer()->getParameter('debug.container.dump'), true))->isFresh()) {
-            $buildContainer = \Closure::bind(function () {
-                $this->initializeBundles();
+            $buildContainer = \Closure::bind(
+                function () {
+                    $this->initializeBundles();
 
-                return $this->buildContainer();
-            }, $kernel, $kernel::class);
+                    return $this->buildContainer();
+                }, $kernel, $kernel::class
+            );
             $container = $buildContainer();
             $container->getCompilerPassConfig()->setRemovingPasses([]);
             $container->getCompilerPassConfig()->setAfterRemovingPasses([]);
             $container->compile();
         } else {
-            $buildContainer = \Closure::bind(function () {
-                $containerBuilder = $this->getContainerBuilder();
-                $this->prepareContainer($containerBuilder);
+            $buildContainer = \Closure::bind(
+                function () {
+                    $containerBuilder = $this->getContainerBuilder();
+                    $this->prepareContainer($containerBuilder);
 
-                return $containerBuilder;
-            }, $kernel, \get_class($kernel));
+                    return $containerBuilder;
+                }, $kernel, \get_class($kernel)
+            );
             $container = $buildContainer();
             (new XmlFileLoader($container, new FileLocator()))->load($kernel->getContainer()->getParameter('debug.container.dump'));
             $locatorPass = new ServiceLocatorTagPass();

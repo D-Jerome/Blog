@@ -16,9 +16,10 @@ use Symfony\Component\RemoteEvent\Messenger\ConsumeRemoteEventHandler;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('remote_event.messenger.handler', ConsumeRemoteEventHandler::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('remote_event.consumer', 'consumer'),
-            ])
-            ->tag('messenger.message_handler')
-    ;
+                ]
+        )
+        ->tag('messenger.message_handler');
 };

@@ -20,10 +20,10 @@ class ColumnTypeGuesser
         $schema = $table->schema();
 
         switch ($schema->columnType($column)) {
-            case 'boolean':
-                return static function () use ($generator) {
+        case 'boolean':
+            return static function () use ($generator) {
                     return $generator->boolean;
-                };
+            };
 
             case 'integer':
                 return static function () use ($generator) {

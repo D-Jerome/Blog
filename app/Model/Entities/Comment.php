@@ -8,149 +8,149 @@ use PDO;
 class Comment extends Entity
 {
 
-	protected int $id;
+    protected int $id;
 
-	protected string $content;
+    protected string $content;
 
-	protected string $createdAt;
+    protected string $createdAt;
 
-	protected ?string $modifiedAt;
+    protected ?string $modifiedAt;
 
-	protected bool $publishState;
+    protected bool $publishState;
 
-	protected ?string $publishAt;
+    protected ?string $publishAt;
 
-	protected ?int $publishUserId;
+    protected ?int $publishUserId;
 
-	protected int $postId;
+    protected int $postId;
 
-	protected int $userId;
+    protected int $userId;
 
-	protected string $username;
+    protected string $username;
 
-	/**
-	 * getId
-	 *
-	 * @return int
-	 */
-	public function getId(): int
-	{
-		return $this->id;
-	}
-
-
-	/**
-	 * getContent
-	 *
-	 * @return string
-	 */
-	public function getContent(): string
-	{
-		return $this->content;
-	}
+    /**
+     * getId
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
 
-	/**
-	 * getCreatedAt
-	 *
-	 * @return DateTime
-	 */
-	public function getCreatedAt(): string
-	{
-		return $this->createdAt;
-	}
+    /**
+     * getContent
+     *
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
 
 
-	/**
-	 * getModifiedAt
-	 *
-	 * @return DateTime
-	 */
-	public function getModifiedAt(): string
-	{
-		return $this->ModifiedAt;
-	}
+    /**
+     * getCreatedAt
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
 
 
-	/**
-	 * getPostId
-	 *
-	 * @return int
-	 */
-	public function getPostId(): int
-	{
-		return $this->postId;
-	}
+    /**
+     * getModifiedAt
+     *
+     * @return DateTime
+     */
+    public function getModifiedAt(): string
+    {
+        return $this->ModifiedAt;
+    }
 
 
-	/**
-	 * getUserId
-	 *
-	 * @return int
-	 */
-	public function getUserId(): int
-	{
-		return $this->userId;
-	}
+    /**
+     * getPostId
+     *
+     * @return int
+     */
+    public function getPostId(): int
+    {
+        return $this->postId;
+    }
 
 
-	/**
-	 * getUsername
-	 *
-	 * @return string
-	 */
-	public function getUsername(): string
-	{
-		return $this->username;
-	}
+    /**
+     * getUserId
+     *
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
 
 
-	/**
-	 * getExcerptContent
-	 *
-	 * @return string
-	 */
-	public function getExcerptContent(): string
-	{
-		$excerpt = substr($this->content, 0, 60) . '...';
-		if (str_contains($excerpt, "<img ")){
-			$excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
-		}
-		return $excerpt;
-	}
+    /**
+     * getUsername
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
 
 
-	/**
-	 * getPublishState
-	 *
-	 * @return bool
-	 */
-	public function getPublishState(): bool
-	{
-		return $this->publishState;
-	}
+    /**
+     * getExcerptContent
+     *
+     * @return string
+     */
+    public function getExcerptContent(): string
+    {
+        $excerpt = substr($this->content, 0, 60) . '...';
+        if (str_contains($excerpt, "<img ")) {
+            $excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
+        }
+        return $excerpt;
+    }
 
 
-	/**
-	 * getPublishAt
-	 *
-	 * @return string
-	 */
-	public function getPublishAt(): string
-	{
-		return $this->publishAt;
-	}
+    /**
+     * getPublishState
+     *
+     * @return bool
+     */
+    public function getPublishState(): bool
+    {
+        return $this->publishState;
+    }
 
 
-	/**
-	 * getPublishUserId
-	 *
-	 * @return int
-	 */
-	public function getPublishUserId(): int
-	{
-		return $this->publishUserId;
-	}
+    /**
+     * getPublishAt
+     *
+     * @return string
+     */
+    public function getPublishAt(): string
+    {
+        return $this->publishAt;
+    }
+
+
+    /**
+     * getPublishUserId
+     *
+     * @return int
+     */
+    public function getPublishUserId(): int
+    {
+        return $this->publishUserId;
+    }
 
 
 }

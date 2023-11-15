@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -106,29 +106,29 @@ class SystemNodeProvider implements NodeProviderInterface
 
         /**
          * @psalm-suppress UnnecessaryVarAnnotation
-         * @var string $phpOs
+         * @var            string $phpOs
          */
         $phpOs = constant('PHP_OS');
 
         ob_start();
         switch (strtoupper(substr($phpOs, 0, 3))) {
-            case 'WIN':
-                passthru('ipconfig /all 2>&1');
+        case 'WIN':
+            passthru('ipconfig /all 2>&1');
 
-                break;
-            case 'DAR':
-                passthru('ifconfig 2>&1');
+            break;
+        case 'DAR':
+            passthru('ifconfig 2>&1');
 
-                break;
-            case 'FRE':
-                passthru('netstat -i -f link 2>&1');
+            break;
+        case 'FRE':
+            passthru('netstat -i -f link 2>&1');
 
-                break;
-            case 'LIN':
-            default:
-                passthru('netstat -ie 2>&1');
+            break;
+        case 'LIN':
+        default:
+            passthru('netstat -ie 2>&1');
 
-                break;
+            break;
         }
 
         $ifconfig = (string) ob_get_clean();
@@ -153,7 +153,7 @@ class SystemNodeProvider implements NodeProviderInterface
 
         /**
          * @psalm-suppress UnnecessaryVarAnnotation
-         * @var string $phpOs
+         * @var            string $phpOs
          */
         $phpOs = constant('PHP_OS');
 
@@ -164,27 +164,37 @@ class SystemNodeProvider implements NodeProviderInterface
                 return '';
             }
 
-            /** @var array<array-key, string> $macs */
+            /**
+ * @var array<array-key, string> $macs 
+*/
             $macs = [];
 
-            array_walk($addressPaths, function (string $addressPath) use (&$macs): void {
-                if (is_readable($addressPath)) {
-                    $macs[] = file_get_contents($addressPath);
+            array_walk(
+                $addressPaths, function (string $addressPath) use (&$macs): void {
+                    if (is_readable($addressPath)) {
+                        $macs[] = file_get_contents($addressPath);
+                    }
                 }
-            });
+            );
 
-            /** @var callable $trim */
+            /**
+ * @var callable $trim 
+*/
             $trim = 'trim';
 
             $macs = array_map($trim, $macs);
 
             // Remove invalid entries.
-            $macs = array_filter($macs, function (string $address) {
-                return $address !== '00:00:00:00:00:00'
+            $macs = array_filter(
+                $macs, function (string $address) {
+                    return $address !== '00:00:00:00:00:00'
                     && preg_match(self::SYSFS_PATTERN, $address);
-            });
+                }
+            );
 
-            /** @var string|bool $mac */
+            /**
+ * @var string|bool $mac 
+*/
             $mac = reset($macs);
         }
 

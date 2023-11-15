@@ -51,185 +51,224 @@ return static function (ContainerConfigurator $container) {
 
         // Asynchronous
         ->set('messenger.senders_locator', SendersLocator::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('per message senders map'),
                 abstract_arg('senders service locator'),
-            ])
+                ]
+        )
         ->set('messenger.middleware.send_message', SendMessageMiddleware::class)
-            ->abstract()
-            ->args([
+        ->abstract()
+        ->args(
+            [
                 service('messenger.senders_locator'),
                 service('event_dispatcher'),
-            ])
-            ->call('setLogger', [service('logger')->ignoreOnInvalid()])
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->call('setLogger', [service('logger')->ignoreOnInvalid()])
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         // Message encoding/decoding
         ->set('messenger.transport.symfony_serializer', Serializer::class)
-            ->args([
+        ->args(
+            [
                 service('serializer'),
                 abstract_arg('format'),
                 abstract_arg('context'),
-            ])
+                ]
+        )
 
         ->set('serializer.normalizer.flatten_exception', FlattenExceptionNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -880])
+        ->tag('serializer.normalizer', ['priority' => -880])
 
         ->set('messenger.transport.native_php_serializer', PhpSerializer::class)
         ->alias('messenger.default_serializer', 'messenger.transport.native_php_serializer')
 
         // Middleware
         ->set('messenger.middleware.handle_message', HandleMessageMiddleware::class)
-            ->abstract()
-            ->args([
+        ->abstract()
+        ->args(
+            [
                 abstract_arg('bus handler resolver'),
-            ])
-            ->tag('monolog.logger', ['channel' => 'messenger'])
-            ->call('setLogger', [service('logger')->ignoreOnInvalid()])
+                ]
+        )
+        ->tag('monolog.logger', ['channel' => 'messenger'])
+        ->call('setLogger', [service('logger')->ignoreOnInvalid()])
 
         ->set('messenger.middleware.add_bus_name_stamp_middleware', AddBusNameStampMiddleware::class)
-            ->abstract()
+        ->abstract()
 
         ->set('messenger.middleware.dispatch_after_current_bus', DispatchAfterCurrentBusMiddleware::class)
 
         ->set('messenger.middleware.validation', ValidationMiddleware::class)
-            ->args([
+        ->args(
+            [
                 service('validator'),
-            ])
+                ]
+        )
 
         ->set('messenger.middleware.reject_redelivered_message_middleware', RejectRedeliveredMessageMiddleware::class)
 
         ->set('messenger.middleware.failed_message_processing_middleware', FailedMessageProcessingMiddleware::class)
 
         ->set('messenger.middleware.traceable', TraceableMiddleware::class)
-            ->abstract()
-            ->args([
+        ->abstract()
+        ->args(
+            [
                 service('debug.stopwatch'),
-            ])
+                ]
+        )
 
         ->set('messenger.middleware.router_context', RouterContextMiddleware::class)
-            ->args([
+        ->args(
+            [
                 service('router'),
-            ])
+                ]
+        )
 
         // Discovery
         ->set('messenger.receiver_locator', ServiceLocator::class)
-            ->args([
+        ->args(
+            [
                 [],
-            ])
-            ->tag('container.service_locator')
+                ]
+        )
+        ->tag('container.service_locator')
 
         // Transports
         ->set('messenger.transport_factory', TransportFactory::class)
-            ->args([
+        ->args(
+            [
                 tagged_iterator('messenger.transport_factory'),
-            ])
+                ]
+        )
 
         ->set('messenger.transport.amqp.factory', AmqpTransportFactory::class)
 
         ->set('messenger.transport.redis.factory', RedisTransportFactory::class)
 
         ->set('messenger.transport.sync.factory', SyncTransportFactory::class)
-            ->args([
+        ->args(
+            [
                 service('messenger.routable_message_bus'),
-            ])
-            ->tag('messenger.transport_factory')
+                ]
+        )
+        ->tag('messenger.transport_factory')
 
         ->set('messenger.transport.in_memory.factory', InMemoryTransportFactory::class)
-            ->tag('messenger.transport_factory')
-            ->tag('kernel.reset', ['method' => 'reset'])
+        ->tag('messenger.transport_factory')
+        ->tag('kernel.reset', ['method' => 'reset'])
 
         ->set('messenger.transport.sqs.factory', AmazonSqsTransportFactory::class)
-            ->args([
+        ->args(
+            [
                 service('logger')->ignoreOnInvalid(),
-            ])
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('messenger.transport.beanstalkd.factory', BeanstalkdTransportFactory::class)
 
         // retry
         ->set('messenger.retry_strategy_locator', ServiceLocator::class)
-            ->args([
+        ->args(
+            [
                 [],
-            ])
-            ->tag('container.service_locator')
+                ]
+        )
+        ->tag('container.service_locator')
 
         ->set('messenger.retry.abstract_multiplier_retry_strategy', MultiplierRetryStrategy::class)
-            ->abstract()
-            ->args([
+        ->abstract()
+        ->args(
+            [
                 abstract_arg('max retries'),
                 abstract_arg('delay ms'),
                 abstract_arg('multiplier'),
                 abstract_arg('max delay ms'),
-            ])
+                ]
+        )
 
         // rate limiter
         ->set('messenger.rate_limiter_locator', ServiceLocator::class)
-            ->args([[]])
-            ->tag('container.service_locator')
+        ->args([[]])
+        ->tag('container.service_locator')
 
         // worker event listener
         ->set('messenger.retry.send_failed_message_for_retry_listener', SendFailedMessageForRetryListener::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('senders service locator'),
                 service('messenger.retry_strategy_locator'),
                 service('logger')->ignoreOnInvalid(),
                 service('event_dispatcher'),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('messenger.failure.add_error_details_stamp_listener', AddErrorDetailsStampListener::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->set('messenger.failure.send_failed_message_to_failure_transport_listener', SendFailedMessageToFailureTransportListener::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('failure transports'),
                 service('logger')->ignoreOnInvalid(),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('messenger.listener.dispatch_pcntl_signal_listener', DispatchPcntlSignalListener::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->set('messenger.listener.stop_worker_on_restart_signal_listener', StopWorkerOnRestartSignalListener::class)
-            ->args([
+        ->args(
+            [
                 service('cache.messenger.restart_workers_signal'),
                 service('logger')->ignoreOnInvalid(),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->set('messenger.listener.stop_worker_signals_listener', StopWorkerOnSignalsListener::class)
-            ->args([
+        ->args(
+            [
                 null,
                 service('logger')->ignoreOnInvalid(),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'messenger'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'messenger'])
 
         ->alias('messenger.listener.stop_worker_on_sigterm_signal_listener', 'messenger.listener.stop_worker_signals_listener')
-            ->deprecate('6.3', 'symfony/messenger', 'The "%alias_id%" service is deprecated, use "messenger.listener.stop_worker_signals_listener" instead.')
+        ->deprecate('6.3', 'symfony/messenger', 'The "%alias_id%" service is deprecated, use "messenger.listener.stop_worker_signals_listener" instead.')
 
         ->set('messenger.listener.stop_worker_on_stop_exception_listener', StopWorkerOnCustomStopExceptionListener::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->set('messenger.listener.reset_services', ResetServicesListener::class)
-            ->args([
+        ->args(
+            [
                 service('services_resetter'),
-            ])
+                ]
+        )
 
         ->set('messenger.routable_message_bus', RoutableMessageBus::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('message bus locator'),
                 service('messenger.default_bus'),
-            ])
+                ]
+        )
 
         ->set('messenger.redispatch_message_handler', RedispatchMessageHandler::class)
-            ->args([
+        ->args(
+            [
                 service('messenger.default_bus'),
-            ])
-            ->tag('messenger.message_handler')
-    ;
+                ]
+        )
+        ->tag('messenger.message_handler');
 };

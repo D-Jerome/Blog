@@ -33,90 +33,111 @@ return static function (ContainerConfigurator $container) {
 
     $container->services()
         ->set('validator', ValidatorInterface::class)
-            ->factory([service('validator.builder'), 'getValidator'])
+        ->factory([service('validator.builder'), 'getValidator'])
         ->alias(ValidatorInterface::class, 'validator')
 
         ->set('validator.builder', ValidatorBuilder::class)
-            ->factory([Validation::class, 'createValidatorBuilder'])
-            ->call('setConstraintValidatorFactory', [
+        ->factory([Validation::class, 'createValidatorBuilder'])
+        ->call(
+            'setConstraintValidatorFactory', [
                 service('validator.validator_factory'),
-            ])
-            ->call('setTranslator', [
+                ]
+        )
+        ->call(
+            'setTranslator', [
                 service('translator')->ignoreOnInvalid(),
-            ])
-            ->call('setTranslationDomain', [
+                ]
+        )
+        ->call(
+            'setTranslationDomain', [
                 param('validator.translation_domain'),
-            ])
+                ]
+        )
         ->alias('validator.mapping.class_metadata_factory', 'validator')
 
         ->set('validator.mapping.cache_warmer', ValidatorCacheWarmer::class)
-            ->args([
+        ->args(
+            [
                 service('validator.builder'),
                 param('validator.mapping.cache.file'),
-            ])
-            ->tag('kernel.cache_warmer')
+                ]
+        )
+        ->tag('kernel.cache_warmer')
 
         ->set('validator.mapping.cache.adapter', PhpArrayAdapter::class)
-            ->factory([PhpArrayAdapter::class, 'create'])
-            ->args([
+        ->factory([PhpArrayAdapter::class, 'create'])
+        ->args(
+            [
                 param('validator.mapping.cache.file'),
                 service('cache.validator'),
-            ])
+                ]
+        )
 
         ->set('validator.validator_factory', ContainerConstraintValidatorFactory::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Constraint validators locator'),
-            ])
+                ]
+        )
 
         ->load('Symfony\Component\Validator\Constraints\\', $validatorsDir.'/*Validator.php')
-            ->exclude($validatorsDir.'/ExpressionLanguageSyntaxValidator.php')
-            ->abstract()
-            ->tag('container.excluded')
-            ->tag('validator.constraint_validator')
+        ->exclude($validatorsDir.'/ExpressionLanguageSyntaxValidator.php')
+        ->abstract()
+        ->tag('container.excluded')
+        ->tag('validator.constraint_validator')
 
         ->set('validator.expression', ExpressionValidator::class)
-            ->args([service('validator.expression_language')->nullOnInvalid()])
-            ->tag('validator.constraint_validator', [
+        ->args([service('validator.expression_language')->nullOnInvalid()])
+        ->tag(
+            'validator.constraint_validator', [
                 'alias' => 'validator.expression',
-            ])
+                ]
+        )
 
         ->set('validator.expression_language', ExpressionLanguage::class)
-            ->args([service('cache.validator_expression_language')->nullOnInvalid()])
+        ->args([service('cache.validator_expression_language')->nullOnInvalid()])
 
         ->set('cache.validator_expression_language')
-            ->parent('cache.system')
-            ->tag('cache.pool')
+        ->parent('cache.system')
+        ->tag('cache.pool')
 
         ->set('validator.email', EmailValidator::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Default mode'),
-            ])
-            ->tag('validator.constraint_validator')
+                ]
+        )
+        ->tag('validator.constraint_validator')
 
         ->set('validator.not_compromised_password', NotCompromisedPasswordValidator::class)
-            ->args([
+        ->args(
+            [
                 service('http_client')->nullOnInvalid(),
                 param('kernel.charset'),
                 false,
-            ])
-            ->tag('validator.constraint_validator')
+                ]
+        )
+        ->tag('validator.constraint_validator')
 
         ->set('validator.when', WhenValidator::class)
-            ->args([service('validator.expression_language')->nullOnInvalid()])
-            ->tag('validator.constraint_validator')
+        ->args([service('validator.expression_language')->nullOnInvalid()])
+        ->tag('validator.constraint_validator')
 
         ->set('validator.no_suspicious_characters', NoSuspiciousCharactersValidator::class)
-            ->args([param('kernel.enabled_locales')])
-            ->tag('validator.constraint_validator', [
+        ->args([param('kernel.enabled_locales')])
+        ->tag(
+            'validator.constraint_validator', [
                 'alias' => NoSuspiciousCharactersValidator::class,
-            ])
+                ]
+        )
 
         ->set('validator.property_info_loader', PropertyInfoLoader::class)
-            ->args([
+        ->args(
+            [
                 service('property_info'),
                 service('property_info'),
                 service('property_info'),
-            ])
-            ->tag('validator.auto_mapper')
-    ;
+                ]
+        )
+        ->tag('validator.auto_mapper');
 };

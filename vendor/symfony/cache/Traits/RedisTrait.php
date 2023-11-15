@@ -62,7 +62,11 @@ trait RedisTrait
 
         if ($redis instanceof \Predis\ClientInterface && $redis->getOptions()->exceptions) {
             $options = clone $redis->getOptions();
-            \Closure::bind(function () { $this->options['exceptions'] = false; }, $options, $options)();
+            \Closure::bind(
+                function () {
+                    $this->options['exceptions'] = false; 
+                }, $options, $options
+            )();
             $redis = new $redis($redis->getConnection(), $options);
         }
 
@@ -98,21 +102,23 @@ trait RedisTrait
             throw new CacheException('Cannot find the "redis" extension nor the "predis/predis" package.');
         }
 
-        $params = preg_replace_callback('#^'.$scheme.':(//)?(?:(?:(?<user>[^:@]*+):)?(?<password>[^@]*+)@)?#', function ($m) use (&$auth) {
-            if (isset($m['password'])) {
-                if (\in_array($m['user'], ['', 'default'], true)) {
-                    $auth = $m['password'];
-                } else {
-                    $auth = [$m['user'], $m['password']];
+        $params = preg_replace_callback(
+            '#^'.$scheme.':(//)?(?:(?:(?<user>[^:@]*+):)?(?<password>[^@]*+)@)?#', function ($m) use (&$auth) {
+                if (isset($m['password'])) {
+                    if (\in_array($m['user'], ['', 'default'], true)) {
+                        $auth = $m['password'];
+                    } else {
+                        $auth = [$m['user'], $m['password']];
+                    }
+
+                    if ('' === $auth) {
+                        $auth = null;
+                    }
                 }
 
-                if ('' === $auth) {
-                    $auth = null;
-                }
-            }
-
-            return 'file:'.($m[1] ?? '');
-        }, $dsn);
+                return 'file:'.($m[1] ?? '');
+            }, $dsn
+        );
 
         if (false === $params = parse_url($params)) {
             throw new InvalidArgumentException('Invalid Redis DSN.');
@@ -265,7 +271,11 @@ trait RedisTrait
                     }
                     @$redis->{$connect}($host, $port, (float) $params['timeout'], (string) $params['persistent_id'], $params['retry_interval'], $params['read_timeout'], ...\defined('Redis::SCAN_PREFIX') || !$isRedisExt ? [$extra] : []);
 
-                    set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+                    set_error_handler(
+                        function ($type, $msg) use (&$error) {
+                            $error = $msg; 
+                        }
+                    );
                     try {
                         $isConnected = $redis->isConnected();
                     } finally {
@@ -337,12 +347,14 @@ trait RedisTrait
                 if (0 < $params['tcp_keepalive'] && (!$isRedisExt || \defined('Redis::OPT_TCP_KEEPALIVE'))) {
                     $redis->setOption($isRedisExt ? \Redis::OPT_TCP_KEEPALIVE : Relay::OPT_TCP_KEEPALIVE, $params['tcp_keepalive']);
                 }
-                $redis->setOption(\RedisCluster::OPT_SLAVE_FAILOVER, match ($params['failover']) {
+                $redis->setOption(
+                    \RedisCluster::OPT_SLAVE_FAILOVER, match ($params['failover']) {
                     'error' => \RedisCluster::FAILOVER_ERROR,
                     'distribute' => \RedisCluster::FAILOVER_DISTRIBUTE,
                     'slaves' => \RedisCluster::FAILOVER_DISTRIBUTE_SLAVES,
                     'none' => \RedisCluster::FAILOVER_NONE,
-                });
+                    }
+                );
 
                 return $redis;
             };
@@ -411,11 +423,13 @@ trait RedisTrait
         $result = [];
 
         if ($this->redis instanceof \Predis\ClientInterface && ($this->redis->getConnection() instanceof ClusterInterface || $this->redis->getConnection() instanceof Predis2ClusterInterface)) {
-            $values = $this->pipeline(function () use ($ids) {
-                foreach ($ids as $id) {
-                    yield 'get' => [$id];
+            $values = $this->pipeline(
+                function () use ($ids) {
+                    foreach ($ids as $id) {
+                        yield 'get' => [$id];
+                    }
                 }
-            });
+            );
         } else {
             $values = $this->redis->mget($ids);
 
@@ -514,11 +528,13 @@ trait RedisTrait
             static $del;
             $del ??= (class_exists(UNLINK::class) ? 'unlink' : 'del');
 
-            $this->pipeline(function () use ($ids, $del) {
-                foreach ($ids as $id) {
-                    yield $del => [$id];
+            $this->pipeline(
+                function () use ($ids, $del) {
+                    foreach ($ids as $id) {
+                        yield $del => [$id];
+                    }
                 }
-            })->rewind();
+            )->rewind();
         } else {
             static $unlink = true;
 
@@ -544,15 +560,17 @@ trait RedisTrait
             return $failed;
         }
 
-        $results = $this->pipeline(function () use ($values, $lifetime) {
-            foreach ($values as $id => $value) {
-                if (0 >= $lifetime) {
-                    yield 'set' => [$id, $value];
-                } else {
-                    yield 'setEx' => [$id, $lifetime, $value];
+        $results = $this->pipeline(
+            function () use ($values, $lifetime) {
+                foreach ($values as $id => $value) {
+                    if (0 >= $lifetime) {
+                        yield 'set' => [$id, $value];
+                    } else {
+                        yield 'setEx' => [$id, $lifetime, $value];
+                    }
                 }
             }
-        });
+        );
 
         foreach ($results as $id => $result) {
             if (true !== $result && (!$result instanceof Status || Status::get('OK') !== $result)) {
@@ -578,12 +596,14 @@ trait RedisTrait
                 $ids[] = 'eval' === $command ? ($redis instanceof \Predis\ClientInterface ? $args[2] : $args[1][0]) : $args[0];
             }
         } elseif ($redis instanceof \Predis\ClientInterface) {
-            $results = $redis->pipeline(static function ($redis) use ($generator, &$ids) {
-                foreach ($generator() as $command => $args) {
-                    $redis->{$command}(...$args);
-                    $ids[] = 'eval' === $command ? $args[2] : $args[0];
+            $results = $redis->pipeline(
+                static function ($redis) use ($generator, &$ids) {
+                    foreach ($generator() as $command => $args) {
+                        $redis->{$command}(...$args);
+                        $ids[] = 'eval' === $command ? $args[2] : $args[0];
+                    }
                 }
-            });
+            );
         } elseif ($redis instanceof \RedisArray) {
             $connections = $results = $ids = [];
             foreach ($generator() as $command => $args) {

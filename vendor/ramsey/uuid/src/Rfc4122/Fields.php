@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -178,7 +178,9 @@ final class Fields implements FieldsInterface
             return null;
         }
 
-        /** @var int[] $parts */
+        /**
+ * @var int[] $parts 
+*/
         $parts = unpack('n*', $this->bytes);
 
         return $parts[4] >> 12;

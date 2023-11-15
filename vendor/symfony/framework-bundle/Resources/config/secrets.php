@@ -17,17 +17,18 @@ use Symfony\Bundle\FrameworkBundle\Secrets\SodiumVault;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('secrets.vault', SodiumVault::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('Secret dir, set in FrameworkExtension'),
                 service('secrets.decryption_key')->ignoreOnInvalid(),
-            ])
-            ->tag('container.env_var_loader')
+                ]
+        )
+        ->tag('container.env_var_loader')
 
         ->set('secrets.decryption_key')
-            ->parent('container.env')
-            ->args([abstract_arg('Decryption env var, set in FrameworkExtension')])
+        ->parent('container.env')
+        ->args([abstract_arg('Decryption env var, set in FrameworkExtension')])
 
         ->set('secrets.local_vault', DotenvVault::class)
-            ->args([abstract_arg('.env file path, set in FrameworkExtension')])
-    ;
+        ->args([abstract_arg('.env file path, set in FrameworkExtension')]);
 };

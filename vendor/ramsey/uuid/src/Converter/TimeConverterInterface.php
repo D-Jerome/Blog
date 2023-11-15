@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -32,10 +32,10 @@ interface TimeConverterInterface
      *
      * @link http://tools.ietf.org/html/rfc4122#section-4.2.2 RFC 4122, § 4.2.2: Generation Details
      *
-     * @param string $seconds A string representation of the number of seconds
-     *     since the Unix epoch for the time to calculate
+     * @param string $seconds      A string representation of the number of seconds
+     *                             since the Unix epoch for the time to calculate
      * @param string $microseconds A string representation of the micro-seconds
-     *     associated with the time to calculate
+     *                             associated with the time to calculate
      *
      * @return Hexadecimal The full UUID timestamp as a Hexadecimal value
      *
@@ -47,8 +47,8 @@ interface TimeConverterInterface
      * Converts a timestamp extracted from a UUID to a Unix timestamp
      *
      * @param Hexadecimal $uuidTimestamp A hexadecimal representation of a UUID
-     *     timestamp; a UUID timestamp is a count of 100-nanosecond intervals
-     *     since UTC 00:00:00.00, 15 October 1582.
+     *                                   timestamp; a UUID timestamp is a count of 100-nanosecond intervals
+     *                                   since UTC 00:00:00.00, 15 October 1582.
      *
      * @return Time An instance of {@see Time}
      *

@@ -24,10 +24,12 @@ class UserManager extends BaseManager
 
     public function getRoleById(int $id): Role
     {
-        $statement = $this->dbConnect->prepare('
+        $statement = $this->dbConnect->prepare(
+            '
             SELECT r.* FROM role r 
             WHERE r.id = ?
-            ');
+            '
+        );
         $statement->setFetchMode(PDO::FETCH_CLASS, Role::class);
         $statement->execute([$id]);
         return $statement->fetch();
@@ -37,15 +39,19 @@ class UserManager extends BaseManager
     {
         
         if (isset($params['roleId'])) {
-            $query = $this->dbConnect->prepare('
+            $query = $this->dbConnect->prepare(
+                '
                 INSERT INTO ' . $this->table . '(firstname,lastname,username, email , file, created_at, role_id ) 
                 VALUES (:firstname, :lastname, :username, :email , :password, :created_at, :role_id)
-            ');
+            '
+            );
         } else {
-            $query = $this->dbConnect->prepare('
+            $query = $this->dbConnect->prepare(
+                '
                 INSERT INTO ' . $this->table . '(firstname,lastname,username, email , password, created_at ) 
                 VALUES (:firstname, :lastname, :username, :email , :password, :created_at)
-            ');
+            '
+            );
         }
 
         if (isset($params['password'])) {
@@ -99,10 +105,12 @@ class UserManager extends BaseManager
     public function verifyCouple(int $id, string $string): int
     {
 
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             SELECT id FROM ' . $this->table . '
             WHERE id = :id AND username = :username
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->bindParam(':username', $string);
@@ -112,10 +120,12 @@ class UserManager extends BaseManager
 
     public function disable(int $id): void
     {
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             UPDATE ' . $this->table . ' SET active = false
             WHERE id = :id 
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
@@ -123,10 +133,12 @@ class UserManager extends BaseManager
 
     public function enable(int $id): void
     {
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             UPDATE ' . $this->table . ' SET active = true
             WHERE id = :id 
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();

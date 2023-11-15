@@ -114,17 +114,19 @@ class TwigDataCollector extends DataCollector implements LateDataCollectorInterf
         $dump = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
-        $dump = str_replace([
+        $dump = str_replace(
+            [
             '<span style="background-color: #ffd">',
             '<span style="color: #d44">',
             '<span style="background-color: #dfd">',
             '<span style="background-color: #ddf">',
-        ], [
+            ], [
             '<span class="status-warning">',
             '<span class="status-error">',
             '<span class="status-success">',
             '<span class="status-info">',
-        ], $dump);
+            ], $dump
+        );
 
         return new Markup($dump, 'UTF-8');
     }

@@ -58,8 +58,7 @@ class RegisterEnvVarProcessorsPass implements CompilerPassInterface
 
         if ($processors) {
             $container->setAlias('container.env_var_processors_locator', (string) ServiceLocatorTagPass::register($container, $processors))
-                ->setPublic(true)
-            ;
+                ->setPublic(true);
         }
     }
 

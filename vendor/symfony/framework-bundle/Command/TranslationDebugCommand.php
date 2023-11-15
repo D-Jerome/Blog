@@ -76,15 +76,18 @@ class TranslationDebugCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('locale', InputArgument::REQUIRED, 'The locale'),
                 new InputArgument('bundle', InputArgument::OPTIONAL, 'The bundle name or directory where to load the messages'),
                 new InputOption('domain', null, InputOption::VALUE_OPTIONAL, 'The messages domain'),
                 new InputOption('only-missing', null, InputOption::VALUE_NONE, 'Display only missing messages'),
                 new InputOption('only-unused', null, InputOption::VALUE_NONE, 'Display only unused messages'),
                 new InputOption('all', null, InputOption::VALUE_NONE, 'Load messages from all registered bundles'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command helps finding unused or missing translation
 messages and comparing them with the fallback ones by inspecting the
 templates and translation files of a given bundle or the default translations directory.
@@ -114,8 +117,7 @@ You can display information about translations in all registered bundles in a sp
   <info>php %command.full_name% --all en</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -127,7 +129,9 @@ EOF
 
         $exitCode = self::SUCCESS;
 
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
 
         // Define Root Paths
@@ -261,7 +265,9 @@ EOF
             return;
         }
 
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
 
         if ($input->mustSuggestArgumentValuesFor('bundle')) {

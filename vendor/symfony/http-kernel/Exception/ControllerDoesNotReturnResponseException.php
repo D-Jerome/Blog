@@ -27,12 +27,16 @@ class ControllerDoesNotReturnResponseException extends \LogicException
         $this->file = $controllerDefinition['file'];
         $this->line = $controllerDefinition['line'];
         $r = new \ReflectionProperty(\Exception::class, 'trace');
-        $r->setValue($this, array_merge([
-            [
+        $r->setValue(
+            $this, array_merge(
+                [
+                [
                 'line' => $line,
                 'file' => $file,
-            ],
-        ], $this->getTrace()));
+                ],
+                ], $this->getTrace()
+            )
+        );
     }
 
     private function parseControllerDefinition(callable $controller): ?array

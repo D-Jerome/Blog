@@ -44,9 +44,11 @@ class DefinitionFileLoader extends FileLoader
         $this->container?->fileExists($path);
 
         // the closure forbids access to the private scope in the included file
-        $load = \Closure::bind(static function ($file) use ($loader) {
-            return include $file;
-        }, null, ProtectedDefinitionFileLoader::class);
+        $load = \Closure::bind(
+            static function ($file) use ($loader) {
+                return include $file;
+            }, null, ProtectedDefinitionFileLoader::class
+        );
 
         $callback = $load($path);
 

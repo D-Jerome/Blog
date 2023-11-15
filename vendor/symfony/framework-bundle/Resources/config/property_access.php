@@ -17,14 +17,15 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('property_accessor', PropertyAccessor::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('magic methods allowed, set by the extension'),
                 abstract_arg('throw exceptions, set by the extension'),
                 service('cache.property_access')->ignoreOnInvalid(),
                 abstract_arg('propertyReadInfoExtractor, set by the extension'),
                 abstract_arg('propertyWriteInfoExtractor, set by the extension'),
-            ])
+                ]
+        )
 
-        ->alias(PropertyAccessorInterface::class, 'property_accessor')
-    ;
+        ->alias(PropertyAccessorInterface::class, 'property_accessor');
 };

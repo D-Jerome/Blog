@@ -416,16 +416,18 @@ class Route implements \Serializable
             return $pattern;
         }
 
-        return preg_replace_callback('#\{(!?)([\w\x80-\xFF]++)(<.*?>)?(\?[^\}]*+)?\}#', function ($m) {
-            if (isset($m[4][0])) {
-                $this->setDefault($m[2], '?' !== $m[4] ? substr($m[4], 1) : null);
-            }
-            if (isset($m[3][0])) {
-                $this->setRequirement($m[2], substr($m[3], 1, -1));
-            }
+        return preg_replace_callback(
+            '#\{(!?)([\w\x80-\xFF]++)(<.*?>)?(\?[^\}]*+)?\}#', function ($m) {
+                if (isset($m[4][0])) {
+                    $this->setDefault($m[2], '?' !== $m[4] ? substr($m[4], 1) : null);
+                }
+                if (isset($m[3][0])) {
+                    $this->setRequirement($m[2], substr($m[3], 1, -1));
+                }
 
-            return '{'.$m[1].$m[2].'}';
-        }, $pattern);
+                return '{'.$m[1].$m[2].'}';
+            }, $pattern
+        );
     }
 
     private function sanitizeRequirement(string $key, string $regex): string

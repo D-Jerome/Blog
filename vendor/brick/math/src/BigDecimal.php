@@ -86,7 +86,7 @@ final class BigDecimal extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigDecimal|null $zero
+         * @var            BigDecimal|null $zero
          */
         static $zero;
 
@@ -106,7 +106,7 @@ final class BigDecimal extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigDecimal|null $one
+         * @var            BigDecimal|null $one
          */
         static $one;
 
@@ -126,7 +126,7 @@ final class BigDecimal extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigDecimal|null $ten
+         * @var            BigDecimal|null $ten
          */
         static $ten;
 
@@ -313,11 +313,13 @@ final class BigDecimal extends BigNumber
         }
 
         if ($exponent < 0 || $exponent > Calculator::MAX_POWER) {
-            throw new \InvalidArgumentException(\sprintf(
-                'The exponent %d is not in the range 0 to %d.',
-                $exponent,
-                Calculator::MAX_POWER
-            ));
+            throw new \InvalidArgumentException(
+                \sprintf(
+                    'The exponent %d is not in the range 0 to %d.',
+                    $exponent,
+                    Calculator::MAX_POWER
+                )
+            );
         }
 
         return new BigDecimal(Calculator::get()->pow($this->value, $exponent), $this->scale * $exponent);

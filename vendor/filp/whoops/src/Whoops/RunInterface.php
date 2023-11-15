@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -95,7 +96,7 @@ interface RunInterface
      * Whoops will by default send HTTP code 500, but you may wish to
      * use 502, 503, or another 5xx family code.
      *
-     * @param bool|int $code
+     * @param  bool|int $code
      * @return int|false
      */
     public function sendHttpCode($code = null);
@@ -104,7 +105,7 @@ interface RunInterface
      * Should Whoops exit with a specific code on the CLI if possible?
      * Whoops will exit with 1 by default, but you can specify something else.
      *
-     * @param int $code
+     * @param  int $code
      * @return int
      */
     public function sendExitCode($code = null);
@@ -151,7 +152,7 @@ interface RunInterface
     /**
      * Registers a filter callback in the frame filters stack.
      *
-     * @param callable $filterCallback
+     * @param  callable $filterCallback
      * @return \Whoops\Run
      */
     public function addFrameFilter($filterCallback);

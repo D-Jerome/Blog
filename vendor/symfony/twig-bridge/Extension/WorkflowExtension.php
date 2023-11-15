@@ -105,8 +105,7 @@ final class WorkflowExtension extends AbstractExtension
             ->workflowRegistry
             ->get($subject, $name)
             ->getMetadataStore()
-            ->getMetadata($key, $metadataSubject)
-        ;
+            ->getMetadata($key, $metadataSubject);
     }
 
     public function buildTransitionBlockerList(object $subject, string $transitionName, string $name = null): TransitionBlockerList

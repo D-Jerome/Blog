@@ -17,14 +17,15 @@ use Symfony\Component\Translation\DataCollectorTranslator;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('translator.data_collector', DataCollectorTranslator::class)
-            ->args([service('translator.data_collector.inner')])
+        ->args([service('translator.data_collector.inner')])
 
         ->set('data_collector.translation', TranslationDataCollector::class)
-            ->args([service('translator.data_collector')])
-            ->tag('data_collector', [
+        ->args([service('translator.data_collector')])
+        ->tag(
+            'data_collector', [
                 'template' => '@WebProfiler/Collector/translation.html.twig',
                 'id' => 'translation',
                 'priority' => 275,
-            ])
-    ;
+                ]
+        );
 };

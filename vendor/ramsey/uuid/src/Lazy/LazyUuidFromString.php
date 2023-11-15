@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -65,7 +65,9 @@ final class LazyUuidFromString implements UuidInterface
     {
     }
 
-    /** @psalm-pure */
+    /**
+     * @psalm-pure 
+     */
     public static function fromBytes(string $bytes): self
     {
         $base16Uuid = bin2hex($bytes);
@@ -113,7 +115,7 @@ final class LazyUuidFromString implements UuidInterface
     /**
      * @param array{string?: string} $data
      *
-     * @psalm-param array{string?: non-empty-string} $data
+     * @psalm-param    array{string?: non-empty-string} $data
      * @psalm-suppress UnusedMethodCall
      */
     public function __unserialize(array $data): void
@@ -127,7 +129,9 @@ final class LazyUuidFromString implements UuidInterface
         $this->unserialize($data['string']);
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getNumberConverter(): NumberConverterInterface
     {
         return ($this->unwrapped ?? $this->unwrap())
@@ -145,98 +149,126 @@ final class LazyUuidFromString implements UuidInterface
             ->getFieldsHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getClockSeqHiAndReservedHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getClockSeqHiAndReservedHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getClockSeqLowHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getClockSeqLowHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getClockSequenceHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getClockSequenceHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getDateTime(): DateTimeInterface
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getDateTime();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getLeastSignificantBitsHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getLeastSignificantBitsHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getMostSignificantBitsHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getMostSignificantBitsHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getNodeHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getNodeHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getTimeHiAndVersionHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getTimeHiAndVersionHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getTimeLowHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getTimeLowHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getTimeMidHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getTimeMidHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getTimestampHex(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getTimestampHex();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getUrn(): string
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getUrn();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getVariant(): ?int
     {
         return ($this->unwrapped ?? $this->unwrap())
             ->getVariant();
     }
 
-    /** @psalm-suppress DeprecatedMethod */
+    /**
+     * @psalm-suppress DeprecatedMethod 
+     */
     public function getVersion(): ?int
     {
         return ($this->unwrapped ?? $this->unwrap())
@@ -267,7 +299,9 @@ final class LazyUuidFromString implements UuidInterface
      */
     public function getBytes(): string
     {
-        /** @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. */
+        /**
+ * @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. 
+*/
         return (string) hex2bin(str_replace('-', '', $this->uuid));
     }
 

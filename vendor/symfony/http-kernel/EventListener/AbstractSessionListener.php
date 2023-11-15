@@ -65,28 +65,30 @@ abstract class AbstractSessionListener implements EventSubscriberInterface, Rese
 
         $request = $event->getRequest();
         if (!$request->hasSession()) {
-            $request->setSessionFactory(function () use ($request) {
-                // Prevent calling `$this->getSession()` twice in case the Request (and the below factory) is cloned
-                static $sess;
+            $request->setSessionFactory(
+                function () use ($request) {
+                    // Prevent calling `$this->getSession()` twice in case the Request (and the below factory) is cloned
+                    static $sess;
 
-                if (!$sess) {
-                    $sess = $this->getSession();
-                    $request->setSession($sess);
+                    if (!$sess) {
+                        $sess = $this->getSession();
+                        $request->setSession($sess);
 
-                    /*
-                     * For supporting sessions in php runtime with runners like roadrunner or swoole, the session
-                     * cookie needs to be read from the cookie bag and set on the session storage.
-                     *
-                     * Do not set it when a native php session is active.
-                     */
-                    if ($sess && !$sess->isStarted() && \PHP_SESSION_ACTIVE !== session_status()) {
-                        $sessionId = $sess->getId() ?: $request->cookies->get($sess->getName(), '');
-                        $sess->setId($sessionId);
+                        /*
+                         * For supporting sessions in php runtime with runners like roadrunner or swoole, the session
+                         * cookie needs to be read from the cookie bag and set on the session storage.
+                         *
+                         * Do not set it when a native php session is active.
+                         */
+                        if ($sess && !$sess->isStarted() && \PHP_SESSION_ACTIVE !== session_status()) {
+                            $sessionId = $sess->getId() ?: $request->cookies->get($sess->getName(), '');
+                            $sess->setId($sessionId);
+                        }
                     }
-                }
 
-                return $sess;
-            });
+                    return $sess;
+                }
+            );
         }
     }
 

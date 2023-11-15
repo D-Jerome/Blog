@@ -45,10 +45,12 @@ class LocaleDataGenerator extends AbstractDataGenerator
     protected function compileTemporaryBundles(BundleCompilerInterface $compiler, string $sourceDir, string $tempDir): void
     {
         $filesystem = new Filesystem();
-        $filesystem->mkdir([
+        $filesystem->mkdir(
+            [
             $tempDir.'/lang',
             $tempDir.'/region',
-        ]);
+            ]
+        );
         $compiler->compile($sourceDir.'/lang', $tempDir.'/lang');
         $compiler->compile($sourceDir.'/region', $tempDir.'/region');
     }

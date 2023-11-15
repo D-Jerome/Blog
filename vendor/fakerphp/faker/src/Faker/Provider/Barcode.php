@@ -35,7 +35,7 @@ class Barcode extends Base
     /**
      * ISBN-10 check digit
      *
-     * @see http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digits
+     * @see        http://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digits
      * @deprecated Use \Faker\Calculator\Isbn::checksum() instead
      *
      * @param string $input ISBN without check-digit

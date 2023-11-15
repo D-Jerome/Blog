@@ -121,7 +121,11 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
 
         static $setSession;
 
-        $setSession ??= \Closure::bind(static function ($subRequest, $request) { $subRequest->session = $request->session; }, null, Request::class);
+        $setSession ??= \Closure::bind(
+            static function ($subRequest, $request) {
+                $subRequest->session = $request->session; 
+            }, null, Request::class
+        );
         $setSession($subRequest, $request);
 
         if ($request->get('_format')) {

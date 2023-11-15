@@ -65,11 +65,13 @@ abstract class BigNumber implements \Serializable, \JsonSerializable
 
         $value = \is_float($value) ? self::floatToString($value) : $value;
 
-        $throw = static function() use ($value) : void {
-            throw new NumberFormatException(\sprintf(
-                'The given value "%s" does not represent a valid number.',
-                $value
-            ));
+        $throw = static function () use ($value) : void {
+            throw new NumberFormatException(
+                \sprintf(
+                    'The given value "%s" does not represent a valid number.',
+                    $value
+                )
+            );
         };
 
         if (\preg_match(self::PARSE_REGEXP, $value, $matches) !== 1) {
@@ -273,7 +275,9 @@ abstract class BigNumber implements \Serializable, \JsonSerializable
      */
     public static function sum(BigNumber|int|float|string ...$values) : static
     {
-        /** @var static|null $sum */
+        /**
+ * @var static|null $sum 
+*/
         $sum = null;
 
         foreach ($values as $value) {
@@ -317,7 +321,9 @@ abstract class BigNumber implements \Serializable, \JsonSerializable
             return $b->plus($a);
         }
 
-        /** @var BigInteger $a */
+        /**
+ * @var BigInteger $a 
+*/
 
         return $a->plus($b);
     }

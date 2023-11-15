@@ -16,6 +16,5 @@ use Symfony\Component\Notifier\Bridge\Twilio\Webhook\TwilioRequestParser;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('notifier.webhook.request_parser.twilio', TwilioRequestParser::class)
-        ->alias(TwilioRequestParser::class, 'notifier.webhook.request_parser.twilio')
-    ;
+        ->alias(TwilioRequestParser::class, 'notifier.webhook.request_parser.twilio');
 };

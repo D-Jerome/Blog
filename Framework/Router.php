@@ -50,8 +50,8 @@ class Router
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
-                    $typeControllerObj = substr($route->getController(),strrpos($route->getController(),'\\') + 1);
-                    if ($this->validateRoute($typeControllerObj ,$paramsValues) === TRUE ) {
+                    $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
+                    if ($this->validateRoute($typeControllerObj, $paramsValues) === true ) {
                         $route->setParams($request->getParams());
                         return $route;
                     }
@@ -67,7 +67,7 @@ class Router
      * validateRoute: verify the Existance of page and return Ture or False
      *
      * @param  string $typeObj
-     * @param  array $matches
+     * @param  array  $matches
      * @return bool
      */
     private function validateRoute(string $typeObj, array $matches): bool

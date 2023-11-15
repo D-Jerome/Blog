@@ -2,8 +2,9 @@
 
 namespace Framework\Helpers;
 
-class Text 
-{    
+class Text
+{
+    
 
     /**
      * toSlug: create a slug text of the @param

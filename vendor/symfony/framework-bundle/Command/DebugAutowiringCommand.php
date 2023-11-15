@@ -46,11 +46,14 @@ class DebugAutowiringCommand extends ContainerDebugCommand
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('search', InputArgument::OPTIONAL, 'A search filter'),
                 new InputOption('all', null, InputOption::VALUE_NONE, 'Show also services that are not aliased'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command displays the classes and interfaces that
 you can use as type-hints for autowiring:
 
@@ -61,8 +64,7 @@ You can also pass a search term to filter the list:
   <info>php %command.full_name% log</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -159,7 +161,8 @@ EOF
     private function getFileLink(string $class): string
     {
         if (null === $this->fileLinkFormatter
-            || (null === $r = $this->getContainerBuilder($this->getApplication()->getKernel())->getReflectionClass($class, false))) {
+            || (null === $r = $this->getContainerBuilder($this->getApplication()->getKernel())->getReflectionClass($class, false))
+        ) {
             return '';
         }
 

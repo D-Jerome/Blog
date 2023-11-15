@@ -22,39 +22,47 @@ use Symfony\Component\Cache\Adapter\PhpArrayAdapter;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('annotations.reader', AnnotationReader::class)
-            ->call('addGlobalIgnoredName', ['required']) // @deprecated since Symfony 6.3
+        ->call('addGlobalIgnoredName', ['required']) // @deprecated since Symfony 6.3
 
         ->set('annotations.cached_reader', PsrCachedReader::class)
-            ->args([
+        ->args(
+            [
                 service('annotations.reader'),
                 inline_service(ArrayAdapter::class),
                 abstract_arg('Debug-Flag'),
-            ])
-            ->tag('annotations.cached_reader')
-            ->tag('container.do_not_inline')
+                ]
+        )
+        ->tag('annotations.cached_reader')
+        ->tag('container.do_not_inline')
 
         ->set('annotations.filesystem_cache_adapter', FilesystemAdapter::class)
-            ->args([
+        ->args(
+            [
                 '',
                 0,
                 abstract_arg('Cache-Directory'),
-            ])
+                ]
+        )
 
         ->set('annotations.cache_warmer', AnnotationsCacheWarmer::class)
-            ->args([
+        ->args(
+            [
                 service('annotations.reader'),
                 param('kernel.cache_dir').'/annotations.php',
                 '#^Symfony\\\\(?:Component\\\\HttpKernel\\\\|Bundle\\\\FrameworkBundle\\\\Controller\\\\(?!.*Controller$))#',
                 param('kernel.debug'),
-            ])
+                ]
+        )
 
         ->set('annotations.cache_adapter', PhpArrayAdapter::class)
-            ->factory([PhpArrayAdapter::class, 'create'])
-            ->args([
+        ->factory([PhpArrayAdapter::class, 'create'])
+        ->args(
+            [
                 param('kernel.cache_dir').'/annotations.php',
                 service('cache.annotations'),
-            ])
-            ->tag('container.hot_path')
+                ]
+        )
+        ->tag('container.hot_path')
 
         ->alias('annotation_reader', 'annotations.reader')
         ->alias(Reader::class, 'annotation_reader');

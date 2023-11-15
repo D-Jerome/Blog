@@ -97,7 +97,9 @@ final class LockRegistry
         }
 
         self::$signalingException ??= unserialize("O:9:\"Exception\":1:{s:16:\"\0Exception\0trace\";a:0:{}}");
-        self::$signalingCallback ??= function () { throw self::$signalingException; };
+        self::$signalingCallback ??= function () {
+            throw self::$signalingException; 
+        };
 
         while (true) {
             try {
@@ -154,7 +156,10 @@ final class LockRegistry
         if (null !== $h = self::$openedFiles[$key] ?? null) {
             return $h;
         }
-        set_error_handler(function () {});
+        set_error_handler(
+            function () {
+            }
+        );
         try {
             $h = fopen(self::$files[$key], 'r+');
         } finally {

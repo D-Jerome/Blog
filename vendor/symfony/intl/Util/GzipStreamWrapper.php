@@ -16,10 +16,14 @@ namespace Symfony\Component\Intl\Util;
  */
 class GzipStreamWrapper
 {
-    /** @var resource|null */
+    /**
+     * @var resource|null 
+     */
     public $context;
 
-    /** @var resource */
+    /**
+     * @var resource 
+     */
     private $handle;
     private string $path;
 
@@ -34,7 +38,7 @@ class GzipStreamWrapper
             stream_wrapper_register('file', self::class);
         }
 
-        return require $path;
+        return include $path;
     }
 
     public function stream_open(string $path, string $mode): bool

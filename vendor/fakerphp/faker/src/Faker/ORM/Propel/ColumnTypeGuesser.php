@@ -32,11 +32,11 @@ class ColumnTypeGuesser
         $type = $column->getType();
 
         switch ($type) {
-            case \PropelColumnTypes::BOOLEAN:
-            case \PropelColumnTypes::BOOLEAN_EMU:
-                return static function () use ($generator) {
+        case \PropelColumnTypes::BOOLEAN:
+        case \PropelColumnTypes::BOOLEAN_EMU:
+            return static function () use ($generator) {
                     return $generator->boolean;
-                };
+            };
 
             case \PropelColumnTypes::NUMERIC:
             case \PropelColumnTypes::DECIMAL:

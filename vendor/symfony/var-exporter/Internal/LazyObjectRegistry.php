@@ -67,13 +67,15 @@ class LazyObjectRegistry
 
         $resetters = [];
         foreach ($classProperties as $scope => $properties) {
-            $resetters[] = \Closure::bind(static function ($instance, $skippedProperties, $onlyProperties = null) use ($properties) {
-                foreach ($properties as $name => $key) {
-                    if (!\array_key_exists($key, $skippedProperties) && (null === $onlyProperties || \array_key_exists($key, $onlyProperties))) {
-                        unset($instance->$name);
+            $resetters[] = \Closure::bind(
+                static function ($instance, $skippedProperties, $onlyProperties = null) use ($properties) {
+                    foreach ($properties as $name => $key) {
+                        if (!\array_key_exists($key, $skippedProperties) && (null === $onlyProperties || \array_key_exists($key, $onlyProperties))) {
+                            unset($instance->$name);
+                        }
                     }
-                }
-            }, null, $scope);
+                }, null, $scope
+            );
         }
 
         $resetters[] = static function ($instance, $skippedProperties, $onlyProperties = null) {
@@ -89,7 +91,8 @@ class LazyObjectRegistry
 
     public static function getClassAccessors($class)
     {
-        return \Closure::bind(static fn () => [
+        return \Closure::bind(
+            static fn () => [
             'get' => static function &($instance, $name, $readonly) {
                 if (!$readonly) {
                     return $instance->$name;
@@ -105,7 +108,8 @@ class LazyObjectRegistry
             'unset' => static function ($instance, $name) {
                 unset($instance->$name);
             },
-        ], null, \Closure::class === $class ? null : $class)();
+            ], null, \Closure::class === $class ? null : $class
+        )();
     }
 
     public static function getParentMethods($class)

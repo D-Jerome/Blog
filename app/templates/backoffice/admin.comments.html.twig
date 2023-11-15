@@ -46,7 +46,7 @@
                     {% endif %}
                    
                             <th scope="row">{{ comment.id }}</th>
-                            <td>{{ comment.content | raw }}</td>
+                            <td>{{ comment.excerptContent | raw }}</td>
                             <td>{{ comment.createdAt | format_datetime(locale='fr') }}</td>
                             <td>{{ comment.username }}</td>
                             <td>

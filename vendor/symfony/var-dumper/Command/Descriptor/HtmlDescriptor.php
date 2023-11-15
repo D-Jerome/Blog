@@ -65,12 +65,15 @@ class HtmlDescriptor implements DumpDescriptorInterface
         }
 
         $isoDate = $this->extractDate($context, 'c');
-        $tags = array_filter([
+        $tags = array_filter(
+            [
             'controller' => $controller ?? null,
             'project dir' => $projectDir ?? null,
-        ]);
+            ]
+        );
 
-        $output->writeln(<<<HTML
+        $output->writeln(
+            <<<HTML
 <article data-dedup-id="$dedupIdentifier">
     <header>
         <div class="row">

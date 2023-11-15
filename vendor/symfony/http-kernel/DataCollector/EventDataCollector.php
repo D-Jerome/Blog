@@ -28,7 +28,9 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 class EventDataCollector extends DataCollector implements LateDataCollectorInterface
 {
-    /** @var iterable<EventDispatcherInterface> */
+    /**
+     * @var iterable<EventDispatcherInterface> 
+     */
     private iterable $dispatchers;
     private ?Request $currentRequest = null;
 

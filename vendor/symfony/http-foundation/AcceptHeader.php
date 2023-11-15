@@ -48,16 +48,20 @@ class AcceptHeader
     {
         $parts = HeaderUtils::split($headerValue ?? '', ',;=');
 
-        return new self(array_map(function ($subParts) {
-            static $index = 0;
-            $part = array_shift($subParts);
-            $attributes = HeaderUtils::combine($subParts);
+        return new self(
+            array_map(
+                function ($subParts) {
+                    static $index = 0;
+                    $part = array_shift($subParts);
+                    $attributes = HeaderUtils::combine($subParts);
 
-            $item = new AcceptHeaderItem($part[0], $attributes);
-            $item->setIndex($index++);
+                    $item = new AcceptHeaderItem($part[0], $attributes);
+                    $item->setIndex($index++);
 
-            return $item;
-        }, $parts));
+                    return $item;
+                }, $parts
+            )
+        );
     }
 
     /**
@@ -133,16 +137,18 @@ class AcceptHeader
     private function sort(): void
     {
         if (!$this->sorted) {
-            uasort($this->items, function (AcceptHeaderItem $a, AcceptHeaderItem $b) {
-                $qA = $a->getQuality();
-                $qB = $b->getQuality();
+            uasort(
+                $this->items, function (AcceptHeaderItem $a, AcceptHeaderItem $b) {
+                    $qA = $a->getQuality();
+                    $qB = $b->getQuality();
 
-                if ($qA === $qB) {
-                    return $a->getIndex() > $b->getIndex() ? 1 : -1;
+                    if ($qA === $qB) {
+                        return $a->getIndex() > $b->getIndex() ? 1 : -1;
+                    }
+
+                    return $qA > $qB ? -1 : 1;
                 }
-
-                return $qA > $qB ? -1 : 1;
-            });
+            );
 
             $this->sorted = true;
         }

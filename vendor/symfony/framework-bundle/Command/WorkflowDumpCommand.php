@@ -69,13 +69,16 @@ class WorkflowDumpCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::REQUIRED, 'A workflow name'),
                 new InputArgument('marking', InputArgument::IS_ARRAY, 'A marking (a list of places)'),
                 new InputOption('label', 'l', InputOption::VALUE_REQUIRED, 'Label a graph'),
                 new InputOption('dump-format', null, InputOption::VALUE_REQUIRED, 'The dump format ['.implode('|', self::DUMP_FORMAT_OPTIONS).']', 'dot'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command dumps the graphical representation of a
 workflow in different formats
 
@@ -83,8 +86,7 @@ workflow in different formats
 <info>PUML</info>: %command.full_name% <workflow name> --dump-format=puml | java -jar plantuml.jar -p > workflow.png
 <info>MERMAID</info>: %command.full_name% <workflow name> --dump-format=mermaid | mmdc -o workflow.svg
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -111,19 +113,19 @@ EOF
         }
 
         switch ($input->getOption('dump-format')) {
-            case 'puml':
-                $transitionType = 'workflow' === $type ? PlantUmlDumper::WORKFLOW_TRANSITION : PlantUmlDumper::STATEMACHINE_TRANSITION;
-                $dumper = new PlantUmlDumper($transitionType);
-                break;
+        case 'puml':
+            $transitionType = 'workflow' === $type ? PlantUmlDumper::WORKFLOW_TRANSITION : PlantUmlDumper::STATEMACHINE_TRANSITION;
+            $dumper = new PlantUmlDumper($transitionType);
+            break;
 
-            case 'mermaid':
-                $transitionType = 'workflow' === $type ? MermaidDumper::TRANSITION_TYPE_WORKFLOW : MermaidDumper::TRANSITION_TYPE_STATEMACHINE;
-                $dumper = new MermaidDumper($transitionType);
-                break;
+        case 'mermaid':
+            $transitionType = 'workflow' === $type ? MermaidDumper::TRANSITION_TYPE_WORKFLOW : MermaidDumper::TRANSITION_TYPE_STATEMACHINE;
+            $dumper = new MermaidDumper($transitionType);
+            break;
 
-            case 'dot':
-            default:
-                $dumper = ('workflow' === $type) ? new GraphvizDumper() : new StateMachineGraphvizDumper();
+        case 'dot':
+        default:
+            $dumper = ('workflow' === $type) ? new GraphvizDumper() : new StateMachineGraphvizDumper();
         }
 
         $marking = new Marking();

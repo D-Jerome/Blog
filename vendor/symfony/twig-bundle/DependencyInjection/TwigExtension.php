@@ -48,9 +48,11 @@ class TwigExtension extends Extension
             $loader->load('form.php');
 
             if (is_subclass_of(AbstractRendererEngine::class, ResetInterface::class)) {
-                $container->getDefinition('twig.form.engine')->addTag('kernel.reset', [
+                $container->getDefinition('twig.form.engine')->addTag(
+                    'kernel.reset', [
                     'method' => 'reset',
-                ]);
+                    ]
+                );
             }
         }
 
@@ -155,16 +157,20 @@ class TwigExtension extends Extension
             $config['autoescape'] = [new Reference($config['autoescape_service']), $config['autoescape_service_method']];
         }
 
-        $container->getDefinition('twig')->replaceArgument(1, array_intersect_key($config, [
-            'debug' => true,
-            'charset' => true,
-            'base_template_class' => true,
-            'strict_variables' => true,
-            'autoescape' => true,
-            'cache' => true,
-            'auto_reload' => true,
-            'optimizations' => true,
-        ]));
+        $container->getDefinition('twig')->replaceArgument(
+            1, array_intersect_key(
+                $config, [
+                'debug' => true,
+                'charset' => true,
+                'base_template_class' => true,
+                'strict_variables' => true,
+                'autoescape' => true,
+                'cache' => true,
+                'auto_reload' => true,
+                'optimizations' => true,
+                ]
+            )
+        );
 
         $container->registerForAutoconfiguration(\Twig_ExtensionInterface::class)->addTag('twig.extension');
         $container->registerForAutoconfiguration(\Twig_LoaderInterface::class)->addTag('twig.loader');

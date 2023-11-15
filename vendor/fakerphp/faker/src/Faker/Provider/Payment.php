@@ -273,21 +273,21 @@ class Payment extends Base
 
         foreach (str_split($expandedFormat) as $class) {
             switch ($class) {
-                default:
-                case 'c':
-                    $result .= Miscellaneous::boolean() ? static::randomDigit() : strtoupper(static::randomLetter());
+            default:
+            case 'c':
+                $result .= Miscellaneous::boolean() ? static::randomDigit() : strtoupper(static::randomLetter());
 
-                    break;
+                break;
 
-                case 'a':
-                    $result .= strtoupper(static::randomLetter());
+            case 'a':
+                $result .= strtoupper(static::randomLetter());
 
-                    break;
+                break;
 
-                case 'n':
-                    $result .= static::randomDigit();
+            case 'n':
+                $result .= static::randomDigit();
 
-                    break;
+                break;
             }
         }
 
@@ -301,7 +301,7 @@ class Payment extends Base
      *
      * @example 'RZTIAT22263'
      *
-     * @see    http://en.wikipedia.org/wiki/ISO_9362
+     * @see http://en.wikipedia.org/wiki/ISO_9362
      *
      * @return string Swift/Bic number
      */

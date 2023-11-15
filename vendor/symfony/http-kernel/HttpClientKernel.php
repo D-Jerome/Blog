@@ -50,10 +50,12 @@ final class HttpClientKernel implements HttpKernelInterface
             $headers = array_merge($headers, $part->getPreparedHeaders()->toArray());
             $body = $part->bodyToIterable();
         }
-        $response = $this->client->request($request->getMethod(), $request->getUri(), [
+        $response = $this->client->request(
+            $request->getMethod(), $request->getUri(), [
             'headers' => $headers,
             'body' => $body,
-        ] + $request->attributes->get('http_client_options', []));
+            ] + $request->attributes->get('http_client_options', [])
+        );
 
         $response = new Response($response->getContent(!$catch), $response->getStatusCode(), $response->getHeaders(!$catch));
 

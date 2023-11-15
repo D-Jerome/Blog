@@ -31,7 +31,6 @@ class DescriptorHelper extends BaseDescriptorHelper
             ->register('txt', new TextDescriptor($fileLinkFormatter))
             ->register('xml', new XmlDescriptor())
             ->register('json', new JsonDescriptor())
-            ->register('md', new MarkdownDescriptor())
-        ;
+            ->register('md', new MarkdownDescriptor());
     }
 }

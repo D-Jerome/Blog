@@ -158,32 +158,34 @@ class Router extends BaseRouter implements WarmableInterface, ServiceSubscriberI
             return $value;
         }
 
-        $escapedValue = preg_replace_callback('/%%|%([^%\s]++)%/', function ($match) use ($value) {
-            // skip %%
-            if (!isset($match[1])) {
-                return '%%';
-            }
-
-            if (preg_match('/^env\((?:\w++:)*+\w++\)$/', $match[1])) {
-                throw new RuntimeException(sprintf('Using "%%%s%%" is not allowed in routing configuration.', $match[1]));
-            }
-
-            $resolved = ($this->paramFetcher)($match[1]);
-
-            if (\is_scalar($resolved)) {
-                $this->collectedParameters[$match[1]] = $resolved;
-
-                if (\is_string($resolved)) {
-                    $resolved = $this->resolve($resolved);
+        $escapedValue = preg_replace_callback(
+            '/%%|%([^%\s]++)%/', function ($match) use ($value) {
+                // skip %%
+                if (!isset($match[1])) {
+                    return '%%';
                 }
+
+                if (preg_match('/^env\((?:\w++:)*+\w++\)$/', $match[1])) {
+                    throw new RuntimeException(sprintf('Using "%%%s%%" is not allowed in routing configuration.', $match[1]));
+                }
+
+                $resolved = ($this->paramFetcher)($match[1]);
 
                 if (\is_scalar($resolved)) {
-                    return false === $resolved ? '0' : (string) $resolved;
-                }
-            }
+                    $this->collectedParameters[$match[1]] = $resolved;
 
-            throw new RuntimeException(sprintf('The container parameter "%s", used in the route configuration value "%s", must be a string or numeric, but it is of type "%s".', $match[1], $value, get_debug_type($resolved)));
-        }, $value);
+                    if (\is_string($resolved)) {
+                        $resolved = $this->resolve($resolved);
+                    }
+
+                    if (\is_scalar($resolved)) {
+                        return false === $resolved ? '0' : (string) $resolved;
+                    }
+                }
+
+                throw new RuntimeException(sprintf('The container parameter "%s", used in the route configuration value "%s", must be a string or numeric, but it is of type "%s".', $match[1], $value, get_debug_type($resolved)));
+            }, $value
+        );
 
         return str_replace('%%', '%', $escapedValue);
     }

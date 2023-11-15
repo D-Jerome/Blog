@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -26,9 +26,9 @@ interface NameGeneratorInterface
      * Generate a binary string from a namespace and name hashed together with
      * the specified hashing algorithm
      *
-     * @param UuidInterface $ns The namespace
-     * @param string $name The name to use for creating a UUID
-     * @param string $hashAlgorithm The hashing algorithm to use
+     * @param UuidInterface $ns            The namespace
+     * @param string        $name          The name to use for creating a UUID
+     * @param string        $hashAlgorithm The hashing algorithm to use
      *
      * @return string A binary string
      *

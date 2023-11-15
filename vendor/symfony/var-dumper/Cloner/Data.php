@@ -232,17 +232,17 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
         $keys = [$key];
 
         switch ($item->type) {
-            case Stub::TYPE_OBJECT:
-                $keys[] = Caster::PREFIX_DYNAMIC.$key;
-                $keys[] = Caster::PREFIX_PROTECTED.$key;
-                $keys[] = Caster::PREFIX_VIRTUAL.$key;
-                $keys[] = "\0$item->class\0$key";
-                // no break
-            case Stub::TYPE_ARRAY:
-            case Stub::TYPE_RESOURCE:
-                break;
-            default:
-                return null;
+        case Stub::TYPE_OBJECT:
+            $keys[] = Caster::PREFIX_DYNAMIC.$key;
+            $keys[] = Caster::PREFIX_PROTECTED.$key;
+            $keys[] = Caster::PREFIX_VIRTUAL.$key;
+            $keys[] = "\0$item->class\0$key";
+            // no break
+        case Stub::TYPE_ARRAY:
+        case Stub::TYPE_RESOURCE:
+            break;
+        default:
+            return null;
         }
 
         $data = null;
@@ -340,39 +340,39 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
                 $children = [];
             }
             switch ($item->type) {
-                case Stub::TYPE_STRING:
-                    $dumper->dumpString($cursor, $item->value, Stub::STRING_BINARY === $item->class, $cut);
-                    break;
+            case Stub::TYPE_STRING:
+                $dumper->dumpString($cursor, $item->value, Stub::STRING_BINARY === $item->class, $cut);
+                break;
 
-                case Stub::TYPE_ARRAY:
-                    $item = clone $item;
-                    $item->type = $item->class;
-                    $item->class = $item->value;
-                    // no break
-                case Stub::TYPE_OBJECT:
-                case Stub::TYPE_RESOURCE:
-                    $withChildren = $children && $cursor->depth !== $this->maxDepth && $this->maxItemsPerDepth;
-                    $dumper->enterHash($cursor, $item->type, $item->class, $withChildren);
-                    if ($withChildren) {
-                        if ($cursor->skipChildren) {
-                            $withChildren = false;
-                            $cut = -1;
-                        } else {
-                            $cut = $this->dumpChildren($dumper, $cursor, $refs, $children, $cut, $item->type, null !== $item->class);
-                        }
-                    } elseif ($children && 0 <= $cut) {
-                        $cut += \count($children);
+            case Stub::TYPE_ARRAY:
+                $item = clone $item;
+                $item->type = $item->class;
+                $item->class = $item->value;
+                // no break
+            case Stub::TYPE_OBJECT:
+            case Stub::TYPE_RESOURCE:
+                $withChildren = $children && $cursor->depth !== $this->maxDepth && $this->maxItemsPerDepth;
+                $dumper->enterHash($cursor, $item->type, $item->class, $withChildren);
+                if ($withChildren) {
+                    if ($cursor->skipChildren) {
+                        $withChildren = false;
+                        $cut = -1;
+                    } else {
+                        $cut = $this->dumpChildren($dumper, $cursor, $refs, $children, $cut, $item->type, null !== $item->class);
                     }
-                    $cursor->skipChildren = false;
-                    $dumper->leaveHash($cursor, $item->type, $item->class, $withChildren, $cut);
-                    break;
+                } elseif ($children && 0 <= $cut) {
+                    $cut += \count($children);
+                }
+                $cursor->skipChildren = false;
+                $dumper->leaveHash($cursor, $item->type, $item->class, $withChildren, $cut);
+                break;
 
-                case Stub::TYPE_SCALAR:
-                    $dumper->dumpScalar($cursor, 'default', $item->attr['value']);
-                    break;
+            case Stub::TYPE_SCALAR:
+                $dumper->dumpScalar($cursor, 'default', $item->attr['value']);
+                break;
 
-                default:
-                    throw new \RuntimeException(sprintf('Unexpected Stub type: "%s".', $item->type));
+            default:
+                throw new \RuntimeException(sprintf('Unexpected Stub type: "%s".', $item->type));
             }
         } elseif ('array' === $type) {
             $dumper->enterHash($cursor, Cursor::HASH_INDEXED, 0, false);

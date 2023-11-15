@@ -37,8 +37,7 @@ final class ContainerLintCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setHelp('This command parses service definitions and ensures that injected values match the type declarations of each services\' class.')
-        ;
+            ->setHelp('This command parses service definitions and ensures that injected values match the type declarations of each services\' class.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -83,11 +82,13 @@ final class ContainerLintCommand extends Command
                 throw new RuntimeException(sprintf('This command does not support the application kernel: "%s" does not extend "%s".', get_debug_type($kernel), Kernel::class));
             }
 
-            $buildContainer = \Closure::bind(function (): ContainerBuilder {
-                $this->initializeBundles();
+            $buildContainer = \Closure::bind(
+                function (): ContainerBuilder {
+                    $this->initializeBundles();
 
-                return $this->buildContainer();
-            }, $kernel, $kernel::class);
+                    return $this->buildContainer();
+                }, $kernel, $kernel::class
+            );
             $container = $buildContainer();
         } else {
             if (!$kernelContainer instanceof Container) {

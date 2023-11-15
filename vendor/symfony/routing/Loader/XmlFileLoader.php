@@ -73,24 +73,24 @@ class XmlFileLoader extends FileLoader
         }
 
         switch ($node->localName) {
-            case 'route':
-                $this->parseRoute($collection, $node, $path);
+        case 'route':
+            $this->parseRoute($collection, $node, $path);
+            break;
+        case 'import':
+            $this->parseImport($collection, $node, $path, $file);
+            break;
+        case 'when':
+            if (!$this->env || $node->getAttribute('env') !== $this->env) {
                 break;
-            case 'import':
-                $this->parseImport($collection, $node, $path, $file);
-                break;
-            case 'when':
-                if (!$this->env || $node->getAttribute('env') !== $this->env) {
-                    break;
+            }
+            foreach ($node->childNodes as $node) {
+                if ($node instanceof \DOMElement) {
+                    $this->parseNode($collection, $node, $path, $file);
                 }
-                foreach ($node->childNodes as $node) {
-                    if ($node instanceof \DOMElement) {
-                        $this->parseNode($collection, $node, $path, $file);
-                    }
-                }
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "route" or "import".', $node->localName, $path));
+            }
+            break;
+        default:
+            throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "route" or "import".', $node->localName, $path));
         }
     }
 
@@ -157,10 +157,14 @@ class XmlFileLoader extends FileLoader
      */
     protected function parseImport(RouteCollection $collection, \DOMElement $node, string $path, string $file)
     {
-        /** @var \DOMElement $resourceElement */
+        /**
+ * @var \DOMElement $resourceElement 
+*/
         if (!($resource = $node->getAttribute('resource') ?: null) && $resourceElement = $node->getElementsByTagName('resource')[0] ?? null) {
             $resource = [];
-            /** @var \DOMAttr $attribute */
+            /**
+ * @var \DOMAttr $attribute 
+*/
             foreach ($resourceElement->attributes as $attribute) {
                 $resource[$attribute->name] = $attribute->value;
             }
@@ -199,7 +203,9 @@ class XmlFileLoader extends FileLoader
 
         $this->setCurrentDir(\dirname($path));
 
-        /** @var RouteCollection[] $imported */
+        /**
+ * @var RouteCollection[] $imported 
+*/
         $imported = $this->import($resource, '' !== $type ? $type : null, false, $file, $exclude) ?: [];
 
         if (!\is_array($imported)) {
@@ -258,43 +264,45 @@ class XmlFileLoader extends FileLoader
         $paths = [];
         $hosts = [];
 
-        /** @var \DOMElement $n */
+        /**
+ * @var \DOMElement $n 
+*/
         foreach ($node->getElementsByTagNameNS(self::NAMESPACE_URI, '*') as $n) {
             if ($node !== $n->parentNode) {
                 continue;
             }
 
             switch ($n->localName) {
-                case 'path':
-                    $paths[$n->getAttribute('locale')] = trim($n->textContent);
-                    break;
-                case 'host':
-                    $hosts[$n->getAttribute('locale')] = trim($n->textContent);
-                    break;
-                case 'prefix':
-                    $prefixes[$n->getAttribute('locale')] = trim($n->textContent);
-                    break;
-                case 'default':
-                    if ($this->isElementValueNull($n)) {
-                        $defaults[$n->getAttribute('key')] = null;
-                    } else {
-                        $defaults[$n->getAttribute('key')] = $this->parseDefaultsConfig($n, $path);
-                    }
+            case 'path':
+                $paths[$n->getAttribute('locale')] = trim($n->textContent);
+                break;
+            case 'host':
+                $hosts[$n->getAttribute('locale')] = trim($n->textContent);
+                break;
+            case 'prefix':
+                $prefixes[$n->getAttribute('locale')] = trim($n->textContent);
+                break;
+            case 'default':
+                if ($this->isElementValueNull($n)) {
+                    $defaults[$n->getAttribute('key')] = null;
+                } else {
+                    $defaults[$n->getAttribute('key')] = $this->parseDefaultsConfig($n, $path);
+                }
 
-                    break;
-                case 'requirement':
-                    $requirements[$n->getAttribute('key')] = trim($n->textContent);
-                    break;
-                case 'option':
-                    $options[$n->getAttribute('key')] = XmlUtils::phpize(trim($n->textContent));
-                    break;
-                case 'condition':
-                    $condition = trim($n->textContent);
-                    break;
-                case 'resource':
-                    break;
-                default:
-                    throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement", "option" or "condition".', $n->localName, $path));
+                break;
+            case 'requirement':
+                $requirements[$n->getAttribute('key')] = trim($n->textContent);
+                break;
+            case 'option':
+                $options[$n->getAttribute('key')] = XmlUtils::phpize(trim($n->textContent));
+                break;
+            case 'condition':
+                $condition = trim($n->textContent);
+                break;
+            case 'resource':
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "default", "requirement", "option" or "condition".', $n->localName, $path));
             }
         }
 
@@ -375,48 +383,48 @@ class XmlFileLoader extends FileLoader
         }
 
         switch ($node->localName) {
-            case 'bool':
-                return 'true' === trim($node->nodeValue) || '1' === trim($node->nodeValue);
-            case 'int':
-                return (int) trim($node->nodeValue);
-            case 'float':
-                return (float) trim($node->nodeValue);
-            case 'string':
-                return trim($node->nodeValue);
-            case 'list':
-                $list = [];
+        case 'bool':
+            return 'true' === trim($node->nodeValue) || '1' === trim($node->nodeValue);
+        case 'int':
+            return (int) trim($node->nodeValue);
+        case 'float':
+            return (float) trim($node->nodeValue);
+        case 'string':
+            return trim($node->nodeValue);
+        case 'list':
+            $list = [];
 
-                foreach ($node->childNodes as $element) {
-                    if (!$element instanceof \DOMElement) {
-                        continue;
-                    }
-
-                    if (self::NAMESPACE_URI !== $element->namespaceURI) {
-                        continue;
-                    }
-
-                    $list[] = $this->parseDefaultNode($element, $path);
+            foreach ($node->childNodes as $element) {
+                if (!$element instanceof \DOMElement) {
+                    continue;
                 }
 
-                return $list;
-            case 'map':
-                $map = [];
-
-                foreach ($node->childNodes as $element) {
-                    if (!$element instanceof \DOMElement) {
-                        continue;
-                    }
-
-                    if (self::NAMESPACE_URI !== $element->namespaceURI) {
-                        continue;
-                    }
-
-                    $map[$element->getAttribute('key')] = $this->parseDefaultNode($element, $path);
+                if (self::NAMESPACE_URI !== $element->namespaceURI) {
+                    continue;
                 }
 
-                return $map;
-            default:
-                throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "bool", "int", "float", "string", "list", or "map".', $node->localName, $path));
+                $list[] = $this->parseDefaultNode($element, $path);
+            }
+
+            return $list;
+        case 'map':
+            $map = [];
+
+            foreach ($node->childNodes as $element) {
+                if (!$element instanceof \DOMElement) {
+                    continue;
+                }
+
+                if (self::NAMESPACE_URI !== $element->namespaceURI) {
+                    continue;
+                }
+
+                $map[$element->getAttribute('key')] = $this->parseDefaultNode($element, $path);
+            }
+
+            return $map;
+        default:
+            throw new \InvalidArgumentException(sprintf('Unknown tag "%s" used in file "%s". Expected "bool", "int", "float", "string", "list", or "map".', $node->localName, $path));
         }
     }
 

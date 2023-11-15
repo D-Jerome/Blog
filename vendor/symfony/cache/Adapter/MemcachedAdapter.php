@@ -96,7 +96,11 @@ class MemcachedAdapter extends AbstractAdapter
         if (!static::isSupported()) {
             throw new CacheException('Memcached > 3.1.5 is required.');
         }
-        set_error_handler(function ($type, $msg, $file, $line) { throw new \ErrorException($msg, 0, $type, $file, $line); });
+        set_error_handler(
+            function ($type, $msg, $file, $line) {
+                throw new \ErrorException($msg, 0, $type, $file, $line); 
+            }
+        );
         try {
             $client = new \Memcached($options['persistent_id'] ?? null);
             $username = $options['username'] ?? null;
@@ -110,13 +114,15 @@ class MemcachedAdapter extends AbstractAdapter
                 if (!str_starts_with($dsn, 'memcached:')) {
                     throw new InvalidArgumentException('Invalid Memcached DSN: it does not start with "memcached:".');
                 }
-                $params = preg_replace_callback('#^memcached:(//)?(?:([^@]*+)@)?#', function ($m) use (&$username, &$password) {
-                    if (!empty($m[2])) {
-                        [$username, $password] = explode(':', $m[2], 2) + [1 => null];
-                    }
+                $params = preg_replace_callback(
+                    '#^memcached:(//)?(?:([^@]*+)@)?#', function ($m) use (&$username, &$password) {
+                        if (!empty($m[2])) {
+                            [$username, $password] = explode(':', $m[2], 2) + [1 => null];
+                        }
 
-                    return 'file:'.($m[1] ?? '');
-                }, $dsn);
+                        return 'file:'.($m[1] ?? '');
+                    }, $dsn
+                );
                 if (false === $params = parse_url($params)) {
                     throw new InvalidArgumentException('Invalid Memcached DSN.');
                 }

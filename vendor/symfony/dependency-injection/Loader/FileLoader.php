@@ -42,7 +42,9 @@ abstract class FileLoader extends BaseFileLoader
     protected $instanceof = [];
     protected $interfaces = [];
     protected $singlyImplemented = [];
-    /** @var array<string, Alias> */
+    /**
+     * @var array<string, Alias> 
+     */
     protected $aliases = [];
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = true;
 
@@ -167,7 +169,9 @@ abstract class FileLoader extends BaseFileLoader
                 $r = $this->container->getReflectionClass($class);
                 $defaultAlias = 1 === \count($interfaces) ? $interfaces[0] : null;
                 foreach ($r->getAttributes(AsAlias::class) as $attr) {
-                    /** @var AsAlias $attribute */
+                    /**
+ * @var AsAlias $attribute 
+*/
                     $attribute = $attr->newInstance();
                     $alias = $attribute->id ?? $defaultAlias;
                     $public = $attribute->public;

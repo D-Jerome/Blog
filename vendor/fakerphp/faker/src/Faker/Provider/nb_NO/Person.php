@@ -308,18 +308,18 @@ class Person extends \Faker\Provider\Person
         $randomDigits = (string) static::numerify('##');
 
         switch ($gender) {
-            case static::GENDER_MALE:
-                $genderDigit = static::randomElement([1, 3, 5, 7, 9]);
+        case static::GENDER_MALE:
+            $genderDigit = static::randomElement([1, 3, 5, 7, 9]);
 
-                break;
+            break;
 
-            case static::GENDER_FEMALE:
-                $genderDigit = static::randomElement([0, 2, 4, 6, 8]);
+        case static::GENDER_FEMALE:
+            $genderDigit = static::randomElement([0, 2, 4, 6, 8]);
 
-                break;
+            break;
 
-            default:
-                $genderDigit = (string) static::numerify('#');
+        default:
+            $genderDigit = (string) static::numerify('#');
         }
 
         $digits = $datePart . $randomDigits . $genderDigit;

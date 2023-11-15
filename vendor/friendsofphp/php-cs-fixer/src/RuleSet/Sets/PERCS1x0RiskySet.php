@@ -24,7 +24,7 @@ use PhpCsFixer\RuleSet\AbstractRuleSetDescription;
  * @TODO 4.0 Remove this class
  *
  * @deprecated Use `@PER-CS2.0:risky` instead.
- * @see https://github.com/php-fig/per-coding-style/blob/1.0.0/spec.md
+ * @see        https://github.com/php-fig/per-coding-style/blob/1.0.0/spec.md
  */
 final class PERCS1x0RiskySet extends AbstractRuleSetDescription
 {

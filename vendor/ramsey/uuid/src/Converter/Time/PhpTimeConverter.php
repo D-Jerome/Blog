@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -92,7 +92,9 @@ class PhpTimeConverter implements TimeConverterInterface
 
         // Check to see whether we've overflowed the max/min integer size.
         // If so, we will default to a different time converter.
-        /** @psalm-suppress RedundantCondition */
+        /**
+ * @psalm-suppress RedundantCondition 
+*/
         if (!is_int($uuidTime)) {
             return $this->fallbackConverter->calculateTime(
                 $seconds->toString(),

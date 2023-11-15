@@ -2,8 +2,9 @@
 
 /**
  * Sinhalese PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Ayesh Karunaratne <ayesh@aye.sh>
+ * @author  Ayesh Karunaratne <ayesh@aye.sh>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP දෝෂය: සත්‍යාපනය අසාර්ථක විය.';

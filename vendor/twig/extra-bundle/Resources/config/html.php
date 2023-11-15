@@ -16,6 +16,5 @@ use Twig\Extra\Html\HtmlExtension;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.extension.html', HtmlExtension::class)
-            ->tag('twig.extension')
-    ;
+        ->tag('twig.extension');
 };

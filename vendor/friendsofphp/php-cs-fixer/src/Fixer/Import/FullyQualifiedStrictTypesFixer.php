@@ -91,7 +91,8 @@ class SomeClass
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder(
                 'leading_backslash_in_global_namespace',
                 'Whether FQCN is prefixed with backslash when that FQCN is used in global namespace context.'
@@ -99,7 +100,8 @@ class SomeClass
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
@@ -207,8 +209,7 @@ class SomeClass
 
                 // if short names are the same, but long one are different then it cannot be shortened
                 foreach ($uses as $useLongName => $useShortName) {
-                    if (
-                        strtolower($typeNameShort) === strtolower($useShortName)
+                    if (strtolower($typeNameShort) === strtolower($useShortName)
                         && strtolower($typeName) !== strtolower($useLongName)
                     ) {
                         continue 2;
@@ -237,8 +238,7 @@ class SomeClass
                 continue;
             }
 
-            if (
-                $tokens[$index]->isGivenKind([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, CT::T_DISJUNCTIVE_NORMAL_FORM_TYPE_PARENTHESIS_CLOSE])
+            if ($tokens[$index]->isGivenKind([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION, CT::T_DISJUNCTIVE_NORMAL_FORM_TYPE_PARENTHESIS_CLOSE])
                 || $index > $endIndex
             ) {
                 if (!$skipNextYield && null !== $typeStartIndex) {

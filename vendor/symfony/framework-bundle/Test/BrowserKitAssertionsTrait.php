@@ -88,10 +88,12 @@ trait BrowserKitAssertionsTrait
 
     public static function assertResponseCookieValueSame(string $name, string $expectedValue, string $path = '/', string $domain = null, string $message = ''): void
     {
-        self::assertThatForResponse(LogicalAnd::fromConstraints(
-            new ResponseConstraint\ResponseHasCookie($name, $path, $domain),
-            new ResponseConstraint\ResponseCookieValueSame($name, $expectedValue, $path, $domain)
-        ), $message);
+        self::assertThatForResponse(
+            LogicalAnd::fromConstraints(
+                new ResponseConstraint\ResponseHasCookie($name, $path, $domain),
+                new ResponseConstraint\ResponseCookieValueSame($name, $expectedValue, $path, $domain)
+            ), $message
+        );
     }
 
     public static function assertResponseIsUnprocessable(string $message = ''): void
@@ -111,10 +113,12 @@ trait BrowserKitAssertionsTrait
 
     public static function assertBrowserCookieValueSame(string $name, string $expectedValue, bool $raw = false, string $path = '/', string $domain = null, string $message = ''): void
     {
-        self::assertThatForClient(LogicalAnd::fromConstraints(
-            new BrowserKitConstraint\BrowserHasCookie($name, $path, $domain),
-            new BrowserKitConstraint\BrowserCookieValueSame($name, $expectedValue, $raw, $path, $domain)
-        ), $message);
+        self::assertThatForClient(
+            LogicalAnd::fromConstraints(
+                new BrowserKitConstraint\BrowserHasCookie($name, $path, $domain),
+                new BrowserKitConstraint\BrowserCookieValueSame($name, $expectedValue, $raw, $path, $domain)
+            ), $message
+        );
     }
 
     public static function assertRequestAttributeValueSame(string $name, string $expectedValue, string $message = ''): void
@@ -142,7 +146,8 @@ trait BrowserKitAssertionsTrait
             self::assertThat(self::getResponse(), $constraint, $message);
         } catch (ExpectationFailedException $exception) {
             if (($serverExceptionMessage = self::getResponse()->headers->get('X-Debug-Exception'))
-                && ($serverExceptionFile = self::getResponse()->headers->get('X-Debug-Exception-File'))) {
+                && ($serverExceptionFile = self::getResponse()->headers->get('X-Debug-Exception-File'))
+            ) {
                 $serverExceptionFile = explode(':', $serverExceptionFile);
                 $exception->__construct($exception->getMessage(), $exception->getComparisonFailure(), new \ErrorException(rawurldecode($serverExceptionMessage), 0, 1, rawurldecode($serverExceptionFile[0]), $serverExceptionFile[1]), $exception->getPrevious());
             }

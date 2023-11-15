@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -75,7 +75,9 @@ class GenericTimeConverter implements TimeConverterInterface
         // Unix epoch. This gives us the correct count of 100-nanosecond
         // intervals since the Gregorian calendar epoch for the given seconds
         // and microseconds.
-        /** @var IntegerObject $uuidTime */
+        /**
+ * @var IntegerObject $uuidTime 
+*/
         $uuidTime = $this->calculator->add(
             $sec,
             $usec,

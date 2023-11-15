@@ -117,7 +117,10 @@ class MockFileSessionStorage extends MockArraySessionStorage
      */
     private function destroy(): void
     {
-        set_error_handler(static function () {});
+        set_error_handler(
+            static function () {
+            }
+        );
         try {
             unlink($this->getFilePath());
         } finally {
@@ -138,7 +141,10 @@ class MockFileSessionStorage extends MockArraySessionStorage
      */
     private function read(): void
     {
-        set_error_handler(static function () {});
+        set_error_handler(
+            static function () {
+            }
+        );
         try {
             $data = file_get_contents($this->getFilePath());
         } finally {

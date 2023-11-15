@@ -53,9 +53,11 @@ class PhpFileLoader extends FileLoader
         $this->container->fileExists($path);
 
         // the closure forbids access to the private scope in the included file
-        $load = \Closure::bind(function ($path, $env) use ($container, $loader, $resource, $type) {
-            return include $path;
-        }, $this, ProtectedPhpFileLoader::class);
+        $load = \Closure::bind(
+            function ($path, $env) use ($container, $loader, $resource, $type) {
+                return include $path;
+            }, $this, ProtectedPhpFileLoader::class
+        );
 
         try {
             $callback = $load($path, $this->env);
@@ -113,30 +115,30 @@ class PhpFileLoader extends FileLoader
             $type = $reflectionType->getName();
 
             switch ($type) {
-                case ContainerConfigurator::class:
-                    $arguments[] = $containerConfigurator;
+            case ContainerConfigurator::class:
+                $arguments[] = $containerConfigurator;
+                break;
+            case ContainerBuilder::class:
+                $arguments[] = $this->container;
+                break;
+            case FileLoader::class:
+            case self::class:
+                $arguments[] = $this;
+                break;
+            case 'string':
+                if (null !== $this->env && 'env' === $parameter->getName()) {
+                    $arguments[] = $this->env;
                     break;
-                case ContainerBuilder::class:
-                    $arguments[] = $this->container;
-                    break;
-                case FileLoader::class:
-                case self::class:
-                    $arguments[] = $this;
-                    break;
-                case 'string':
-                    if (null !== $this->env && 'env' === $parameter->getName()) {
-                        $arguments[] = $this->env;
-                        break;
-                    }
-                    // no break
-                default:
-                    try {
-                        $configBuilder = $this->configBuilder($type);
-                    } catch (InvalidArgumentException|\LogicException $e) {
-                        throw new \InvalidArgumentException(sprintf('Could not resolve argument "%s" for "%s".', $type.' $'.$parameter->getName(), $path), 0, $e);
-                    }
-                    $configBuilders[] = $configBuilder;
-                    $arguments[] = $configBuilder;
+                }
+                // no break
+            default:
+                try {
+                    $configBuilder = $this->configBuilder($type);
+                } catch (InvalidArgumentException|\LogicException $e) {
+                    throw new \InvalidArgumentException(sprintf('Could not resolve argument "%s" for "%s".', $type.' $'.$parameter->getName(), $path), 0, $e);
+                }
+                $configBuilders[] = $configBuilder;
+                $arguments[] = $configBuilder;
             }
         }
 
@@ -145,7 +147,9 @@ class PhpFileLoader extends FileLoader
 
         $callback(...$arguments);
 
-        /** @var ConfigBuilderInterface $configBuilder */
+        /**
+ * @var ConfigBuilderInterface $configBuilder 
+*/
         foreach ($configBuilders as $configBuilder) {
             $containerConfigurator->extension($configBuilder->getExtensionAlias(), $configBuilder->toArray());
         }

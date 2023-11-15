@@ -291,7 +291,7 @@ final class BigInteger extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigInteger|null $zero
+         * @var            BigInteger|null $zero
          */
         static $zero;
 
@@ -311,7 +311,7 @@ final class BigInteger extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigInteger|null $one
+         * @var            BigInteger|null $one
          */
         static $one;
 
@@ -331,7 +331,7 @@ final class BigInteger extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigInteger|null $ten
+         * @var            BigInteger|null $ten
          */
         static $ten;
 
@@ -467,11 +467,13 @@ final class BigInteger extends BigNumber
         }
 
         if ($exponent < 0 || $exponent > Calculator::MAX_POWER) {
-            throw new \InvalidArgumentException(\sprintf(
-                'The exponent %d is not in the range 0 to %d.',
-                $exponent,
-                Calculator::MAX_POWER
-            ));
+            throw new \InvalidArgumentException(
+                \sprintf(
+                    'The exponent %d is not in the range 0 to %d.',
+                    $exponent,
+                    Calculator::MAX_POWER
+                )
+            );
         }
 
         return new BigInteger(Calculator::get()->pow($this->value, $exponent));

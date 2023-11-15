@@ -19,14 +19,15 @@ return static function (ContainerConfigurator $container) {
     $service = \function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\service') ? 'Symfony\Component\DependencyInjection\Loader\Configurator\service' : 'Symfony\Component\DependencyInjection\Loader\Configurator\ref';
     $container->services()
         ->set('twig.extension.markdown', MarkdownExtension::class)
-            ->tag('twig.extension')
+        ->tag('twig.extension')
 
         ->set('twig.runtime.markdown', MarkdownRuntime::class)
-            ->args([
+        ->args(
+            [
                 $service('twig.markdown.default'),
-            ])
-            ->tag('twig.runtime')
+                ]
+        )
+        ->tag('twig.runtime')
 
-        ->set('twig.markdown.default', DefaultMarkdown::class)
-    ;
+        ->set('twig.markdown.default', DefaultMarkdown::class);
 };

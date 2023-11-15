@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -49,10 +49,14 @@ class UnixTimeGenerator implements TimeGeneratorInterface
     private static ?string $seed = null;
     private static int $seedIndex = 0;
 
-    /** @var int[] */
+    /**
+     * @var int[] 
+     */
     private static array $rand = [];
 
-    /** @var int[] */
+    /**
+     * @var int[] 
+     */
     private static array $seedParts;
 
     public function __construct(
@@ -62,10 +66,10 @@ class UnixTimeGenerator implements TimeGeneratorInterface
     }
 
     /**
-     * @param Hexadecimal|int|string|null $node Unused in this generator
-     * @param int|null $clockSeq Unused in this generator
-     * @param DateTimeInterface $dateTime A date-time instance to use when
-     *     generating bytes
+     * @param Hexadecimal|int|string|null $node     Unused in this generator
+     * @param int|null                    $clockSeq Unused in this generator
+     * @param DateTimeInterface           $dateTime A date-time instance to use when
+     *                                              generating bytes
      *
      * @inheritDoc
      */
@@ -85,7 +89,9 @@ class UnixTimeGenerator implements TimeGeneratorInterface
             $time = str_pad(BigInteger::of($time)->toBytes(false), 6, "\x00", STR_PAD_LEFT);
         }
 
-        /** @var non-empty-string */
+        /**
+ * @var non-empty-string 
+*/
         return $time . pack('n*', self::$rand[1], self::$rand[2], self::$rand[3], self::$rand[4], self::$rand[5]);
     }
 
@@ -98,7 +104,9 @@ class UnixTimeGenerator implements TimeGeneratorInterface
             $seed = $this->randomGenerator->generate(10);
         }
 
-        /** @var int[] $rand */
+        /**
+ * @var int[] $rand 
+*/
         $rand = unpack('n*', $seed);
         $rand[1] &= 0x03ff;
 
@@ -130,7 +138,9 @@ class UnixTimeGenerator implements TimeGeneratorInterface
         if (self::$seedIndex === 0 && self::$seed !== null) {
             self::$seed = hash('sha512', self::$seed, true);
 
-            /** @var int[] $s */
+            /**
+ * @var int[] $s 
+*/
             $s = unpack('l*', self::$seed);
             $s[] = ($s[1] >> 8 & 0xff0000) | ($s[2] >> 16 & 0xff00) | ($s[3] >> 24 & 0xff);
             $s[] = ($s[4] >> 8 & 0xff0000) | ($s[5] >> 16 & 0xff00) | ($s[6] >> 24 & 0xff);

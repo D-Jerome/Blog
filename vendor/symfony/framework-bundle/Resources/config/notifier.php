@@ -37,100 +37,108 @@ use Symfony\Component\Notifier\Transport\Transports;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('notifier', Notifier::class)
-            ->args([tagged_locator('notifier.channel', 'channel'), service('notifier.channel_policy')->ignoreOnInvalid()])
+        ->args([tagged_locator('notifier.channel', 'channel'), service('notifier.channel_policy')->ignoreOnInvalid()])
 
         ->alias(NotifierInterface::class, 'notifier')
 
         ->set('notifier.channel_policy', ChannelPolicy::class)
-            ->args([[]])
+        ->args([[]])
 
         ->set('notifier.flash_message_importance_mapper', DefaultFlashMessageImportanceMapper::class)
-            ->args([[]])
+        ->args([[]])
 
         ->set('notifier.channel.browser', BrowserChannel::class)
-            ->args([service('request_stack'), service('notifier.flash_message_importance_mapper')])
-            ->tag('notifier.channel', ['channel' => 'browser'])
+        ->args([service('request_stack'), service('notifier.flash_message_importance_mapper')])
+        ->tag('notifier.channel', ['channel' => 'browser'])
 
         ->set('notifier.channel.chat', ChatChannel::class)
-            ->args([
+        ->args(
+            [
                 service('chatter.transports'),
                 abstract_arg('message bus'),
-            ])
-            ->tag('notifier.channel', ['channel' => 'chat'])
+                ]
+        )
+        ->tag('notifier.channel', ['channel' => 'chat'])
 
         ->set('notifier.channel.sms', SmsChannel::class)
-            ->args([
+        ->args(
+            [
                 service('texter.transports'),
                 abstract_arg('message bus'),
-            ])
-            ->tag('notifier.channel', ['channel' => 'sms'])
+                ]
+        )
+        ->tag('notifier.channel', ['channel' => 'sms'])
 
         ->set('notifier.channel.email', EmailChannel::class)
-            ->args([
+        ->args(
+            [
                 service('mailer.transports'),
                 abstract_arg('message bus'),
-            ])
-            ->tag('notifier.channel', ['channel' => 'email'])
+                ]
+        )
+        ->tag('notifier.channel', ['channel' => 'email'])
 
         ->set('notifier.channel.push', PushChannel::class)
-            ->args([service('texter.transports'), service('messenger.default_bus')->ignoreOnInvalid()])
-            ->tag('notifier.channel', ['channel' => 'push'])
+        ->args([service('texter.transports'), service('messenger.default_bus')->ignoreOnInvalid()])
+        ->tag('notifier.channel', ['channel' => 'push'])
 
         ->set('notifier.monolog_handler', NotifierHandler::class)
-            ->args([service('notifier')])
+        ->args([service('notifier')])
 
         ->set('notifier.failed_message_listener', SendFailedMessageToNotifierListener::class)
-            ->args([service('notifier')])
+        ->args([service('notifier')])
 
         ->set('chatter', Chatter::class)
-            ->args([
+        ->args(
+            [
                 service('chatter.transports'),
                 abstract_arg('message bus'),
                 service('event_dispatcher')->ignoreOnInvalid(),
-            ])
+                ]
+        )
 
         ->alias(ChatterInterface::class, 'chatter')
 
         ->set('chatter.transports', Transports::class)
-            ->factory([service('chatter.transport_factory'), 'fromStrings'])
-            ->args([[]])
+        ->factory([service('chatter.transport_factory'), 'fromStrings'])
+        ->args([[]])
 
         ->set('chatter.transport_factory', Transport::class)
-            ->args([tagged_iterator('chatter.transport_factory')])
+        ->args([tagged_iterator('chatter.transport_factory')])
 
         ->set('chatter.messenger.chat_handler', MessageHandler::class)
-            ->args([service('chatter.transports')])
-            ->tag('messenger.message_handler', ['handles' => ChatMessage::class])
+        ->args([service('chatter.transports')])
+        ->tag('messenger.message_handler', ['handles' => ChatMessage::class])
 
         ->set('texter', Texter::class)
-            ->args([
+        ->args(
+            [
                 service('texter.transports'),
                 abstract_arg('message bus'),
                 service('event_dispatcher')->ignoreOnInvalid(),
-            ])
+                ]
+        )
 
         ->alias(TexterInterface::class, 'texter')
 
         ->set('texter.transports', Transports::class)
-            ->factory([service('texter.transport_factory'), 'fromStrings'])
-            ->args([[]])
+        ->factory([service('texter.transport_factory'), 'fromStrings'])
+        ->args([[]])
 
         ->set('texter.transport_factory', Transport::class)
-            ->args([tagged_iterator('texter.transport_factory')])
+        ->args([tagged_iterator('texter.transport_factory')])
 
         ->set('texter.messenger.sms_handler', MessageHandler::class)
-            ->args([service('texter.transports')])
-            ->tag('messenger.message_handler', ['handles' => SmsMessage::class])
+        ->args([service('texter.transports')])
+        ->tag('messenger.message_handler', ['handles' => SmsMessage::class])
 
         ->set('texter.messenger.push_handler', MessageHandler::class)
-            ->args([service('texter.transports')])
-            ->tag('messenger.message_handler', ['handles' => PushMessage::class])
+        ->args([service('texter.transports')])
+        ->tag('messenger.message_handler', ['handles' => PushMessage::class])
 
         ->set('notifier.notification_logger_listener', NotificationLoggerListener::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->alias('notifier.logger_notification_listener', 'notifier.notification_logger_listener')
-            ->deprecate('symfony/framework-bundle', '6.3', 'The "%alias_id%" service is deprecated, use "notifier.notification_logger_listener" instead.')
-
-    ;
+        ->deprecate('symfony/framework-bundle', '6.3', 'The "%alias_id%" service is deprecated, use "notifier.notification_logger_listener" instead.');
 };

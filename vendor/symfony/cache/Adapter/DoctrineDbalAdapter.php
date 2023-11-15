@@ -71,7 +71,8 @@ class DoctrineDbalAdapter extends AbstractAdapter implements PruneableInterface
                 throw new InvalidArgumentException('Failed to parse DSN. Try running "composer require doctrine/dbal".');
             }
             if (class_exists(DsnParser::class)) {
-                $params = (new DsnParser([
+                $params = (new DsnParser(
+                    [
                     'db2' => 'ibm_db2',
                     'mssql' => 'pdo_sqlsrv',
                     'mysql' => 'pdo_mysql',
@@ -81,7 +82,8 @@ class DoctrineDbalAdapter extends AbstractAdapter implements PruneableInterface
                     'pgsql' => 'pdo_pgsql',
                     'sqlite' => 'pdo_sqlite',
                     'sqlite3' => 'pdo_sqlite',
-                ]))->parse($connOrDsn);
+                    ]
+                ))->parse($connOrDsn);
             } else {
                 $params = ['url' => $connOrDsn];
             }
@@ -167,13 +169,15 @@ class DoctrineDbalAdapter extends AbstractAdapter implements PruneableInterface
         $expired = [];
 
         $sql = "SELECT $this->idCol, CASE WHEN $this->lifetimeCol IS NULL OR $this->lifetimeCol + $this->timeCol > ? THEN $this->dataCol ELSE NULL END FROM $this->table WHERE $this->idCol IN (?)";
-        $result = $this->conn->executeQuery($sql, [
+        $result = $this->conn->executeQuery(
+            $sql, [
             $now,
             $ids,
-        ], [
+            ], [
             ParameterType::INTEGER,
             class_exists(ArrayParameterType::class) ? ArrayParameterType::STRING : Connection::PARAM_STR_ARRAY,
-        ])->iterateNumeric();
+            ]
+        )->iterateNumeric();
 
         foreach ($result as $row) {
             if (null === $row[1]) {
@@ -185,26 +189,30 @@ class DoctrineDbalAdapter extends AbstractAdapter implements PruneableInterface
 
         if ($expired) {
             $sql = "DELETE FROM $this->table WHERE $this->lifetimeCol + $this->timeCol <= ? AND $this->idCol IN (?)";
-            $this->conn->executeStatement($sql, [
+            $this->conn->executeStatement(
+                $sql, [
                 $now,
                 $expired,
-            ], [
+                ], [
                 ParameterType::INTEGER,
                 class_exists(ArrayParameterType::class) ? ArrayParameterType::STRING : Connection::PARAM_STR_ARRAY,
-            ]);
+                ]
+            );
         }
     }
 
     protected function doHave(string $id): bool
     {
         $sql = "SELECT 1 FROM $this->table WHERE $this->idCol = ? AND ($this->lifetimeCol IS NULL OR $this->lifetimeCol + $this->timeCol > ?)";
-        $result = $this->conn->executeQuery($sql, [
+        $result = $this->conn->executeQuery(
+            $sql, [
             $id,
             time(),
-        ], [
+            ], [
             ParameterType::STRING,
             ParameterType::INTEGER,
-        ]);
+            ]
+        );
 
         return (bool) $result->fetchOne();
     }
@@ -250,32 +258,32 @@ class DoctrineDbalAdapter extends AbstractAdapter implements PruneableInterface
         $insertSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?)";
 
         switch (true) {
-            case 'mysql' === $platformName:
-                $sql = $insertSql." ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
-                break;
-            case 'oci' === $platformName:
-                // DUAL is Oracle specific dummy table
-                $sql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
-                    "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?";
-                break;
-            case 'sqlsrv' === $platformName && version_compare($this->getServerVersion(), '10', '>='):
-                // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
-                // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
-                $sql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
-                    "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?;";
-                break;
-            case 'sqlite' === $platformName:
-                $sql = 'INSERT OR REPLACE'.substr($insertSql, 6);
-                break;
-            case 'pgsql' === $platformName && version_compare($this->getServerVersion(), '9.5', '>='):
-                $sql = $insertSql." ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
-                break;
-            default:
-                $platformName = null;
-                $sql = "UPDATE $this->table SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ? WHERE $this->idCol = ?";
-                break;
+        case 'mysql' === $platformName:
+            $sql = $insertSql." ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
+            break;
+        case 'oci' === $platformName:
+            // DUAL is Oracle specific dummy table
+            $sql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) ".
+                "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?";
+            break;
+        case 'sqlsrv' === $platformName && version_compare($this->getServerVersion(), '10', '>='):
+            // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
+            // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
+            $sql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) ".
+                "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?;";
+            break;
+        case 'sqlite' === $platformName:
+            $sql = 'INSERT OR REPLACE'.substr($insertSql, 6);
+            break;
+        case 'pgsql' === $platformName && version_compare($this->getServerVersion(), '9.5', '>='):
+            $sql = $insertSql." ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
+            break;
+        default:
+            $platformName = null;
+            $sql = "UPDATE $this->table SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ? WHERE $this->idCol = ?";
+            break;
         }
 
         $now = time();

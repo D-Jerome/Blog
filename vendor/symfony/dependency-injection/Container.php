@@ -343,7 +343,7 @@ class Container implements ContainerInterface, ResetInterface
      */
     protected function load(string $file)
     {
-        return require $file;
+        return include $file;
     }
 
     /**

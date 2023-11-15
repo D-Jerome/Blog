@@ -46,10 +46,12 @@ abstract class ResourceBundle
     final protected static function readEntry(array $indices, string $locale = null, bool $fallback = true): mixed
     {
         if (!isset(self::$entryReader)) {
-            self::$entryReader = new BundleEntryReader(new BufferedBundleReader(
-                new PhpBundleReader(),
-                Intl::BUFFER_SIZE
-            ));
+            self::$entryReader = new BundleEntryReader(
+                new BufferedBundleReader(
+                    new PhpBundleReader(),
+                    Intl::BUFFER_SIZE
+                )
+            );
 
             $localeAliases = self::$entryReader->readEntry(Intl::getDataDirectory().'/'.Intl::LOCALE_DIR, 'meta', ['Aliases']);
             self::$entryReader->setLocaleAliases($localeAliases instanceof \Traversable ? iterator_to_array($localeAliases) : $localeAliases);

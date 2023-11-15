@@ -104,9 +104,11 @@ class RedisCaster
             $prefix.'_redir' => $c->_redir(),
             $prefix.'mode' => new ConstStub($c->getMode() ? 'MULTI' : 'ATOMIC', $c->getMode()),
             $prefix.'lastError' => $c->getLastError(),
-            $prefix.'options' => self::getRedisOptions($c, [
+            $prefix.'options' => self::getRedisOptions(
+                $c, [
                 'SLAVE_FAILOVER' => isset(self::FAILOVER_OPTIONS[$failover]) ? new ConstStub(self::FAILOVER_OPTIONS[$failover], $failover) : $failover,
-            ]),
+                ]
+            ),
         ];
 
         return $a;

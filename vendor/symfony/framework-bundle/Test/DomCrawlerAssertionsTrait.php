@@ -41,26 +41,32 @@ trait DomCrawlerAssertionsTrait
 
     public static function assertSelectorTextContains(string $selector, string $text, string $message = ''): void
     {
-        self::assertThat(self::getCrawler(), LogicalAnd::fromConstraints(
-            new DomCrawlerConstraint\CrawlerSelectorExists($selector),
-            new DomCrawlerConstraint\CrawlerSelectorTextContains($selector, $text)
-        ), $message);
+        self::assertThat(
+            self::getCrawler(), LogicalAnd::fromConstraints(
+                new DomCrawlerConstraint\CrawlerSelectorExists($selector),
+                new DomCrawlerConstraint\CrawlerSelectorTextContains($selector, $text)
+            ), $message
+        );
     }
 
     public static function assertSelectorTextSame(string $selector, string $text, string $message = ''): void
     {
-        self::assertThat(self::getCrawler(), LogicalAnd::fromConstraints(
-            new DomCrawlerConstraint\CrawlerSelectorExists($selector),
-            new DomCrawlerConstraint\CrawlerSelectorTextSame($selector, $text)
-        ), $message);
+        self::assertThat(
+            self::getCrawler(), LogicalAnd::fromConstraints(
+                new DomCrawlerConstraint\CrawlerSelectorExists($selector),
+                new DomCrawlerConstraint\CrawlerSelectorTextSame($selector, $text)
+            ), $message
+        );
     }
 
     public static function assertSelectorTextNotContains(string $selector, string $text, string $message = ''): void
     {
-        self::assertThat(self::getCrawler(), LogicalAnd::fromConstraints(
-            new DomCrawlerConstraint\CrawlerSelectorExists($selector),
-            new LogicalNot(new DomCrawlerConstraint\CrawlerSelectorTextContains($selector, $text))
-        ), $message);
+        self::assertThat(
+            self::getCrawler(), LogicalAnd::fromConstraints(
+                new DomCrawlerConstraint\CrawlerSelectorExists($selector),
+                new LogicalNot(new DomCrawlerConstraint\CrawlerSelectorTextContains($selector, $text))
+            ), $message
+        );
     }
 
     public static function assertPageTitleSame(string $expectedTitle, string $message = ''): void
@@ -75,18 +81,22 @@ trait DomCrawlerAssertionsTrait
 
     public static function assertInputValueSame(string $fieldName, string $expectedValue, string $message = ''): void
     {
-        self::assertThat(self::getCrawler(), LogicalAnd::fromConstraints(
-            new DomCrawlerConstraint\CrawlerSelectorExists("input[name=\"$fieldName\"]"),
-            new DomCrawlerConstraint\CrawlerSelectorAttributeValueSame("input[name=\"$fieldName\"]", 'value', $expectedValue)
-        ), $message);
+        self::assertThat(
+            self::getCrawler(), LogicalAnd::fromConstraints(
+                new DomCrawlerConstraint\CrawlerSelectorExists("input[name=\"$fieldName\"]"),
+                new DomCrawlerConstraint\CrawlerSelectorAttributeValueSame("input[name=\"$fieldName\"]", 'value', $expectedValue)
+            ), $message
+        );
     }
 
     public static function assertInputValueNotSame(string $fieldName, string $expectedValue, string $message = ''): void
     {
-        self::assertThat(self::getCrawler(), LogicalAnd::fromConstraints(
-            new DomCrawlerConstraint\CrawlerSelectorExists("input[name=\"$fieldName\"]"),
-            new LogicalNot(new DomCrawlerConstraint\CrawlerSelectorAttributeValueSame("input[name=\"$fieldName\"]", 'value', $expectedValue))
-        ), $message);
+        self::assertThat(
+            self::getCrawler(), LogicalAnd::fromConstraints(
+                new DomCrawlerConstraint\CrawlerSelectorExists("input[name=\"$fieldName\"]"),
+                new LogicalNot(new DomCrawlerConstraint\CrawlerSelectorAttributeValueSame("input[name=\"$fieldName\"]", 'value', $expectedValue))
+            ), $message
+        );
     }
 
     public static function assertCheckboxChecked(string $fieldName, string $message = ''): void

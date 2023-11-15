@@ -161,8 +161,7 @@ else {
         foreach ($tokens as $index => $token) {
             $currentScope = \count($scopes) - 1;
 
-            if (
-                $token->equalsAny($blockFirstTokens)
+            if ($token->equalsAny($blockFirstTokens)
                 || ($token->equals('(') && !$tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_ARRAY))
                 || isset($alternativeBlockStarts[$index])
                 || isset($caseBlockStarts[$index])
@@ -306,8 +305,7 @@ else {
                 continue;
             }
 
-            if (
-                $token->isWhitespace()
+            if ($token->isWhitespace()
                 || ($index > 0 && $tokens[$index - 1]->isGivenKind(T_OPEN_TAG))
             ) {
                 $previousOpenTagContent = $tokens[$index - 1]->isGivenKind(T_OPEN_TAG)
@@ -322,8 +320,7 @@ else {
 
                 $nextToken = $tokens[$index + 1] ?? null;
 
-                if (
-                    $this->bracesFixerCompatibility
+                if ($this->bracesFixerCompatibility
                     && null !== $nextToken
                     && $nextToken->isComment()
                     && !$this->isCommentWithFixableIndentation($tokens, $index + 1)
@@ -361,18 +358,15 @@ else {
                             ++$endIndex;
                         }
 
-                        if (
-                            (null !== $firstNonWhitespaceTokenIndex && $firstNonWhitespaceTokenIndex < $endIndex)
+                        if ((null !== $firstNonWhitespaceTokenIndex && $firstNonWhitespaceTokenIndex < $endIndex)
                             || (null !== $nextNewlineIndex && $nextNewlineIndex < $endIndex)
                         ) {
-                            if (
-                                // do we touch whitespace directly before comment...
+                            if (// do we touch whitespace directly before comment...
                                 $tokens[$firstNonWhitespaceTokenIndex]->isGivenKind(T_COMMENT)
                                 // ...and afterwards, there is only comment or `}`
                                 && $tokens[$tokens->getNextMeaningfulToken($firstNonWhitespaceTokenIndex)]->equals('}')
                             ) {
-                                if (
-                                    // ... and the comment was only content in docblock
+                                if (// ... and the comment was only content in docblock
                                     $tokens[$tokens->getPrevMeaningfulToken($firstNonWhitespaceTokenIndex)]->equals('{')
                                 ) {
                                     $indent = true;
@@ -430,14 +424,16 @@ else {
                 }
 
                 if (null !== $nextToken && $nextToken->isComment()) {
-                    $tokens[$index + 1] = new Token([
+                    $tokens[$index + 1] = new Token(
+                        [
                         $nextToken->getId(),
                         Preg::replace(
                             '/(\R)'.preg_quote($previousLineInitialIndent, '/').'(\h*\S+.*)/',
                             '$1'.$previousLineNewIndent.'$2',
                             $nextToken->getContent()
                         ),
-                    ]);
+                        ]
+                    );
                 }
 
                 if ($token->isWhitespace()) {
@@ -556,8 +552,7 @@ else {
 
     private function getLineIndentationWithBracesCompatibility(Tokens $tokens, int $index, string $regularIndent): string
     {
-        if (
-            $this->bracesFixerCompatibility
+        if ($this->bracesFixerCompatibility
             && $tokens[$index]->isGivenKind(T_OPEN_TAG)
             && Preg::match('/\R/', $tokens[$index]->getContent())
             && isset($tokens[$index + 1])

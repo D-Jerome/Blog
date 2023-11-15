@@ -82,7 +82,9 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
             }
 
             foreach ($instanceofDefs as $key => $instanceofDef) {
-                /** @var ChildDefinition $instanceofDef */
+                /**
+ * @var ChildDefinition $instanceofDef 
+*/
                 $instanceofDef = clone $instanceofDef;
                 $instanceofDef->setAbstract(true)->setParent($parent ?: '.abstract.instanceof.'.$id);
                 $parent = '.instanceof.'.$interface.'.'.$key.'.'.$id;
@@ -115,7 +117,9 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
                 $definition = substr_replace($definition, '53', 2, 2);
                 $definition = substr_replace($definition, 'Child', 44, 0);
             }
-            /** @var ChildDefinition $definition */
+            /**
+ * @var ChildDefinition $definition 
+*/
             $definition = unserialize($definition);
             $definition->setParent($parent);
 

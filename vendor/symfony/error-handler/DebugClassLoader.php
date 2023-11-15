@@ -357,8 +357,7 @@ class DebugClassLoader
 
     public function checkAnnotations(\ReflectionClass $refl, string $class): array
     {
-        if (
-            'Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerForV7' === $class
+        if ('Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerForV7' === $class
             || 'Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerForV6' === $class
         ) {
             return [];
@@ -441,7 +440,7 @@ class DebugClassLoader
                     if (!strncmp($vendor, str_replace('_', '\\', $use), $vendorLen)
                         && str_starts_with($className, 'Symfony\\')
                         && (!class_exists(InstalledVersions::class)
-                            || 'symfony/symfony' !== InstalledVersions::getRootPackage()['name'])
+                        || 'symfony/symfony' !== InstalledVersions::getRootPackage()['name'])
                     ) {
                         // skip "same vendor" @method deprecations for Symfony\* classes unless symfony/symfony is being tested
                         continue;

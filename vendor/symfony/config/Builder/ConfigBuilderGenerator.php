@@ -60,17 +60,19 @@ class ConfigBuilderGenerator implements ConfigBuilderGeneratorInterface
             $this->classes[] = $rootClass;
             $this->buildNode($rootNode, $rootClass, $this->getSubNamespace($rootClass));
             $rootClass->addImplements(ConfigBuilderInterface::class);
-            $rootClass->addMethod('getExtensionAlias', '
+            $rootClass->addMethod(
+                'getExtensionAlias', '
 public function NAME(): string
 {
     return \'ALIAS\';
-}', ['ALIAS' => $rootNode->getPath()]);
+}', ['ALIAS' => $rootNode->getPath()]
+            );
 
             $this->writeClasses();
         }
 
         return function () use ($path, $rootClass) {
-            require_once $path;
+            include_once $path;
             $className = $rootClass->getFqcn();
 
             return new $className();
@@ -174,12 +176,14 @@ COMMENTpublic function NAME(array $value = []): CLASS
     return $this->PROPERTY;
 }';
         $class->addUse(InvalidConfigurationException::class);
-        $class->addMethod($node->getName(), $body, [
+        $class->addMethod(
+            $node->getName(), $body, [
             'COMMENT' => $comment,
             'PROPERTY' => $property->getName(),
             'CLASS' => $childClass->getFqcn(),
             'PARAM_TYPE' => \in_array('mixed', $nodeTypes, true) ? 'mixed' : implode('|', $nodeTypes),
-        ]);
+            ]
+        );
 
         $this->buildNode($node, $childClass, $this->getSubNamespace($childClass));
     }
@@ -202,11 +206,13 @@ public function NAME(mixed $valueDEFAULT): static
 
     return $this;
 }';
-        $class->addMethod($node->getName(), $body, [
+        $class->addMethod(
+            $node->getName(), $body, [
             'PROPERTY' => $property->getName(),
             'COMMENT' => $comment,
             'DEFAULT' => $node->hasDefaultValue() ? ' = '.var_export($node->getDefaultValue(), true) : '',
-        ]);
+            ]
+        );
     }
 
     private function handlePrototypedArrayNode(PrototypedArrayNode $node, ClassBuilder $class, string $namespace): void
@@ -238,12 +244,14 @@ public function NAME(PARAM_TYPE $value): static
     return $this;
 }';
 
-                $class->addMethod($node->getName(), $body, [
+                $class->addMethod(
+                    $node->getName(), $body, [
                     'PROPERTY' => $property->getName(),
                     'PROTOTYPE_TYPE' => implode('|', $prototypeParameterTypes),
                     'EXTRA_TYPE' => $nodeTypesWithoutArray ? '|'.implode('|', $nodeTypesWithoutArray) : '',
                     'PARAM_TYPE' => \in_array('mixed', $nodeParameterTypes, true) ? 'mixed' : 'ParamConfigurator|'.implode('|', $nodeParameterTypes),
-                ]);
+                    ]
+                );
             } else {
                 $body = '
 /**
@@ -257,12 +265,14 @@ public function NAME(string $VAR, TYPE $VALUE): static
     return $this;
 }';
 
-                $class->addMethod($methodName, $body, [
+                $class->addMethod(
+                    $methodName, $body, [
                     'PROPERTY' => $property->getName(),
                     'TYPE' => \in_array('mixed', $prototypeParameterTypes, true) ? 'mixed' : 'ParamConfigurator|'.implode('|', $prototypeParameterTypes),
                     'VAR' => '' === $key ? 'key' : $key,
                     'VALUE' => 'value' === $key ? 'data' : 'value',
-                ]);
+                    ]
+                );
             }
 
             return;
@@ -309,12 +319,14 @@ COMMENTpublic function NAME(array $value = []): CLASS
 
     return $this->PROPERTY[] = new CLASS($value);
 }';
-            $class->addMethod($methodName, $body, [
+            $class->addMethod(
+                $methodName, $body, [
                 'COMMENT' => $comment,
                 'PROPERTY' => $property->getName(),
                 'CLASS' => $childClass->getFqcn(),
                 'PARAM_TYPE' => \in_array('mixed', $nodeParameterTypes, true) ? 'mixed' : implode('|', $nodeParameterTypes),
-            ]);
+                ]
+            );
         } else {
             $body = $hasNormalizationClosures ? '
 COMMENTpublic function NAME(string $VAR, PARAM_TYPE $VALUE = []): CLASS|static
@@ -347,13 +359,15 @@ COMMENTpublic function NAME(string $VAR, array $VALUE = []): CLASS
     return $this->PROPERTY[$VAR];
 }';
             $class->addUse(InvalidConfigurationException::class);
-            $class->addMethod($methodName, str_replace('$value', '$VAR', $body), [
+            $class->addMethod(
+                $methodName, str_replace('$value', '$VAR', $body), [
                 'COMMENT' => $comment, 'PROPERTY' => $property->getName(),
                 'CLASS' => $childClass->getFqcn(),
                 'VAR' => '' === $key ? 'key' : $key,
                 'VALUE' => 'value' === $key ? 'data' : 'value',
                 'PARAM_TYPE' => \in_array('mixed', $prototypeParameterTypes, true) ? 'mixed' : implode('|', $prototypeParameterTypes),
-            ]);
+                ]
+            );
         }
 
         $this->buildNode($prototype, $childClass, $namespace.'\\'.$childClass->getName());
@@ -489,21 +503,25 @@ public function NAME($value): static
                 }
             }
 
-            $body .= strtr('
+            $body .= strtr(
+                '
     if (isset($this->_usedProperties[\'PROPERTY\'])) {
         $output[\'ORG_NAME\'] = '.$code.';
-    }', ['PROPERTY' => $p->getName(), 'ORG_NAME' => $p->getOriginalName(), 'CLASS' => $p->getType()]);
+    }', ['PROPERTY' => $p->getName(), 'ORG_NAME' => $p->getOriginalName(), 'CLASS' => $p->getType()]
+            );
         }
 
         $extraKeys = $class->shouldAllowExtraKeys() ? ' + $this->_extraKeys' : '';
 
-        $class->addMethod('toArray', '
+        $class->addMethod(
+            'toArray', '
 public function NAME(): array
 {
     '.$body.'
 
     return $output'.$extraKeys.';
-}');
+}'
+        );
     }
 
     private function buildConstructor(ClassBuilder $class): void
@@ -525,13 +543,15 @@ public function NAME(): array
                 }
             }
 
-            $body .= strtr('
+            $body .= strtr(
+                '
     if (array_key_exists(\'ORG_NAME\', $value)) {
         $this->_usedProperties[\'PROPERTY\'] = true;
         $this->PROPERTY = '.$code.';
         unset($value[\'ORG_NAME\']);
     }
-', ['PROPERTY' => $p->getName(), 'ORG_NAME' => $p->getOriginalName()]);
+', ['PROPERTY' => $p->getName(), 'ORG_NAME' => $p->getOriginalName()]
+            );
         }
 
         if ($class->shouldAllowExtraKeys()) {
@@ -547,10 +567,12 @@ public function NAME(): array
             $class->addUse(InvalidConfigurationException::class);
         }
 
-        $class->addMethod('__construct', '
+        $class->addMethod(
+            '__construct', '
 public function __construct(array $value = [])
 {'.$body.'
-}');
+}'
+        );
     }
 
     private function buildSetExtraKey(ClassBuilder $class): void
@@ -563,7 +585,8 @@ public function __construct(array $value = [])
 
         $class->addProperty('_extraKeys');
 
-        $class->addMethod('set', '
+        $class->addMethod(
+            'set', '
 /**
  * @param ParamConfigurator|mixed $value
  *
@@ -574,7 +597,8 @@ public function NAME(string $key, mixed $value): static
     $this->_extraKeys[$key] = $value;
 
     return $this;
-}');
+}'
+        );
     }
 
     private function getSubNamespace(ClassBuilder $rootClass): string

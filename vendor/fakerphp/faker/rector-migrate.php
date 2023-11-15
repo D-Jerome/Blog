@@ -150,12 +150,14 @@ return static function (Config\RectorConfig $rectorConfig): void {
 
     $rectorConfig->ruleWithConfiguration(
         Transform\Rector\Assign\PropertyFetchToMethodCallRector::class,
-        array_map(static function (string $property): Transform\ValueObject\PropertyFetchToMethodCall {
-            return new Transform\ValueObject\PropertyFetchToMethodCall(
-                Generator::class,
-                $property,
-                $property,
-            );
-        }, $properties),
+        array_map(
+            static function (string $property): Transform\ValueObject\PropertyFetchToMethodCall {
+                return new Transform\ValueObject\PropertyFetchToMethodCall(
+                    Generator::class,
+                    $property,
+                    $property,
+                );
+            }, $properties
+        ),
     );
 };

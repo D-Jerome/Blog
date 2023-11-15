@@ -48,7 +48,7 @@ abstract class BaseManager
      */
     public function getAllToList(string $field): array
     {
-        $query = $this->dbConnect->prepare("SELECT $field FROM " . $this->table);
+        $query = $this->dbConnect->prepare("SELECT id, $field FROM " . $this->table);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -68,7 +68,7 @@ abstract class BaseManager
             $sql .= ' WHERE ';
             $i = 0;
             foreach ($params as $k => $value){
-                if ($i !== 0 ){
+                if ($i !== 0 ) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
@@ -131,7 +131,7 @@ abstract class BaseManager
         }
         $sql = $sql . " WHERE id = :id ";
         $req = $this->dbConnect->prepare($sql);
-        $param['id'] = $obj->getId() ;
+        $param['id'] = $obj->getId();
         $boundParam = [];
         foreach ($param as $paramName => $paramValue) {
             if (property_exists($obj, $paramName)) {

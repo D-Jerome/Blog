@@ -124,19 +124,23 @@ class FrameworkBundle extends Bundle
         parent::build($container);
 
         $registerListenersPass = new RegisterListenersPass();
-        $registerListenersPass->setHotPathEvents([
+        $registerListenersPass->setHotPathEvents(
+            [
             KernelEvents::REQUEST,
             KernelEvents::CONTROLLER,
             KernelEvents::CONTROLLER_ARGUMENTS,
             KernelEvents::RESPONSE,
             KernelEvents::FINISH_REQUEST,
-        ]);
+            ]
+        );
         if (class_exists(ConsoleEvents::class)) {
-            $registerListenersPass->setNoPreloadEvents([
+            $registerListenersPass->setNoPreloadEvents(
+                [
                 ConsoleEvents::COMMAND,
                 ConsoleEvents::TERMINATE,
                 ConsoleEvents::ERROR,
-            ]);
+                ]
+            );
         }
 
         $container->addCompilerPass(new AssetsContextPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);

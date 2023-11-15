@@ -131,10 +131,12 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
 
         $value->addTag('container.service_subscriber.locator', ['id' => (string) $locatorRef]);
 
-        $value->setBindings([
+        $value->setBindings(
+            [
             PsrContainerInterface::class => new BoundArgument($locatorRef, false),
             ServiceProviderInterface::class => new BoundArgument($locatorRef, false),
-        ] + $value->getBindings());
+            ] + $value->getBindings()
+        );
 
         return parent::processValue($value);
     }

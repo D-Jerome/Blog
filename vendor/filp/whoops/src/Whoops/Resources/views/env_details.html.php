@@ -5,7 +5,7 @@
   <div class="data-table-container" id="data-tables">
     <?php foreach ($tables as $label => $data): ?>
       <div class="data-table" id="sg-<?php echo $tpl->escape($tpl->slug($label)) ?>">
-        <?php if (!empty($data)): ?>
+        <?php if (!empty($data)) : ?>
             <label><?php echo $tpl->escape($label) ?></label>
             <table class="data-table">
               <thead>

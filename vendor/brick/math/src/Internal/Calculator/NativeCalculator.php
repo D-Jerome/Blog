@@ -31,16 +31,16 @@ class NativeCalculator extends Calculator
     public function __construct()
     {
         switch (PHP_INT_SIZE) {
-            case 4:
-                $this->maxDigits = 9;
-                break;
+        case 4:
+            $this->maxDigits = 9;
+            break;
 
-            case 8:
-                $this->maxDigits = 18;
-                break;
+        case 8:
+            $this->maxDigits = 18;
+            break;
 
-            default:
-                throw new \RuntimeException('The platform is not 32-bit or 64-bit as expected.');
+        default:
+            throw new \RuntimeException('The platform is not 32-bit or 64-bit as expected.');
         }
     }
 
@@ -151,11 +151,15 @@ class NativeCalculator extends Calculator
             return [$this->neg($a), '0'];
         }
 
-        /** @psalm-var numeric-string $a */
+        /**
+ * @psalm-var numeric-string $a 
+*/
         $na = $a * 1; // cast to number
 
         if (is_int($na)) {
-            /** @psalm-var numeric-string $b */
+            /**
+ * @psalm-var numeric-string $b 
+*/
             $nb = $b * 1;
 
             if (is_int($nb)) {
@@ -203,7 +207,9 @@ class NativeCalculator extends Calculator
 
         $aa = $this->mul($a, $a);
 
-        /** @psalm-suppress PossiblyInvalidArgument We're sure that $e / 2 is an int now */
+        /**
+ * @psalm-suppress PossiblyInvalidArgument We're sure that $e / 2 is an int now 
+*/
         $result = $this->pow($aa, $e / 2);
 
         if ($odd === 1) {
@@ -290,14 +296,20 @@ class NativeCalculator extends Calculator
 
             if ($i < 0) {
                 $blockLength += $i;
-                /** @psalm-suppress LoopInvalidation */
+                /**
+ * @psalm-suppress LoopInvalidation 
+*/
                 $i = 0;
             }
 
-            /** @psalm-var numeric-string $blockA */
+            /**
+ * @psalm-var numeric-string $blockA 
+*/
             $blockA = \substr($a, $i, $blockLength);
 
-            /** @psalm-var numeric-string $blockB */
+            /**
+ * @psalm-var numeric-string $blockB 
+*/
             $blockB = \substr($b, $i, $blockLength);
 
             $sum = (string) ($blockA + $blockB + $carry);
@@ -359,14 +371,20 @@ class NativeCalculator extends Calculator
 
             if ($i < 0) {
                 $blockLength += $i;
-                /** @psalm-suppress LoopInvalidation */
+                /**
+ * @psalm-suppress LoopInvalidation 
+*/
                 $i = 0;
             }
 
-            /** @psalm-var numeric-string $blockA */
+            /**
+ * @psalm-var numeric-string $blockA 
+*/
             $blockA = \substr($a, $i, $blockLength);
 
-            /** @psalm-var numeric-string $blockB */
+            /**
+ * @psalm-var numeric-string $blockB 
+*/
             $blockB = \substr($b, $i, $blockLength);
 
             $sum = $blockA - $blockB - $carry;
@@ -422,7 +440,9 @@ class NativeCalculator extends Calculator
 
             if ($i < 0) {
                 $blockALength += $i;
-                /** @psalm-suppress LoopInvalidation */
+                /**
+ * @psalm-suppress LoopInvalidation 
+*/
                 $i = 0;
             }
 
@@ -436,7 +456,9 @@ class NativeCalculator extends Calculator
 
                 if ($j < 0) {
                     $blockBLength += $j;
-                    /** @psalm-suppress LoopInvalidation */
+                    /**
+ * @psalm-suppress LoopInvalidation 
+*/
                     $j = 0;
                 }
 

@@ -159,13 +159,17 @@ class Person extends \Faker\Provider\Person
         };
 
         if ($gender && $gender === static::GENDER_FEMALE) {
-            return $zeroCheck(static function () {
-                return (string) static::numerify('##') . static::randomElement([0, 2, 4, 6, 8]);
-            });
+            return $zeroCheck(
+                static function () {
+                    return (string) static::numerify('##') . static::randomElement([0, 2, 4, 6, 8]);
+                }
+            );
         }
 
-        return  $zeroCheck(static function () {
-            return (string) static::numerify('###');
-        });
+        return  $zeroCheck(
+            static function () {
+                return (string) static::numerify('###');
+            }
+        );
     }
 }

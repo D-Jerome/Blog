@@ -93,9 +93,13 @@ class Person extends \Faker\Provider\Person
             return $this->middleNameFemale();
         }
 
-        return $this->middleName(static::randomElement([
-            static::GENDER_MALE,
-            static::GENDER_FEMALE,
-        ]));
+        return $this->middleName(
+            static::randomElement(
+                [
+                static::GENDER_MALE,
+                static::GENDER_FEMALE,
+                ]
+            )
+        );
     }
 }

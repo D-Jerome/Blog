@@ -31,14 +31,15 @@ interface CacheInterface
      *
      * @template T
      *
-     * @param string $key The key of the item to retrieve from the cache
+     * @param string                                                                                      $key       The key of the item to retrieve from the cache
      * @param (callable(CacheItemInterface,bool):T)|(callable(ItemInterface,bool):T)|CallbackInterface<T> $callback
-     * @param float|null $beta      A float that, as it grows, controls the likeliness of triggering
-     *                              early expiration. 0 disables it, INF forces immediate expiration.
-     *                              The default (or providing null) is implementation dependent but should
-     *                              typically be 1.0, which should provide optimal stampede protection.
-     *                              See https://en.wikipedia.org/wiki/Cache_stampede#Probabilistic_early_expiration
-     * @param array      &$metadata The metadata of the cached item {@see ItemInterface::getMetadata()}
+     * @param float|null                                                                                  $beta      A float that, as it grows, controls the likeliness of triggering
+     *                                                                                                               early expiration. 0 disables it, INF forces immediate
+     *                                                                                                               expiration. The default (or providing null) is implementation
+     *                                                                                                               dependent but should typically be 1.0, which should provide
+     *                                                                                                               optimal stampede protection. See
+     *                                                                                                               https://en.wikipedia.org/wiki/Cache_stampede#Probabilistic_early_expiration
+     * @param array                                                                                       &$metadata The metadata of the cached item {@see ItemInterface::getMetadata()}
      *
      * @return T
      *

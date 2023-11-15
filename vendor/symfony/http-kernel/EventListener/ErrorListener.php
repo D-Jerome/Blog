@@ -77,7 +77,9 @@ class ErrorListener implements EventSubscriberInterface
 
             do {
                 if ($attributes = $class->getAttributes(WithHttpStatus::class, \ReflectionAttribute::IS_INSTANCEOF)) {
-                    /** @var WithHttpStatus $instance */
+                    /**
+ * @var WithHttpStatus $instance 
+*/
                     $instance = $attributes[0]->newInstance();
 
                     $throwable = new HttpException($instance->statusCode, $throwable->getMessage(), $throwable, $instance->headers);
@@ -200,7 +202,9 @@ class ErrorListener implements EventSubscriberInterface
 
         do {
             if ($attributes = $class->getAttributes(WithLogLevel::class)) {
-                /** @var WithLogLevel $instance */
+                /**
+ * @var WithLogLevel $instance 
+*/
                 $instance = $attributes[0]->newInstance();
 
                 return $instance->level;

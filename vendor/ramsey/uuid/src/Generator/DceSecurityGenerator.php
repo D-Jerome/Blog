@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -84,27 +84,27 @@ class DceSecurityGenerator implements DceSecurityGeneratorInterface
         }
 
         switch ($localDomain) {
-            case Uuid::DCE_DOMAIN_ORG:
-                if ($localIdentifier === null) {
-                    throw new DceSecurityException(
-                        'A local identifier must be provided for the org domain'
-                    );
-                }
+        case Uuid::DCE_DOMAIN_ORG:
+            if ($localIdentifier === null) {
+                throw new DceSecurityException(
+                    'A local identifier must be provided for the org domain'
+                );
+            }
 
-                break;
-            case Uuid::DCE_DOMAIN_PERSON:
-                if ($localIdentifier === null) {
-                    $localIdentifier = $this->dceSecurityProvider->getUid();
-                }
+            break;
+        case Uuid::DCE_DOMAIN_PERSON:
+            if ($localIdentifier === null) {
+                $localIdentifier = $this->dceSecurityProvider->getUid();
+            }
 
-                break;
-            case Uuid::DCE_DOMAIN_GROUP:
-            default:
-                if ($localIdentifier === null) {
-                    $localIdentifier = $this->dceSecurityProvider->getGid();
-                }
+            break;
+        case Uuid::DCE_DOMAIN_GROUP:
+        default:
+            if ($localIdentifier === null) {
+                $localIdentifier = $this->dceSecurityProvider->getGid();
+            }
 
-                break;
+            break;
         }
 
         $identifierHex = $this->numberConverter->toHex($localIdentifier->toString());

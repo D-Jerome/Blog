@@ -262,7 +262,8 @@ class Router implements RouterInterface, RequestMatcherInterface
             return $this->matcher;
         }
 
-        $cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'].'/url_matching_routes.php',
+        $cache = $this->getConfigCacheFactory()->cache(
+            $this->options['cache_dir'].'/url_matching_routes.php',
             function (ConfigCacheInterface $cache) {
                 $dumper = $this->getMatcherDumperInstance();
                 if (method_exists($dumper, 'addExpressionLanguageProvider')) {
@@ -296,7 +297,8 @@ class Router implements RouterInterface, RequestMatcherInterface
             }
             $this->generator = new $this->options['generator_class']($routes, $this->context, $this->logger, $this->defaultLocale);
         } else {
-            $cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'].'/url_generating_routes.php',
+            $cache = $this->getConfigCacheFactory()->cache(
+                $this->options['cache_dir'].'/url_generating_routes.php',
                 function (ConfigCacheInterface $cache) {
                     $dumper = $this->getGeneratorDumperInstance();
 
@@ -348,9 +350,9 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
 
         if (null === self::$cache) {
-            return require $path;
+            return include $path;
         }
 
-        return self::$cache[$path] ??= require $path;
+        return self::$cache[$path] ??= include $path;
     }
 }

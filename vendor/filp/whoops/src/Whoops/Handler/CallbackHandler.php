@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -22,7 +23,7 @@ class CallbackHandler extends Handler
 
     /**
      * @throws InvalidArgumentException If argument is not callable
-     * @param  callable                 $callable
+     * @param  callable $callable
      */
     public function __construct($callable)
     {

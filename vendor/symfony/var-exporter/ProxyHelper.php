@@ -121,10 +121,12 @@ final class ProxyHelper
             $trait = new \ReflectionMethod(LazyProxyTrait::class, '__get');
             $body = \array_slice(file($trait->getFileName()), $trait->getStartLine() - 1, $trait->getEndLine() - $trait->getStartLine());
             $body[0] = str_replace('): mixed', '): '.$type, $body[0]);
-            $methods['__get'] = strtr(implode('', $body).'    }', [
+            $methods['__get'] = strtr(
+                implode('', $body).'    }', [
                 'Hydrator' => '\\'.Hydrator::class,
                 'Registry' => '\\'.LazyObjectRegistry::class,
-            ]);
+                ]
+            );
             break;
         }
 
@@ -360,10 +362,14 @@ final class ProxyHelper
                 default => '\\'.$m[2],
             };
 
-        return implode('', array_map(fn ($part) => match ($part[0]) {
-            '"' => $part, // for internal classes only
-            "'" => false !== strpbrk($part, "\\\0\r\n") ? '"'.substr(str_replace(['$', "\0", "\r", "\n"], ['\$', '\0', '\r', '\n'], $part), 1, -1).'"' : $part,
-            default => preg_replace_callback($regexp, $callback, $part),
-        }, $parts));
+        return implode(
+            '', array_map(
+                fn ($part) => match ($part[0]) {
+                    '"' => $part, // for internal classes only
+                    "'" => false !== strpbrk($part, "\\\0\r\n") ? '"'.substr(str_replace(['$', "\0", "\r", "\n"], ['\$', '\0', '\r', '\n'], $part), 1, -1).'"' : $part,
+                    default => preg_replace_callback($regexp, $callback, $part),
+                }, $parts
+            )
+        );
     }
 }

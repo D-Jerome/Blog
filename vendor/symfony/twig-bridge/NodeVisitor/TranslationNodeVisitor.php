@@ -55,8 +55,7 @@ final class TranslationNodeVisitor extends AbstractNodeVisitor
             return $node;
         }
 
-        if (
-            $node instanceof FilterExpression
+        if ($node instanceof FilterExpression
             && 'trans' === $node->getNode('filter')->getAttribute('value')
             && $node->getNode('node') instanceof ConstantExpression
         ) {
@@ -65,8 +64,7 @@ final class TranslationNodeVisitor extends AbstractNodeVisitor
                 $node->getNode('node')->getAttribute('value'),
                 $this->getReadDomainFromArguments($node->getNode('arguments'), 1),
             ];
-        } elseif (
-            $node instanceof FunctionExpression
+        } elseif ($node instanceof FunctionExpression
             && 't' === $node->getAttribute('name')
         ) {
             $nodeArguments = $node->getNode('arguments');
@@ -83,8 +81,7 @@ final class TranslationNodeVisitor extends AbstractNodeVisitor
                 $node->getNode('body')->getAttribute('data'),
                 $node->hasNode('domain') ? $this->getReadDomainFromNode($node->getNode('domain')) : null,
             ];
-        } elseif (
-            $node instanceof FilterExpression
+        } elseif ($node instanceof FilterExpression
             && 'trans' === $node->getNode('filter')->getAttribute('value')
             && $node->getNode('node') instanceof ConcatBinary
             && $message = $this->getConcatValueFromNode($node->getNode('node'), null)

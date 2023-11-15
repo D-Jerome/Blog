@@ -28,7 +28,7 @@ class Route
      * @param  string $method
      * @param  string $controller
      * @param  string $action
-     * @param  array $authRoles
+     * @param  array  $authRoles
      * @return void
      */
     public function __construct(string $path, string $method, string $controller, string $action, array $authRoles)

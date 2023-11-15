@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -52,7 +53,7 @@ final class Run implements RunInterface
     private $handlerStack = [];
 
     /**
-     * @var array
+     * @var       array
      * @psalm-var list<array{patterns: string, levels: int}>
      */
     private $silencedPatterns = [];
@@ -530,10 +531,12 @@ final class Run implements RunInterface
     public function addFrameFilter($filterCallback)
     {
         if (!is_callable($filterCallback)) {
-            throw new \InvalidArgumentException(sprintf(
-                "A frame filter must be of type callable, %s type given.", 
-                gettype($filterCallback)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "A frame filter must be of type callable, %s type given.", 
+                    gettype($filterCallback)
+                )
+            );
         }
 
         $this->frameFilters[] = $filterCallback;

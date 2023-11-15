@@ -56,11 +56,10 @@ class Post extends BaseController
 
 
     /**
-    * posts : recovers all informations for each publish article for display with paging
-    *
-    *
-    * @return void
-    */
+     * posts : recovers all informations for each publish article for display with paging
+     *
+     * @return void
+     */
     public function posts()
     {
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
@@ -68,7 +67,8 @@ class Post extends BaseController
         $dirList = $filter->getDir();
         $list = $filter->getList();
         $listNames = $filter->getListNames();
-
+        $listSelect = $filter->getListSelect();
+        $listSortSelect = isset(($this->getRoute()->getParams())['listSelect']) ? ($this->getRoute()->getParams())['listSelect'] : null;
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
         $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
@@ -79,7 +79,13 @@ class Post extends BaseController
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
-        $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
+        if (!$listSortSelect) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
+        } else {
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams, $listSortSelect);
+        }
+        
+        
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -125,16 +131,19 @@ class Post extends BaseController
                         'id' => $user->getId()
                     ];
         }
-        return $this->view('frontoffice/posts.html.twig', [
+        return $this->view(
+            'frontoffice/posts.html.twig', [
                 'posts' => $statementPosts,
                 'sort' => $sortList,
                 'dir' => $dirList,
                 'sortDir' => $sortDir,
                 'sortBy' => $sortBy,
                 'list' => $list ,
+                'listSelect' => $listSelect,
                 'listNames' => $listNames,
                 'pages' => $pages,
-                'authUser' => $user]);
+            'authUser' => $user]
+        );
     }
 
 

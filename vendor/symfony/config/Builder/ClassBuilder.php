@@ -23,10 +23,14 @@ class ClassBuilder
     private string $namespace;
     private string $name;
 
-    /** @var Property[] */
+    /**
+     * @var Property[] 
+     */
     private array $properties = [];
 
-    /** @var Method[] */
+    /**
+     * @var Method[] 
+     */
     private array $methods = [];
     private array $require = [];
     private array $use = [];
@@ -82,7 +86,8 @@ class ClassBuilder
             }
         }
 
-        $content = strtr('<?php
+        $content = strtr(
+            '<?php
 
 namespace NAMESPACE;
 
@@ -94,7 +99,8 @@ class CLASS IMPLEMENTS
 {
 BODY
 }
-', ['NAMESPACE' => $this->namespace, 'REQUIRE' => $require, 'USE' => $use, 'CLASS' => $this->getName(), 'IMPLEMENTS' => $implements, 'BODY' => $body]);
+', ['NAMESPACE' => $this->namespace, 'REQUIRE' => $require, 'USE' => $use, 'CLASS' => $this->getName(), 'IMPLEMENTS' => $implements, 'BODY' => $body]
+        );
 
         return $content;
     }

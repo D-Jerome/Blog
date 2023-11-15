@@ -16,12 +16,15 @@ use Symfony\Component\Mailer\DataCollector\MessageDataCollector;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('mailer.data_collector', MessageDataCollector::class)
-            ->args([
+        ->args(
+            [
                 service('mailer.message_logger_listener'),
-            ])
-            ->tag('data_collector', [
+                ]
+        )
+        ->tag(
+            'data_collector', [
                 'template' => '@WebProfiler/Collector/mailer.html.twig',
                 'id' => 'mailer',
-            ])
-    ;
+                ]
+        );
 };

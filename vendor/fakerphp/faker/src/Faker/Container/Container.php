@@ -44,10 +44,12 @@ final class Container implements ContainerInterface
     public function get($id): Extension
     {
         if (!is_string($id)) {
-            throw new \InvalidArgumentException(sprintf(
-                'First argument of %s::get() must be string',
-                self::class,
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'First argument of %s::get() must be string',
+                    self::class,
+                )
+            );
         }
 
         if (array_key_exists($id, $this->services)) {
@@ -55,10 +57,12 @@ final class Container implements ContainerInterface
         }
 
         if (!$this->has($id)) {
-            throw new NotInContainerException(sprintf(
-                'There is not service with id "%s" in the container.',
-                $id,
-            ));
+            throw new NotInContainerException(
+                sprintf(
+                    'There is not service with id "%s" in the container.',
+                    $id,
+                )
+            );
         }
 
         $definition = $this->definitions[$id];
@@ -66,11 +70,13 @@ final class Container implements ContainerInterface
         $service = $this->services[$id] = $this->getService($id, $definition);
 
         if (!$service instanceof Extension) {
-            throw new \RuntimeException(sprintf(
-                'Service resolved for identifier "%s" does not implement the %s" interface.',
-                $id,
-                Extension::class,
-            ));
+            throw new \RuntimeException(
+                sprintf(
+                    'Service resolved for identifier "%s" does not implement the %s" interface.',
+                    $id,
+                    Extension::class,
+                )
+            );
         }
 
         return $service;
@@ -104,15 +110,19 @@ final class Container implements ContainerInterface
                 }
             }
 
-            throw new ContainerException(sprintf(
-                'Could not instantiate class "%s". Class was not found.',
-                $id,
-            ));
+            throw new ContainerException(
+                sprintf(
+                    'Could not instantiate class "%s". Class was not found.',
+                    $id,
+                )
+            );
         } else {
-            throw new ContainerException(sprintf(
-                'Invalid type for definition with id "%s"',
-                $id,
-            ));
+            throw new ContainerException(
+                sprintf(
+                    'Invalid type for definition with id "%s"',
+                    $id,
+                )
+            );
         }
     }
 
@@ -126,10 +136,12 @@ final class Container implements ContainerInterface
     public function has($id): bool
     {
         if (!is_string($id)) {
-            throw new \InvalidArgumentException(sprintf(
-                'First argument of %s::get() must be string',
-                self::class,
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'First argument of %s::get() must be string',
+                    self::class,
+                )
+            );
         }
 
         return array_key_exists($id, $this->definitions);

@@ -98,7 +98,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // needed in case there is a fatal error because the backend is too slow to respond
         register_shutdown_function($this->store->cleanup(...));
 
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'debug' => false,
             'default_ttl' => 0,
             'private_headers' => ['Authorization', 'Cookie'],
@@ -110,7 +111,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             'trace_level' => 'none',
             'trace_header' => 'X-Symfony-Cache',
             'terminate_on_cache_hit' => true,
-        ], $options);
+            ], $options
+        );
 
         if (!isset($options['trace_level'])) {
             $this->options['trace_level'] = $this->options['debug'] ? 'full' : 'none';

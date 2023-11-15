@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -22,7 +23,7 @@ class XmlResponseHandler extends Handler
     private $returnFrames = false;
 
     /**
-     * @param  bool|null  $returnFrames
+     * @param  bool|null $returnFrames
      * @return bool|static
      */
     public function addTraceToOutput($returnFrames = null)
@@ -62,7 +63,7 @@ class XmlResponseHandler extends Handler
     }
 
     /**
-     * @param  SimpleXMLElement  $node Node to append data to, will be modified in place
+     * @param  SimpleXMLElement   $node Node to append data to, will be modified in place
      * @param  array|\Traversable $data
      * @return SimpleXMLElement  The modified node, for chaining
      */

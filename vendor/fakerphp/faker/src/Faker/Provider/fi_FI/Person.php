@@ -106,23 +106,23 @@ class Person extends \Faker\Provider\Person
         $datePart = $birthdate->format('dmy');
 
         switch ((int) ($birthdate->format('Y') / 100)) {
-            case 18:
-                $centurySign = '+';
+        case 18:
+            $centurySign = '+';
 
-                break;
+            break;
 
-            case 19:
-                $centurySign = '-';
+        case 19:
+            $centurySign = '-';
 
-                break;
+            break;
 
-            case 20:
-                $centurySign = 'A';
+        case 20:
+            $centurySign = 'A';
 
-                break;
+            break;
 
-            default:
-                throw new \InvalidArgumentException('Year must be between 1800 and 2099 inclusive.');
+        default:
+            throw new \InvalidArgumentException('Year must be between 1800 and 2099 inclusive.');
         }
 
         $randomDigits = self::numberBetween(0, 89);

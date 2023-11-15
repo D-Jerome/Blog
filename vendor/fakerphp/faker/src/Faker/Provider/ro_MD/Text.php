@@ -21,8 +21,8 @@ class Text extends \Faker\Provider\Text
      *
      * Language: Romanian
      *
-     * @see     https://wikimediafoundation.org/wiki/Terms_of_Use/
-     * @see    https://ro.wikisource.org/wiki/Povestea_lui_Harap-Alb
+     * @see https://wikimediafoundation.org/wiki/Terms_of_Use/
+     * @see https://ro.wikisource.org/wiki/Povestea_lui_Harap-Alb
      *
      * @var string
      */

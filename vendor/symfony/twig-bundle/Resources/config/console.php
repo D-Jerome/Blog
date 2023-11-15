@@ -17,17 +17,18 @@ use Symfony\Bundle\TwigBundle\Command\LintCommand;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.command.debug', DebugCommand::class)
-            ->args([
+        ->args(
+            [
                 service('twig'),
                 param('kernel.project_dir'),
                 param('kernel.bundles_metadata'),
                 param('twig.default_path'),
                 service('debug.file_link_formatter')->nullOnInvalid(),
-            ])
-            ->tag('console.command')
+                ]
+        )
+        ->tag('console.command')
 
         ->set('twig.command.lint', LintCommand::class)
-            ->args([service('twig'), abstract_arg('File name pattern')])
-            ->tag('console.command')
-    ;
+        ->args([service('twig'), abstract_arg('File name pattern')])
+        ->tag('console.command');
 };

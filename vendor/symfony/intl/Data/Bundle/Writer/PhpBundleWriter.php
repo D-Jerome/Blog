@@ -35,11 +35,13 @@ TEMPLATE;
             $data = iterator_to_array($data);
         }
 
-        array_walk_recursive($data, function (&$value) {
-            if ($value instanceof \Traversable) {
-                $value = iterator_to_array($value);
+        array_walk_recursive(
+            $data, function (&$value) {
+                if ($value instanceof \Traversable) {
+                    $value = iterator_to_array($value);
+                }
             }
-        });
+        );
 
         file_put_contents($path.'/'.$locale.'.php', sprintf($template, VarExporter::export($data)));
     }

@@ -120,7 +120,7 @@ trait MicroKernelTrait
 
     public function registerBundles(): iterable
     {
-        $contents = require $this->getBundlesPath();
+        $contents = include $this->getBundlesPath();
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                 yield new $class();
@@ -133,59 +133,62 @@ trait MicroKernelTrait
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(function (ContainerBuilder $container) use ($loader) {
-            $container->loadFromExtension('framework', [
-                'router' => [
+        $loader->load(
+            function (ContainerBuilder $container) use ($loader) {
+                $container->loadFromExtension(
+                    'framework', [
+                    'router' => [
                     'resource' => 'kernel::loadRoutes',
                     'type' => 'service',
-                ],
-            ]);
+                    ],
+                    ]
+                );
 
-            $kernelClass = str_contains(static::class, "@anonymous\0") ? parent::class : static::class;
+                $kernelClass = str_contains(static::class, "@anonymous\0") ? parent::class : static::class;
 
-            if (!$container->hasDefinition('kernel')) {
-                $container->register('kernel', $kernelClass)
-                    ->addTag('controller.service_arguments')
-                    ->setAutoconfigured(true)
-                    ->setSynthetic(true)
-                    ->setPublic(true)
-                ;
+                if (!$container->hasDefinition('kernel')) {
+                    $container->register('kernel', $kernelClass)
+                        ->addTag('controller.service_arguments')
+                        ->setAutoconfigured(true)
+                        ->setSynthetic(true)
+                        ->setPublic(true);
+                }
+
+                $kernelDefinition = $container->getDefinition('kernel');
+                $kernelDefinition->addTag('routing.route_loader');
+
+                $container->addObjectResource($this);
+                $container->fileExists($this->getBundlesPath());
+
+                $configureContainer = new \ReflectionMethod($this, 'configureContainer');
+                $configuratorClass = $configureContainer->getNumberOfParameters() > 0 && ($type = $configureContainer->getParameters()[0]->getType()) instanceof \ReflectionNamedType && !$type->isBuiltin() ? $type->getName() : null;
+
+                if ($configuratorClass && !is_a(ContainerConfigurator::class, $configuratorClass, true)) {
+                    $configureContainer->getClosure($this)($container, $loader);
+
+                    return;
+                }
+
+                $file = (new \ReflectionObject($this))->getFileName();
+                /* @var ContainerPhpFileLoader $kernelLoader */
+                $kernelLoader = $loader->getResolver()->resolve($file);
+                $kernelLoader->setCurrentDir(\dirname($file));
+                $instanceof = &\Closure::bind(fn &() => $this->instanceof, $kernelLoader, $kernelLoader)();
+
+                $valuePreProcessor = AbstractConfigurator::$valuePreProcessor;
+                AbstractConfigurator::$valuePreProcessor = fn ($value) => $this === $value ? new Reference('kernel') : $value;
+
+                try {
+                    $configureContainer->getClosure($this)(new ContainerConfigurator($container, $kernelLoader, $instanceof, $file, $file, $this->getEnvironment()), $loader, $container);
+                } finally {
+                    $instanceof = [];
+                    $kernelLoader->registerAliasesForSinglyImplementedInterfaces();
+                    AbstractConfigurator::$valuePreProcessor = $valuePreProcessor;
+                }
+
+                $container->setAlias($kernelClass, 'kernel')->setPublic(true);
             }
-
-            $kernelDefinition = $container->getDefinition('kernel');
-            $kernelDefinition->addTag('routing.route_loader');
-
-            $container->addObjectResource($this);
-            $container->fileExists($this->getBundlesPath());
-
-            $configureContainer = new \ReflectionMethod($this, 'configureContainer');
-            $configuratorClass = $configureContainer->getNumberOfParameters() > 0 && ($type = $configureContainer->getParameters()[0]->getType()) instanceof \ReflectionNamedType && !$type->isBuiltin() ? $type->getName() : null;
-
-            if ($configuratorClass && !is_a(ContainerConfigurator::class, $configuratorClass, true)) {
-                $configureContainer->getClosure($this)($container, $loader);
-
-                return;
-            }
-
-            $file = (new \ReflectionObject($this))->getFileName();
-            /* @var ContainerPhpFileLoader $kernelLoader */
-            $kernelLoader = $loader->getResolver()->resolve($file);
-            $kernelLoader->setCurrentDir(\dirname($file));
-            $instanceof = &\Closure::bind(fn &() => $this->instanceof, $kernelLoader, $kernelLoader)();
-
-            $valuePreProcessor = AbstractConfigurator::$valuePreProcessor;
-            AbstractConfigurator::$valuePreProcessor = fn ($value) => $this === $value ? new Reference('kernel') : $value;
-
-            try {
-                $configureContainer->getClosure($this)(new ContainerConfigurator($container, $kernelLoader, $instanceof, $file, $file, $this->getEnvironment()), $loader, $container);
-            } finally {
-                $instanceof = [];
-                $kernelLoader->registerAliasesForSinglyImplementedInterfaces();
-                AbstractConfigurator::$valuePreProcessor = $valuePreProcessor;
-            }
-
-            $container->setAlias($kernelClass, 'kernel')->setPublic(true);
-        });
+        );
     }
 
     /**

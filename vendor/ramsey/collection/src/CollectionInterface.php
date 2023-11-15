@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ use Ramsey\Collection\Exception\UnsupportedOperationException;
  * and others unordered.
  *
  * @template T
- * @extends ArrayInterface<T>
+ * @extends  ArrayInterface<T>
  */
 interface CollectionInterface extends ArrayInterface
 {
@@ -63,8 +63,8 @@ interface CollectionInterface extends ArrayInterface
     /**
      * Returns `true` if this collection contains the specified element.
      *
-     * @param T $element The element to check whether the collection contains.
-     * @param bool $strict Whether to perform a strict type check on the value.
+     * @param T    $element The element to check whether the collection contains.
+     * @param bool $strict  Whether to perform a strict type check on the value.
      */
     public function contains(mixed $element, bool $strict = true): bool;
 
@@ -87,7 +87,7 @@ interface CollectionInterface extends ArrayInterface
      * Returns the values from the given property, method, or array key.
      *
      * @param string $propertyOrMethod The name of the property, method, or
-     *     array key to evaluate and return.
+     *                                 array key to evaluate and return.
      *
      * @return array<int, mixed>
      *
@@ -126,8 +126,8 @@ interface CollectionInterface extends ArrayInterface
      * a new one.
      *
      * @param string | null $propertyOrMethod The property, method, or array key
-     *     to sort by.
-     * @param Sort $order The sort order for the resulting collection.
+     *                                        to sort by.
+     * @param Sort          $order            The sort order for the resulting collection.
      *
      * @return CollectionInterface<T>
      *
@@ -162,8 +162,8 @@ interface CollectionInterface extends ArrayInterface
      * a new one.
      *
      * @param string | null $propertyOrMethod The property, method, or array key
-     *     to evaluate. If `null`, the element itself is compared to $value.
-     * @param mixed $value The value to match.
+     *                                        to evaluate. If `null`, the element itself is compared to $value.
+     * @param mixed         $value            The value to match.
      *
      * @return CollectionInterface<T>
      *
@@ -185,7 +185,7 @@ interface CollectionInterface extends ArrayInterface
      * for examples of how the `$callback` parameter works.
      *
      * @param callable(T): TCallbackReturn $callback A callable to apply to each
-     *     item of the collection.
+     *                                               item of the collection.
      *
      * @return CollectionInterface<TCallbackReturn>
      *
@@ -201,8 +201,8 @@ interface CollectionInterface extends ArrayInterface
      * for examples of how the `$callback` and `$initial` parameters work.
      *
      * @param callable(TCarry, T): TCarry $callback A callable to apply to each
-     *     item of the collection to reduce it to a single value.
-     * @param TCarry $initial This is the initial value provided to the callback.
+     *                                              item of the collection to reduce it to a single value.
+     * @param TCarry                      $initial  This is the initial value provided to the callback.
      *
      * @return TCarry
      *
@@ -215,7 +215,7 @@ interface CollectionInterface extends ArrayInterface
      * collection.
      *
      * @param CollectionInterface<T> $other The collection to check for divergent
-     *     items.
+     *                                      items.
      *
      * @return CollectionInterface<T>
      *
@@ -229,7 +229,7 @@ interface CollectionInterface extends ArrayInterface
      * collection.
      *
      * @param CollectionInterface<T> $other The collection to check for
-     *     intersecting items.
+     *                                      intersecting items.
      *
      * @return CollectionInterface<T>
      *

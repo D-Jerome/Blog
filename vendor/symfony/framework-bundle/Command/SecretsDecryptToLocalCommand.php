@@ -43,7 +43,8 @@ final class SecretsDecryptToLocalCommand extends Command
     {
         $this
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force overriding of secrets that already exist in the local vault')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command decrypts all secrets and copies them in the local vault.
 
     <info>%command.full_name%</info>
@@ -52,8 +53,7 @@ When the option <info>--force</info> is provided, secrets that already exist in 
 
     <info>%command.full_name% --force</info>
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,10 +81,12 @@ EOF
         }
 
         if ($skipped > 0) {
-            $io->warning([
+            $io->warning(
+                [
                 sprintf('%d secret%s already overridden in the local vault and will be skipped.', $skipped, 1 !== $skipped ? 's are' : ' is'),
                 'Use the --force flag to override these.',
-            ]);
+                ]
+            );
         }
 
         foreach ($secrets as $k => $v) {

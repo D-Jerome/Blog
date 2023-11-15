@@ -19,7 +19,6 @@ return static function (ContainerConfigurator $container) {
         ->set('ssi', Ssi::class)
 
         ->set('ssi_listener', SurrogateListener::class)
-            ->args([service('ssi')->ignoreOnInvalid()])
-            ->tag('kernel.event_subscriber')
-    ;
+        ->args([service('ssi')->ignoreOnInvalid()])
+        ->tag('kernel.event_subscriber');
 };

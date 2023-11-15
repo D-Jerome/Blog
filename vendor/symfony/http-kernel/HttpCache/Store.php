@@ -25,9 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 class Store implements StoreInterface
 {
     protected $root;
-    /** @var \SplObjectStorage<Request, string> */
+    /**
+     * @var \SplObjectStorage<Request, string> 
+     */
     private \SplObjectStorage $keyCache;
-    /** @var array<string, resource> */
+    /**
+     * @var array<string, resource> 
+     */
     private array $locks = [];
     private array $options;
 
@@ -48,9 +52,11 @@ class Store implements StoreInterface
             throw new \RuntimeException(sprintf('Unable to create the store directory (%s).', $this->root));
         }
         $this->keyCache = new \SplObjectStorage();
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'private_headers' => ['Set-Cookie'],
-        ], $options);
+            ], $options
+        );
     }
 
     /**
@@ -195,7 +201,7 @@ class Store implements StoreInterface
             if ($this->getPath($digest) !== $response->headers->get('X-Body-File')) {
                 throw new \RuntimeException('X-Body-File and X-Content-Digest do not match.');
             }
-        // Everything seems ok, omit writing content to disk
+            // Everything seems ok, omit writing content to disk
         } else {
             $digest = $this->generateContentDigest($response);
             $response->headers->set('X-Content-Digest', $digest);

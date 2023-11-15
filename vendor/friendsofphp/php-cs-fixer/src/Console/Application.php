@@ -57,11 +57,13 @@ final class Application extends BaseApplication
         $this->add(new FixCommand($this->toolInfo));
         $this->add(new ListFilesCommand($this->toolInfo));
         $this->add(new ListSetsCommand());
-        $this->add(new SelfUpdateCommand(
-            new NewVersionChecker(new GithubClient()),
-            $this->toolInfo,
-            new PharChecker()
-        ));
+        $this->add(
+            new SelfUpdateCommand(
+                new NewVersionChecker(new GithubClient()),
+                $this->toolInfo,
+                new PharChecker()
+            )
+        );
     }
 
     public static function getMajorVersion(): int
@@ -91,8 +93,7 @@ final class Application extends BaseApplication
 
         $result = parent::doRun($input, $output);
 
-        if (
-            null !== $stdErr
+        if (null !== $stdErr
             && $output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE
         ) {
             $triggeredDeprecations = Utils::getTriggeredDeprecations();
@@ -114,17 +115,21 @@ final class Application extends BaseApplication
         $commit = '@git-commit@';
         $versionCommit = '';
 
-        if ('@'.'git-commit@' !== $commit) { /** @phpstan-ignore-line as `$commit` is replaced during phar building */
+        if ('@'.'git-commit@' !== $commit) { /**
+ * @phpstan-ignore-line as `$commit` is replaced during phar building 
+*/
             $versionCommit = substr($commit, 0, 7);
         }
 
-        return implode('', [
+        return implode(
+            '', [
             parent::getLongVersion(),
             $versionCommit ? sprintf(' <info>(%s)</info>', $versionCommit) : '', // @phpstan-ignore-line to avoid `Ternary operator condition is always true|false.`
             self::VERSION_CODENAME ? sprintf(' <info>%s</info>', self::VERSION_CODENAME) : '', // @phpstan-ignore-line to avoid `Ternary operator condition is always true|false.`
             ' by <comment>Fabien Potencier</comment> and <comment>Dariusz Ruminski</comment>.',
             "\nPHP runtime: <info>".PHP_VERSION.'</info>',
-        ]);
+            ]
+        );
     }
 
     protected function getDefaultCommands(): array

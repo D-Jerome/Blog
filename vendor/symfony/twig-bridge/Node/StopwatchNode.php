@@ -42,7 +42,6 @@ final class StopwatchNode extends Node
             ->subcompile($this->getNode('body'))
             ->write("\$this->env->getExtension('Symfony\Bridge\Twig\Extension\StopwatchExtension')->getStopwatch()->stop(")
             ->subcompile($this->getNode('var'))
-            ->raw(");\n")
-        ;
+            ->raw(");\n");
     }
 }

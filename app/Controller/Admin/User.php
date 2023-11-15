@@ -19,7 +19,7 @@ class User extends BaseController
      */
     public function userList(): void
     {
-        $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $sortList = $filter->getSort();
         $dirList = $filter->getDir();
         $list = $filter->getList();
@@ -36,7 +36,7 @@ class User extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
         $users = (new UserManager(Application::getDatasource()));
-        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage , $sqlParams);
+        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
 
        
             $count = count($users->getAll());
@@ -75,7 +75,8 @@ class User extends BaseController
         $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
 
 
-        $this->view('backoffice/admin.users.html.twig', [
+        $this->view(
+            'backoffice/admin.users.html.twig', [
                 'registredUsers' => $statementUsers,
                 'sort' => $sortList,
                 'dir' => $dirList,
@@ -85,7 +86,8 @@ class User extends BaseController
                 'listNames' => $listNames,
                 'pages' => $pages,
                 'authUser' => $user
-            ]);
+            ]
+        );
     }
 
 

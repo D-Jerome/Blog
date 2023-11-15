@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ use function count;
  * This class provides a basic implementation of `ArrayInterface`, to minimize
  * the effort required to implement this interface.
  *
- * @template T
+ * @template   T
  * @implements ArrayInterface<T>
  */
 abstract class AbstractArray implements ArrayInterface
@@ -94,8 +94,8 @@ abstract class AbstractArray implements ArrayInterface
      * @link http://php.net/manual/en/arrayaccess.offsetset.php ArrayAccess::offsetSet()
      *
      * @param array-key | null $offset The offset to set. If `null`, the value
-     *     may be set at a numerically-indexed offset.
-     * @param T $value The value to set at the given offset.
+     *                                 may be set at a numerically-indexed offset.
+     * @param T                $value  The value to set at the given offset.
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {

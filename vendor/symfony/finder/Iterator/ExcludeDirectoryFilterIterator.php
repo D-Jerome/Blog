@@ -24,7 +24,9 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class ExcludeDirectoryFilterIterator extends \FilterIterator implements \RecursiveIterator
 {
-    /** @var \Iterator<string, SplFileInfo> */
+    /**
+     * @var \Iterator<string, SplFileInfo> 
+     */
     private \Iterator $iterator;
     private bool $isRecursive;
     private array $excludedDirs = [];

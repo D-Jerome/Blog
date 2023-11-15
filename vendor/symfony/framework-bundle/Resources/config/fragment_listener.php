@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('fragment.listener', FragmentListener::class)
-            ->args([service('uri_signer'), param('fragment.path')])
-            ->tag('kernel.event_subscriber')
-    ;
+        ->args([service('uri_signer'), param('fragment.path')])
+        ->tag('kernel.event_subscriber');
 };

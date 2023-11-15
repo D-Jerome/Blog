@@ -33,17 +33,29 @@ final class ExtensionSet
     private $staging;
     private $parsers;
     private $visitors;
-    /** @var array<string, TwigFilter> */
+    /**
+     * @var array<string, TwigFilter> 
+     */
     private $filters;
-    /** @var array<string, TwigTest> */
+    /**
+     * @var array<string, TwigTest> 
+     */
     private $tests;
-    /** @var array<string, TwigFunction> */
+    /**
+     * @var array<string, TwigFunction> 
+     */
     private $functions;
-    /** @var array<string, array{precedence: int, class: class-string<AbstractUnary>}> */
+    /**
+     * @var array<string, array{precedence: int, class: class-string<AbstractUnary>}> 
+     */
     private $unaryOperators;
-    /** @var array<string, array{precedence: int, class: class-string<AbstractBinary>, associativity: ExpressionParser::OPERATOR_*}> */
+    /**
+     * @var array<string, array{precedence: int, class: class-string<AbstractBinary>, associativity: ExpressionParser::OPERATOR_*}> 
+     */
     private $binaryOperators;
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed> 
+     */
     private $globals;
     private $functionCallbacks = [];
     private $filterCallbacks = [];

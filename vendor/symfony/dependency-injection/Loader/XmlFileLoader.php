@@ -151,8 +151,7 @@ class XmlFileLoader extends FileLoader
             if ('stack' === $service->tagName) {
                 $service->setAttribute('parent', '-');
                 $definition = $this->parseDefinition($service, $file, $defaults)
-                    ->setTags(array_merge_recursive(['container.stack' => [[]]], $defaults->getTags()))
-                ;
+                    ->setTags(array_merge_recursive(['container.stack' => [[]]], $defaults->getTags()));
                 $this->setDefinition($id = (string) $service->getAttribute('id'), $definition);
                 $stack = [];
 
@@ -546,90 +545,90 @@ class XmlFileLoader extends FileLoader
             }
 
             switch ($type = $arg->getAttribute('type')) {
-                case 'service':
-                    if ('' === $arg->getAttribute('id')) {
-                        throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="service" has no or empty "id" attribute in "%s".', $name, $file));
-                    }
+            case 'service':
+                if ('' === $arg->getAttribute('id')) {
+                    throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="service" has no or empty "id" attribute in "%s".', $name, $file));
+                }
 
-                    $arguments[$key] = new Reference($arg->getAttribute('id'), $invalidBehavior);
-                    break;
-                case 'expression':
-                    if (!class_exists(Expression::class)) {
-                        throw new \LogicException('The type="expression" attribute cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
-                    }
+                $arguments[$key] = new Reference($arg->getAttribute('id'), $invalidBehavior);
+                break;
+            case 'expression':
+                if (!class_exists(Expression::class)) {
+                    throw new \LogicException('The type="expression" attribute cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+                }
 
-                    $arguments[$key] = new Expression($arg->nodeValue);
-                    break;
-                case 'collection':
-                    $arguments[$key] = $this->getArgumentsAsPhp($arg, $name, $file);
-                    break;
-                case 'iterator':
+                $arguments[$key] = new Expression($arg->nodeValue);
+                break;
+            case 'collection':
+                $arguments[$key] = $this->getArgumentsAsPhp($arg, $name, $file);
+                break;
+            case 'iterator':
+                $arg = $this->getArgumentsAsPhp($arg, $name, $file);
+                $arguments[$key] = new IteratorArgument($arg);
+                break;
+            case 'closure':
+            case 'service_closure':
+                if ('' !== $arg->getAttribute('id')) {
+                    $arg = new Reference($arg->getAttribute('id'), $invalidBehavior);
+                } else {
                     $arg = $this->getArgumentsAsPhp($arg, $name, $file);
-                    $arguments[$key] = new IteratorArgument($arg);
-                    break;
-                case 'closure':
-                case 'service_closure':
-                    if ('' !== $arg->getAttribute('id')) {
-                        $arg = new Reference($arg->getAttribute('id'), $invalidBehavior);
-                    } else {
-                        $arg = $this->getArgumentsAsPhp($arg, $name, $file);
-                    }
-                    $arguments[$key] = match ($type) {
-                        'service_closure' => new ServiceClosureArgument($arg),
-                        'closure' => (new Definition('Closure'))
-                            ->setFactory(['Closure', 'fromCallable'])
-                            ->addArgument($arg),
-                    };
-                    break;
-                case 'service_locator':
-                    $arg = $this->getArgumentsAsPhp($arg, $name, $file);
+                }
+                $arguments[$key] = match ($type) {
+                    'service_closure' => new ServiceClosureArgument($arg),
+                    'closure' => (new Definition('Closure'))
+                        ->setFactory(['Closure', 'fromCallable'])
+                        ->addArgument($arg),
+                };
+                break;
+            case 'service_locator':
+                $arg = $this->getArgumentsAsPhp($arg, $name, $file);
 
-                    if (isset($arg[0])) {
-                        trigger_deprecation('symfony/dependency-injection', '6.3', 'Skipping "key" argument or using integers as values in a "service_locator" tag is deprecated. The keys will default to the IDs of the original services in 7.0.');
-                    }
+                if (isset($arg[0])) {
+                    trigger_deprecation('symfony/dependency-injection', '6.3', 'Skipping "key" argument or using integers as values in a "service_locator" tag is deprecated. The keys will default to the IDs of the original services in 7.0.');
+                }
 
-                    $arguments[$key] = new ServiceLocatorArgument($arg);
-                    break;
-                case 'tagged':
-                case 'tagged_iterator':
-                case 'tagged_locator':
-                    $forLocator = 'tagged_locator' === $type;
+                $arguments[$key] = new ServiceLocatorArgument($arg);
+                break;
+            case 'tagged':
+            case 'tagged_iterator':
+            case 'tagged_locator':
+                $forLocator = 'tagged_locator' === $type;
 
-                    if (!$arg->getAttribute('tag')) {
-                        throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="%s" has no or empty "tag" attribute in "%s".', $name, $type, $file));
-                    }
+                if (!$arg->getAttribute('tag')) {
+                    throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="%s" has no or empty "tag" attribute in "%s".', $name, $type, $file));
+                }
 
-                    $excludes = array_column($this->getChildren($arg, 'exclude'), 'nodeValue');
-                    if ($arg->hasAttribute('exclude')) {
-                        if (\count($excludes) > 0) {
-                            throw new InvalidArgumentException('You cannot use both the attribute "exclude" and <exclude> tags at the same time.');
-                        }
-                        $excludes = [$arg->getAttribute('exclude')];
+                $excludes = array_column($this->getChildren($arg, 'exclude'), 'nodeValue');
+                if ($arg->hasAttribute('exclude')) {
+                    if (\count($excludes) > 0) {
+                        throw new InvalidArgumentException('You cannot use both the attribute "exclude" and <exclude> tags at the same time.');
                     }
+                    $excludes = [$arg->getAttribute('exclude')];
+                }
 
-                    $arguments[$key] = new TaggedIteratorArgument($arg->getAttribute('tag'), $arg->getAttribute('index-by') ?: null, $arg->getAttribute('default-index-method') ?: null, $forLocator, $arg->getAttribute('default-priority-method') ?: null, $excludes, !$arg->hasAttribute('exclude-self') || XmlUtils::phpize($arg->getAttribute('exclude-self')));
+                $arguments[$key] = new TaggedIteratorArgument($arg->getAttribute('tag'), $arg->getAttribute('index-by') ?: null, $arg->getAttribute('default-index-method') ?: null, $forLocator, $arg->getAttribute('default-priority-method') ?: null, $excludes, !$arg->hasAttribute('exclude-self') || XmlUtils::phpize($arg->getAttribute('exclude-self')));
 
-                    if ($forLocator) {
-                        $arguments[$key] = new ServiceLocatorArgument($arguments[$key]);
-                    }
-                    break;
-                case 'binary':
-                    if (false === $value = base64_decode($arg->nodeValue)) {
-                        throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="binary" is not a valid base64 encoded string.', $name));
-                    }
-                    $arguments[$key] = $value;
-                    break;
-                case 'abstract':
-                    $arguments[$key] = new AbstractArgument($arg->nodeValue);
-                    break;
-                case 'string':
-                    $arguments[$key] = $trim ? trim($arg->nodeValue) : $arg->nodeValue;
-                    break;
-                case 'constant':
-                    $arguments[$key] = \constant(trim($arg->nodeValue));
-                    break;
-                default:
-                    $arguments[$key] = XmlUtils::phpize($trim ? trim($arg->nodeValue) : $arg->nodeValue);
+                if ($forLocator) {
+                    $arguments[$key] = new ServiceLocatorArgument($arguments[$key]);
+                }
+                break;
+            case 'binary':
+                if (false === $value = base64_decode($arg->nodeValue)) {
+                    throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="binary" is not a valid base64 encoded string.', $name));
+                }
+                $arguments[$key] = $value;
+                break;
+            case 'abstract':
+                $arguments[$key] = new AbstractArgument($arg->nodeValue);
+                break;
+            case 'string':
+                $arguments[$key] = $trim ? trim($arg->nodeValue) : $arg->nodeValue;
+                break;
+            case 'constant':
+                $arguments[$key] = \constant(trim($arg->nodeValue));
+                break;
+            default:
+                $arguments[$key] = XmlUtils::phpize($trim ? trim($arg->nodeValue) : $arg->nodeValue);
             }
         }
 
@@ -765,18 +764,22 @@ EOF
             $dom->loadXML('<?xml version="1.0"?><test/>');
 
             $tmpfile = tempnam(sys_get_temp_dir(), 'symfony');
-            register_shutdown_function(static function () use ($tmpfile) {
-                @unlink($tmpfile);
-            });
+            register_shutdown_function(
+                static function () use ($tmpfile) {
+                    @unlink($tmpfile);
+                }
+            );
             $schema = '<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <xsd:include schemaLocation="file:///'.rawurlencode(str_replace('\\', '/', $tmpfile)).'" />
 </xsd:schema>';
-            file_put_contents($tmpfile, '<?xml version="1.0" encoding="utf-8"?>
+            file_put_contents(
+                $tmpfile, '<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <xsd:element name="test" type="testType" />
   <xsd:complexType name="testType"/>
-</xsd:schema>');
+</xsd:schema>'
+            );
         }
 
         return !@$dom->schemaValidateSource($schema);

@@ -17,22 +17,29 @@ use Symfony\Component\Validator\Validator\TraceableValidator;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('debug.validator', TraceableValidator::class)
-            ->decorate('validator', null, 255)
-            ->args([
+        ->decorate('validator', null, 255)
+        ->args(
+            [
                 service('debug.validator.inner'),
-            ])
-            ->tag('kernel.reset', [
+                ]
+        )
+        ->tag(
+            'kernel.reset', [
                 'method' => 'reset',
-            ])
+                ]
+        )
 
         ->set('data_collector.validator', ValidatorDataCollector::class)
-            ->args([
+        ->args(
+            [
                 service('debug.validator'),
-            ])
-            ->tag('data_collector', [
+                ]
+        )
+        ->tag(
+            'data_collector', [
                 'template' => '@WebProfiler/Collector/validator.html.twig',
                 'id' => 'validator',
                 'priority' => 320,
-            ])
-    ;
+                ]
+        );
 };

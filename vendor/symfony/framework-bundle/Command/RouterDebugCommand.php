@@ -53,20 +53,22 @@ class RouterDebugCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::OPTIONAL, 'A route name'),
                 new InputOption('show-controllers', null, InputOption::VALUE_NONE, 'Show assigned controllers in overview'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'txt'),
                 new InputOption('raw', null, InputOption::VALUE_NONE, 'To output raw route(s)'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> displays the configured routes:
 
   <info>php %command.full_name%</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -88,12 +90,14 @@ EOF
             $matchingRoutes = $this->findRouteNameContaining($name, $routes);
 
             if (!$input->isInteractive() && !$route && \count($matchingRoutes) > 1) {
-                $helper->describe($io, $this->findRouteContaining($name, $routes), [
+                $helper->describe(
+                    $io, $this->findRouteContaining($name, $routes), [
                     'format' => $input->getOption('format'),
                     'raw_text' => $input->getOption('raw'),
                     'show_controllers' => $input->getOption('show-controllers'),
                     'output' => $io,
-                ]);
+                    ]
+                );
 
                 return 0;
             }
@@ -108,21 +112,25 @@ EOF
                 throw new InvalidArgumentException(sprintf('The route "%s" does not exist.', $name));
             }
 
-            $helper->describe($io, $route, [
+            $helper->describe(
+                $io, $route, [
                 'format' => $input->getOption('format'),
                 'raw_text' => $input->getOption('raw'),
                 'name' => $name,
                 'output' => $io,
                 'container' => $container,
-            ]);
+                ]
+            );
         } else {
-            $helper->describe($io, $routes, [
+            $helper->describe(
+                $io, $routes, [
                 'format' => $input->getOption('format'),
                 'raw_text' => $input->getOption('raw'),
                 'show_controllers' => $input->getOption('show-controllers'),
                 'output' => $io,
                 'container' => $container,
-            ]);
+                ]
+            );
         }
 
         return 0;

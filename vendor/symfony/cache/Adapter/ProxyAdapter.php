@@ -86,13 +86,15 @@ class ProxyAdapter implements AdapterInterface, CacheInterface, PruneableInterfa
             return $this->doGet($this, $key, $callback, $beta, $metadata);
         }
 
-        return $this->pool->get($this->getId($key), function ($innerItem, bool &$save) use ($key, $callback) {
-            $item = (self::$createCacheItem)($key, $innerItem, $this->poolHash);
-            $item->set($value = $callback($item, $save));
-            (self::$setInnerItem)($innerItem, $item);
+        return $this->pool->get(
+            $this->getId($key), function ($innerItem, bool &$save) use ($key, $callback) {
+                $item = (self::$createCacheItem)($key, $innerItem, $this->poolHash);
+                $item->set($value = $callback($item, $save));
+                (self::$setInnerItem)($innerItem, $item);
 
-            return $value;
-        }, $beta, $metadata);
+                return $value;
+            }, $beta, $metadata
+        );
     }
 
     public function getItem(mixed $key): CacheItem

@@ -145,14 +145,17 @@ class CachePoolPass implements CompilerPassInterface
                     }
                 } elseif ('early_expiration_message_bus' === $attr) {
                     $needsMessageHandler = true;
-                    $pool->addMethodCall('setCallbackWrapper', [(new Definition(EarlyExpirationDispatcher::class))
-                        ->addArgument(new Reference($tags[0]['early_expiration_message_bus']))
-                        ->addArgument(new Reference('reverse_container'))
-                        ->addArgument((new Definition('callable'))
-                            ->setFactory([new Reference($id), 'setCallbackWrapper'])
-                            ->addArgument(null)
-                        ),
-                    ]);
+                    $pool->addMethodCall(
+                        'setCallbackWrapper', [(new Definition(EarlyExpirationDispatcher::class))
+                            ->addArgument(new Reference($tags[0]['early_expiration_message_bus']))
+                            ->addArgument(new Reference('reverse_container'))
+                            ->addArgument(
+                                (new Definition('callable'))
+                                    ->setFactory([new Reference($id), 'setCallbackWrapper'])
+                                    ->addArgument(null)
+                            ),
+                        ]
+                    );
                     $pool->addTag('container.reversible');
                 } elseif ('namespace' !== $attr || !\in_array($class, [ArrayAdapter::class, NullAdapter::class], true)) {
                     $argument = $tags[0][$attr];

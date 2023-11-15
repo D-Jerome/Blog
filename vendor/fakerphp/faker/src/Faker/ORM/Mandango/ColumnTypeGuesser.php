@@ -24,10 +24,10 @@ class ColumnTypeGuesser
         $generator = $this->generator;
 
         switch ($field['type']) {
-            case 'boolean':
-                return static function () use ($generator) {
+        case 'boolean':
+            return static function () use ($generator) {
                     return $generator->boolean;
-                };
+            };
 
             case 'integer':
                 return static function () use ($generator) {

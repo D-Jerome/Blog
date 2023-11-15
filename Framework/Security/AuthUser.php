@@ -14,7 +14,7 @@ class AuthUser
     /**
      * __construct keep auth user information
      *
-     * @param  int $id
+     * @param  int    $id
      * @param  string $roleName
      * @param  string $username
      * @return void

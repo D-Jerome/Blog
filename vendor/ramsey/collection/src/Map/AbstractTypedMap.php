@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -22,9 +22,9 @@ use Ramsey\Collection\Tool\ValueToStringTrait;
  * This class provides a basic implementation of `TypedMapInterface`, to
  * minimize the effort required to implement this interface.
  *
- * @template K of array-key
- * @template T
- * @extends AbstractMap<K, T>
+ * @template   K of array-key
+ * @template   T
+ * @extends    AbstractMap<K, T>
  * @implements TypedMapInterface<K, T>
  */
 abstract class AbstractTypedMap extends AbstractMap implements TypedMapInterface

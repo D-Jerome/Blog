@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -27,15 +28,17 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
 
     public function __construct(array $frames)
     {
-        $this->frames = array_map(function ($frame) {
-            return new Frame($frame);
-        }, $frames);
+        $this->frames = array_map(
+            function ($frame) {
+                return new Frame($frame);
+            }, $frames
+        );
     }
 
     /**
      * Filters frames using a callable, returns the same FrameCollection
      *
-     * @param  callable        $callable
+     * @param  callable $callable
      * @return FrameCollection
      */
     public function filter($callable)
@@ -47,24 +50,26 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     /**
      * Map the collection of frames
      *
-     * @param  callable        $callable
+     * @param  callable $callable
      * @return FrameCollection
      */
     public function map($callable)
     {
         // Contain the map within a higher-order callable
         // that enforces type-correctness for the $callable
-        $this->frames = array_map(function ($frame) use ($callable) {
-            $frame = call_user_func($callable, $frame);
+        $this->frames = array_map(
+            function ($frame) use ($callable) {
+                $frame = call_user_func($callable, $frame);
 
-            if (!$frame instanceof Frame) {
-                throw new UnexpectedValueException(
-                    "Callable to " . __CLASS__ . "::map must return a Frame object"
-                );
-            }
+                if (!$frame instanceof Frame) {
+                    throw new UnexpectedValueException(
+                        "Callable to " . __CLASS__ . "::map must return a Frame object"
+                    );
+                }
 
-            return $frame;
-        }, $this->frames);
+                return $frame;
+            }, $this->frames
+        );
 
         return $this;
     }
@@ -84,7 +89,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see IteratorAggregate::getIterator
+     * @see    IteratorAggregate::getIterator
      * @return ArrayIterator
      */
     #[ReturnTypeWillChange]
@@ -94,7 +99,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see ArrayAccess::offsetExists
+     * @see   ArrayAccess::offsetExists
      * @param int $offset
      */
     #[ReturnTypeWillChange]
@@ -104,7 +109,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see ArrayAccess::offsetGet
+     * @see   ArrayAccess::offsetGet
      * @param int $offset
      */
     #[ReturnTypeWillChange]
@@ -114,7 +119,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see ArrayAccess::offsetSet
+     * @see   ArrayAccess::offsetSet
      * @param int $offset
      */
     #[ReturnTypeWillChange]
@@ -124,7 +129,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see ArrayAccess::offsetUnset
+     * @see   ArrayAccess::offsetUnset
      * @param int $offset
      */
     #[ReturnTypeWillChange]
@@ -134,7 +139,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see Countable::count
+     * @see    Countable::count
      * @return int
      */
     #[ReturnTypeWillChange]
@@ -150,13 +155,17 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
      */
     public function countIsApplication()
     {
-        return count(array_filter($this->frames, function (Frame $f) {
-            return $f->isApplication();
-        }));
+        return count(
+            array_filter(
+                $this->frames, function (Frame $f) {
+                    return $f->isApplication();
+                }
+            )
+        );
     }
 
     /**
-     * @see Serializable::serialize
+     * @see    Serializable::serialize
      * @return string
      */
     #[ReturnTypeWillChange]
@@ -166,7 +175,7 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
     }
 
     /**
-     * @see Serializable::unserialize
+     * @see   Serializable::unserialize
      * @param string $serializedFrames
      */
     #[ReturnTypeWillChange]
@@ -207,7 +216,9 @@ class FrameCollection implements ArrayAccess, IteratorAggregate, Serializable, C
         $p = count($parentFrames)-1;
 
         for ($i = count($diff)-1; $i >= 0 && $p >= 0; $i--) {
-            /** @var Frame $tailFrame */
+            /**
+ * @var Frame $tailFrame 
+*/
             $tailFrame = $diff[$i];
             if ($tailFrame->equals($parentFrames[$p])) {
                 unset($diff[$i]);

@@ -76,20 +76,20 @@ class VarDumper
 
         $format = $_SERVER['VAR_DUMPER_FORMAT'] ?? null;
         switch (true) {
-            case 'html' === $format:
-                $dumper = new HtmlDumper();
-                break;
-            case 'cli' === $format:
-                $dumper = new CliDumper();
-                break;
-            case 'server' === $format:
-            case $format && 'tcp' === parse_url($format, \PHP_URL_SCHEME):
-                $host = 'server' === $format ? $_SERVER['VAR_DUMPER_SERVER'] ?? '127.0.0.1:9912' : $format;
-                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? new CliDumper() : new HtmlDumper();
-                $dumper = new ServerDumper($host, $dumper, self::getDefaultContextProviders());
-                break;
-            default:
-                $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? new CliDumper() : new HtmlDumper();
+        case 'html' === $format:
+            $dumper = new HtmlDumper();
+            break;
+        case 'cli' === $format:
+            $dumper = new CliDumper();
+            break;
+        case 'server' === $format:
+        case $format && 'tcp' === parse_url($format, \PHP_URL_SCHEME):
+            $host = 'server' === $format ? $_SERVER['VAR_DUMPER_SERVER'] ?? '127.0.0.1:9912' : $format;
+            $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? new CliDumper() : new HtmlDumper();
+            $dumper = new ServerDumper($host, $dumper, self::getDefaultContextProviders());
+            break;
+        default:
+            $dumper = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) ? new CliDumper() : new HtmlDumper();
         }
 
         if (!$dumper instanceof ServerDumper) {

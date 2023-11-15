@@ -338,11 +338,13 @@ class ExceptionCaster
         if (isset($trace[0]['file'], $trace[0]['line']) && $trace[0]['file'] === $file && $trace[0]['line'] === $line) {
             return;
         }
-        array_unshift($trace, [
+        array_unshift(
+            $trace, [
             'function' => $class ? 'new '.$class : null,
             'file' => $file,
             'line' => $line,
-        ]);
+            ]
+        );
     }
 
     private static function extractSource(string $srcLines, int $line, int $srcContext, string $lang, ?string $file, array $frame): EnumStub

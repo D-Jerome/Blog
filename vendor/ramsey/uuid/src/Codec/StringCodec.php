@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -50,7 +50,9 @@ class StringCodec implements CodecInterface
     {
         $hex = bin2hex($uuid->getFields()->getBytes());
 
-        /** @var non-empty-string */
+        /**
+ * @var non-empty-string 
+*/
         return sprintf(
             '%08s-%04s-%04s-%04s-%012s',
             substr($hex, 0, 8),
@@ -62,13 +64,15 @@ class StringCodec implements CodecInterface
     }
 
     /**
-     * @psalm-return non-empty-string
+     * @psalm-return   non-empty-string
      * @psalm-suppress MoreSpecificReturnType we know that the retrieved `string` is never empty
      * @psalm-suppress LessSpecificReturnStatement we know that the retrieved `string` is never empty
      */
     public function encodeBinary(UuidInterface $uuid): string
     {
-        /** @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. */
+        /**
+ * @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. 
+*/
         return $uuid->getFields()->getBytes();
     }
 

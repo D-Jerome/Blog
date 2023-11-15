@@ -88,8 +88,7 @@ class ExtensionPass implements CompilerPassInterface
 
             if ($container->hasDefinition('fragment.renderer.hinclude')) {
                 $container->getDefinition('fragment.renderer.hinclude')
-                    ->addTag('kernel.fragment_renderer', ['alias' => 'hinclude'])
-                ;
+                    ->addTag('kernel.fragment_renderer', ['alias' => 'hinclude']);
             }
         }
 

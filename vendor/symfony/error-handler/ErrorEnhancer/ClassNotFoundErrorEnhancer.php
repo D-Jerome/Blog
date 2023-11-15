@@ -63,7 +63,7 @@ class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
      *
      * @param string $class A class name (without its namespace)
      *
-     * Returns an array of possible fully qualified class names
+     *                      Returns an array of possible fully qualified class names
      */
     private function getClassCandidates(string $class): array
     {
@@ -153,7 +153,7 @@ class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
         }
 
         try {
-            require_once $file;
+            include_once $file;
         } catch (\Throwable) {
             return null;
         }

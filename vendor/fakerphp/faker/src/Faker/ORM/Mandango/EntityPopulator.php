@@ -106,7 +106,8 @@ class EntityPopulator
                 $value = is_callable($format) ? $format($insertedEntities, $obj) : $format;
 
                 if (isset($metadata['fields'][$column])
-                    || isset($metadata['referencesOne'][$column])) {
+                    || isset($metadata['referencesOne'][$column])
+                ) {
                     $obj->set($column, $value);
                 }
 

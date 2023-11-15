@@ -203,22 +203,26 @@ class Base
         }
 
         if (!is_array($elements)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Argument for parameter $array needs to be array, an instance of %s, or an instance of %s, got %s instead.',
-                \UnitEnum::class,
-                \Traversable::class,
-                is_object($array) ? get_class($array) : gettype($array),
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for parameter $array needs to be array, an instance of %s, or an instance of %s, got %s instead.',
+                    \UnitEnum::class,
+                    \Traversable::class,
+                    is_object($array) ? get_class($array) : gettype($array),
+                )
+            );
         }
 
         $numberOfElements = count($elements);
 
         if (!$allowDuplicates && null !== $count && $numberOfElements < $count) {
-            throw new \LengthException(sprintf(
-                'Cannot get %d elements, only %d in array',
-                $count,
-                $numberOfElements,
-            ));
+            throw new \LengthException(
+                sprintf(
+                    'Cannot get %d elements, only %d in array',
+                    $count,
+                    $numberOfElements,
+                )
+            );
         }
 
         if (null === $count) {
@@ -277,12 +281,14 @@ class Base
         }
 
         if (!is_array($elements)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Argument for parameter $array needs to be array, an instance of %s, or an instance of %s, got %s instead.',
-                \UnitEnum::class,
-                \Traversable::class,
-                is_object($array) ? get_class($array) : gettype($array),
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for parameter $array needs to be array, an instance of %s, or an instance of %s, got %s instead.',
+                    \UnitEnum::class,
+                    \Traversable::class,
+                    is_object($array) ? get_class($array) : gettype($array),
+                )
+            );
         }
 
         $randomElements = static::randomElements($elements, 1);
@@ -490,9 +496,11 @@ class Base
      */
     public static function bothify($string = '## ??')
     {
-        $string = self::replaceWildcard($string, '*', static function () {
-            return mt_rand(0, 1) ? '#' : '?';
-        });
+        $string = self::replaceWildcard(
+            $string, '*', static function () {
+                return mt_rand(0, 1) ? '#' : '?';
+            }
+        );
 
         return static::lexify(static::numerify($string));
     }
@@ -550,48 +558,64 @@ class Base
         $regex = preg_replace('/(?<!\\\)\*/', '{0,' . static::randomDigitNotNull() . '}', $regex);
         $regex = preg_replace('/(?<!\\\)\+/', '{1,' . static::randomDigitNotNull() . '}', $regex);
         // [12]{1,2} becomes [12] or [12][12]
-        $regex = preg_replace_callback('/(\[[^\]]+\])\{(\d+),(\d+)\}/', static function ($matches) {
-            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/(\[[^\]]+\])\{(\d+),(\d+)\}/', static function ($matches) {
+                return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+            }, $regex
+        );
         // (12|34){1,2} becomes (12|34) or (12|34)(12|34)
-        $regex = preg_replace_callback('/(\([^\)]+\))\{(\d+),(\d+)\}/', static function ($matches) {
-            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/(\([^\)]+\))\{(\d+),(\d+)\}/', static function ($matches) {
+                return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+            }, $regex
+        );
         // A{1,2} becomes A or AA or \d{3} becomes \d\d\d
-        $regex = preg_replace_callback('/(\\\?.)\{(\d+),(\d+)\}/', static function ($matches) {
-            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/(\\\?.)\{(\d+),(\d+)\}/', static function ($matches) {
+                return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+            }, $regex
+        );
         // (this|that) becomes 'this' or 'that'
-        $regex = preg_replace_callback('/\((.*?)\)/', static function ($matches) {
-            return Base::randomElement(explode('|', str_replace(['(', ')'], '', $matches[1])));
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/\((.*?)\)/', static function ($matches) {
+                return Base::randomElement(explode('|', str_replace(['(', ')'], '', $matches[1])));
+            }, $regex
+        );
         // All A-F inside of [] become ABCDEF
-        $regex = preg_replace_callback('/\[([^\]]+)\]/', static function ($matches) {
-            return '[' . preg_replace_callback('/(\w|\d)\-(\w|\d)/', static function ($range) {
-                return implode('', range($range[1], $range[2]));
-            }, $matches[1]) . ']';
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/\[([^\]]+)\]/', static function ($matches) {
+                return '[' . preg_replace_callback(
+                    '/(\w|\d)\-(\w|\d)/', static function ($range) {
+                        return implode('', range($range[1], $range[2]));
+                    }, $matches[1]
+                ) . ']';
+            }, $regex
+        );
         // All [ABC] become B (or A or C)
-        $regex = preg_replace_callback('/\[([^\]]+)\]/', static function ($matches) {
-            // remove backslashes (that are not followed by another backslash) because they are escape characters
-            $match = preg_replace('/\\\(?!\\\)/', '', $matches[1]);
-            $randomElement = Base::randomElement(str_split($match));
-            //[.] should not be a random character, but a literal .
-            return str_replace('.', '\.', $randomElement);
-        }, $regex);
+        $regex = preg_replace_callback(
+            '/\[([^\]]+)\]/', static function ($matches) {
+                // remove backslashes (that are not followed by another backslash) because they are escape characters
+                $match = preg_replace('/\\\(?!\\\)/', '', $matches[1]);
+                $randomElement = Base::randomElement(str_split($match));
+                //[.] should not be a random character, but a literal .
+                return str_replace('.', '\.', $randomElement);
+            }, $regex
+        );
         // replace \d with number and \w with letter and . with ascii
         $regex = preg_replace_callback('/\\\w/', [static::class, 'randomLetter'], $regex);
         $regex = preg_replace_callback('/\\\d/', [static::class, 'randomDigit'], $regex);
         //replace . with ascii except backslash
-        $regex = preg_replace_callback('/(?<!\\\)\./', static function () {
-            $chr = static::asciify('*');
+        $regex = preg_replace_callback(
+            '/(?<!\\\)\./', static function () {
+                $chr = static::asciify('*');
 
-            if ($chr === '\\') {
-                $chr .= '\\';
-            }
+                if ($chr === '\\') {
+                    $chr .= '\\';
+                }
 
-            return $chr;
-        }, $regex);
+                return $chr;
+            }, $regex
+        );
         // remove remaining single backslashes
         $regex = str_replace('\\\\', '[:escaped_backslash:]', $regex);
         $regex = str_replace('\\', '', $regex);

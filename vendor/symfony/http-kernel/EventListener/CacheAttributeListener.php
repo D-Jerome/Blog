@@ -62,7 +62,9 @@ class CacheAttributeListener implements EventSubscriberInterface
         $lastModified = null;
         $etag = null;
 
-        /** @var Cache[] $attributes */
+        /**
+ * @var Cache[] $attributes 
+*/
         foreach ($attributes as $cache) {
             if (null !== $cache->lastModified) {
                 $lastModified = $this->getExpressionLanguage()->evaluate($cache->lastModified, array_merge($request->attributes->all(), $event->getNamedArguments()));
@@ -99,7 +101,9 @@ class CacheAttributeListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        /** @var Cache[] $attributes */
+        /**
+ * @var Cache[] $attributes 
+*/
         if (!\is_array($attributes = $request->attributes->get('_cache'))) {
             return;
         }

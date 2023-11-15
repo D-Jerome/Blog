@@ -2,8 +2,9 @@
 
 /**
  * Hindi PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Yash Karanke <mr.karanke@gmail.com>
+ * @author  Yash Karanke <mr.karanke@gmail.com>
  * Rewrite and extension of the work by Jayanti Suthar <suthar.jayanti93@gmail.com>
  */
 

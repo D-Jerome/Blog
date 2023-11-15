@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ interface UuidBuilderInterface
      * Builds and returns a UuidInterface
      *
      * @param CodecInterface $codec The codec to use for building this UuidInterface instance
-     * @param string $bytes The byte string from which to construct a UUID
+     * @param string         $bytes The byte string from which to construct a UUID
      *
      * @return UuidInterface Implementations may choose to return more specific
      *     instances of UUIDs that implement UuidInterface

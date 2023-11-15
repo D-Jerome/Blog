@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -158,19 +159,21 @@ class PrettyPageHandler extends Handler
             $cloner = new VarCloner();
             // Only dump object internals if a custom caster exists for performance reasons
             // https://github.com/filp/whoops/pull/404
-            $cloner->addCasters(['*' => function ($obj, $a, $stub, $isNested, $filter = 0) {
-                $class = $stub->class;
-                $classes = [$class => $class] + class_parents($obj) + class_implements($obj);
+            $cloner->addCasters(
+                ['*' => function ($obj, $a, $stub, $isNested, $filter = 0) {
+                    $class = $stub->class;
+                    $classes = [$class => $class] + class_parents($obj) + class_implements($obj);
 
-                foreach ($classes as $class) {
-                    if (isset(AbstractCloner::$defaultCasters[$class])) {
-                        return $a;
+                    foreach ($classes as $class) {
+                        if (isset(AbstractCloner::$defaultCasters[$class])) {
+                            return $a;
+                        }
                     }
-                }
 
-                // Remove all internals
-                return [];
-            }]);
+                    // Remove all internals
+                    return [];
+                }]
+            );
             $this->templateHelper->setCloner($cloner);
         }
     }
@@ -281,9 +284,11 @@ class PrettyPageHandler extends Handler
 
         // Add extra entries list of data tables:
         // @todo: Consolidate addDataTable and addDataTableCallback
-        $extraTables = array_map(function ($table) use ($inspector) {
-            return $table instanceof \Closure ? $table($inspector) : $table;
-        }, $this->getDataTables());
+        $extraTables = array_map(
+            function ($table) use ($inspector) {
+                return $table instanceof \Closure ? $table($inspector) : $table;
+            }, $this->getDataTables()
+        );
         $vars["tables"] = array_merge($extraTables, $vars["tables"]);
 
         $plainTextHandler = new PlainTextHandler();
@@ -780,7 +785,7 @@ class PrettyPageHandler extends Handler
      *
      * @param string $superGlobalName The name of the superglobal array, e.g. '_GET'
      * @param string $key             The key within the superglobal
-     * @see hideSuperglobalKey
+     * @see   hideSuperglobalKey
      *
      * @return static
      */
@@ -793,8 +798,8 @@ class PrettyPageHandler extends Handler
     /**
      * Hide a sensitive value within one of the superglobal arrays.
      *
-     * @param string $superGlobalName The name of the superglobal array, e.g. '_GET'
-     * @param string $key             The key within the superglobal
+     * @param  string $superGlobalName The name of the superglobal array, e.g. '_GET'
+     * @param  string $key             The key within the superglobal
      * @return static
      */
     public function hideSuperglobalKey($superGlobalName, $key)
@@ -810,8 +815,8 @@ class PrettyPageHandler extends Handler
      * Non-string values will be replaced with a fixed asterisk count.
      * We intentionally dont rely on $GLOBALS as it depends on the 'auto_globals_jit' php.ini setting.
      *
-     * @param array|\ArrayAccess  $superGlobal     One of the superglobal arrays
-     * @param string $superGlobalName The name of the superglobal array, e.g. '_GET'
+     * @param array|\ArrayAccess $superGlobal     One of the superglobal arrays
+     * @param string             $superGlobalName The name of the superglobal array, e.g. '_GET'
      *
      * @return array $values without sensitive data
      */

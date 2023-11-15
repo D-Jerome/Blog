@@ -25,11 +25,10 @@ class Configuration implements ConfigurationInterface
         foreach (Extensions::getClasses() as $name => $class) {
             $rootNode
                 ->children()
-                    ->arrayNode($name)
-                        ->{class_exists($class) ? 'canBeDisabled' : 'canBeEnabled'}()
-                    ->end()
+                ->arrayNode($name)
+                ->{class_exists($class) ? 'canBeDisabled' : 'canBeEnabled'}()
                 ->end()
-            ;
+                ->end();
         }
 
         return $treeBuilder;

@@ -19,12 +19,10 @@ class Template
          * The name of the template to render.
          */
         public string $template,
-
         /**
          * The controller method arguments to pass to the template.
          */
         public ?array $vars = null,
-
         /**
          * Enables streaming the template.
          */

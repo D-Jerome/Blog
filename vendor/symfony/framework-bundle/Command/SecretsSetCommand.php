@@ -51,7 +51,8 @@ final class SecretsSetCommand extends Command
             ->addArgument('file', InputArgument::OPTIONAL, 'A file where to read the secret from or "-" for reading from STDIN')
             ->addOption('local', 'l', InputOption::VALUE_NONE, 'Update the local vault.')
             ->addOption('random', 'r', InputOption::VALUE_OPTIONAL, 'Generate a random value.', false)
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command stores a secret in the vault.
 
     <info>%command.full_name% <name></info>
@@ -70,8 +71,7 @@ Use "-" as a file name to read from STDIN:
 
 Use <info>--local</info> to override secrets for local needs.
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

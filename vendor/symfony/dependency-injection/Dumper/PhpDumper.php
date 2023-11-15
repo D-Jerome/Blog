@@ -64,7 +64,9 @@ class PhpDumper extends Dumper
      */
     public const NON_FIRST_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789_';
 
-    /** @var \SplObjectStorage<Definition, Variable>|null */
+    /**
+     * @var \SplObjectStorage<Definition, Variable>|null 
+     */
     private ?\SplObjectStorage $definitionVariables = null;
     private ?array $referenceVariables = null;
     private int $variableCount;
@@ -138,7 +140,8 @@ class PhpDumper extends Dumper
         $this->inlinedRequires = [];
         $this->exportedVariables = [];
         $this->dynamicParameters = [];
-        $options = array_merge([
+        $options = array_merge(
+            [
             'class' => 'ProjectServiceContainer',
             'base_class' => 'Container',
             'namespace' => '',
@@ -153,7 +156,8 @@ class PhpDumper extends Dumper
             'preload_classes' => [],
             'service_locator_tag' => 'container.service_locator',
             'build_time' => time(),
-        ], $options);
+            ], $options
+        );
 
         $this->addGetService = false;
         $this->namespace = $options['namespace'];
@@ -1032,7 +1036,8 @@ EOF;
             return $code;
         }
 
-        $code .= sprintf(<<<'EOTXT'
+        $code .= sprintf(
+            <<<'EOTXT'
 
         if (isset($container->%s[%s])) {
             return $container->%1$s[%2$s];
@@ -1188,7 +1193,8 @@ EOTXT
             }
 
             if (\is_string($callable) && str_starts_with($callable, '@=')) {
-                return $return.sprintf('(($args = %s) ? (%s) : null)',
+                return $return.sprintf(
+                    '(($args = %s) ? (%s) : null)',
                     $this->dumpValue(new ServiceLocatorArgument($definition->getArguments())),
                     $this->getExpressionLanguage()->compile(substr($callable, 2), ['container' => 'container', 'args' => 'args'])
                 ).$tail;
@@ -1202,10 +1208,9 @@ EOTXT
                 throw new RuntimeException(sprintf('Cannot dump definition because of invalid factory method (%s).', $callable[1] ?: 'n/a'));
             }
 
-            if (['...'] === $arguments && ($definition->isLazy() || 'Closure' !== ($definition->getClass() ?? 'Closure')) && (
-                $callable[0] instanceof Reference
-                || ($callable[0] instanceof Definition && !$this->definitionVariables->contains($callable[0]))
-            )) {
+            if (['...'] === $arguments && ($definition->isLazy() || 'Closure' !== ($definition->getClass() ?? 'Closure')) && ($callable[0] instanceof Reference
+                || ($callable[0] instanceof Definition && !$this->definitionVariables->contains($callable[0]))                )
+            ) {
                 $initializer = 'fn () => '.$this->dumpValue($callable[0]);
 
                 return $return.LazyClosure::getCode($initializer, $callable, $definition, $this->container, $id).$tail;
@@ -1898,7 +1903,8 @@ EOF;
                         }
                         $definition = $this->container->getDefinition($id);
                         $load = !($definition->hasErrors() && $e = $definition->getErrors()) ? $this->asFiles && !$this->inlineFactories && !$this->isHotPath($definition) : reset($e);
-                        $serviceMap .= sprintf("\n            %s => [%s, %s, %s, %s],",
+                        $serviceMap .= sprintf(
+                            "\n            %s => [%s, %s, %s, %s],",
                             $this->export($k),
                             $this->export($definition->isShared() ? ($definition->isPublic() ? 'services' : 'privates') : false),
                             $this->doExport($id),
@@ -2144,15 +2150,17 @@ EOF;
                 throw new LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed. Try running "composer require symfony/expression-language".');
             }
             $providers = $this->container->getExpressionLanguageProviders();
-            $this->expressionLanguage = new ExpressionLanguage(null, $providers, function ($arg) {
-                $id = '""' === substr_replace($arg, '', 1, -1) ? stripcslashes(substr($arg, 1, -1)) : null;
+            $this->expressionLanguage = new ExpressionLanguage(
+                null, $providers, function ($arg) {
+                    $id = '""' === substr_replace($arg, '', 1, -1) ? stripcslashes(substr($arg, 1, -1)) : null;
 
-                if (null !== $id && ($this->container->hasAlias($id) || $this->container->hasDefinition($id))) {
-                    return $this->getServiceCall($id);
+                    if (null !== $id && ($this->container->hasAlias($id) || $this->container->hasDefinition($id))) {
+                        return $this->getServiceCall($id);
+                    }
+
+                    return sprintf('$container->get(%s)', $arg);
                 }
-
-                return sprintf('$container->get(%s)', $arg);
-            });
+            );
 
             if ($this->container->isTrackingResources()) {
                 foreach ($providers as $provider) {

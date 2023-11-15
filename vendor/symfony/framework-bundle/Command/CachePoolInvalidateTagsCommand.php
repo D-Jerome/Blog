@@ -46,14 +46,15 @@ final class CachePoolInvalidateTagsCommand extends Command
         $this
             ->addArgument('tags', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'The tags to invalidate')
             ->addOption('pool', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'The pools to invalidate on')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
                 The <info>%command.name%</info> command invalidates tags from taggable pools. By default, all pools
                 have the passed tags invalidated. Pass <info>--pool=my_pool</info> to invalidate tags on a specific pool.
 
                   php %command.full_name% tag1 tag2
                   php %command.full_name% tag1 tag2 --pool=cache2 --pool=cache1
-                EOF)
-        ;
+                EOF
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

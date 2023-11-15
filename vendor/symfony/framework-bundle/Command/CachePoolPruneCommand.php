@@ -41,13 +41,13 @@ final class CachePoolPruneCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command deletes all expired items from all pruneable pools.
 
     %command.full_name%
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

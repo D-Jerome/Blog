@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -84,10 +84,12 @@ class DefaultTimeGenerator implements TimeGeneratorInterface
         $timeHex = str_pad($uuidTime->toString(), 16, '0', STR_PAD_LEFT);
 
         if (strlen($timeHex) !== 16) {
-            throw new TimeSourceException(sprintf(
-                'The generated time of \'%s\' is larger than expected',
-                $timeHex
-            ));
+            throw new TimeSourceException(
+                sprintf(
+                    'The generated time of \'%s\' is larger than expected',
+                    $timeHex
+                )
+            );
         }
 
         $timeBytes = (string) hex2bin($timeHex);

@@ -44,8 +44,7 @@ class ForNode extends Node
             ->write("\$context['_parent'] = \$context;\n")
             ->write("\$context['_seq'] = twig_ensure_traversable(")
             ->subcompile($this->getNode('seq'))
-            ->raw(");\n")
-        ;
+            ->raw(");\n");
 
         if ($this->hasNode('else')) {
             $compiler->write("\$context['_iterated'] = false;\n");
@@ -67,8 +66,7 @@ class ForNode extends Node
                 ->write("\$context['loop']['length'] = \$length;\n")
                 ->write("\$context['loop']['last'] = 1 === \$length;\n")
                 ->outdent()
-                ->write("}\n")
-            ;
+                ->write("}\n");
         }
 
         $this->loop->setAttribute('else', $this->hasNode('else'));
@@ -83,8 +81,7 @@ class ForNode extends Node
             ->indent()
             ->subcompile($this->getNode('body'))
             ->outdent()
-            ->write("}\n")
-        ;
+            ->write("}\n");
 
         if ($this->hasNode('else')) {
             $compiler
@@ -92,8 +89,7 @@ class ForNode extends Node
                 ->indent()
                 ->subcompile($this->getNode('else'))
                 ->outdent()
-                ->write("}\n")
-            ;
+                ->write("}\n");
         }
 
         $compiler->write("\$_parent = \$context['_parent'];\n");

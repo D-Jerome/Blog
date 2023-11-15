@@ -62,11 +62,13 @@ class Image extends Base
         $imageFormats = static::getFormats();
 
         if (!in_array(strtolower($format), $imageFormats, true)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid image format "%s". Allowable formats are: %s',
-                $format,
-                implode(', ', $imageFormats),
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid image format "%s". Allowable formats are: %s',
+                    $format,
+                    implode(', ', $imageFormats),
+                )
+            );
         }
 
         $size = sprintf('%dx%d.%s', $width, $height, $format);

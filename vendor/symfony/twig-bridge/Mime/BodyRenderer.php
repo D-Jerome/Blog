@@ -53,9 +53,11 @@ final class BodyRenderer implements BodyRendererInterface
             throw new InvalidArgumentException(sprintf('A "%s" context cannot have an "email" entry as this is a reserved variable.', get_debug_type($message)));
         }
 
-        $vars = array_merge($this->context, $messageContext, [
+        $vars = array_merge(
+            $this->context, $messageContext, [
             'email' => new WrappedTemplatedEmail($this->twig, $message),
-        ]);
+            ]
+        );
 
         if ($template = $message->getTextTemplate()) {
             $message->text($this->twig->render($template, $vars));

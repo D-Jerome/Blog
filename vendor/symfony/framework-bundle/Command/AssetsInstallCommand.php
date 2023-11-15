@@ -55,13 +55,16 @@ class AssetsInstallCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('target', InputArgument::OPTIONAL, 'The target directory', null),
-            ])
+                ]
+            )
             ->addOption('symlink', null, InputOption::VALUE_NONE, 'Symlink the assets instead of copying them')
             ->addOption('relative', null, InputOption::VALUE_NONE, 'Make relative symlinks')
             ->addOption('no-cleanup', null, InputOption::VALUE_NONE, 'Do not remove the assets of the bundles that no longer exist')
-            ->setHelp(<<<'EOT'
+            ->setHelp(
+                <<<'EOT'
 The <info>%command.name%</info> command installs bundle assets into a given
 directory (e.g. the <comment>public</comment> directory).
 
@@ -80,13 +83,14 @@ To make symlink relative, add the <info>--relative</info> option:
   <info>php %command.full_name% public --symlink --relative</info>
 
 EOT
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var KernelInterface $kernel */
+        /**
+ * @var KernelInterface $kernel 
+*/
         $kernel = $this->getApplication()->getKernel();
         $targetArg = rtrim($input->getArgument('target') ?? '', '/');
         if (!$targetArg) {
@@ -123,7 +127,9 @@ EOT
         $copyUsed = false;
         $exitCode = 0;
         $validAssetDirs = [];
-        /** @var BundleInterface $bundle */
+        /**
+ * @var BundleInterface $bundle 
+*/
         foreach ($kernel->getBundles() as $bundle) {
             if (!is_dir($originDir = $bundle->getPath().'/Resources/public') && !is_dir($originDir = $bundle->getPath().'/public')) {
                 continue;

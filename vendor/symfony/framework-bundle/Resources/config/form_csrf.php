@@ -16,14 +16,15 @@ use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('form.type_extension.csrf', FormTypeCsrfExtension::class)
-            ->args([
+        ->args(
+            [
                 service('security.csrf.token_manager'),
                 param('form.type_extension.csrf.enabled'),
                 param('form.type_extension.csrf.field_name'),
                 service('translator')->nullOnInvalid(),
                 param('validator.translation_domain'),
                 service('form.server_params'),
-            ])
-            ->tag('form.type_extension')
-    ;
+                ]
+        )
+        ->tag('form.type_extension');
 };

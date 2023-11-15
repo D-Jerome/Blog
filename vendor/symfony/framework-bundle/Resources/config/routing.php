@@ -44,91 +44,113 @@ return static function (ContainerConfigurator $container) {
     $container->parameters()
         ->set('router.request_context.host', 'localhost')
         ->set('router.request_context.scheme', 'http')
-        ->set('router.request_context.base_url', '')
-    ;
+        ->set('router.request_context.base_url', '');
 
     $container->services()
         ->set('routing.resolver', LoaderResolver::class)
 
         ->set('routing.loader.xml', XmlFileLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.yml', YamlFileLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.php', PhpFileLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.glob', GlobFileLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.directory', DirectoryLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.container', ContainerLoader::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('routing.route_loader'),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader')
+                ]
+        )
+        ->tag('routing.loader')
 
         ->set('routing.loader.annotation', AnnotatedRouteControllerLoader::class)
-            ->args([
+        ->args(
+            [
                 service('annotation_reader')->nullOnInvalid(),
                 '%kernel.environment%',
-            ])
-            ->tag('routing.loader', ['priority' => -10])
+                ]
+        )
+        ->tag('routing.loader', ['priority' => -10])
 
         ->set('routing.loader.annotation.directory', AnnotationDirectoryLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 service('routing.loader.annotation'),
-            ])
-            ->tag('routing.loader', ['priority' => -10])
+                ]
+        )
+        ->tag('routing.loader', ['priority' => -10])
 
         ->set('routing.loader.annotation.file', AnnotationFileLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
                 service('routing.loader.annotation'),
-            ])
-            ->tag('routing.loader', ['priority' => -10])
+                ]
+        )
+        ->tag('routing.loader', ['priority' => -10])
 
         ->set('routing.loader.psr4', Psr4DirectoryLoader::class)
-            ->args([
+        ->args(
+            [
                 service('file_locator'),
-            ])
-            ->tag('routing.loader', ['priority' => -10])
+                ]
+        )
+        ->tag('routing.loader', ['priority' => -10])
 
         ->set('routing.loader', DelegatingLoader::class)
-            ->public()
-            ->args([
+        ->public()
+        ->args(
+            [
                 service('routing.resolver'),
                 [], // Default options
                 [], // Default requirements
-            ])
+                ]
+        )
 
         ->set('router.default', Router::class)
-            ->args([
+        ->args(
+            [
                 service(ContainerInterface::class),
                 param('router.resource'),
                 [
@@ -143,71 +165,85 @@ return static function (ContainerConfigurator $container) {
                 service('parameter_bag')->ignoreOnInvalid(),
                 service('logger')->ignoreOnInvalid(),
                 param('kernel.default_locale'),
-            ])
-            ->call('setConfigCacheFactory', [
+                ]
+        )
+        ->call(
+            'setConfigCacheFactory', [
                 service('config_cache_factory'),
-            ])
-            ->tag('monolog.logger', ['channel' => 'router'])
-            ->tag('container.service_subscriber', ['id' => 'routing.loader'])
+                ]
+        )
+        ->tag('monolog.logger', ['channel' => 'router'])
+        ->tag('container.service_subscriber', ['id' => 'routing.loader'])
         ->alias('router', 'router.default')
-            ->public()
+        ->public()
         ->alias(RouterInterface::class, 'router')
         ->alias(UrlGeneratorInterface::class, 'router')
         ->alias(UrlMatcherInterface::class, 'router')
         ->alias(RequestContextAwareInterface::class, 'router')
 
         ->set('router.request_context', RequestContext::class)
-            ->factory([RequestContext::class, 'fromUri'])
-            ->args([
+        ->factory([RequestContext::class, 'fromUri'])
+        ->args(
+            [
                 param('router.request_context.base_url'),
                 param('router.request_context.host'),
                 param('router.request_context.scheme'),
                 param('request_listener.http_port'),
                 param('request_listener.https_port'),
-            ])
-            ->call('setParameter', [
+                ]
+        )
+        ->call(
+            'setParameter', [
                 '_functions',
                 service('router.expression_language_provider')->ignoreOnInvalid(),
-            ])
+                ]
+        )
         ->alias(RequestContext::class, 'router.request_context')
 
         ->set('router.expression_language_provider', ExpressionLanguageProvider::class)
-            ->args([
+        ->args(
+            [
                 tagged_locator('routing.expression_language_function', 'function'),
-            ])
-            ->tag('routing.expression_language_provider')
+                ]
+        )
+        ->tag('routing.expression_language_provider')
 
         ->set('router.cache_warmer', RouterCacheWarmer::class)
-            ->args([service(ContainerInterface::class)])
-            ->tag('container.service_subscriber', ['id' => 'router'])
-            ->tag('kernel.cache_warmer')
+        ->args([service(ContainerInterface::class)])
+        ->tag('container.service_subscriber', ['id' => 'router'])
+        ->tag('kernel.cache_warmer')
 
         ->set('router_listener', RouterListener::class)
-            ->args([
+        ->args(
+            [
                 service('router'),
                 service('request_stack'),
                 service('router.request_context')->ignoreOnInvalid(),
                 service('logger')->ignoreOnInvalid(),
                 param('kernel.project_dir'),
                 param('kernel.debug'),
-            ])
-            ->tag('kernel.event_subscriber')
-            ->tag('monolog.logger', ['channel' => 'request'])
+                ]
+        )
+        ->tag('kernel.event_subscriber')
+        ->tag('monolog.logger', ['channel' => 'request'])
 
         ->set(RedirectController::class)
-            ->public()
-            ->args([
+        ->public()
+        ->args(
+            [
                 service('router'),
                 inline_service('int')
                     ->factory([service('router.request_context'), 'getHttpPort']),
                 inline_service('int')
                     ->factory([service('router.request_context'), 'getHttpsPort']),
-            ])
+                ]
+        )
 
         ->set(TemplateController::class)
-            ->args([
+        ->args(
+            [
                 service('twig')->ignoreOnInvalid(),
-            ])
-            ->public()
-    ;
+                ]
+        )
+        ->public();
 };

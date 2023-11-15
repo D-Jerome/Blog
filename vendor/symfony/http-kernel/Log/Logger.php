@@ -51,7 +51,9 @@ class Logger extends AbstractLogger implements DebugLoggerInterface
     private array $logs = [];
     private array $errorCount = [];
 
-    /** @var resource|null */
+    /**
+     * @var resource|null 
+     */
     private $handle;
 
     /**
@@ -179,11 +181,11 @@ class Logger extends AbstractLogger implements DebugLoggerInterface
 
         $this->errorCount[$key] ??= 0;
         switch ($level) {
-            case LogLevel::ERROR:
-            case LogLevel::CRITICAL:
-            case LogLevel::ALERT:
-            case LogLevel::EMERGENCY:
-                ++$this->errorCount[$key];
+        case LogLevel::ERROR:
+        case LogLevel::CRITICAL:
+        case LogLevel::ALERT:
+        case LogLevel::EMERGENCY:
+            ++$this->errorCount[$key];
         }
     }
 }

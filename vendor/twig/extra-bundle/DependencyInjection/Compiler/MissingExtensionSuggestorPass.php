@@ -18,15 +18,16 @@ use Twig\Environment;
 
 class MissingExtensionSuggestorPass implements CompilerPassInterface
 {
-    /** @return void */
+    /**
+     * @return void 
+     */
     public function process(ContainerBuilder $container)
     {
         if ($container->getParameter('kernel.debug')) {
             $twigDefinition = $container->getDefinition('twig');
             $twigDefinition
                 ->addMethodCall('registerUndefinedFilterCallback', [[new Reference('twig.missing_extension_suggestor'), 'suggestFilter']])
-                ->addMethodCall('registerUndefinedFunctionCallback', [[new Reference('twig.missing_extension_suggestor'), 'suggestFunction']])
-            ;
+                ->addMethodCall('registerUndefinedFunctionCallback', [[new Reference('twig.missing_extension_suggestor'), 'suggestFunction']]);
 
             // this method was added in Twig 3.2
             if (method_exists(Environment::class, 'registerUndefinedTokenParserCallback')) {

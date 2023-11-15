@@ -47,20 +47,3 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
-{% block page %}
-{% if pages %}
-<div class="d-flex justify-content-evenly">
-{% if pages.previousActive %}
-    <a href="{{ pages.previousUri }}" class="btn btn-primary ">Page Précédente</a>
-{% else %}
-    <a href="{{ pages.previousUri }}" class="btn btn-secondary disabled" role="button" aria-disabled="true">Page Précédente</a>
-{% endif %}
-{% if pages.nextActive %}
-    <a href="{{ pages.nextUri }}" class="btn btn-primary " {{ pages.nextActive }} >Page Suivante</a>
-{% else %}
-    <a href="{{ pages.nextUri }}" class="btn btn-secondary disabled" role="button" aria-disabled="true">Page Suivante</a>
-
-{% endif %}
-</div>
-{% endif %}
-{% endblock %}

@@ -20,30 +20,33 @@ use Symfony\Component\Workflow\Workflow;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('workflow.abstract', Workflow::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('workflow definition'),
                 abstract_arg('marking store'),
                 service('event_dispatcher')->ignoreOnInvalid(),
                 abstract_arg('workflow name'),
                 abstract_arg('events to dispatch'),
-            ])
-            ->abstract()
+                ]
+        )
+        ->abstract()
         ->set('state_machine.abstract', StateMachine::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('workflow definition'),
                 abstract_arg('marking store'),
                 service('event_dispatcher')->ignoreOnInvalid(),
                 abstract_arg('workflow name'),
                 abstract_arg('events to dispatch'),
-            ])
-            ->abstract()
+                ]
+        )
+        ->abstract()
         ->set('workflow.marking_store.method', MethodMarkingStore::class)
-            ->abstract()
+        ->abstract()
         ->set('.workflow.registry', Registry::class)
         ->alias(Registry::class, '.workflow.registry')
-            ->deprecate('symfony/workflow', '6.2', 'The "%alias_id%" alias is deprecated, inject the workflow directly.')
+        ->deprecate('symfony/workflow', '6.2', 'The "%alias_id%" alias is deprecated, inject the workflow directly.')
         ->alias('workflow.registry', '.workflow.registry')
-            ->deprecate('symfony/workflow', '6.2', 'The "%alias_id%" alias is deprecated, inject the workflow directly.')
-        ->set('workflow.security.expression_language', ExpressionLanguage::class)
-    ;
+        ->deprecate('symfony/workflow', '6.2', 'The "%alias_id%" alias is deprecated, inject the workflow directly.')
+        ->set('workflow.security.expression_language', ExpressionLanguage::class);
 };

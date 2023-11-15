@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -106,12 +106,14 @@ final class Fields implements FieldsInterface
 
     public function getTimestamp(): Hexadecimal
     {
-        return new Hexadecimal(sprintf(
-            '%03x%04s%08s',
-            hexdec($this->getTimeHiAndVersion()->toString()) & 0x0fff,
-            $this->getTimeMid()->toString(),
-            $this->getTimeLow()->toString()
-        ));
+        return new Hexadecimal(
+            sprintf(
+                '%03x%04s%08s',
+                hexdec($this->getTimeHiAndVersion()->toString()) & 0x0fff,
+                $this->getTimeMid()->toString(),
+                $this->getTimeLow()->toString()
+            )
+        );
     }
 
     public function getVersion(): ?int

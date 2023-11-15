@@ -39,15 +39,17 @@ final class Preloader
 
     public static function preload(array $classes, array $preloaded = []): array
     {
-        set_error_handler(function ($t, $m, $f, $l) {
-            if (error_reporting() & $t) {
-                if (__FILE__ !== $f) {
-                    throw new \ErrorException($m, 0, $t, $f, $l);
-                }
+        set_error_handler(
+            function ($t, $m, $f, $l) {
+                if (error_reporting() & $t) {
+                    if (__FILE__ !== $f) {
+                        throw new \ErrorException($m, 0, $t, $f, $l);
+                    }
 
-                throw new \ReflectionException($m);
+                    throw new \ReflectionException($m);
+                }
             }
-        });
+        );
 
         $prev = [];
 

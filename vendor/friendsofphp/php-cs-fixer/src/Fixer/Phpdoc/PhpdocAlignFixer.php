@@ -201,15 +201,13 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
         );
         $tags
             ->setAllowedTypes(['array'])
-            ->setDefault(self::DEFAULT_TAGS)
-        ;
+            ->setDefault(self::DEFAULT_TAGS);
 
         $align = new FixerOptionBuilder('align', 'How comments should be aligned.');
         $align
             ->setAllowedTypes(['string'])
             ->setAllowedValues([self::ALIGN_LEFT, self::ALIGN_VERTICAL])
-            ->setDefault(self::ALIGN_VERTICAL)
-        ;
+            ->setDefault(self::ALIGN_VERTICAL);
 
         return new FixerConfigurationResolver([$tags->getOption(), $align->getOption()]);
     }

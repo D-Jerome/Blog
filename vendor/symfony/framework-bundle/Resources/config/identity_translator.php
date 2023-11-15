@@ -19,6 +19,5 @@ return static function (ContainerConfigurator $container) {
         ->set('translator', IdentityTranslator::class)
         ->alias(TranslatorInterface::class, 'translator')
 
-        ->set('identity_translator', IdentityTranslator::class)
-    ;
+        ->set('identity_translator', IdentityTranslator::class);
 };

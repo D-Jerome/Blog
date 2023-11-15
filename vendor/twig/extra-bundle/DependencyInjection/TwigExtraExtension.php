@@ -23,7 +23,9 @@ use Twig\Extra\TwigExtraBundle\Extensions;
  */
 class TwigExtraExtension extends Extension
 {
-    /** @return void */
+    /**
+     * @return void 
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));

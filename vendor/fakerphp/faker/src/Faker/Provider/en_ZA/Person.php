@@ -149,18 +149,18 @@ class Person extends \Faker\Provider\Person
         $birthDateString = $birthdate->format('ymd');
 
         switch (strtolower($gender ?: '')) {
-            case static::GENDER_FEMALE:
-                $genderDigit = self::numberBetween(0, 4);
+        case static::GENDER_FEMALE:
+            $genderDigit = self::numberBetween(0, 4);
 
-                break;
+            break;
 
-            case static::GENDER_MALE:
-                $genderDigit = self::numberBetween(5, 9);
+        case static::GENDER_MALE:
+            $genderDigit = self::numberBetween(5, 9);
 
-                break;
+            break;
 
-            default:
-                $genderDigit = self::numberBetween(0, 9);
+        default:
+            $genderDigit = self::numberBetween(0, 9);
         }
         $sequenceDigits = str_pad(self::randomNumber(3), 3, 0, STR_PAD_BOTH);
         $citizenDigit = ($citizen === true) ? '0' : '1';

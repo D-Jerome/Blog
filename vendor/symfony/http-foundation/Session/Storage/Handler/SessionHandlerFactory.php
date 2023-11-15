@@ -35,62 +35,62 @@ class SessionHandlerFactory
         $options = ($query ?: []) + $options;
 
         switch (true) {
-            case $connection instanceof \Redis:
-            case $connection instanceof Relay:
-            case $connection instanceof \RedisArray:
-            case $connection instanceof \RedisCluster:
-            case $connection instanceof \Predis\ClientInterface:
-                return new RedisSessionHandler($connection);
+        case $connection instanceof \Redis:
+        case $connection instanceof Relay:
+        case $connection instanceof \RedisArray:
+        case $connection instanceof \RedisCluster:
+        case $connection instanceof \Predis\ClientInterface:
+            return new RedisSessionHandler($connection);
 
-            case $connection instanceof \Memcached:
-                return new MemcachedSessionHandler($connection);
+        case $connection instanceof \Memcached:
+            return new MemcachedSessionHandler($connection);
 
-            case $connection instanceof \PDO:
-                return new PdoSessionHandler($connection);
+        case $connection instanceof \PDO:
+            return new PdoSessionHandler($connection);
 
-            case !\is_string($connection):
-                throw new \InvalidArgumentException(sprintf('Unsupported Connection: "%s".', get_debug_type($connection)));
-            case str_starts_with($connection, 'file://'):
-                $savePath = substr($connection, 7);
+        case !\is_string($connection):
+            throw new \InvalidArgumentException(sprintf('Unsupported Connection: "%s".', get_debug_type($connection)));
+        case str_starts_with($connection, 'file://'):
+            $savePath = substr($connection, 7);
 
-                return new StrictSessionHandler(new NativeFileSessionHandler('' === $savePath ? null : $savePath));
+            return new StrictSessionHandler(new NativeFileSessionHandler('' === $savePath ? null : $savePath));
 
-            case str_starts_with($connection, 'redis:'):
-            case str_starts_with($connection, 'rediss:'):
-            case str_starts_with($connection, 'memcached:'):
-                if (!class_exists(AbstractAdapter::class)) {
-                    throw new \InvalidArgumentException('Unsupported Redis or Memcached DSN. Try running "composer require symfony/cache".');
-                }
-                $handlerClass = str_starts_with($connection, 'memcached:') ? MemcachedSessionHandler::class : RedisSessionHandler::class;
-                $connection = AbstractAdapter::createConnection($connection, ['lazy' => true]);
+        case str_starts_with($connection, 'redis:'):
+        case str_starts_with($connection, 'rediss:'):
+        case str_starts_with($connection, 'memcached:'):
+            if (!class_exists(AbstractAdapter::class)) {
+                throw new \InvalidArgumentException('Unsupported Redis or Memcached DSN. Try running "composer require symfony/cache".');
+            }
+            $handlerClass = str_starts_with($connection, 'memcached:') ? MemcachedSessionHandler::class : RedisSessionHandler::class;
+            $connection = AbstractAdapter::createConnection($connection, ['lazy' => true]);
 
-                return new $handlerClass($connection, array_intersect_key($options, ['prefix' => 1, 'ttl' => 1]));
+            return new $handlerClass($connection, array_intersect_key($options, ['prefix' => 1, 'ttl' => 1]));
 
-            case str_starts_with($connection, 'pdo_oci://'):
-                if (!class_exists(DriverManager::class)) {
-                    throw new \InvalidArgumentException('Unsupported PDO OCI DSN. Try running "composer require doctrine/dbal".');
-                }
-                $connection[3] = '-';
-                $params = class_exists(DsnParser::class) ? (new DsnParser())->parse($connection) : ['url' => $connection];
-                $config = new Configuration();
-                if (class_exists(DefaultSchemaManagerFactory::class)) {
-                    $config->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
-                }
+        case str_starts_with($connection, 'pdo_oci://'):
+            if (!class_exists(DriverManager::class)) {
+                throw new \InvalidArgumentException('Unsupported PDO OCI DSN. Try running "composer require doctrine/dbal".');
+            }
+            $connection[3] = '-';
+            $params = class_exists(DsnParser::class) ? (new DsnParser())->parse($connection) : ['url' => $connection];
+            $config = new Configuration();
+            if (class_exists(DefaultSchemaManagerFactory::class)) {
+                $config->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
+            }
 
-                $connection = DriverManager::getConnection($params, $config);
-                $connection = method_exists($connection, 'getNativeConnection') ? $connection->getNativeConnection() : $connection->getWrappedConnection();
-                // no break;
+            $connection = DriverManager::getConnection($params, $config);
+            $connection = method_exists($connection, 'getNativeConnection') ? $connection->getNativeConnection() : $connection->getWrappedConnection();
+            // no break;
 
-            case str_starts_with($connection, 'mssql://'):
-            case str_starts_with($connection, 'mysql://'):
-            case str_starts_with($connection, 'mysql2://'):
-            case str_starts_with($connection, 'pgsql://'):
-            case str_starts_with($connection, 'postgres://'):
-            case str_starts_with($connection, 'postgresql://'):
-            case str_starts_with($connection, 'sqlsrv://'):
-            case str_starts_with($connection, 'sqlite://'):
-            case str_starts_with($connection, 'sqlite3://'):
-                return new PdoSessionHandler($connection, $options);
+        case str_starts_with($connection, 'mssql://'):
+        case str_starts_with($connection, 'mysql://'):
+        case str_starts_with($connection, 'mysql2://'):
+        case str_starts_with($connection, 'pgsql://'):
+        case str_starts_with($connection, 'postgres://'):
+        case str_starts_with($connection, 'postgresql://'):
+        case str_starts_with($connection, 'sqlsrv://'):
+        case str_starts_with($connection, 'sqlite://'):
+        case str_starts_with($connection, 'sqlite3://'):
+            return new PdoSessionHandler($connection, $options);
         }
 
         throw new \InvalidArgumentException(sprintf('Unsupported Connection: "%s".', $connection));

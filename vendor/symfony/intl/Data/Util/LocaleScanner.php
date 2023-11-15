@@ -43,7 +43,11 @@ class LocaleScanner
         $locales = glob($sourceDir.'/*.txt', \GLOB_NOSORT);
 
         // Remove file extension and sort
-        array_walk($locales, function (&$locale) { $locale = basename($locale, '.txt'); });
+        array_walk(
+            $locales, function (&$locale) {
+                $locale = basename($locale, '.txt'); 
+            }
+        );
 
         // Remove non-locales
         $locales = array_filter($locales, fn ($locale) => preg_match('/^[a-z]{2}(_.+)?$/', $locale));

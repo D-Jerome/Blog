@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -32,6 +33,7 @@ class Misc
 
     /**
      * Check, if possible, that this execution was triggered by a command line.
+     *
      * @return bool
      */
     public static function isCommandLine()
@@ -42,7 +44,7 @@ class Misc
     /**
      * Translate ErrorException code into the represented constant.
      *
-     * @param int $error_code
+     * @param  int $error_code
      * @return string
      */
     public static function translateErrorCode($error_code)
@@ -61,7 +63,7 @@ class Misc
     /**
      * Determine if an error level is fatal (halts execution)
      *
-     * @param int $level
+     * @param  int $level
      * @return bool
      */
     public static function isLevelFatal($level)

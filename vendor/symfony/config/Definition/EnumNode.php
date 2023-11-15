@@ -59,13 +59,19 @@ class EnumNode extends ScalarNode
      */
     public function getPermissibleValues(string $separator): string
     {
-        return implode($separator, array_unique(array_map(static function (mixed $value): string {
-            if (!$value instanceof \UnitEnum) {
-                return json_encode($value);
-            }
+        return implode(
+            $separator, array_unique(
+                array_map(
+                    static function (mixed $value): string {
+                        if (!$value instanceof \UnitEnum) {
+                            return json_encode($value);
+                        }
 
-            return ltrim(var_export($value, true), '\\');
-        }, $this->values)));
+                        return ltrim(var_export($value, true), '\\');
+                    }, $this->values
+                )
+            )
+        );
     }
 
     /**

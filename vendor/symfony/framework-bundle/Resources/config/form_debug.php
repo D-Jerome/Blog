@@ -20,19 +20,20 @@ use Symfony\Component\Form\ResolvedFormTypeFactory;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('form.resolved_type_factory', ResolvedTypeFactoryDataCollectorProxy::class)
-            ->args([
+        ->args(
+            [
                 inline_service(ResolvedFormTypeFactory::class),
                 service('data_collector.form'),
-            ])
+                ]
+        )
 
         ->set('form.type_extension.form.data_collector', DataCollectorTypeExtension::class)
-            ->args([service('data_collector.form')])
-            ->tag('form.type_extension')
+        ->args([service('data_collector.form')])
+        ->tag('form.type_extension')
 
         ->set('data_collector.form.extractor', FormDataExtractor::class)
 
         ->set('data_collector.form', FormDataCollector::class)
-            ->args([service('data_collector.form.extractor')])
-            ->tag('data_collector', ['template' => '@WebProfiler/Collector/form.html.twig', 'id' => 'form', 'priority' => 310])
-    ;
+        ->args([service('data_collector.form.extractor')])
+        ->tag('data_collector', ['template' => '@WebProfiler/Collector/form.html.twig', 'id' => 'form', 'priority' => 310]);
 };

@@ -35,7 +35,8 @@ final class TwigFilter
     {
         $this->name = $name;
         $this->callable = $callable;
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'needs_environment' => false,
             'needs_context' => false,
             'is_variadic' => false,
@@ -46,7 +47,8 @@ final class TwigFilter
             'node_class' => FilterExpression::class,
             'deprecated' => false,
             'alternative' => null,
-        ], $options);
+            ], $options
+        );
     }
 
     public function getName(): string

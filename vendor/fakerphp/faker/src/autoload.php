@@ -8,22 +8,24 @@
  * Code inspired from the SplClassLoader RFC
  * @see https://wiki.php.net/rfc/splclassloader#example_implementation
  */
-spl_autoload_register(function ($className) {
-    $className = ltrim($className, '\\');
-    $fileName = '';
+spl_autoload_register(
+    function ($className) {
+        $className = ltrim($className, '\\');
+        $fileName = '';
 
-    if ($lastNsPos = strripos($className, '\\')) {
-        $namespace = substr($className, 0, $lastNsPos);
-        $className = substr($className, $lastNsPos + 1);
-        $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+        if ($lastNsPos = strripos($className, '\\')) {
+            $namespace = substr($className, 0, $lastNsPos);
+            $className = substr($className, $lastNsPos + 1);
+            $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+        }
+        $fileName = __DIR__ . DIRECTORY_SEPARATOR . $fileName . $className . '.php';
+
+        if (file_exists($fileName)) {
+            include $fileName;
+
+            return true;
+        }
+
+        return false;
     }
-    $fileName = __DIR__ . DIRECTORY_SEPARATOR . $fileName . $className . '.php';
-
-    if (file_exists($fileName)) {
-        require $fileName;
-
-        return true;
-    }
-
-    return false;
-});
+);

@@ -17,10 +17,12 @@ class CommentManager extends BaseManager
 
     public function getCommentsByPostId($id)
     {
-        $statement = $this->dbConnect->prepare('
+        $statement = $this->dbConnect->prepare(
+            '
             SELECT * FROM comment com 
             WHERE com.post_id = ? and com.publish_state = true
-            ');
+            '
+        );
 
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$id]);
@@ -30,10 +32,12 @@ class CommentManager extends BaseManager
 
     public function getCountCommentsByPostId(int $id)
     {
-        $statement = $this->dbConnect->prepare('
+        $statement = $this->dbConnect->prepare(
+            '
             SELECT com.id FROM comment com 
             WHERE p.id = ? and com.publish_state = true
-            ');
+            '
+        );
         $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
         return $statement->rowCount();
@@ -41,10 +45,12 @@ class CommentManager extends BaseManager
 
     public function getCommentUsername(int $id)
     {
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             SELECT username FROM user
             WHERE user.id = ?
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->execute([$id]);
         return $query->fetch();
@@ -52,10 +58,12 @@ class CommentManager extends BaseManager
 
     public function getCommentsByUserId(int $id)
     {
-        $query = $this->dbConnect->prepare("
+        $query = $this->dbConnect->prepare(
+            "
             SELECT * FROM  $this->table 
             WHERE user_id = :user_id
-        ");
+        "
+        );
 
         $query->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $query->bindParam(':user_id', $id);
@@ -66,15 +74,18 @@ class CommentManager extends BaseManager
 
     public function insertNewComment(array $params)
     {
-        $query = $this->dbConnect->prepare('
-            INSERT INTO ' . $this->table . '(content, created_at, post_id, user_id) 
-            VALUES (:content, :created_at, :post_id, :user_id)
-        ');
+        $query = $this->dbConnect->prepare(
+            '
+            INSERT INTO ' . $this->table . '(content, created_at, modified_at, post_id, user_id) 
+            VALUES (:content, :created_at, :modified_at, :post_id, :user_id)
+        '
+        );
 
         $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
 
         $query->bindParam(':content', $params['content']);
         $query->bindParam(':created_at', $created_at);
+        $query->bindParam(':modified_at', $created_at);        
         $query->bindParam(':post_id', $params['postId']);
         $query->bindParam(':user_id', $params['userId']);
         $query->execute();
@@ -82,10 +93,12 @@ class CommentManager extends BaseManager
 
     public function verifyCouple(int $postId,  int $commentId): int
     {
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             SELECT id FROM ' . $this->table . '
             WHERE post_id = :postId AND id = :commentId
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':postId', $postId);
         $query->bindParam(':commentId', $commentId);
@@ -96,12 +109,14 @@ class CommentManager extends BaseManager
     public function unpublish(int $id): void
     {
        
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             UPDATE ' . $this->table . ' 
             SET 
                 publish_state = false
             WHERE id = :id 
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
@@ -109,12 +124,14 @@ class CommentManager extends BaseManager
 
     public function publish(int $id): void
     {
-        $query = $this->dbConnect->prepare('
+        $query = $this->dbConnect->prepare(
+            '
             UPDATE ' . $this->table . ' 
             SET 
                 publish_state = true
             WHERE id = :id 
-        ');
+        '
+        );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();

@@ -117,64 +117,64 @@ class Parser
         $rv = [];
         while (!$this->stream->isEOF()) {
             switch ($this->getCurrentToken()->getType()) {
-                case /* Token::TEXT_TYPE */ 0:
-                    $token = $this->stream->next();
-                    $rv[] = new TextNode($token->getValue(), $token->getLine());
-                    break;
+            case /* Token::TEXT_TYPE */ 0:
+                $token = $this->stream->next();
+                $rv[] = new TextNode($token->getValue(), $token->getLine());
+                break;
 
-                case /* Token::VAR_START_TYPE */ 2:
-                    $token = $this->stream->next();
-                    $expr = $this->expressionParser->parseExpression();
-                    $this->stream->expect(/* Token::VAR_END_TYPE */ 4);
-                    $rv[] = new PrintNode($expr, $token->getLine());
-                    break;
+            case /* Token::VAR_START_TYPE */ 2:
+                $token = $this->stream->next();
+                $expr = $this->expressionParser->parseExpression();
+                $this->stream->expect(/* Token::VAR_END_TYPE */ 4);
+                $rv[] = new PrintNode($expr, $token->getLine());
+                break;
 
-                case /* Token::BLOCK_START_TYPE */ 1:
-                    $this->stream->next();
-                    $token = $this->getCurrentToken();
+            case /* Token::BLOCK_START_TYPE */ 1:
+                $this->stream->next();
+                $token = $this->getCurrentToken();
 
-                    if (/* Token::NAME_TYPE */ 5 !== $token->getType()) {
-                        throw new SyntaxError('A block must start with a tag name.', $token->getLine(), $this->stream->getSourceContext());
+                if (/* Token::NAME_TYPE */ 5 !== $token->getType()) {
+                    throw new SyntaxError('A block must start with a tag name.', $token->getLine(), $this->stream->getSourceContext());
+                }
+
+                if (null !== $test && $test($token)) {
+                    if ($dropNeedle) {
+                        $this->stream->next();
                     }
 
-                    if (null !== $test && $test($token)) {
-                        if ($dropNeedle) {
-                            $this->stream->next();
+                    if (1 === \count($rv)) {
+                        return $rv[0];
+                    }
+
+                    return new Node($rv, [], $lineno);
+                }
+
+                if (!$subparser = $this->env->getTokenParser($token->getValue())) {
+                    if (null !== $test) {
+                        $e = new SyntaxError(sprintf('Unexpected "%s" tag', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
+
+                        if (\is_array($test) && isset($test[0]) && $test[0] instanceof TokenParserInterface) {
+                            $e->appendMessage(sprintf(' (expecting closing tag for the "%s" tag defined near line %s).', $test[0]->getTag(), $lineno));
                         }
-
-                        if (1 === \count($rv)) {
-                            return $rv[0];
-                        }
-
-                        return new Node($rv, [], $lineno);
+                    } else {
+                        $e = new SyntaxError(sprintf('Unknown "%s" tag.', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
+                        $e->addSuggestions($token->getValue(), array_keys($this->env->getTokenParsers()));
                     }
 
-                    if (!$subparser = $this->env->getTokenParser($token->getValue())) {
-                        if (null !== $test) {
-                            $e = new SyntaxError(sprintf('Unexpected "%s" tag', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
+                    throw $e;
+                }
 
-                            if (\is_array($test) && isset($test[0]) && $test[0] instanceof TokenParserInterface) {
-                                $e->appendMessage(sprintf(' (expecting closing tag for the "%s" tag defined near line %s).', $test[0]->getTag(), $lineno));
-                            }
-                        } else {
-                            $e = new SyntaxError(sprintf('Unknown "%s" tag.', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
-                            $e->addSuggestions($token->getValue(), array_keys($this->env->getTokenParsers()));
-                        }
+                $this->stream->next();
 
-                        throw $e;
-                    }
+                $subparser->setParser($this);
+                $node = $subparser->parse($token);
+                if (null !== $node) {
+                    $rv[] = $node;
+                }
+                break;
 
-                    $this->stream->next();
-
-                    $subparser->setParser($this);
-                    $node = $subparser->parse($token);
-                    if (null !== $node) {
-                        $rv[] = $node;
-                    }
-                    break;
-
-                default:
-                    throw new SyntaxError('Lexer or parser ended up in unsupported state.', $this->getCurrentToken()->getLine(), $this->stream->getSourceContext());
+            default:
+                throw new SyntaxError('Lexer or parser ended up in unsupported state.', $this->getCurrentToken()->getLine(), $this->stream->getSourceContext());
             }
         }
 
@@ -301,10 +301,9 @@ class Parser
     private function filterBodyNodes(Node $node, bool $nested = false): ?Node
     {
         // check that the body does not contain non-empty output nodes
-        if (
-            ($node instanceof TextNode && !ctype_space($node->getAttribute('data')))
-            ||
-            (!$node instanceof TextNode && !$node instanceof BlockReferenceNode && $node instanceof NodeOutputInterface)
+        if (($node instanceof TextNode && !ctype_space($node->getAttribute('data')))
+            
+            || (!$node instanceof TextNode && !$node instanceof BlockReferenceNode && $node instanceof NodeOutputInterface)
         ) {
             if (false !== strpos((string) $node, \chr(0xEF).\chr(0xBB).\chr(0xBF))) {
                 $t = substr($node->getAttribute('data'), 3);

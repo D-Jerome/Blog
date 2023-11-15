@@ -72,10 +72,12 @@ final class ListDocumentGenerator
                 $alternatives = $fixer->getSuccessorsNames();
 
                 if (0 !== \count($alternatives)) {
-                    $documentation .= RstUtils::toRst(sprintf(
-                        '   Use %s instead.',
-                        Utils::naturalLanguageJoinWithBackticks($alternatives)
-                    ), 3);
+                    $documentation .= RstUtils::toRst(
+                        sprintf(
+                            '   Use %s instead.',
+                            Utils::naturalLanguageJoinWithBackticks($alternatives)
+                        ), 3
+                    );
                 }
 
                 $documentation .= "\n";
@@ -112,9 +114,11 @@ final class ListDocumentGenerator
                         );
                     } else {
                         $allowedKind = 'Allowed values';
-                        $allowed = array_map(static fn ($value): string => $value instanceof AllowedValueSubset
+                        $allowed = array_map(
+                            static fn ($value): string => $value instanceof AllowedValueSubset
                             ? 'a subset of ``'.Utils::toString($value->getAllowedValues()).'``'
-                            : '``'.Utils::toString($value).'``', $allowed);
+                            : '``'.Utils::toString($value).'``', $allowed
+                        );
                     }
 
                     $allowed = Utils::naturalLanguageJoin($allowed, '');

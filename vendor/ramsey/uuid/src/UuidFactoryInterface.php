@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -41,11 +41,11 @@ interface UuidFactoryInterface
      * Creates a UUID from a DateTimeInterface instance
      *
      * @param DateTimeInterface $dateTime The date and time
-     * @param Hexadecimal|null $node A 48-bit number representing the hardware
-     *     address
-     * @param int|null $clockSeq A 14-bit number used to help avoid duplicates
-     *     that could arise when the clock is set backwards in time or if the
-     *     node ID changes
+     * @param Hexadecimal|null  $node     A 48-bit number representing the hardware
+     *                                    address
+     * @param int|null          $clockSeq A 14-bit number used to help avoid duplicates
+     *                                    that could arise when the clock is set
+     *                                    backwards in time or if the node ID changes
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 1 UUID created from a DateTimeInterface instance
@@ -91,12 +91,13 @@ interface UuidFactoryInterface
      * Returns a version 1 (Gregorian time) UUID from a host ID, sequence number,
      * and the current time
      *
-     * @param Hexadecimal|int|string|null $node A 48-bit number representing the
-     *     hardware address; this number may be represented as an integer or a
-     *     hexadecimal string
-     * @param int|null $clockSeq A 14-bit number used to help avoid duplicates
-     *     that could arise when the clock is set backwards in time or if the
-     *     node ID changes
+     * @param Hexadecimal|int|string|null $node     A 48-bit number representing the
+     *                                              hardware address; this number
+     *                                              may be represented as an integer
+     *                                              or a hexadecimal string
+     * @param int|null                    $clockSeq A 14-bit number used to help avoid duplicates
+     *                                              that could arise when the clock is set
+     *                                              backwards in time or if the node ID changes
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 1 UUID
@@ -107,17 +108,17 @@ interface UuidFactoryInterface
      * Returns a version 2 (DCE Security) UUID from a local domain, local
      * identifier, host ID, clock sequence, and the current time
      *
-     * @param int $localDomain The local domain to use when generating bytes,
-     *     according to DCE Security
+     * @param int                $localDomain     The local domain to use when generating bytes,
+     *                                            according to DCE Security
      * @param IntegerObject|null $localIdentifier The local identifier for the
-     *     given domain; this may be a UID or GID on POSIX systems, if the local
-     *     domain is person or group, or it may be a site-defined identifier
-     *     if the local domain is org
-     * @param Hexadecimal|null $node A 48-bit number representing the hardware
-     *     address
-     * @param int|null $clockSeq A 14-bit number used to help avoid duplicates
-     *     that could arise when the clock is set backwards in time or if the
-     *     node ID changes
+     *                                            given domain; this may be a UID or GID on POSIX systems, if the local
+     *                                            domain is person or group, or it may be a site-defined identifier
+     *                                            if the local domain is org
+     * @param Hexadecimal|null   $node            A 48-bit number representing the hardware
+     *                                            address
+     * @param int|null           $clockSeq        A 14-bit number used to help avoid duplicates
+     *                                            that could arise when the clock is set
+     *                                            backwards in time or if the node ID changes
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 2 UUID
@@ -133,8 +134,8 @@ interface UuidFactoryInterface
      * Returns a version 3 (name-based) UUID based on the MD5 hash of a
      * namespace ID and a name
      *
-     * @param string|UuidInterface $ns The namespace (must be a valid UUID)
-     * @param string $name The name to use for creating a UUID
+     * @param string|UuidInterface $ns   The namespace (must be a valid UUID)
+     * @param string               $name The name to use for creating a UUID
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 3 UUID
@@ -155,8 +156,8 @@ interface UuidFactoryInterface
      * Returns a version 5 (name-based) UUID based on the SHA-1 hash of a
      * namespace ID and a name
      *
-     * @param string|UuidInterface $ns The namespace (must be a valid UUID)
-     * @param string $name The name to use for creating a UUID
+     * @param string|UuidInterface $ns   The namespace (must be a valid UUID)
+     * @param string               $name The name to use for creating a UUID
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 5 UUID
@@ -169,11 +170,11 @@ interface UuidFactoryInterface
      * Returns a version 6 (reordered time) UUID from a host ID, sequence number,
      * and the current time
      *
-     * @param Hexadecimal|null $node A 48-bit number representing the hardware
-     *     address
-     * @param int|null $clockSeq A 14-bit number used to help avoid duplicates
-     *     that could arise when the clock is set backwards in time or if the
-     *     node ID changes
+     * @param Hexadecimal|null $node     A 48-bit number representing the hardware
+     *                                   address
+     * @param int|null         $clockSeq A 14-bit number used to help avoid duplicates
+     *                                   that could arise when the clock is set
+     *                                   backwards in time or if the node ID changes
      *
      * @return UuidInterface A UuidInterface instance that represents a
      *     version 6 UUID

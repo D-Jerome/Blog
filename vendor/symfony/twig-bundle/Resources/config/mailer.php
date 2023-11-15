@@ -18,11 +18,10 @@ use Symfony\Component\Mime\BodyRendererInterface;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.mailer.message_listener', MessageListener::class)
-            ->args([null, service('twig.mime_body_renderer')])
-            ->tag('kernel.event_subscriber')
+        ->args([null, service('twig.mime_body_renderer')])
+        ->tag('kernel.event_subscriber')
 
         ->set('twig.mime_body_renderer', BodyRenderer::class)
-            ->args([service('twig')])
-        ->alias(BodyRendererInterface::class, 'twig.mime_body_renderer')
-    ;
+        ->args([service('twig')])
+        ->alias(BodyRendererInterface::class, 'twig.mime_body_renderer');
 };

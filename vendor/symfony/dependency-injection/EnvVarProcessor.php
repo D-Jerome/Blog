@@ -21,7 +21,9 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 class EnvVarProcessor implements EnvVarProcessorInterface
 {
     private ContainerInterface $container;
-    /** @var \Traversable<EnvVarLoaderInterface> */
+    /**
+     * @var \Traversable<EnvVarLoaderInterface> 
+     */
     private \Traversable $loaders;
     private array $loadedVars = [];
 
@@ -139,7 +141,7 @@ class EnvVarProcessor implements EnvVarProcessorInterface
             if ('file' === $prefix) {
                 return file_get_contents($file);
             } else {
-                return require $file;
+                return include $file;
             }
         }
 
@@ -305,23 +307,25 @@ class EnvVarProcessor implements EnvVarProcessorInterface
         }
 
         if ('resolve' === $prefix) {
-            return preg_replace_callback('/%%|%([^%\s]+)%/', function ($match) use ($name, $getEnv) {
-                if (!isset($match[1])) {
-                    return '%';
-                }
+            return preg_replace_callback(
+                '/%%|%([^%\s]+)%/', function ($match) use ($name, $getEnv) {
+                    if (!isset($match[1])) {
+                        return '%';
+                    }
 
-                if (str_starts_with($match[1], 'env(') && str_ends_with($match[1], ')') && 'env()' !== $match[1]) {
-                    $value = $getEnv(substr($match[1], 4, -1));
-                } else {
-                    $value = $this->container->getParameter($match[1]);
-                }
+                    if (str_starts_with($match[1], 'env(') && str_ends_with($match[1], ')') && 'env()' !== $match[1]) {
+                        $value = $getEnv(substr($match[1], 4, -1));
+                    } else {
+                        $value = $this->container->getParameter($match[1]);
+                    }
 
-                if (!\is_scalar($value)) {
-                    throw new RuntimeException(sprintf('Parameter "%s" found when resolving env var "%s" must be scalar, "%s" given.', $match[1], $name, get_debug_type($value)));
-                }
+                    if (!\is_scalar($value)) {
+                        throw new RuntimeException(sprintf('Parameter "%s" found when resolving env var "%s" must be scalar, "%s" given.', $match[1], $name, get_debug_type($value)));
+                    }
 
-                return $value;
-            }, $env);
+                    return $value;
+                }, $env
+            );
         }
 
         if ('csv' === $prefix) {

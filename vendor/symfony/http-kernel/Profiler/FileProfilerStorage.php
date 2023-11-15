@@ -167,7 +167,8 @@ class FileProfilerStorage implements ProfilerStorageInterface
                 return false;
             }
 
-            fputcsv($file, [
+            fputcsv(
+                $file, [
                 $profile->getToken(),
                 $profile->getIp(),
                 $profile->getMethod(),
@@ -175,7 +176,8 @@ class FileProfilerStorage implements ProfilerStorageInterface
                 $profile->getTime() ?: time(),
                 $profile->getParentToken(),
                 $profile->getStatusCode(),
-            ]);
+                ]
+            );
             fclose($file);
 
             if (1 === mt_rand(1, 10)) {

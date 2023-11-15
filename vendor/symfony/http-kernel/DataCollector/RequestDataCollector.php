@@ -152,18 +152,22 @@ class RequestDataCollector extends DataCollector implements EventSubscriberInter
         }
 
         if ($response->isRedirect()) {
-            $response->headers->setCookie(new Cookie(
-                'sf_redirect',
-                json_encode([
-                    'token' => $response->headers->get('x-debug-token'),
-                    'route' => $request->attributes->get('_route', 'n/a'),
-                    'method' => $request->getMethod(),
-                    'controller' => $this->parseController($request->attributes->get('_controller')),
-                    'status_code' => $statusCode,
-                    'status_text' => Response::$statusTexts[$statusCode],
-                ]),
-                0, '/', null, $request->isSecure(), true, false, 'lax'
-            ));
+            $response->headers->setCookie(
+                new Cookie(
+                    'sf_redirect',
+                    json_encode(
+                        [
+                        'token' => $response->headers->get('x-debug-token'),
+                        'route' => $request->attributes->get('_route', 'n/a'),
+                        'method' => $request->getMethod(),
+                        'controller' => $this->parseController($request->attributes->get('_controller')),
+                        'status_code' => $statusCode,
+                        'status_text' => Response::$statusTexts[$statusCode],
+                        ]
+                    ),
+                    0, '/', null, $request->isSecure(), true, false, 'lax'
+                )
+            );
         }
 
         $this->data['identifier'] = $this->data['route'] ?: (\is_array($this->data['controller']) ? $this->data['controller']['class'].'::'.$this->data['controller']['method'].'()' : $this->data['controller']);

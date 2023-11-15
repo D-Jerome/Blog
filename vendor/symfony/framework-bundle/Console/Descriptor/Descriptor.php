@@ -150,11 +150,13 @@ abstract class Descriptor implements DescriptorInterface
         // Recursively search for enum values, so we can replace it
         // before json_encode (which will not display anything for \UnitEnum otherwise)
         if (\is_array($value)) {
-            array_walk_recursive($value, static function (&$value) {
-                if ($value instanceof \UnitEnum) {
-                    $value = ltrim(var_export($value, true), '\\');
+            array_walk_recursive(
+                $value, static function (&$value) {
+                    if ($value instanceof \UnitEnum) {
+                        $value = ltrim(var_export($value, true), '\\');
+                    }
                 }
-            });
+            );
         }
 
         if (\is_bool($value) || \is_array($value) || (null === $value)) {
@@ -337,10 +339,14 @@ abstract class Descriptor implements DescriptorInterface
     protected function getServiceEdges(ContainerBuilder $container, string $serviceId): array
     {
         try {
-            return array_values(array_unique(array_map(
-                fn (ServiceReferenceGraphEdge $edge) => $edge->getSourceNode()->getId(),
-                $container->getCompiler()->getServiceReferenceGraph()->getNode($serviceId)->getInEdges()
-            )));
+            return array_values(
+                array_unique(
+                    array_map(
+                        fn (ServiceReferenceGraphEdge $edge) => $edge->getSourceNode()->getId(),
+                        $container->getCompiler()->getServiceReferenceGraph()->getNode($serviceId)->getInEdges()
+                    )
+                )
+            );
         } catch (InvalidArgumentException $exception) {
             return [];
         }

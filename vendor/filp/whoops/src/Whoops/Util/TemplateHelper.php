@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -19,6 +20,7 @@ class TemplateHelper
 {
     /**
      * An array of variables to be passed to all templates
+     *
      * @var array
      */
     private $variables = [];
@@ -244,10 +246,12 @@ class TemplateHelper
             $variables = array_replace($variables, $additionalVariables);
         }
 
-        call_user_func(function () {
-            extract(func_get_arg(1));
-            require func_get_arg(0);
-        }, $template, $variables);
+        call_user_func(
+            function () {
+                extract(func_get_arg(1));
+                include func_get_arg(0);
+            }, $template, $variables
+        );
     }
 
     /**

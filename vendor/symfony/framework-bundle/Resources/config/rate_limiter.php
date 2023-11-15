@@ -16,15 +16,16 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('cache.rate_limiter')
-            ->parent('cache.app')
-            ->tag('cache.pool')
+        ->parent('cache.app')
+        ->tag('cache.pool')
 
         ->set('limiter', RateLimiterFactory::class)
-            ->abstract()
-            ->args([
+        ->abstract()
+        ->args(
+            [
                 abstract_arg('config'),
                 abstract_arg('storage'),
                 null,
-            ])
-    ;
+                ]
+        );
 };

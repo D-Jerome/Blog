@@ -8,33 +8,33 @@
     var global$1 = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
     const fireInsertCustomChar = (editor, chr) => {
-      return editor.dispatch('insertCustomChar', { chr });
+        return editor.dispatch('insertCustomChar', { chr });
     };
 
     const insertChar = (editor, chr) => {
-      const evtChr = fireInsertCustomChar(editor, chr).chr;
-      editor.execCommand('mceInsertContent', false, evtChr);
+        const evtChr = fireInsertCustomChar(editor, chr).chr;
+        editor.execCommand('mceInsertContent', false, evtChr);
     };
 
     const hasProto = (v, constructor, predicate) => {
-      var _a;
-      if (predicate(v, constructor.prototype)) {
-        return true;
-      } else {
-        return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
-      }
+        var _a;
+        if (predicate(v, constructor.prototype)) {
+            return true;
+        } else {
+            return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
+        }
     };
     const typeOf = x => {
-      const t = typeof x;
-      if (x === null) {
-        return 'null';
-      } else if (t === 'object' && Array.isArray(x)) {
-        return 'array';
-      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
-        return 'string';
-      } else {
-        return t;
-      }
+        const t = typeof x;
+        if (x === null) {
+            return 'null';
+        } else if (t === 'object' && Array.isArray(x)) {
+            return 'array';
+        } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
+            return 'string';
+        } else {
+            return t;
+        }
     };
     const isType = type => value => typeOf(value) === type;
     const isSimpleType = type => value => typeof value === type;
@@ -47,144 +47,166 @@
     const isFunction = isSimpleType('function');
 
     const constant = value => {
-      return () => {
-        return value;
-      };
+        return () => {
+            return value;
+        };
     };
     const never = constant(false);
 
     class Optional {
-      constructor(tag, value) {
-        this.tag = tag;
-        this.value = value;
-      }
-      static some(value) {
-        return new Optional(true, value);
-      }
-      static none() {
-        return Optional.singletonNone;
-      }
-      fold(onNone, onSome) {
-        if (this.tag) {
-          return onSome(this.value);
-        } else {
-          return onNone();
+        constructor(tag, value)
+        {
+            this.tag = tag;
+            this.value = value;
         }
-      }
-      isSome() {
-        return this.tag;
-      }
-      isNone() {
-        return !this.tag;
-      }
-      map(mapper) {
-        if (this.tag) {
-          return Optional.some(mapper(this.value));
-        } else {
-          return Optional.none();
+        static some(value)
+        {
+            return new Optional(true, value);
         }
-      }
-      bind(binder) {
-        if (this.tag) {
-          return binder(this.value);
-        } else {
-          return Optional.none();
+        static none()
+        {
+            return Optional.singletonNone;
         }
-      }
-      exists(predicate) {
-        return this.tag && predicate(this.value);
-      }
-      forall(predicate) {
-        return !this.tag || predicate(this.value);
-      }
-      filter(predicate) {
-        if (!this.tag || predicate(this.value)) {
-          return this;
-        } else {
-          return Optional.none();
+        fold(onNone, onSome)
+        {
+            if (this.tag) {
+                return onSome(this.value);
+            } else {
+                return onNone();
+            }
         }
-      }
-      getOr(replacement) {
-        return this.tag ? this.value : replacement;
-      }
-      or(replacement) {
-        return this.tag ? this : replacement;
-      }
-      getOrThunk(thunk) {
-        return this.tag ? this.value : thunk();
-      }
-      orThunk(thunk) {
-        return this.tag ? this : thunk();
-      }
-      getOrDie(message) {
-        if (!this.tag) {
-          throw new Error(message !== null && message !== void 0 ? message : 'Called getOrDie on None');
-        } else {
-          return this.value;
+        isSome()
+        {
+            return this.tag;
         }
-      }
-      static from(value) {
-        return isNonNullable(value) ? Optional.some(value) : Optional.none();
-      }
-      getOrNull() {
-        return this.tag ? this.value : null;
-      }
-      getOrUndefined() {
-        return this.value;
-      }
-      each(worker) {
-        if (this.tag) {
-          worker(this.value);
+        isNone()
+        {
+            return !this.tag;
         }
-      }
-      toArray() {
-        return this.tag ? [this.value] : [];
-      }
-      toString() {
-        return this.tag ? `some(${ this.value })` : 'none()';
-      }
+        map(mapper)
+        {
+            if (this.tag) {
+                return Optional.some(mapper(this.value));
+            } else {
+                return Optional.none();
+            }
+        }
+        bind(binder)
+        {
+            if (this.tag) {
+                return binder(this.value);
+            } else {
+                return Optional.none();
+            }
+        }
+        exists(predicate)
+        {
+            return this.tag && predicate(this.value);
+        }
+        forall(predicate)
+        {
+            return !this.tag || predicate(this.value);
+        }
+        filter(predicate)
+        {
+            if (!this.tag || predicate(this.value)) {
+                return this;
+            } else {
+                return Optional.none();
+            }
+        }
+        getOr(replacement)
+        {
+            return this.tag ? this.value : replacement;
+        }
+        or(replacement)
+        {
+            return this.tag ? this : replacement;
+        }
+        getOrThunk(thunk)
+        {
+            return this.tag ? this.value : thunk();
+        }
+        orThunk(thunk)
+        {
+            return this.tag ? this : thunk();
+        }
+        getOrDie(message)
+        {
+            if (!this.tag) {
+                throw new Error(message !== null && message !== void 0 ? message : 'Called getOrDie on None');
+            } else {
+                return this.value;
+            }
+        }
+        static from(value)
+        {
+            return isNonNullable(value) ? Optional.some(value) : Optional.none();
+        }
+        getOrNull()
+        {
+            return this.tag ? this.value : null;
+        }
+        getOrUndefined()
+        {
+            return this.value;
+        }
+        each(worker)
+        {
+            if (this.tag) {
+                worker(this.value);
+            }
+        }
+        toArray()
+        {
+            return this.tag ? [this.value] : [];
+        }
+        toString()
+        {
+            return this.tag ? `some(${ this.value })` : 'none()';
+        }
     }
     Optional.singletonNone = new Optional(false);
 
     const nativePush = Array.prototype.push;
     const map = (xs, f) => {
-      const len = xs.length;
-      const r = new Array(len);
-      for (let i = 0; i < len; i++) {
-        const x = xs[i];
-        r[i] = f(x, i);
-      }
-      return r;
+        const len = xs.length;
+        const r = new Array(len);
+        for (let i = 0; i < len; i++) {
+            const x = xs[i];
+            r[i] = f(x, i);
+        }
+        return r;
     };
     const each = (xs, f) => {
-      for (let i = 0, len = xs.length; i < len; i++) {
-        const x = xs[i];
-        f(x, i);
-      }
+        for (let i = 0, len = xs.length; i < len; i++) {
+            const x = xs[i];
+            f(x, i);
+        }
     };
     const findUntil = (xs, pred, until) => {
-      for (let i = 0, len = xs.length; i < len; i++) {
-        const x = xs[i];
-        if (pred(x, i)) {
-          return Optional.some(x);
-        } else if (until(x, i)) {
-          break;
+        for (let i = 0, len = xs.length; i < len; i++) {
+            const x = xs[i];
+            if (pred(x, i)) {
+                return Optional.some(x);
+            } else if (until(x, i)) {
+                break;
+            }
         }
-      }
-      return Optional.none();
+        return Optional.none();
     };
     const find = (xs, pred) => {
-      return findUntil(xs, pred, never);
+        return findUntil(xs, pred, never);
     };
     const flatten = xs => {
-      const r = [];
-      for (let i = 0, len = xs.length; i < len; ++i) {
-        if (!isArray$1(xs[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
+        const r = [];
+        for (let i = 0, len = xs.length; i < len; ++i) {
+            if (!isArray$1(xs[i])) {
+                throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
+            }
+            nativePush.apply(r, xs[i]);
         }
-        nativePush.apply(r, xs[i]);
-      }
-      return r;
+        return r;
     };
     const bind = (xs, f) => flatten(map(xs, f));
 
@@ -192,10 +214,10 @@
 
     const option = name => editor => editor.options.get(name);
     const register$2 = editor => {
-      const registerOption = editor.options.register;
-      const charMapProcessor = value => isFunction(value) || isArray$1(value);
-      registerOption('charmap', { processor: charMapProcessor });
-      registerOption('charmap_append', { processor: charMapProcessor });
+        const registerOption = editor.options.register;
+        const charMapProcessor = value => isFunction(value) || isArray$1(value);
+        registerOption('charmap', { processor: charMapProcessor });
+        registerOption('charmap_append', { processor: charMapProcessor });
     };
     const getCharMap$1 = option('charmap');
     const getCharMapAppend = option('charmap_append');
@@ -203,10 +225,10 @@
     const isArray = global.isArray;
     const UserDefined = 'User Defined';
     const getDefaultCharMap = () => {
-      return [
+        return [
         {
-          name: 'Currency',
-          characters: [
+            name: 'Currency',
+            characters: [
             [
               36,
               'dollar sign'
@@ -363,11 +385,11 @@
               22278,
               'yen/yuan character variant one'
             ]
-          ]
+            ]
         },
         {
-          name: 'Text',
-          characters: [
+            name: 'Text',
+            characters: [
             [
               169,
               'copyright sign'
@@ -420,11 +442,11 @@
               223,
               'sharp s / ess-zed'
             ]
-          ]
+            ]
         },
         {
-          name: 'Quotations',
-          characters: [
+            name: 'Quotations',
+            characters: [
             [
               8249,
               'single left-pointing angle quotation mark'
@@ -573,11 +595,11 @@
               190,
               'fraction three quarters'
             ]
-          ]
+            ]
         },
         {
-          name: 'Mathematical',
-          characters: [
+            name: 'Mathematical',
+            characters: [
             [
               402,
               'function / florin'
@@ -686,11 +708,11 @@
               8736,
               'angle'
             ]
-          ]
+            ]
         },
         {
-          name: 'Extended Latin',
-          characters: [
+            name: 'Extended Latin',
+            characters: [
             [
               192,
               'A - grave'
@@ -1199,11 +1221,11 @@
               969,
               'omega'
             ]
-          ]
+            ]
         },
         {
-          name: 'Symbols',
-          characters: [
+            name: 'Symbols',
+            characters: [
             [
               8501,
               'alef symbol'
@@ -1228,11 +1250,11 @@
               8465,
               'imaginary part'
             ]
-          ]
+            ]
         },
         {
-          name: 'Arrows',
-          characters: [
+            name: 'Arrows',
+            characters: [
             [
               8592,
               'leftwards arrow'
@@ -1389,268 +1411,296 @@
               8207,
               'right-to-left mark'
             ]
-          ]
+            ]
         }
-      ];
+        ];
     };
     const charmapFilter = charmap => {
-      return global.grep(charmap, item => {
-        return isArray(item) && item.length === 2;
-      });
+        return global.grep(
+            charmap, item => {
+                return isArray(item) && item.length === 2;
+            }
+        );
     };
     const getCharsFromOption = optionValue => {
-      if (isArray(optionValue)) {
-        return charmapFilter(optionValue);
-      }
-      if (typeof optionValue === 'function') {
-        return optionValue();
-      }
-      return [];
+        if (isArray(optionValue)) {
+            return charmapFilter(optionValue);
+        }
+        if (typeof optionValue === 'function') {
+            return optionValue();
+        }
+        return [];
     };
     const extendCharMap = (editor, charmap) => {
-      const userCharMap = getCharMap$1(editor);
-      if (userCharMap) {
-        charmap = [{
-            name: UserDefined,
-            characters: getCharsFromOption(userCharMap)
-          }];
-      }
-      const userCharMapAppend = getCharMapAppend(editor);
-      if (userCharMapAppend) {
-        const userDefinedGroup = global.grep(charmap, cg => cg.name === UserDefined);
-        if (userDefinedGroup.length) {
-          userDefinedGroup[0].characters = [
-            ...userDefinedGroup[0].characters,
-            ...getCharsFromOption(userCharMapAppend)
-          ];
-          return charmap;
+        const userCharMap = getCharMap$1(editor);
+        if (userCharMap) {
+            charmap = [{
+                name: UserDefined,
+                characters: getCharsFromOption(userCharMap)
+            }];
         }
-        return charmap.concat({
-          name: UserDefined,
-          characters: getCharsFromOption(userCharMapAppend)
-        });
-      }
-      return charmap;
+        const userCharMapAppend = getCharMapAppend(editor);
+        if (userCharMapAppend) {
+            const userDefinedGroup = global.grep(charmap, cg => cg.name === UserDefined);
+            if (userDefinedGroup.length) {
+                userDefinedGroup[0].characters = [
+                ...userDefinedGroup[0].characters,
+                ...getCharsFromOption(userCharMapAppend)
+                ];
+                return charmap;
+            }
+            return charmap.concat(
+                {
+                    name: UserDefined,
+                    characters: getCharsFromOption(userCharMapAppend)
+                }
+            );
+        }
+        return charmap;
     };
     const getCharMap = editor => {
-      const groups = extendCharMap(editor, getDefaultCharMap());
-      return groups.length > 1 ? [{
-          name: 'All',
-          characters: bind(groups, g => g.characters)
+        const groups = extendCharMap(editor, getDefaultCharMap());
+        return groups.length > 1 ? [{
+            name: 'All',
+            characters: bind(groups, g => g.characters)
         }].concat(groups) : groups;
     };
 
     const get = editor => {
-      const getCharMap$1 = () => {
-        return getCharMap(editor);
-      };
-      const insertChar$1 = chr => {
-        insertChar(editor, chr);
-      };
-      return {
-        getCharMap: getCharMap$1,
-        insertChar: insertChar$1
-      };
+        const getCharMap$1 = () => {
+            return getCharMap(editor);
+        };
+        const insertChar$1 = chr => {
+            insertChar(editor, chr);
+        };
+        return {
+            getCharMap: getCharMap$1,
+            insertChar: insertChar$1
+        };
     };
 
     const Cell = initial => {
-      let value = initial;
-      const get = () => {
-        return value;
-      };
-      const set = v => {
-        value = v;
-      };
-      return {
-        get,
-        set
-      };
+        let value = initial;
+        const get = () => {
+            return value;
+        };
+        const set = v => {
+            value = v;
+        };
+        return {
+            get,
+            set
+        };
     };
 
     const last = (fn, rate) => {
-      let timer = null;
-      const cancel = () => {
-        if (!isNull(timer)) {
-          clearTimeout(timer);
-          timer = null;
-        }
-      };
-      const throttle = (...args) => {
-        cancel();
-        timer = setTimeout(() => {
-          timer = null;
-          fn.apply(null, args);
-        }, rate);
-      };
-      return {
-        cancel,
-        throttle
-      };
+        let timer = null;
+        const cancel = () => {
+            if (!isNull(timer)) {
+                clearTimeout(timer);
+                timer = null;
+            }
+        };
+        const throttle = (...args) => {
+            cancel();
+            timer = setTimeout(
+                () => {
+                    timer = null;
+                    fn.apply(null, args);
+                }, rate
+            );
+        };
+        return {
+            cancel,
+            throttle
+        };
     };
 
     const contains = (str, substr, start = 0, end) => {
-      const idx = str.indexOf(substr, start);
-      if (idx !== -1) {
-        return isUndefined(end) ? true : idx + substr.length <= end;
-      } else {
-        return false;
-      }
+        const idx = str.indexOf(substr, start);
+        if (idx !== -1) {
+            return isUndefined(end) ? true : idx + substr.length <= end;
+        } else {
+            return false;
+        }
     };
     const fromCodePoint = String.fromCodePoint;
 
     const charMatches = (charCode, name, lowerCasePattern) => {
-      if (contains(fromCodePoint(charCode).toLowerCase(), lowerCasePattern)) {
-        return true;
-      } else {
-        return contains(name.toLowerCase(), lowerCasePattern) || contains(name.toLowerCase().replace(/\s+/g, ''), lowerCasePattern);
-      }
+        if (contains(fromCodePoint(charCode).toLowerCase(), lowerCasePattern)) {
+            return true;
+        } else {
+            return contains(name.toLowerCase(), lowerCasePattern) || contains(name.toLowerCase().replace(/\s+/g, ''), lowerCasePattern);
+        }
     };
     const scan = (group, pattern) => {
-      const matches = [];
-      const lowerCasePattern = pattern.toLowerCase();
-      each(group.characters, g => {
-        if (charMatches(g[0], g[1], lowerCasePattern)) {
-          matches.push(g);
-        }
-      });
-      return map(matches, m => ({
+        const matches = [];
+        const lowerCasePattern = pattern.toLowerCase();
+        each(
+            group.characters, g => {
+            if (charMatches(g[0], g[1], lowerCasePattern)) {
+                matches.push(g);
+            }
+            }
+        );
+    return map(
+        matches, m => ({
         text: m[1],
         value: fromCodePoint(m[0]),
         icon: fromCodePoint(m[0])
-      }));
+            })
+    );
     };
 
     const patternName = 'pattern';
     const open = (editor, charMap) => {
-      const makeGroupItems = () => [
+        const makeGroupItems = () => [
         {
-          label: 'Search',
-          type: 'input',
-          name: patternName
+            label: 'Search',
+            type: 'input',
+            name: patternName
         },
         {
-          type: 'collection',
-          name: 'results'
+            type: 'collection',
+            name: 'results'
         }
-      ];
-      const makeTabs = () => map(charMap, charGroup => ({
-        title: charGroup.name,
-        name: charGroup.name,
-        items: makeGroupItems()
-      }));
+        ];
+        const makeTabs = () => map(
+            charMap, charGroup => ({
+            title: charGroup.name,
+            name: charGroup.name,
+            items: makeGroupItems()
+            })
+        );
       const makePanel = () => ({
-        type: 'panel',
-        items: makeGroupItems()
-      });
+            type: 'panel',
+            items: makeGroupItems()
+        });
       const makeTabPanel = () => ({
-        type: 'tabpanel',
-        tabs: makeTabs()
-      });
+            type: 'tabpanel',
+            tabs: makeTabs()
+        });
       const currentTab = charMap.length === 1 ? Cell(UserDefined) : Cell('All');
       const scanAndSet = (dialogApi, pattern) => {
-        find(charMap, group => group.name === currentTab.get()).each(f => {
-          const items = scan(f, pattern);
-          dialogApi.setData({ results: items });
-        });
-      };
-      const SEARCH_DELAY = 40;
-      const updateFilter = last(dialogApi => {
-        const pattern = dialogApi.getData().pattern;
-        scanAndSet(dialogApi, pattern);
-      }, SEARCH_DELAY);
+            find(charMap, group => group.name === currentTab.get()).each(
+                f => {
+                const items = scan(f, pattern);
+                dialogApi.setData({ results: items });
+                }
+            );
+        };
+        const SEARCH_DELAY = 40;
+        const updateFilter = last(
+            dialogApi => {
+            const pattern = dialogApi.getData().pattern;
+            scanAndSet(dialogApi, pattern);
+            }, SEARCH_DELAY
+        );
       const body = charMap.length === 1 ? makePanel() : makeTabPanel();
       const initialData = {
-        pattern: '',
-        results: scan(charMap[0], '')
-      };
-      const bridgeSpec = {
-        title: 'Special Character',
-        size: 'normal',
-        body,
-        buttons: [{
-            type: 'cancel',
-            name: 'close',
-            text: 'Close',
-            primary: true
-          }],
-        initialData,
-        onAction: (api, details) => {
-          if (details.name === 'results') {
-            insertChar(editor, details.value);
-            api.close();
-          }
-        },
-        onTabChange: (dialogApi, details) => {
-          currentTab.set(details.newTabName);
-          updateFilter.throttle(dialogApi);
-        },
-        onChange: (dialogApi, changeData) => {
-          if (changeData.name === patternName) {
-            updateFilter.throttle(dialogApi);
-          }
-        }
-      };
-      const dialogApi = editor.windowManager.open(bridgeSpec);
-      dialogApi.focus(patternName);
+            pattern: '',
+            results: scan(charMap[0], '')
+        };
+        const bridgeSpec = {
+            title: 'Special Character',
+            size: 'normal',
+            body,
+            buttons: [{
+                type: 'cancel',
+                name: 'close',
+                text: 'Close',
+                primary: true
+            }],
+            initialData,
+            onAction: (api, details) => {
+                if (details.name === 'results') {
+                    insertChar(editor, details.value);
+                    api.close();
+                }
+            },
+            onTabChange: (dialogApi, details) => {
+                currentTab.set(details.newTabName);
+                updateFilter.throttle(dialogApi);
+            },
+            onChange: (dialogApi, changeData) => {
+                if (changeData.name === patternName) {
+                    updateFilter.throttle(dialogApi);
+                }
+            }
+        };
+        const dialogApi = editor.windowManager.open(bridgeSpec);
+        dialogApi.focus(patternName);
     };
 
     const register$1 = (editor, charMap) => {
-      editor.addCommand('mceShowCharmap', () => {
-        open(editor, charMap);
-      });
+        editor.addCommand(
+            'mceShowCharmap', () => {
+            open(editor, charMap);
+            }
+        );
     };
 
     const init = (editor, all) => {
-      editor.ui.registry.addAutocompleter('charmap', {
-        trigger: ':',
-        columns: 'auto',
-        minChars: 2,
-        fetch: (pattern, _maxResults) => new Promise((resolve, _reject) => {
-          resolve(scan(all, pattern));
-        }),
-        onAction: (autocompleteApi, rng, value) => {
-          editor.selection.setRng(rng);
-          editor.insertContent(value);
-          autocompleteApi.hide();
-        }
-      });
+        editor.ui.registry.addAutocompleter(
+            'charmap', {
+                trigger: ':',
+                columns: 'auto',
+                minChars: 2,
+                fetch: (pattern, _maxResults) => new Promise(
+                    (resolve, _reject) => {
+                    resolve(scan(all, pattern));
+                    }
+                ),
+            onAction: (autocompleteApi, rng, value) => {
+                editor.selection.setRng(rng);
+                editor.insertContent(value);
+                autocompleteApi.hide();
+                }
+            }
+        );
     };
 
     const onSetupEditable = editor => api => {
-      const nodeChanged = () => {
-        api.setEnabled(editor.selection.isEditable());
-      };
-      editor.on('NodeChange', nodeChanged);
-      nodeChanged();
-      return () => {
-        editor.off('NodeChange', nodeChanged);
-      };
+        const nodeChanged = () => {
+            api.setEnabled(editor.selection.isEditable());
+        };
+        editor.on('NodeChange', nodeChanged);
+        nodeChanged();
+        return () => {
+            editor.off('NodeChange', nodeChanged);
+        };
     };
     const register = editor => {
-      const onAction = () => editor.execCommand('mceShowCharmap');
-      editor.ui.registry.addButton('charmap', {
-        icon: 'insert-character',
-        tooltip: 'Special character',
-        onAction,
-        onSetup: onSetupEditable(editor)
-      });
-      editor.ui.registry.addMenuItem('charmap', {
-        icon: 'insert-character',
-        text: 'Special character...',
-        onAction,
-        onSetup: onSetupEditable(editor)
-      });
+        const onAction = () => editor.execCommand('mceShowCharmap');
+        editor.ui.registry.addButton(
+            'charmap', {
+                icon: 'insert-character',
+                tooltip: 'Special character',
+                onAction,
+                onSetup: onSetupEditable(editor)
+            }
+        );
+    editor.ui.registry.addMenuItem(
+        'charmap', {
+            icon: 'insert-character',
+            text: 'Special character...',
+                onAction,
+            onSetup: onSetupEditable(editor)
+        }
+    );
     };
 
     var Plugin = () => {
-      global$1.add('charmap', editor => {
-        register$2(editor);
-        const charMap = getCharMap(editor);
-        register$1(editor, charMap);
-        register(editor);
-        init(editor, charMap[0]);
-        return get(editor);
-      });
+        global$1.add(
+            'charmap', editor => {
+            register$2(editor);
+            const charMap = getCharMap(editor);
+            register$1(editor, charMap);
+            register(editor);
+            init(editor, charMap[0]);
+            return get(editor);
+            }
+        );
     };
 
     Plugin();

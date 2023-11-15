@@ -18,13 +18,12 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('html_sanitizer.config.default', HtmlSanitizerConfig::class)
-            ->call('allowSafeElements', [], true)
+        ->call('allowSafeElements', [], true)
 
         ->set('html_sanitizer.sanitizer.default', HtmlSanitizer::class)
-            ->args([service('html_sanitizer.config.default')])
-            ->tag('html_sanitizer', ['sanitizer' => 'default'])
+        ->args([service('html_sanitizer.config.default')])
+        ->tag('html_sanitizer', ['sanitizer' => 'default'])
 
         ->alias('html_sanitizer', 'html_sanitizer.sanitizer.default')
-        ->alias(HtmlSanitizerInterface::class, 'html_sanitizer')
-    ;
+        ->alias(HtmlSanitizerInterface::class, 'html_sanitizer');
 };

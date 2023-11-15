@@ -44,7 +44,8 @@ class YamlLintCommand extends BaseLintCommand
     {
         parent::configure();
 
-        $this->setHelp($this->getHelp().<<<'EOF'
+        $this->setHelp(
+            $this->getHelp().<<<'EOF'
 
 Or find all files in a bundle:
 

@@ -161,15 +161,17 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
                 if (!($this->recursive || null !== $regex) || isset($this->excludedPrefixes[str_replace('\\', '/', $path)])) {
                     continue;
                 }
-                $files = iterator_to_array(new \RecursiveIteratorIterator(
-                    new \RecursiveCallbackFilterIterator(
-                        new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS),
-                        fn (\SplFileInfo $file, $path) => !isset($this->excludedPrefixes[$path = str_replace('\\', '/', $path)])
-                            && (null === $regex || preg_match($regex, substr($path, $prefixLen)) || $file->isDir())
-                            && '.' !== $file->getBasename()[0]
-                    ),
-                    \RecursiveIteratorIterator::LEAVES_ONLY
-                ));
+                $files = iterator_to_array(
+                    new \RecursiveIteratorIterator(
+                        new \RecursiveCallbackFilterIterator(
+                            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS),
+                            fn (\SplFileInfo $file, $path) => !isset($this->excludedPrefixes[$path = str_replace('\\', '/', $path)])
+                                && (null === $regex || preg_match($regex, substr($path, $prefixLen)) || $file->isDir())
+                                && '.' !== $file->getBasename()[0]
+                        ),
+                        \RecursiveIteratorIterator::LEAVES_ONLY
+                    )
+                );
                 uksort($files, 'strnatcmp');
 
                 foreach ($files as $path => $info) {
@@ -188,22 +190,23 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
 
         yield from (new Finder())
             ->followLinks()
-            ->filter(function (\SplFileInfo $info) use ($regex, $prefixLen, $prefix) {
-                $normalizedPath = str_replace('\\', '/', $info->getPathname());
-                if (!preg_match($regex, substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
-                    return false;
+            ->filter(
+                function (\SplFileInfo $info) use ($regex, $prefixLen, $prefix) {
+                    $normalizedPath = str_replace('\\', '/', $info->getPathname());
+                    if (!preg_match($regex, substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
+                        return false;
+                    }
+                    if ($this->excludedPrefixes) {
+                        do {
+                            if (isset($this->excludedPrefixes[$dirPath = $normalizedPath])) {
+                                return false;
+                            }
+                        } while ($prefix !== $dirPath && $dirPath !== $normalizedPath = \dirname($dirPath));
+                    }
                 }
-                if ($this->excludedPrefixes) {
-                    do {
-                        if (isset($this->excludedPrefixes[$dirPath = $normalizedPath])) {
-                            return false;
-                        }
-                    } while ($prefix !== $dirPath && $dirPath !== $normalizedPath = \dirname($dirPath));
-                }
-            })
+            )
             ->sortByName()
-            ->in($prefix)
-        ;
+            ->in($prefix);
     }
 
     private function computeHash(): string

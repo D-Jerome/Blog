@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -44,8 +44,8 @@ use function usort;
  * This class provides a basic implementation of `CollectionInterface`, to
  * minimize the effort required to implement this interface
  *
- * @template T
- * @extends AbstractArray<T>
+ * @template   T
+ * @extends    AbstractArray<T>
  * @implements CollectionInterface<T>
  */
 abstract class AbstractCollection extends AbstractArray implements CollectionInterface
@@ -112,7 +112,9 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
         $temp = [];
 
         foreach ($this->data as $item) {
-            /** @psalm-suppress MixedAssignment */
+            /**
+ * @psalm-suppress MixedAssignment 
+*/
             $temp[] = $this->extractValue($item, $propertyOrMethod);
         }
 
@@ -170,10 +172,14 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
              * @param T $b
              */
             function (mixed $a, mixed $b) use ($propertyOrMethod, $order): int {
-                /** @var mixed $aValue */
+                /**
+            * @var mixed $aValue 
+            */
                 $aValue = $this->extractValue($a, $propertyOrMethod);
 
-                /** @var mixed $bValue */
+                /**
+            * @var mixed $bValue 
+            */
                 $bValue = $this->extractValue($b, $propertyOrMethod);
 
                 return ($aValue <=> $bValue) * ($order === Sort::Descending ? -1 : 1);
@@ -211,7 +217,9 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
              * @param T $item
              */
             function (mixed $item) use ($propertyOrMethod, $value): bool {
-                /** @var mixed $accessorValue */
+                /**
+            * @var mixed $accessorValue 
+            */
                 $accessorValue = $this->extractValue($item, $propertyOrMethod);
 
                 return $accessorValue === $value;
@@ -221,7 +229,7 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
 
     /**
      * @param callable(T): TCallbackReturn $callback A callable to apply to each
-     *     item of the collection.
+     *                                               item of the collection.
      *
      * @return CollectionInterface<TCallbackReturn>
      *
@@ -229,14 +237,16 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
      */
     public function map(callable $callback): CollectionInterface
     {
-        /** @var Collection<TCallbackReturn> */
+        /**
+ * @var Collection<TCallbackReturn> 
+*/
         return new Collection('mixed', array_map($callback, $this->data));
     }
 
     /**
      * @param callable(TCarry, T): TCarry $callback A callable to apply to each
-     *     item of the collection to reduce it to a single value.
-     * @param TCarry $initial This is the initial value provided to the callback.
+     *                                              item of the collection to reduce it to a single value.
+     * @param TCarry                      $initial  This is the initial value provided to the callback.
      *
      * @return TCarry
      *
@@ -244,13 +254,15 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
      */
     public function reduce(callable $callback, mixed $initial): mixed
     {
-        /** @var TCarry */
+        /**
+ * @var TCarry 
+*/
         return array_reduce($this->data, $callback, $initial);
     }
 
     /**
      * @param CollectionInterface<T> $other The collection to check for divergent
-     *     items.
+     *                                      items.
      *
      * @return CollectionInterface<T>
      *
@@ -264,7 +276,9 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
         $diffAtoB = array_udiff($this->data, $other->toArray(), $this->getComparator());
         $diffBtoA = array_udiff($other->toArray(), $this->data, $this->getComparator());
 
-        /** @var array<array-key, T> $diff */
+        /**
+ * @var array<array-key, T> $diff 
+*/
         $diff = array_merge($diffAtoB, $diffBtoA);
 
         $collection = clone $this;
@@ -275,7 +289,7 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
 
     /**
      * @param CollectionInterface<T> $other The collection to check for
-     *     intersecting items.
+     *                                      intersecting items.
      *
      * @return CollectionInterface<T>
      *
@@ -286,7 +300,9 @@ abstract class AbstractCollection extends AbstractArray implements CollectionInt
     {
         $this->compareCollectionTypes($other);
 
-        /** @var array<array-key, T> $intersect */
+        /**
+ * @var array<array-key, T> $intersect 
+*/
         $intersect = array_uintersect($this->data, $other->toArray(), $this->getComparator());
 
         $collection = clone $this;

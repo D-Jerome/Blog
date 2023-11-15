@@ -26,7 +26,7 @@ use Symfony\Component\PropertyInfo\PropertyWriteInfoExtractorInterface;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('property_info', PropertyInfoExtractor::class)
-            ->args([[], [], [], [], []])
+        ->args([[], [], [], [], []])
 
         ->alias(PropertyAccessExtractorInterface::class, 'property_info')
         ->alias(PropertyDescriptionExtractorInterface::class, 'property_info')
@@ -36,17 +36,16 @@ return static function (ContainerConfigurator $container) {
         ->alias(PropertyInitializableExtractorInterface::class, 'property_info')
 
         ->set('property_info.cache', PropertyInfoCacheExtractor::class)
-            ->decorate('property_info')
-            ->args([service('property_info.cache.inner'), service('cache.property_info')])
+        ->decorate('property_info')
+        ->args([service('property_info.cache.inner'), service('cache.property_info')])
 
         // Extractor
         ->set('property_info.reflection_extractor', ReflectionExtractor::class)
-            ->tag('property_info.list_extractor', ['priority' => -1000])
-            ->tag('property_info.type_extractor', ['priority' => -1002])
-            ->tag('property_info.access_extractor', ['priority' => -1000])
-            ->tag('property_info.initializable_extractor', ['priority' => -1000])
+        ->tag('property_info.list_extractor', ['priority' => -1000])
+        ->tag('property_info.type_extractor', ['priority' => -1002])
+        ->tag('property_info.access_extractor', ['priority' => -1000])
+        ->tag('property_info.initializable_extractor', ['priority' => -1000])
 
         ->alias(PropertyReadInfoExtractorInterface::class, 'property_info.reflection_extractor')
-        ->alias(PropertyWriteInfoExtractorInterface::class, 'property_info.reflection_extractor')
-    ;
+        ->alias(PropertyWriteInfoExtractorInterface::class, 'property_info.reflection_extractor');
 };

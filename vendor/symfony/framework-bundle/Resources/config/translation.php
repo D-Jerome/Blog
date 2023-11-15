@@ -55,7 +55,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('translator.default', Translator::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('translation loaders locator'),
                 service('translator.formatter'),
                 param('kernel.default_locale'),
@@ -65,109 +66,112 @@ return static function (ContainerConfigurator $container) {
                     'debug' => param('kernel.debug'),
                 ],
                 abstract_arg('enabled locales'),
-            ])
-            ->call('setConfigCacheFactory', [service('config_cache_factory')])
-            ->tag('kernel.locale_aware')
+                ]
+        )
+        ->call('setConfigCacheFactory', [service('config_cache_factory')])
+        ->tag('kernel.locale_aware')
 
         ->alias(TranslatorInterface::class, 'translator')
 
         ->set('translator.logging', LoggingTranslator::class)
-            ->args([
+        ->args(
+            [
                 service('translator.logging.inner'),
                 service('logger'),
-            ])
-            ->tag('monolog.logger', ['channel' => 'translation'])
+                ]
+        )
+        ->tag('monolog.logger', ['channel' => 'translation'])
 
         ->set('translator.formatter.default', MessageFormatter::class)
-            ->args([service('identity_translator')])
+        ->args([service('identity_translator')])
 
         ->set('translation.loader.php', PhpFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'php'])
+        ->tag('translation.loader', ['alias' => 'php'])
 
         ->set('translation.loader.yml', YamlFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'yaml', 'legacy-alias' => 'yml'])
+        ->tag('translation.loader', ['alias' => 'yaml', 'legacy-alias' => 'yml'])
 
         ->set('translation.loader.xliff', XliffFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'xlf', 'legacy-alias' => 'xliff'])
+        ->tag('translation.loader', ['alias' => 'xlf', 'legacy-alias' => 'xliff'])
 
         ->set('translation.loader.po', PoFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'po'])
+        ->tag('translation.loader', ['alias' => 'po'])
 
         ->set('translation.loader.mo', MoFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'mo'])
+        ->tag('translation.loader', ['alias' => 'mo'])
 
         ->set('translation.loader.qt', QtFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'ts'])
+        ->tag('translation.loader', ['alias' => 'ts'])
 
         ->set('translation.loader.csv', CsvFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'csv'])
+        ->tag('translation.loader', ['alias' => 'csv'])
 
         ->set('translation.loader.res', IcuResFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'res'])
+        ->tag('translation.loader', ['alias' => 'res'])
 
         ->set('translation.loader.dat', IcuDatFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'dat'])
+        ->tag('translation.loader', ['alias' => 'dat'])
 
         ->set('translation.loader.ini', IniFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'ini'])
+        ->tag('translation.loader', ['alias' => 'ini'])
 
         ->set('translation.loader.json', JsonFileLoader::class)
-            ->tag('translation.loader', ['alias' => 'json'])
+        ->tag('translation.loader', ['alias' => 'json'])
 
         ->set('translation.dumper.php', PhpFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'php'])
+        ->tag('translation.dumper', ['alias' => 'php'])
 
         ->set('translation.dumper.xliff', XliffFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'xlf'])
+        ->tag('translation.dumper', ['alias' => 'xlf'])
 
         ->set('translation.dumper.xliff.xliff', XliffFileDumper::class)
-            ->args(['xliff'])
-            ->tag('translation.dumper', ['alias' => 'xliff'])
+        ->args(['xliff'])
+        ->tag('translation.dumper', ['alias' => 'xliff'])
 
         ->set('translation.dumper.po', PoFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'po'])
+        ->tag('translation.dumper', ['alias' => 'po'])
 
         ->set('translation.dumper.mo', MoFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'mo'])
+        ->tag('translation.dumper', ['alias' => 'mo'])
 
         ->set('translation.dumper.yml', YamlFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'yml'])
+        ->tag('translation.dumper', ['alias' => 'yml'])
 
         ->set('translation.dumper.yaml', YamlFileDumper::class)
-            ->args(['yaml'])
-            ->tag('translation.dumper', ['alias' => 'yaml'])
+        ->args(['yaml'])
+        ->tag('translation.dumper', ['alias' => 'yaml'])
 
         ->set('translation.dumper.qt', QtFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'ts'])
+        ->tag('translation.dumper', ['alias' => 'ts'])
 
         ->set('translation.dumper.csv', CsvFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'csv'])
+        ->tag('translation.dumper', ['alias' => 'csv'])
 
         ->set('translation.dumper.ini', IniFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'ini'])
+        ->tag('translation.dumper', ['alias' => 'ini'])
 
         ->set('translation.dumper.json', JsonFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'json'])
+        ->tag('translation.dumper', ['alias' => 'json'])
 
         ->set('translation.dumper.res', IcuResFileDumper::class)
-            ->tag('translation.dumper', ['alias' => 'res'])
+        ->tag('translation.dumper', ['alias' => 'res'])
 
         ->set('translation.extractor.php', PhpExtractor::class)
-            ->deprecate('symfony/framework-bundle', '6.2', 'The "%service_id%" service is deprecated, use "translation.extractor.php_ast" instead.')
-            ->tag('translation.extractor', ['alias' => 'php'])
+        ->deprecate('symfony/framework-bundle', '6.2', 'The "%service_id%" service is deprecated, use "translation.extractor.php_ast" instead.')
+        ->tag('translation.extractor', ['alias' => 'php'])
 
         ->set('translation.extractor.php_ast', PhpAstExtractor::class)
-            ->args([tagged_iterator('translation.extractor.visitor')])
-            ->tag('translation.extractor', ['alias' => 'php'])
+        ->args([tagged_iterator('translation.extractor.visitor')])
+        ->tag('translation.extractor', ['alias' => 'php'])
 
         ->set('translation.extractor.visitor.trans_method', TransMethodVisitor::class)
-            ->tag('translation.extractor.visitor')
+        ->tag('translation.extractor.visitor')
 
         ->set('translation.extractor.visitor.translatable_message', TranslatableMessageVisitor::class)
-            ->tag('translation.extractor.visitor')
+        ->tag('translation.extractor.visitor')
 
         ->set('translation.extractor.visitor.constraint', ConstraintVisitor::class)
-            ->tag('translation.extractor.visitor')
+        ->tag('translation.extractor.visitor')
 
         ->set('translation.reader', TranslationReader::class)
         ->alias(TranslationReaderInterface::class, 'translation.reader')
@@ -179,19 +183,20 @@ return static function (ContainerConfigurator $container) {
         ->alias(TranslationWriterInterface::class, 'translation.writer')
 
         ->set('translation.warmer', TranslationsCacheWarmer::class)
-            ->args([service(ContainerInterface::class)])
-            ->tag('container.service_subscriber', ['id' => 'translator'])
-            ->tag('kernel.cache_warmer')
+        ->args([service(ContainerInterface::class)])
+        ->tag('container.service_subscriber', ['id' => 'translator'])
+        ->tag('kernel.cache_warmer')
 
         ->set('translation.locale_switcher', LocaleSwitcher::class)
-            ->args([
+        ->args(
+            [
                 param('kernel.default_locale'),
                 tagged_iterator('kernel.locale_aware', exclude: 'translation.locale_switcher'),
                 service('router.request_context')->ignoreOnInvalid(),
-            ])
-            ->tag('kernel.reset', ['method' => 'reset'])
-            ->tag('kernel.locale_aware')
+                ]
+        )
+        ->tag('kernel.reset', ['method' => 'reset'])
+        ->tag('kernel.locale_aware')
         ->alias(LocaleAwareInterface::class, 'translation.locale_switcher')
-        ->alias(LocaleSwitcher::class, 'translation.locale_switcher')
-    ;
+        ->alias(LocaleSwitcher::class, 'translation.locale_switcher');
 };

@@ -45,7 +45,8 @@ return static function (ContainerConfigurator $container) {
         ->alias(ResolvedFormTypeFactoryInterface::class, 'form.resolved_type_factory')
 
         ->set('form.registry', FormRegistry::class)
-            ->args([
+        ->args(
+            [
                 [
                     /*
                      * We don't need to be able to add more extensions.
@@ -56,99 +57,109 @@ return static function (ContainerConfigurator $container) {
                     service('form.extension'),
                 ],
                 service('form.resolved_type_factory'),
-            ])
+                ]
+        )
 
         ->alias(FormRegistryInterface::class, 'form.registry')
 
         ->set('form.factory', FormFactory::class)
-            ->args([service('form.registry')])
+        ->args([service('form.registry')])
 
         ->alias(FormFactoryInterface::class, 'form.factory')
 
         ->set('form.extension', DependencyInjectionExtension::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('All services with tag "form.type" are stored in a service locator by FormPass'),
                 abstract_arg('All services with tag "form.type_extension" are stored here by FormPass'),
                 abstract_arg('All services with tag "form.type_guesser" are stored here by FormPass'),
-            ])
+                ]
+        )
 
         ->set('form.type_guesser.validator', ValidatorTypeGuesser::class)
-            ->args([service('validator.mapping.class_metadata_factory')])
-            ->tag('form.type_guesser')
+        ->args([service('validator.mapping.class_metadata_factory')])
+        ->tag('form.type_guesser')
 
         ->alias('form.property_accessor', 'property_accessor')
 
         ->set('form.choice_list_factory.default', DefaultChoiceListFactory::class)
 
         ->set('form.choice_list_factory.property_access', PropertyAccessDecorator::class)
-            ->args([
+        ->args(
+            [
                 service('form.choice_list_factory.default'),
                 service('form.property_accessor'),
-            ])
+                ]
+        )
 
         ->set('form.choice_list_factory.cached', CachingFactoryDecorator::class)
-            ->args([service('form.choice_list_factory.property_access')])
-            ->tag('kernel.reset', ['method' => 'reset'])
+        ->args([service('form.choice_list_factory.property_access')])
+        ->tag('kernel.reset', ['method' => 'reset'])
 
         ->alias('form.choice_list_factory', 'form.choice_list_factory.cached')
 
         ->set('form.type.form', FormType::class)
-            ->args([service('form.property_accessor')])
-            ->tag('form.type')
+        ->args([service('form.property_accessor')])
+        ->tag('form.type')
 
         ->set('form.type.choice', ChoiceType::class)
-            ->args([
+        ->args(
+            [
                 service('form.choice_list_factory'),
                 service('translator')->ignoreOnInvalid(),
-            ])
-            ->tag('form.type')
+                ]
+        )
+        ->tag('form.type')
 
         ->set('form.type.file', FileType::class)
-            ->args([service('translator')->ignoreOnInvalid()])
-            ->tag('form.type')
+        ->args([service('translator')->ignoreOnInvalid()])
+        ->tag('form.type')
 
         ->set('form.type.color', ColorType::class)
-            ->args([service('translator')->ignoreOnInvalid()])
-            ->tag('form.type')
+        ->args([service('translator')->ignoreOnInvalid()])
+        ->tag('form.type')
 
         ->set('form.type_extension.form.transformation_failure_handling', TransformationFailureExtension::class)
-            ->args([service('translator')->ignoreOnInvalid()])
-            ->tag('form.type_extension', ['extended-type' => FormType::class])
+        ->args([service('translator')->ignoreOnInvalid()])
+        ->tag('form.type_extension', ['extended-type' => FormType::class])
 
         ->set('form.type_extension.form.html_sanitizer', TextTypeHtmlSanitizerExtension::class)
-            ->args([tagged_locator('html_sanitizer', 'sanitizer')])
-            ->tag('form.type_extension', ['extended-type' => TextType::class])
+        ->args([tagged_locator('html_sanitizer', 'sanitizer')])
+        ->tag('form.type_extension', ['extended-type' => TextType::class])
 
         ->set('form.type_extension.form.http_foundation', FormTypeHttpFoundationExtension::class)
-            ->args([service('form.type_extension.form.request_handler')])
-            ->tag('form.type_extension')
+        ->args([service('form.type_extension.form.request_handler')])
+        ->tag('form.type_extension')
 
         ->set('form.type_extension.form.request_handler', HttpFoundationRequestHandler::class)
-            ->args([service('form.server_params')])
+        ->args([service('form.server_params')])
 
         ->set('form.server_params', ServerParams::class)
-            ->args([service('request_stack')])
+        ->args([service('request_stack')])
 
         ->set('form.type_extension.form.validator', FormTypeValidatorExtension::class)
-            ->args([
+        ->args(
+            [
                 service('validator'),
                 false,
                 service('twig.form.renderer')->ignoreOnInvalid(),
                 service('translator')->ignoreOnInvalid(),
-            ])
-            ->tag('form.type_extension', ['extended-type' => FormType::class])
+                ]
+        )
+        ->tag('form.type_extension', ['extended-type' => FormType::class])
 
         ->set('form.type_extension.repeated.validator', RepeatedTypeValidatorExtension::class)
-            ->tag('form.type_extension')
+        ->tag('form.type_extension')
 
         ->set('form.type_extension.submit.validator', SubmitTypeValidatorExtension::class)
-            ->tag('form.type_extension', ['extended-type' => SubmitType::class])
+        ->tag('form.type_extension', ['extended-type' => SubmitType::class])
 
         ->set('form.type_extension.upload.validator', UploadValidatorExtension::class)
-            ->args([
+        ->args(
+            [
                 service('translator'),
                 param('validator.translation_domain'),
-            ])
-            ->tag('form.type_extension')
-    ;
+                ]
+        )
+        ->tag('form.type_extension');
 };

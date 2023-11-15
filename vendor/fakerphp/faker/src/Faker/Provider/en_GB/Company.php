@@ -21,17 +21,17 @@ class Company extends \Faker\Provider\Company
     public static function vat(string $type = null): string
     {
         switch ($type) {
-            case static::VAT_TYPE_BRANCH:
-                return static::generateBranchTraderVatNumber();
+        case static::VAT_TYPE_BRANCH:
+            return static::generateBranchTraderVatNumber();
 
-            case static::VAT_TYPE_GOVERNMENT:
-                return static::generateGovernmentVatNumber();
+        case static::VAT_TYPE_GOVERNMENT:
+            return static::generateGovernmentVatNumber();
 
-            case static::VAT_TYPE_HEALTH_AUTHORITY:
-                return static::generateHealthAuthorityVatNumber();
+        case static::VAT_TYPE_HEALTH_AUTHORITY:
+            return static::generateHealthAuthorityVatNumber();
 
-            default:
-                return static::generateStandardVatNumber();
+        default:
+            return static::generateStandardVatNumber();
         }
     }
 

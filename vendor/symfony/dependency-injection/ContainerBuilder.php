@@ -1058,10 +1058,9 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
                 $callable = [$callable, '__invoke'];
             }
 
-            if (\is_array($callable) && (
-                $callable[0] instanceof Reference
-                || $callable[0] instanceof Definition && !isset($inlineServices[spl_object_hash($callable[0])])
-            )) {
+            if (\is_array($callable) && ($callable[0] instanceof Reference
+                || $callable[0] instanceof Definition && !isset($inlineServices[spl_object_hash($callable[0])])                )
+            ) {
                 $initializer = function () use ($callable, &$inlineServices) {
                     return $this->doResolveServices($callable[0], $inlineServices);
                 };
@@ -1091,7 +1090,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         }
 
         if (null !== $definition->getFile()) {
-            require_once $parameterBag->resolveValue($definition->getFile());
+            include_once $parameterBag->resolveValue($definition->getFile());
         }
 
         $arguments = $definition->getArguments();
@@ -1213,40 +1212,42 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             $reference = $value->getValues()[0];
             $value = fn () => $this->resolveServices($reference);
         } elseif ($value instanceof IteratorArgument) {
-            $value = new RewindableGenerator(function () use ($value, &$inlineServices) {
-                foreach ($value->getValues() as $k => $v) {
-                    foreach (self::getServiceConditionals($v) as $s) {
-                        if (!$this->has($s)) {
-                            continue 2;
+            $value = new RewindableGenerator(
+                function () use ($value, &$inlineServices) {
+                    foreach ($value->getValues() as $k => $v) {
+                        foreach (self::getServiceConditionals($v) as $s) {
+                            if (!$this->has($s)) {
+                                continue 2;
+                            }
                         }
+                        foreach (self::getInitializedConditionals($v) as $s) {
+                            if (!$this->doGet($s, ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE, $inlineServices)) {
+                                continue 2;
+                            }
+                        }
+
+                        yield $k => $this->doResolveServices($v, $inlineServices);
                     }
-                    foreach (self::getInitializedConditionals($v) as $s) {
-                        if (!$this->doGet($s, ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE, $inlineServices)) {
-                            continue 2;
+                }, function () use ($value): int {
+                    $count = 0;
+                    foreach ($value->getValues() as $v) {
+                        foreach (self::getServiceConditionals($v) as $s) {
+                            if (!$this->has($s)) {
+                                continue 2;
+                            }
                         }
+                        foreach (self::getInitializedConditionals($v) as $s) {
+                            if (!$this->doGet($s, ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE)) {
+                                continue 2;
+                            }
+                        }
+
+                        ++$count;
                     }
 
-                    yield $k => $this->doResolveServices($v, $inlineServices);
+                    return $count;
                 }
-            }, function () use ($value): int {
-                $count = 0;
-                foreach ($value->getValues() as $v) {
-                    foreach (self::getServiceConditionals($v) as $s) {
-                        if (!$this->has($s)) {
-                            continue 2;
-                        }
-                    }
-                    foreach (self::getInitializedConditionals($v) as $s) {
-                        if (!$this->doGet($s, ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE)) {
-                            continue 2;
-                        }
-                    }
-
-                    ++$count;
-                }
-
-                return $count;
-            });
+            );
         } elseif ($value instanceof ServiceLocatorArgument) {
             $refs = $types = [];
             foreach ($value->getValues() as $k => $v) {

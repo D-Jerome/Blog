@@ -119,12 +119,16 @@ class RegisterControllerArgumentLocatorsPass implements CompilerPassInterface
             }
 
             foreach ($methods as [$r, $parameters]) {
-                /** @var \ReflectionMethod $r */
+                /**
+ * @var \ReflectionMethod $r 
+*/
 
                 // create a per-method map of argument-names to service/type-references
                 $args = [];
                 foreach ($parameters as $p) {
-                    /** @var \ReflectionParameter $p */
+                    /**
+ * @var \ReflectionParameter $p 
+*/
                     $type = preg_replace('/(^|[(|&])\\\\/', '\1', $target = ltrim(ProxyHelper::exportType($p) ?? '', '?'));
                     $invalidBehavior = ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
                     $autowireAttributes = $autowire ? $emptyAutowireAttributes : [];

@@ -25,10 +25,10 @@ class ColumnTypeGuesser
         $type = $class->getTypeOfField($fieldName);
 
         switch ($type) {
-            case 'boolean':
-                return static function () use ($generator) {
+        case 'boolean':
+            return static function () use ($generator) {
                     return $generator->boolean;
-                };
+            };
 
             case 'decimal':
                 $size = $class->fieldMappings[$fieldName]['precision'] ?? 2;

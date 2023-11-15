@@ -17,16 +17,19 @@ use Symfony\Component\Serializer\Debug\TraceableSerializer;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('debug.serializer', TraceableSerializer::class)
-            ->decorate('serializer')
-            ->args([
+        ->decorate('serializer')
+        ->args(
+            [
                 service('debug.serializer.inner'),
                 service('serializer.data_collector'),
-            ])
+                ]
+        )
 
         ->set('serializer.data_collector', SerializerDataCollector::class)
-            ->tag('data_collector', [
+        ->tag(
+            'data_collector', [
                 'template' => '@WebProfiler/Collector/serializer.html.twig',
                 'id' => 'serializer',
-            ])
-    ;
+                ]
+        );
 };

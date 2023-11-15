@@ -49,17 +49,19 @@ final class CachePoolClearCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('pools', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'A list of cache pools or cache pool clearers'),
-            ])
+                ]
+            )
             ->addOption('all', null, InputOption::VALUE_NONE, 'Clear all cache pools')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command clears the given cache pools or cache pool clearers.
 
     %command.full_name% <cache pool or clearer 1> [...<cache pool or clearer N>]
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -159,8 +159,8 @@ abstract class NodeDefinition implements NodeParentInterface
      * @param string $version The version of the package that introduced the deprecation
      * @param string $message the deprecation message to use
      *
-     * You can use %node% and %path% placeholders in your message to display,
-     * respectively, the node name and its complete path
+     *                        You can use %node% and %path% placeholders in your message to display,
+     *                        respectively, the node name and its complete path
      *
      * @return $this
      */

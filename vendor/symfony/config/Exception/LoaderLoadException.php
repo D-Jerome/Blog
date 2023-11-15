@@ -56,7 +56,7 @@ class LoaderLoadException extends \Exception
             }
             $message .= '.';
 
-        // if there's no previous message, present it the default way
+            // if there's no previous message, present it the default way
         } elseif (null === $sourceResource) {
             $message .= sprintf('Cannot load resource "%s".', $resource);
         } else {

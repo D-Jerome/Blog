@@ -40,7 +40,9 @@ class ServerDumpCommand extends Command
 {
     private DumpServer $server;
 
-    /** @var DumpDescriptorInterface[] */
+    /**
+     * @var DumpDescriptorInterface[] 
+     */
     private array $descriptors;
 
     public function __construct(DumpServer $server, array $descriptors = [])
@@ -58,7 +60,8 @@ class ServerDumpCommand extends Command
     {
         $this
             ->addOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format (%s)', implode(', ', $this->getAvailableFormats())), 'cli')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 <info>%command.name%</info> starts a dump server that collects and displays
 dumps in a single place for debugging you application:
 
@@ -70,8 +73,7 @@ and redirecting the output to a file:
   <info>php %command.full_name% --format="html" > dump.html</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -91,9 +93,11 @@ EOF
         $errorIo->success(sprintf('Server listening on %s', $this->server->getHost()));
         $errorIo->comment('Quit the server with CONTROL-C.');
 
-        $this->server->listen(function (Data $data, array $context, int $clientId) use ($descriptor, $io) {
-            $descriptor->describe($io, $data, $context, $clientId);
-        });
+        $this->server->listen(
+            function (Data $data, array $context, int $clientId) use ($descriptor, $io) {
+                $descriptor->describe($io, $data, $context, $clientId);
+            }
+        );
 
         return 0;
     }

@@ -31,13 +31,15 @@ class ExpressionRequestMatcher implements RequestMatcherInterface
 
     public function matches(Request $request): bool
     {
-        return $this->language->evaluate($this->expression, [
+        return $this->language->evaluate(
+            $this->expression, [
             'request' => $request,
             'method' => $request->getMethod(),
             'path' => rawurldecode($request->getPathInfo()),
             'host' => $request->getHost(),
             'ip' => $request->getClientIp(),
             'attributes' => $request->attributes->all(),
-        ]);
+            ]
+        );
     }
 }

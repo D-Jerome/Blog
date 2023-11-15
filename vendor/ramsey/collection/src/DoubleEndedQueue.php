@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -25,8 +25,8 @@ use function array_unshift;
  * This class provides a basic implementation of `DoubleEndedQueueInterface`, to
  * minimize the effort required to implement this interface.
  *
- * @template T
- * @extends Queue<T>
+ * @template   T
+ * @extends    Queue<T>
  * @implements DoubleEndedQueueInterface<T>
  */
 class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
@@ -35,8 +35,8 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
      * Constructs a double-ended queue (dequeue) object of the specified type,
      * optionally with the specified data.
      *
-     * @param string $queueType The type or class name associated with this dequeue.
-     * @param array<array-key, T> $data The initial items to store in the dequeue.
+     * @param string              $queueType The type or class name associated with this dequeue.
+     * @param array<array-key, T> $data      The initial items to store in the dequeue.
      */
     public function __construct(private readonly string $queueType, array $data = [])
     {

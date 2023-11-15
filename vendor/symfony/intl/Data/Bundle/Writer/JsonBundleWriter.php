@@ -26,11 +26,13 @@ class JsonBundleWriter implements BundleWriterInterface
             $data = iterator_to_array($data);
         }
 
-        array_walk_recursive($data, function (&$value) {
-            if ($value instanceof \Traversable) {
-                $value = iterator_to_array($value);
+        array_walk_recursive(
+            $data, function (&$value) {
+                if ($value instanceof \Traversable) {
+                    $value = iterator_to_array($value);
+                }
             }
-        });
+        );
 
         $contents = json_encode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE)."\n";
 

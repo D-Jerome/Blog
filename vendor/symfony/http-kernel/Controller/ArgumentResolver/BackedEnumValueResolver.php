@@ -81,7 +81,9 @@ class BackedEnumValueResolver implements ArgumentValueResolverInterface, ValueRe
             throw new \LogicException(sprintf('Could not resolve the "%s $%s" controller argument: expecting an int or string, got "%s".', $argument->getType(), $argument->getName(), get_debug_type($value)));
         }
 
-        /** @var class-string<\BackedEnum> $enumType */
+        /**
+ * @var class-string<\BackedEnum> $enumType 
+*/
         $enumType = $argument->getType();
 
         try {

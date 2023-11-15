@@ -132,7 +132,9 @@ final class FormExtension extends AbstractExtension
      */
     public function getFieldErrors(FormView $view): iterable
     {
-        /** @var FormError $error */
+        /**
+ * @var FormError $error 
+*/
         foreach ($view->vars['errors'] as $error) {
             yield $error->getMessage();
         }

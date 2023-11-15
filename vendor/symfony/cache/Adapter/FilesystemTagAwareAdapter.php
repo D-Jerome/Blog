@@ -46,7 +46,10 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
     {
         $ok = $this->doPrune();
 
-        set_error_handler(static function () {});
+        set_error_handler(
+            static function () {
+            }
+        );
         $chars = '+-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         try {
@@ -92,7 +95,10 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
             return $ok;
         }
 
-        set_error_handler(static function () {});
+        set_error_handler(
+            static function () {
+            }
+        );
         $chars = '+-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         $this->tmpSuffix ??= str_replace('/', '-', base64_encode(random_bytes(6)));
@@ -225,7 +231,10 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
 
             $this->tmpSuffix ??= str_replace('/', '-', base64_encode(random_bytes(6)));
 
-            set_error_handler(static function () {});
+            set_error_handler(
+                static function () {
+                }
+            );
 
             try {
                 if (rename($tagFolder, $renamed = substr_replace($tagFolder, $this->tmpSuffix.'_', -10))) {

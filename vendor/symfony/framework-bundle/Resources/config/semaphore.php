@@ -16,8 +16,7 @@ use Symfony\Component\Semaphore\SemaphoreFactory;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('semaphore.factory.abstract', SemaphoreFactory::class)->abstract()
-            ->args([abstract_arg('Store')])
-            ->call('setLogger', [service('logger')->ignoreOnInvalid()])
-            ->tag('monolog.logger', ['channel' => 'semaphore'])
-    ;
+        ->args([abstract_arg('Store')])
+        ->call('setLogger', [service('logger')->ignoreOnInvalid()])
+        ->tag('monolog.logger', ['channel' => 'semaphore']);
 };

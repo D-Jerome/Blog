@@ -106,23 +106,23 @@ class EntityPopulator
             $columnName = Base::toLower($columnMap->getName());
 
             switch ($name) {
-                case 'nested_set':
-                    $columnNames = [$params['left_column'], $params['right_column'], $params['level_column']];
+            case 'nested_set':
+                $columnNames = [$params['left_column'], $params['right_column'], $params['level_column']];
 
-                    if (in_array($columnName, $columnNames, false)) {
-                        return true;
-                    }
+                if (in_array($columnName, $columnNames, false)) {
+                    return true;
+                }
 
-                    break;
+                break;
 
-                case 'timestampable':
-                    $columnNames = [$params['create_column'], $params['update_column']];
+            case 'timestampable':
+                $columnNames = [$params['create_column'], $params['update_column']];
 
-                    if (in_array($columnName, $columnNames, false)) {
-                        return true;
-                    }
+                if (in_array($columnName, $columnNames, false)) {
+                    return true;
+                }
 
-                    break;
+                break;
             }
         }
 
@@ -159,25 +159,25 @@ class EntityPopulator
 
         foreach ($tableMap->getBehaviors() as $name => $params) {
             switch ($name) {
-                case 'nested_set':
-                    $modifiers['nested_set'] = static function ($obj, $inserted) use ($class, $generator): void {
-                        if (isset($inserted[$class])) {
-                            $queryClass = $class . 'Query';
-                            $parent = $queryClass::create()->findPk($generator->randomElement($inserted[$class]));
-                            $obj->insertAsLastChildOf($parent);
-                        } else {
-                            $obj->makeRoot();
-                        }
-                    };
+            case 'nested_set':
+                $modifiers['nested_set'] = static function ($obj, $inserted) use ($class, $generator): void {
+                    if (isset($inserted[$class])) {
+                        $queryClass = $class . 'Query';
+                        $parent = $queryClass::create()->findPk($generator->randomElement($inserted[$class]));
+                        $obj->insertAsLastChildOf($parent);
+                    } else {
+                        $obj->makeRoot();
+                    }
+                };
 
-                    break;
+                break;
 
-                case 'sortable':
-                    $modifiers['sortable'] = static function ($obj, $inserted) use ($class, $generator): void {
-                        $obj->insertAtRank($generator->numberBetween(1, count($inserted[$class] ?? []) + 1));
-                    };
+            case 'sortable':
+                $modifiers['sortable'] = static function ($obj, $inserted) use ($class, $generator): void {
+                    $obj->insertAtRank($generator->numberBetween(1, count($inserted[$class] ?? []) + 1));
+                };
 
-                    break;
+                break;
             }
         }
 

@@ -21,7 +21,9 @@ use Twig\Source;
  */
 class FilesystemLoader implements LoaderInterface
 {
-    /** Identifier of the main namespace. */
+    /**
+     * Identifier of the main namespace. 
+     */
     public const MAIN_NAMESPACE = '__main__';
 
     protected $paths = [];
@@ -277,7 +279,6 @@ class FilesystemLoader implements LoaderInterface
                 && ':' === $file[1]
                 && strspn($file, '/\\', 2, 1)
             )
-            || null !== parse_url($file, \PHP_URL_SCHEME)
-        ;
+            || null !== parse_url($file, \PHP_URL_SCHEME);
     }
 }

@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -89,7 +89,9 @@ final class Fields implements FieldsInterface
     public function getTimeLow(): Hexadecimal
     {
         // Swap the bytes from little endian to network byte order.
-        /** @var array $hex */
+        /**
+ * @var array $hex 
+*/
         $hex = unpack(
             'H*',
             pack(
@@ -105,7 +107,9 @@ final class Fields implements FieldsInterface
     public function getTimeMid(): Hexadecimal
     {
         // Swap the bytes from little endian to network byte order.
-        /** @var array $hex */
+        /**
+ * @var array $hex 
+*/
         $hex = unpack(
             'H*',
             pack(
@@ -120,7 +124,9 @@ final class Fields implements FieldsInterface
     public function getTimeHiAndVersion(): Hexadecimal
     {
         // Swap the bytes from little endian to network byte order.
-        /** @var array $hex */
+        /**
+ * @var array $hex 
+*/
         $hex = unpack(
             'H*',
             pack(
@@ -134,12 +140,14 @@ final class Fields implements FieldsInterface
 
     public function getTimestamp(): Hexadecimal
     {
-        return new Hexadecimal(sprintf(
-            '%03x%04s%08s',
-            hexdec($this->getTimeHiAndVersion()->toString()) & 0x0fff,
-            $this->getTimeMid()->toString(),
-            $this->getTimeLow()->toString()
-        ));
+        return new Hexadecimal(
+            sprintf(
+                '%03x%04s%08s',
+                hexdec($this->getTimeHiAndVersion()->toString()) & 0x0fff,
+                $this->getTimeMid()->toString(),
+                $this->getTimeLow()->toString()
+            )
+        );
     }
 
     public function getClockSeq(): Hexadecimal
@@ -176,7 +184,9 @@ final class Fields implements FieldsInterface
             return null;
         }
 
-        /** @var array $parts */
+        /**
+ * @var array $parts 
+*/
         $parts = unpack('n*', $this->bytes);
 
         return ((int) $parts[4] >> 4) & 0x00f;

@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -34,13 +34,15 @@ final class UuidV1 extends Uuid implements UuidInterface
     /**
      * Creates a version 1 (Gregorian time) UUID
      *
-     * @param Rfc4122FieldsInterface $fields The fields from which to construct a UUID
+     * @param Rfc4122FieldsInterface   $fields          The fields from which to construct a UUID
      * @param NumberConverterInterface $numberConverter The number converter to use
-     *     for converting hex values to/from integers
-     * @param CodecInterface $codec The codec to use when encoding or decoding
-     *     UUID strings
-     * @param TimeConverterInterface $timeConverter The time converter to use
-     *     for converting timestamps extracted from a UUID to unix timestamps
+     *                                                  for converting hex values to/from integers
+     * @param CodecInterface           $codec           The codec to use when encoding or decoding
+     *                                                  UUID strings
+     * @param TimeConverterInterface   $timeConverter   The time converter to use
+     *                                                  for converting timestamps
+     *                                                  extracted from a UUID to
+     *                                                  unix timestamps
      */
     public function __construct(
         Rfc4122FieldsInterface $fields,

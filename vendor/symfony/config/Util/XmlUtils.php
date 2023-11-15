@@ -213,28 +213,28 @@ class XmlUtils
         $lowercaseValue = strtolower($value);
 
         switch (true) {
-            case 'null' === $lowercaseValue:
-                return null;
-            case ctype_digit($value):
-            case isset($value[1]) && '-' === $value[0] && ctype_digit(substr($value, 1)):
-                $raw = $value;
-                $cast = (int) $value;
+        case 'null' === $lowercaseValue:
+            return null;
+        case ctype_digit($value):
+        case isset($value[1]) && '-' === $value[0] && ctype_digit(substr($value, 1)):
+            $raw = $value;
+            $cast = (int) $value;
 
-                return self::isOctal($value) ? \intval($value, 8) : (($raw === (string) $cast) ? $cast : $raw);
-            case 'true' === $lowercaseValue:
-                return true;
-            case 'false' === $lowercaseValue:
-                return false;
-            case isset($value[1]) && '0b' == $value[0].$value[1] && preg_match('/^0b[01]*$/', $value):
-                return bindec($value);
-            case is_numeric($value):
-                return '0x' === $value[0].$value[1] ? hexdec($value) : (float) $value;
-            case preg_match('/^0x[0-9a-f]++$/i', $value):
-                return hexdec($value);
-            case preg_match('/^[+-]?[0-9]+(\.[0-9]+)?$/', $value):
-                return (float) $value;
-            default:
-                return $value;
+            return self::isOctal($value) ? \intval($value, 8) : (($raw === (string) $cast) ? $cast : $raw);
+        case 'true' === $lowercaseValue:
+            return true;
+        case 'false' === $lowercaseValue:
+            return false;
+        case isset($value[1]) && '0b' == $value[0].$value[1] && preg_match('/^0b[01]*$/', $value):
+            return bindec($value);
+        case is_numeric($value):
+            return '0x' === $value[0].$value[1] ? hexdec($value) : (float) $value;
+        case preg_match('/^0x[0-9a-f]++$/i', $value):
+            return hexdec($value);
+        case preg_match('/^[+-]?[0-9]+(\.[0-9]+)?$/', $value):
+            return (float) $value;
+        default:
+            return $value;
         }
     }
 
@@ -245,7 +245,8 @@ class XmlUtils
     {
         $errors = [];
         foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
+            $errors[] = sprintf(
+                '[%s %s] %s (in %s - line %d, column %d)',
                 \LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
                 $error->code,
                 trim($error->message),

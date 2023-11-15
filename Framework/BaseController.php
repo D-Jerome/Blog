@@ -28,9 +28,11 @@ class BaseController
 
         $this->session = new Session();
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
-        $this->twig = new Environment($loader, [
+        $this->twig = new Environment(
+            $loader, [
             // 'cache' => __DIR__ . '/../app/var/cache',
-        ]);
+            ]
+        );
         $this->twig->addExtension(new IntlExtension());
         $this->route= $route;
    
@@ -52,7 +54,7 @@ class BaseController
      * view : Twig Template view construct
      *
      * @param  string $template : NAme of the template
-     * @param  array $params : params to show in template
+     * @param  array  $params   : params to show in template
      * @return void
      */
     protected function view(string $template, array $params)

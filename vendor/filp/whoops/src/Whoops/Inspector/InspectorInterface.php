@@ -1,6 +1,7 @@
 <?php
 /**
  * Whoops - php errors for cool kids
+ *
  * @author Filipe Dobreira <http://github.com/filp>
  */
 
@@ -42,12 +43,14 @@ interface InspectorInterface
 
     /**
      * Does the wrapped Exception has a previous Exception?
+     *
      * @return bool
      */
     public function hasPreviousException();
 
     /**
      * Returns an Inspector for a previous Exception, if any.
+     *
      * @todo   Clean this up a bit, cache stuff a bit better.
      * @return InspectorInterface
      */
@@ -55,6 +58,7 @@ interface InspectorInterface
 
     /**
      * Returns an array of all previous exceptions for this inspector's exception
+     *
      * @return \Throwable[]
      */
     public function getPreviousExceptions();

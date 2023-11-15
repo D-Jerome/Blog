@@ -44,12 +44,14 @@ final class IntlExtension extends AbstractExtension
 
         // Assuming that each `RELATIVE_*` constant are defined when one of them is.
         if (\defined('IntlDateFormatter::RELATIVE_FULL')) {
-            $formats = array_merge($formats, [
+            $formats = array_merge(
+                $formats, [
                 'relative_short' => \IntlDateFormatter::RELATIVE_SHORT,
                 'relative_medium' => \IntlDateFormatter::RELATIVE_MEDIUM,
                 'relative_long' => \IntlDateFormatter::RELATIVE_LONG,
                 'relative_full' => \IntlDateFormatter::RELATIVE_FULL,
-            ]);
+                ]
+            );
         }
 
         return $formats;

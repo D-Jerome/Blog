@@ -131,22 +131,26 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         $statusCode = $this->escape($exception->getStatusCode());
 
         if (!$debug) {
-            return $this->include(self::$template, [
+            return $this->include(
+                self::$template, [
                 'statusText' => $statusText,
                 'statusCode' => $statusCode,
-            ]);
+                ]
+            );
         }
 
         $exceptionMessage = $this->escape($exception->getMessage());
 
-        return $this->include($debugTemplate, [
+        return $this->include(
+            $debugTemplate, [
             'exception' => $exception,
             'exceptionMessage' => $exceptionMessage,
             'statusText' => $statusText,
             'statusCode' => $statusCode,
             'logger' => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
             'currentContent' => \is_string($this->outputBuffer) ? $this->outputBuffer : ($this->outputBuffer)(),
-        ]);
+            ]
+        );
     }
 
     private function dumpValue(Data $value): string

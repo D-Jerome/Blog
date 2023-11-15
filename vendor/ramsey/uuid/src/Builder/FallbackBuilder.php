@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ class FallbackBuilder implements UuidBuilderInterface
      * succeeds
      *
      * @param CodecInterface $codec The codec to use for building this instance
-     * @param string $bytes The byte string from which to construct a UUID
+     * @param string         $bytes The byte string from which to construct a UUID
      *
      * @return UuidInterface an instance of a UUID object
      *

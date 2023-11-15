@@ -159,7 +159,8 @@ class HtmlDumper extends CliDumper
             return $this->dumpHeader;
         }
 
-        $line = str_replace('{$options}', json_encode($this->displayOptions, \JSON_FORCE_OBJECT), <<<'EOHTML'
+        $line = str_replace(
+            '{$options}', json_encode($this->displayOptions, \JSON_FORCE_OBJECT), <<<'EOHTML'
 <script>
 Sfdump = window.Sfdump || (function (doc) {
 
@@ -901,32 +902,36 @@ EOHTML
         }
 
         $map = static::$controlCharsMap;
-        $v = "<span class=sf-dump-{$style}>".preg_replace_callback(static::$controlCharsRx, function ($c) use ($map) {
-            $s = $b = '<span class="sf-dump-default';
-            $c = $c[$i = 0];
-            if ($ns = "\r" === $c[$i] || "\n" === $c[$i]) {
-                $s .= ' sf-dump-ns';
-            }
-            $s .= '">';
-            do {
-                if (("\r" === $c[$i] || "\n" === $c[$i]) !== $ns) {
-                    $s .= '</span>'.$b;
-                    if ($ns = !$ns) {
-                        $s .= ' sf-dump-ns';
-                    }
-                    $s .= '">';
+        $v = "<span class=sf-dump-{$style}>".preg_replace_callback(
+            static::$controlCharsRx, function ($c) use ($map) {
+                $s = $b = '<span class="sf-dump-default';
+                $c = $c[$i = 0];
+                if ($ns = "\r" === $c[$i] || "\n" === $c[$i]) {
+                    $s .= ' sf-dump-ns';
                 }
+                $s .= '">';
+                do {
+                    if (("\r" === $c[$i] || "\n" === $c[$i]) !== $ns) {
+                        $s .= '</span>'.$b;
+                        if ($ns = !$ns) {
+                            $s .= ' sf-dump-ns';
+                        }
+                        $s .= '">';
+                    }
 
-                $s .= $map[$c[$i]] ?? sprintf('\x%02X', \ord($c[$i]));
-            } while (isset($c[++$i]));
+                    $s .= $map[$c[$i]] ?? sprintf('\x%02X', \ord($c[$i]));
+                } while (isset($c[++$i]));
 
-            return $s.'</span>';
-        }, $v).'</span>';
+                return $s.'</span>';
+            }, $v
+        ).'</span>';
 
         if (!($attr['binary'] ?? false)) {
-            $v = preg_replace_callback(static::$unicodeCharsRx, function ($c) {
-                return '<span class=sf-dump-default>\u{'.strtoupper(dechex(mb_ord($c[0]))).'}</span>';
-            }, $v);
+            $v = preg_replace_callback(
+                static::$unicodeCharsRx, function ($c) {
+                    return '<span class=sf-dump-default>\u{'.strtoupper(dechex(mb_ord($c[0]))).'}</span>';
+                }, $v
+            );
         }
 
         if (isset($attr['file']) && $href = $this->getSourceLink($attr['file'], $attr['line'] ?? 0)) {

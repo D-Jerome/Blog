@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -50,14 +50,13 @@ class OrderedTimeCodec extends StringCodec
      * fields rearranged for optimized storage
      *
      * @inheritDoc
-     * @psalm-return non-empty-string
+     * @psalm-return   non-empty-string
      * @psalm-suppress MoreSpecificReturnType we know that the retrieved `string` is never empty
      * @psalm-suppress LessSpecificReturnStatement we know that the retrieved `string` is never empty
      */
     public function encodeBinary(UuidInterface $uuid): string
     {
-        if (
-            !($uuid->getFields() instanceof Rfc4122FieldsInterface)
+        if (!($uuid->getFields() instanceof Rfc4122FieldsInterface)
             || $uuid->getFields()->getVersion() !== Uuid::UUID_TYPE_TIME
         ) {
             throw new InvalidArgumentException(
@@ -67,7 +66,9 @@ class OrderedTimeCodec extends StringCodec
 
         $bytes = $uuid->getFields()->getBytes();
 
-        /** @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. */
+        /**
+ * @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. 
+*/
         return $bytes[6] . $bytes[7]
             . $bytes[4] . $bytes[5]
             . $bytes[0] . $bytes[1] . $bytes[2] . $bytes[3]
@@ -98,8 +99,7 @@ class OrderedTimeCodec extends StringCodec
 
         $uuid = parent::decodeBytes($rearrangedBytes);
 
-        if (
-            !($uuid->getFields() instanceof Rfc4122FieldsInterface)
+        if (!($uuid->getFields() instanceof Rfc4122FieldsInterface)
             || $uuid->getFields()->getVersion() !== Uuid::UUID_TYPE_TIME
         ) {
             throw new UnsupportedOperationException(

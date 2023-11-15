@@ -81,7 +81,8 @@ class Post extends BaseController
                  'roleName' => $user->getRoleName()
                 ];
 
-        $this->view('backoffice/admin.posts.html.twig', [
+        $this->view(
+            'backoffice/admin.posts.html.twig', [
             'posts' => $statementPosts,
             'sort' => $sortList,
             'dir' => $dirList,
@@ -91,7 +92,8 @@ class Post extends BaseController
             'listNames' => $listNames,
             'pages' => $pages,
             'authUser' => $user
-        ]);
+            ]
+        );
     }
 
 
@@ -285,7 +287,7 @@ class Post extends BaseController
     public function moderationPosts(): void
     {
 
-        $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $sortList = $filter->getSort();
         $dirList = $filter->getDir();
         $list = $filter->getList();
@@ -347,7 +349,8 @@ class Post extends BaseController
                  'roleName' => $user->getRoleName()
                 ];
 
-        $this->view('backoffice/admin.moderation.posts.html.twig', [
+        $this->view(
+            'backoffice/admin.moderation.posts.html.twig', [
             'posts' => $statementPosts,
             'sort' => $sortList,
             'dir' => $dirList,
@@ -357,7 +360,8 @@ class Post extends BaseController
             'listNames' => $listNames,
             'pages' => $pages,
             'authUser' => $user
-        ]);
+            ]
+        );
 
     }
 

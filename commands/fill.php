@@ -1,5 +1,5 @@
 <?php
-require(dirname(__DIR__) . '/vendor/autoload.php');
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Faker\Factory;
 use App\Model\PDOConnection;
@@ -42,7 +42,8 @@ $pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='
 $pdo->exec("INSERT INTO user SET firstname = '{$faker->firstname()}', lastname='{$faker->lastname()}', username='testinactive', password='$passTestInactive' , email='{$faker->email()}', picture = '{$faker->image(null, 640, 480)}' , created_at='{$faker->date()} {$faker->time()}', active = false ");
 
 for ($i = 0; $i < 25; $i++) {
-    $pdo->exec("
+    $pdo->exec(
+        "
         INSERT INTO post 
         SET 
             name='{$faker->sentence()}',
@@ -50,11 +51,13 @@ for ($i = 0; $i < 25; $i++) {
             created_at='{$faker->date()} {$faker->time()}', 
             content= '<p>{$faker->paragraphs(rand(3, 6), true)}</p> <div class=\'border bg-success\'>{$faker->paragraphs(rand(3, 6), true)}</div>', 
             user_id='{$faker->numberBetween(1, 4)}'
-    ");
+    "
+    );
     $posts[] = $pdo->lastInsertId();
 }
 for ($i = 0; $i < 25; $i++) {
-    $pdo->exec("
+    $pdo->exec(
+        "
         INSERT INTO post 
         SET 
             name='{$faker->sentence()}',
@@ -62,39 +65,46 @@ for ($i = 0; $i < 25; $i++) {
             created_at='{$faker->date()} {$faker->time()}', 
             content='<p class=\'border bg-warning\'>{$faker->paragraphs(rand(3, 6), true)}</p> <div class=\'border bg-success\'>{$faker->paragraphs(rand(3, 6), true)}</div>', 
             user_id='{$faker->numberBetween(1, 4)}'
-    ");
+    "
+    );
     $posts[] = $pdo->lastInsertId();
 }
 
 for ($i = 0; $i < 5; $i++) {
-    $pdo->exec("
+    $pdo->exec(
+        "
         INSERT INTO category 
         SET 
             name='{$faker->word(3)}', 
             slug='{$faker->slug()}'
-    ");
+    "
+    );
     $categories[] = $pdo->lastInsertId();
 }
 
 foreach ($posts as $post) {
     $randomCategories = $faker->randomElements($categories, rand(0, count($categories)));
     foreach ($randomCategories as $category) {
-        $pdo->exec("
+        $pdo->exec(
+            "
             INSERT INTO post_category 
             SET 
                 post_id=$post , 
                 category_id=$category
-        ");
+        "
+        );
     }
 }
 
 for ($i = 0; $i < 50; $i++) {
-    $pdo->exec("
+    $pdo->exec(
+        "
         INSERT INTO comment 
         SET 
             created_at='{$faker->date()} {$faker->time()}', 
             content= '<p class=\'border bg-danger\'>{$faker->paragraphs(rand(3, 6), true)}</p> <div>{$faker->paragraphs(rand(3, 6), true)}</div>',  
             post_id='{$faker->numberBetween(1, 50)}', 
-            user_id = '{$faker->numberBetween(1, 4)}';");
+            user_id = '{$faker->numberBetween(1, 4)}';"
+    );
     $comments[] = $pdo->lastInsertId();
 }

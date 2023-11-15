@@ -77,11 +77,13 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public static function phone($formatted = true)
     {
-        $options = static::randomElement([
+        $options = static::randomElement(
+            [
             ['cellphone', false],
             ['cellphone', true],
             ['landline', null],
-        ]);
+            ]
+        );
 
         return call_user_func("static::{$options[0]}", $formatted, $options[1]);
     }

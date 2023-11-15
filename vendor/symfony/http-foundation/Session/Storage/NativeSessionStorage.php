@@ -246,14 +246,16 @@ class NativeSessionStorage implements SessionStorageInterface
         }
 
         // Register error handler to add information about the current save handler
-        $previousHandler = set_error_handler(function ($type, $msg, $file, $line) use (&$previousHandler) {
-            if (\E_WARNING === $type && str_starts_with($msg, 'session_write_close():')) {
-                $handler = $this->saveHandler instanceof SessionHandlerProxy ? $this->saveHandler->getHandler() : $this->saveHandler;
-                $msg = sprintf('session_write_close(): Failed to write session data with "%s" handler', $handler::class);
-            }
+        $previousHandler = set_error_handler(
+            function ($type, $msg, $file, $line) use (&$previousHandler) {
+                if (\E_WARNING === $type && str_starts_with($msg, 'session_write_close():')) {
+                    $handler = $this->saveHandler instanceof SessionHandlerProxy ? $this->saveHandler->getHandler() : $this->saveHandler;
+                    $msg = sprintf('session_write_close(): Failed to write session data with "%s" handler', $handler::class);
+                }
 
-            return $previousHandler ? $previousHandler($type, $msg, $file, $line) : false;
-        });
+                return $previousHandler ? $previousHandler($type, $msg, $file, $line) : false;
+            }
+        );
 
         try {
             session_write_close();
@@ -356,7 +358,8 @@ class NativeSessionStorage implements SessionStorageInterface
             return;
         }
 
-        $validOptions = array_flip([
+        $validOptions = array_flip(
+            [
             'cache_expire', 'cache_limiter', 'cookie_domain', 'cookie_httponly',
             'cookie_lifetime', 'cookie_path', 'cookie_secure', 'cookie_samesite',
             'gc_divisor', 'gc_maxlifetime', 'gc_probability',
@@ -364,7 +367,8 @@ class NativeSessionStorage implements SessionStorageInterface
             'serialize_handler', 'use_strict_mode', 'use_cookies',
             'use_only_cookies', 'use_trans_sid',
             'sid_length', 'sid_bits_per_character', 'trans_sid_hosts', 'trans_sid_tags',
-        ]);
+            ]
+        );
 
         foreach ($options as $key => $value) {
             if (isset($validOptions[$key])) {

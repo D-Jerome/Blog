@@ -70,12 +70,14 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('scalar_types', 'Fix also scalar types; may have unexpected behaviour due to PHP bad type coercion system.'))
                 ->setAllowedTypes(['bool'])
                 ->setDefault(true)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -85,7 +87,8 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
     {
         do {
             $index = $tokens->getPrevNonWhitespace($index);
-        } while ($tokens[$index]->isGivenKind([
+        } while ($tokens[$index]->isGivenKind(
+            [
             T_COMMENT,
             T_ABSTRACT,
             T_FINAL,
@@ -93,7 +96,8 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
             T_PROTECTED,
             T_PUBLIC,
             T_STATIC,
-        ]));
+            ]
+        ));
 
         if ($tokens[$index]->isGivenKind(T_DOC_COMMENT)) {
             return $index;
@@ -143,8 +147,7 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
             if ($token->isGivenKind(T_STRING)) {
                 $typeUnqualified = $token->getContent();
 
-                if (
-                    (isset($this->scalarTypes[$typeUnqualified]) || isset($this->versionSpecificTypes[$typeUnqualified]))
+                if ((isset($this->scalarTypes[$typeUnqualified]) || isset($this->versionSpecificTypes[$typeUnqualified]))
                     && isset($newTokens[$i - 1])
                     && '\\' === $newTokens[$i - 1]->getContent()
                 ) {

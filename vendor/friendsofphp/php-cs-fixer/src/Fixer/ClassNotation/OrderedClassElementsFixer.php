@@ -31,10 +31,14 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class OrderedClassElementsFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const SORT_ALPHA = 'alpha';
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     public const SORT_NONE = 'none';
 
     private const SUPPORTED_SORT_ALGORITHMS = [
@@ -272,10 +276,12 @@ Custom values:
     {
         $builtIns = array_keys(array_merge(self::$typeHierarchy, self::$specialTypes));
 
-        return new FixerConfigurationResolver([
+        return new FixerConfigurationResolver(
+            [
             (new FixerOptionBuilder('order', 'List of strings defining order of elements.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([
+                ->setAllowedValues(
+                    [
                     static function (array $values) use ($builtIns): bool {
                         foreach ($values as $value) {
                             if (\in_array($value, $builtIns, true)) {
@@ -289,8 +295,10 @@ Custom values:
 
                         return false;
                     },
-                ])
-                ->setDefault([
+                    ]
+                )
+                ->setDefault(
+                    [
                     'use_trait',
                     'case',
                     'constant_public',
@@ -306,7 +314,8 @@ Custom values:
                     'method_public',
                     'method_protected',
                     'method_private',
-                ])
+                    ]
+                )
                 ->getOption(),
             (new FixerOptionBuilder('sort_algorithm', 'How multiple occurrences of same type statements should be sorted.'))
                 ->setAllowedValues(self::SUPPORTED_SORT_ALGORITHMS)
@@ -316,7 +325,8 @@ Custom values:
                 ->setAllowedTypes(['bool'])
                 ->setDefault(false)
                 ->getOption(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -439,8 +449,8 @@ Custom values:
             return 'destruct';
         }
 
-        if (
-            $nameToken->equalsAny([
+        if ($nameToken->equalsAny(
+            [
                 [T_STRING, 'setUpBeforeClass'],
                 [T_STRING, 'doSetUpBeforeClass'],
                 [T_STRING, 'tearDownAfterClass'],
@@ -451,7 +461,8 @@ Custom values:
                 [T_STRING, 'assertPostConditions'],
                 [T_STRING, 'tearDown'],
                 [T_STRING, 'doTearDown'],
-            ], false)
+                ], false
+        )
         ) {
             return ['phpunit', strtolower($nameToken->getContent())];
         }
@@ -546,13 +557,15 @@ Custom values:
 
         unset($element);
 
-        usort($elements, function (array $a, array $b): int {
-            if ($a['position'] === $b['position']) {
-                return $this->sortGroupElements($a, $b);
-            }
+        usort(
+            $elements, function (array $a, array $b): int {
+                if ($a['position'] === $b['position']) {
+                    return $this->sortGroupElements($a, $b);
+                }
 
-            return $a['position'] <=> $b['position'];
-        });
+                return $a['position'] <=> $b['position'];
+            }
+        );
 
         return $elements;
     }

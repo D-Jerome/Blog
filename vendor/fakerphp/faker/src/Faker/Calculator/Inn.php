@@ -4,7 +4,7 @@ namespace Faker\Calculator;
 
 /**
  * @deprecated moved to ru_RU\Company, use {@link \Faker\Provider\ru_RU\Company}.
- * @see \Faker\Provider\ru_RU\Company
+ * @see        \Faker\Provider\ru_RU\Company
  */
 class Inn
 {
@@ -18,7 +18,7 @@ class Inn
      * @return string Checksum (one digit)
      *
      * @deprecated use {@link \Faker\Provider\ru_RU\Company::inn10Checksum()} instead
-     * @see \Faker\Provider\ru_RU\Company::inn10Checksum()
+     * @see        \Faker\Provider\ru_RU\Company::inn10Checksum()
      */
     public static function checksum($inn)
     {
@@ -33,7 +33,7 @@ class Inn
      * @return bool
      *
      * @deprecated use {@link \Faker\Provider\ru_RU\Company::inn10IsValid()} instead
-     * @see \Faker\Provider\ru_RU\Company::inn10IsValid()
+     * @see        \Faker\Provider\ru_RU\Company::inn10IsValid()
      */
     public static function isValid($inn)
     {

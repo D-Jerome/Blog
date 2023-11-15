@@ -1,5 +1,5 @@
 <div class="frames-description <?php echo $has_frames_tabs ? 'frames-description-application' : '' ?>">
-  <?php if ($has_frames_tabs): ?>
+  <?php if ($has_frames_tabs) : ?>
     <a href="#" id="application-frames-tab" class="frames-tab <?php echo $active_frames_tab == 'application' ? 'frames-tab-active' : '' ?>">
         Application frames (<?php echo $frames->countIsApplication() ?>)
     </a>

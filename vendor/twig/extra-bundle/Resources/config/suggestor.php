@@ -15,6 +15,5 @@ use Twig\Extra\TwigExtraBundle\MissingExtensionSuggestor;
 
 return static function (ContainerConfigurator $container) {
     $container->services()
-        ->set('twig.missing_extension_suggestor', MissingExtensionSuggestor::class)
-    ;
+        ->set('twig.missing_extension_suggestor', MissingExtensionSuggestor::class);
 };

@@ -16,6 +16,5 @@ use Twig\Extra\Intl\IntlExtension;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.extension.intl', IntlExtension::class)
-            ->tag('twig.extension')
-    ;
+        ->tag('twig.extension');
 };

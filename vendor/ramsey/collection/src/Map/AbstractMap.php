@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -27,9 +27,9 @@ use function var_export;
  * This class provides a basic implementation of `MapInterface`, to minimize the
  * effort required to implement this interface.
  *
- * @template K of array-key
- * @template T
- * @extends AbstractArray<T>
+ * @template   K of array-key
+ * @template   T
+ * @extends    AbstractArray<T>
  * @implements MapInterface<K, T>
  */
 abstract class AbstractMap extends AbstractArray implements MapInterface
@@ -52,7 +52,7 @@ abstract class AbstractMap extends AbstractArray implements MapInterface
 
     /**
      * @param K $offset The offset to set
-     * @param T $value The value to set at the given offset.
+     * @param T $value  The value to set at the given offset.
      *
      * @inheritDoc
      * @psalm-suppress MoreSpecificImplementedParamType,DocblockTypeContradiction
@@ -88,7 +88,7 @@ abstract class AbstractMap extends AbstractArray implements MapInterface
     }
 
     /**
-     * @param K $key The key to return from the map.
+     * @param K        $key          The key to return from the map.
      * @param T | null $defaultValue The default value to use if `$key` is not found.
      *
      * @return T | null the value or `null` if the key could not be found.
@@ -99,7 +99,7 @@ abstract class AbstractMap extends AbstractArray implements MapInterface
     }
 
     /**
-     * @param K $key The key to put or replace in the map.
+     * @param K $key   The key to put or replace in the map.
      * @param T $value The value to store at `$key`.
      *
      * @return T | null the previous value associated with key, or `null` if
@@ -114,7 +114,7 @@ abstract class AbstractMap extends AbstractArray implements MapInterface
     }
 
     /**
-     * @param K $key The key to put in the map.
+     * @param K $key   The key to put in the map.
      * @param T $value The value to store at `$key`.
      *
      * @return T | null the previous value associated with key, or `null` if
@@ -157,7 +157,7 @@ abstract class AbstractMap extends AbstractArray implements MapInterface
     }
 
     /**
-     * @param K $key The key to replace.
+     * @param K $key   The key to replace.
      * @param T $value The value to set at `$key`.
      *
      * @return T | null the previous value associated with key, or `null` if

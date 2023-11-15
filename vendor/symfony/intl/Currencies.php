@@ -72,9 +72,11 @@ final class Currencies extends ResourceBundle
             $names = iterator_to_array($names);
         }
 
-        array_walk($names, function (&$value) {
-            $value = $value[self::INDEX_NAME];
-        });
+        array_walk(
+            $names, function (&$value) {
+                $value = $value[self::INDEX_NAME];
+            }
+        );
 
         return self::asort($names, $displayLocale);
     }

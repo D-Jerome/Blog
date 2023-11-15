@@ -54,7 +54,8 @@ class Lexer
     {
         $this->env = $env;
 
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'tag_comment' => ['{#', '#}'],
             'tag_block' => ['{%', '%}'],
             'tag_variable' => ['{{', '}}'],
@@ -62,7 +63,8 @@ class Lexer
             'whitespace_line_trim' => '~',
             'whitespace_line_chars' => ' \t\0\x0B',
             'interpolation' => ['#{', '}'],
-        ], $options);
+            ], $options
+        );
     }
 
     private function initialize()
@@ -185,25 +187,25 @@ class Lexer
             // dispatch to the lexing functions depending
             // on the current state
             switch ($this->state) {
-                case self::STATE_DATA:
-                    $this->lexData();
-                    break;
+            case self::STATE_DATA:
+                $this->lexData();
+                break;
 
-                case self::STATE_BLOCK:
-                    $this->lexBlock();
-                    break;
+            case self::STATE_BLOCK:
+                $this->lexBlock();
+                break;
 
-                case self::STATE_VAR:
-                    $this->lexVar();
-                    break;
+            case self::STATE_VAR:
+                $this->lexVar();
+                break;
 
-                case self::STATE_STRING:
-                    $this->lexString();
-                    break;
+            case self::STATE_STRING:
+                $this->lexString();
+                break;
 
-                case self::STATE_INTERPOLATION:
-                    $this->lexInterpolation();
-                    break;
+            case self::STATE_INTERPOLATION:
+                $this->lexInterpolation();
+                break;
             }
         }
 
@@ -254,31 +256,31 @@ class Lexer
         $this->moveCursor($textContent.$position[0]);
 
         switch ($this->positions[1][$this->position][0]) {
-            case $this->options['tag_comment'][0]:
-                $this->lexComment();
-                break;
+        case $this->options['tag_comment'][0]:
+            $this->lexComment();
+            break;
 
-            case $this->options['tag_block'][0]:
-                // raw data?
-                if (preg_match($this->regexes['lex_block_raw'], $this->code, $match, 0, $this->cursor)) {
-                    $this->moveCursor($match[0]);
-                    $this->lexRawData();
+        case $this->options['tag_block'][0]:
+            // raw data?
+            if (preg_match($this->regexes['lex_block_raw'], $this->code, $match, 0, $this->cursor)) {
+                $this->moveCursor($match[0]);
+                $this->lexRawData();
                 // {% line \d+ %}
-                } elseif (preg_match($this->regexes['lex_block_line'], $this->code, $match, 0, $this->cursor)) {
-                    $this->moveCursor($match[0]);
-                    $this->lineno = (int) $match[1];
-                } else {
-                    $this->pushToken(/* Token::BLOCK_START_TYPE */ 1);
-                    $this->pushState(self::STATE_BLOCK);
-                    $this->currentVarBlockLine = $this->lineno;
-                }
-                break;
-
-            case $this->options['tag_variable'][0]:
-                $this->pushToken(/* Token::VAR_START_TYPE */ 2);
-                $this->pushState(self::STATE_VAR);
+            } elseif (preg_match($this->regexes['lex_block_line'], $this->code, $match, 0, $this->cursor)) {
+                $this->moveCursor($match[0]);
+                $this->lineno = (int) $match[1];
+            } else {
+                $this->pushToken(/* Token::BLOCK_START_TYPE */ 1);
+                $this->pushState(self::STATE_BLOCK);
                 $this->currentVarBlockLine = $this->lineno;
-                break;
+            }
+            break;
+
+        case $this->options['tag_variable'][0]:
+            $this->pushToken(/* Token::VAR_START_TYPE */ 2);
+            $this->pushState(self::STATE_VAR);
+            $this->currentVarBlockLine = $this->lineno;
+            break;
         }
     }
 

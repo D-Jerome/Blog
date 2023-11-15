@@ -181,9 +181,13 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public function fixedLineNumber()
     {
-        return ltrim(static::numerify($this->generator->parse(
-            static::randomElement(static::$fixedLineFormats),
-        )));
+        return ltrim(
+            static::numerify(
+                $this->generator->parse(
+                    static::randomElement(static::$fixedLineFormats),
+                )
+            )
+        );
     }
 
     /**
@@ -210,9 +214,13 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public function mobileNumber()
     {
-        return ltrim(static::numerify($this->generator->parse(
-            static::randomElement(static::$mobileFormats),
-        )));
+        return ltrim(
+            static::numerify(
+                $this->generator->parse(
+                    static::randomElement(static::$mobileFormats),
+                )
+            )
+        );
     }
 
     /**
@@ -221,10 +229,12 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
     public static function mobilePhoneNumber()
     {
         return static::numerify(
-            strtr(static::randomElement(static::$mobileFormats), [
+            strtr(
+                static::randomElement(static::$mobileFormats), [
                 '{{internationalCodePrefix}}' => static::internationalCodePrefix(),
                 '{{mobileCode}}' => static::mobileCode(),
-            ]),
+                ]
+            ),
         );
     }
 
@@ -240,9 +250,13 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public function personalNumber()
     {
-        return ltrim(static::numerify($this->generator->parse(
-            static::randomElement(static::$personalFormats),
-        )));
+        return ltrim(
+            static::numerify(
+                $this->generator->parse(
+                    static::randomElement(static::$personalFormats),
+                )
+            )
+        );
     }
 
     /**
@@ -257,11 +271,15 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public static function tollFreeNumber()
     {
-        return ltrim(static::numerify(
-            strtr(static::randomElement(static::$tollFreeFormats), [
-                '{{internationalCodePrefix}}' => static::internationalCodePrefix(),
-            ]),
-        ));
+        return ltrim(
+            static::numerify(
+                strtr(
+                    static::randomElement(static::$tollFreeFormats), [
+                    '{{internationalCodePrefix}}' => static::internationalCodePrefix(),
+                    ]
+                ),
+            )
+        );
     }
 
     /**
@@ -288,9 +306,13 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public function sharedCostNumber()
     {
-        return ltrim(static::numerify($this->generator->parse(
-            static::randomElement(static::$sharedCostFormats),
-        )));
+        return ltrim(
+            static::numerify(
+                $this->generator->parse(
+                    static::randomElement(static::$sharedCostFormats),
+                )
+            )
+        );
     }
 
     /**
@@ -317,8 +339,12 @@ class PhoneNumber extends \Faker\Provider\PhoneNumber
      */
     public function premiumRateNumber()
     {
-        return ltrim(static::numerify($this->generator->parse(
-            static::randomElement(static::$premiumRateFormats),
-        )));
+        return ltrim(
+            static::numerify(
+                $this->generator->parse(
+                    static::randomElement(static::$premiumRateFormats),
+                )
+            )
+        );
     }
 }

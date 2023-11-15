@@ -167,7 +167,11 @@ class UploadedFile extends File
 
             $target = $this->getTargetFile($directory, $name);
 
-            set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+            set_error_handler(
+                function ($type, $msg) use (&$error) {
+                    $error = $msg; 
+                }
+            );
             try {
                 $moved = move_uploaded_file($this->getPathname(), $target);
             } finally {
@@ -183,20 +187,20 @@ class UploadedFile extends File
         }
 
         switch ($this->error) {
-            case \UPLOAD_ERR_INI_SIZE:
-                throw new IniSizeFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_FORM_SIZE:
-                throw new FormSizeFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_PARTIAL:
-                throw new PartialFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_NO_FILE:
-                throw new NoFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_CANT_WRITE:
-                throw new CannotWriteFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_NO_TMP_DIR:
-                throw new NoTmpDirFileException($this->getErrorMessage());
-            case \UPLOAD_ERR_EXTENSION:
-                throw new ExtensionFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_INI_SIZE:
+            throw new IniSizeFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_FORM_SIZE:
+            throw new FormSizeFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_PARTIAL:
+            throw new PartialFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_NO_FILE:
+            throw new NoFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_CANT_WRITE:
+            throw new CannotWriteFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_NO_TMP_DIR:
+            throw new NoTmpDirFileException($this->getErrorMessage());
+        case \UPLOAD_ERR_EXTENSION:
+            throw new ExtensionFileException($this->getErrorMessage());
         }
 
         throw new FileException($this->getErrorMessage());
@@ -233,13 +237,13 @@ class UploadedFile extends File
         }
 
         switch (substr($size, -1)) {
-            case 't': $max *= 1024;
-                // no break
-            case 'g': $max *= 1024;
-                // no break
-            case 'm': $max *= 1024;
-                // no break
-            case 'k': $max *= 1024;
+        case 't': $max *= 1024;
+            // no break
+        case 'g': $max *= 1024;
+            // no break
+        case 'm': $max *= 1024;
+            // no break
+        case 'k': $max *= 1024;
         }
 
         return $max;

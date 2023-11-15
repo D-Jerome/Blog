@@ -45,13 +45,16 @@ class ConfigDebugCommand extends AbstractConfigCommand
         $helpFormats = implode('", "', $commentedHelpFormats);
 
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::OPTIONAL, 'The bundle name or the extension alias'),
                 new InputArgument('path', InputArgument::OPTIONAL, 'The configuration option path'),
                 new InputOption('resolve-env', null, InputOption::VALUE_NONE, 'Display resolved environment variable values instead of placeholders'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), class_exists(Yaml::class) ? 'txt' : 'json'),
-            ])
-            ->setHelp(<<<EOF
+                ]
+            )
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command dumps the current configuration for an
 extension/bundle.
 
@@ -70,8 +73,7 @@ For dumping a specific option, add its path as second argument:
   <info>php %command.full_name% framework serializer.enabled</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

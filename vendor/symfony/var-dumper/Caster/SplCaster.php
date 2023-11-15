@@ -205,10 +205,12 @@ class SplCaster
 
         $clone = clone $c;
         foreach ($clone as $obj) {
-            $storage[] = new EnumStub([
+            $storage[] = new EnumStub(
+                [
                 'object' => $obj,
                 'info' => $clone->getInfo(),
-             ]);
+                ]
+            );
         }
 
         $a += [
@@ -246,10 +248,12 @@ class SplCaster
         $map = [];
 
         foreach (clone $c as $obj => $data) {
-            $map[] = new EnumStub([
+            $map[] = new EnumStub(
+                [
                 'object' => $obj,
                 'data' => $data,
-             ]);
+                ]
+            );
         }
 
         $a += [

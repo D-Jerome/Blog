@@ -24,6 +24,8 @@
         "twig/extra-bundle": "^3.7"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.38"
+        "friendsofphp/php-cs-fixer": "^3.38",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "*"
     }
 }

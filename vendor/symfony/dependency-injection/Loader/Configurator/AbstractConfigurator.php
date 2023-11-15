@@ -31,7 +31,9 @@ abstract class AbstractConfigurator
      */
     public static $valuePreProcessor;
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     protected Definition|Alias|null $definition = null;
 
     public function __call(string $method, array $args)
@@ -96,20 +98,20 @@ abstract class AbstractConfigurator
         }
 
         switch (true) {
-            case null === $value:
-            case \is_scalar($value):
-            case $value instanceof \UnitEnum:
-                return $value;
+        case null === $value:
+        case \is_scalar($value):
+        case $value instanceof \UnitEnum:
+            return $value;
 
-            case $value instanceof ArgumentInterface:
-            case $value instanceof Definition:
-            case $value instanceof Expression:
-            case $value instanceof Parameter:
-            case $value instanceof AbstractArgument:
-            case $value instanceof Reference:
-                if ($allowServices) {
-                    return $value;
-                }
+        case $value instanceof ArgumentInterface:
+        case $value instanceof Definition:
+        case $value instanceof Expression:
+        case $value instanceof Parameter:
+        case $value instanceof AbstractArgument:
+        case $value instanceof Reference:
+            if ($allowServices) {
+                return $value;
+            }
         }
 
         throw new InvalidArgumentException(sprintf('Cannot use values of type "%s" in service configuration files.', get_debug_type($value)));

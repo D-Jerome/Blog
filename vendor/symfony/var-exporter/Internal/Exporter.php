@@ -203,13 +203,20 @@ class Exporter
     public static function export($value, $indent = '')
     {
         switch (true) {
-            case \is_int($value) || \is_float($value): return var_export($value, true);
-            case [] === $value: return '[]';
-            case false === $value: return 'false';
-            case true === $value: return 'true';
-            case null === $value: return 'null';
-            case '' === $value: return "''";
-            case $value instanceof \UnitEnum: return '\\'.ltrim(var_export($value, true), '\\');
+        case \is_int($value) || \is_float($value): 
+            return var_export($value, true);
+        case [] === $value: 
+            return '[]';
+        case false === $value: 
+            return 'false';
+        case true === $value: 
+            return 'true';
+        case null === $value: 
+            return 'null';
+        case '' === $value: 
+            return "''";
+        case $value instanceof \UnitEnum: 
+            return '\\'.ltrim(var_export($value, true), '\\');
         }
 
         if ($value instanceof Reference) {
@@ -228,23 +235,27 @@ class Exporter
         if (\is_string($value)) {
             $code = sprintf("'%s'", addcslashes($value, "'\\"));
 
-            $code = preg_replace_callback("/((?:[\\0\\r\\n]|\u{202A}|\u{202B}|\u{202D}|\u{202E}|\u{2066}|\u{2067}|\u{2068}|\u{202C}|\u{2069})++)(.)/", function ($m) use ($subIndent) {
-                $m[1] = sprintf('\'."%s".\'', str_replace(
-                    ["\0", "\r", "\n", "\u{202A}", "\u{202B}", "\u{202D}", "\u{202E}", "\u{2066}", "\u{2067}", "\u{2068}", "\u{202C}", "\u{2069}", '\n\\'],
-                    ['\0', '\r', '\n', '\u{202A}', '\u{202B}', '\u{202D}', '\u{202E}', '\u{2066}', '\u{2067}', '\u{2068}', '\u{202C}', '\u{2069}', '\n"'."\n".$subIndent.'."\\'],
-                    $m[1]
-                ));
+            $code = preg_replace_callback(
+                "/((?:[\\0\\r\\n]|\u{202A}|\u{202B}|\u{202D}|\u{202E}|\u{2066}|\u{2067}|\u{2068}|\u{202C}|\u{2069})++)(.)/", function ($m) use ($subIndent) {
+                    $m[1] = sprintf(
+                        '\'."%s".\'', str_replace(
+                            ["\0", "\r", "\n", "\u{202A}", "\u{202B}", "\u{202D}", "\u{202E}", "\u{2066}", "\u{2067}", "\u{2068}", "\u{202C}", "\u{2069}", '\n\\'],
+                            ['\0', '\r', '\n', '\u{202A}', '\u{202B}', '\u{202D}', '\u{202E}', '\u{2066}', '\u{2067}', '\u{2068}', '\u{202C}', '\u{2069}', '\n"'."\n".$subIndent.'."\\'],
+                            $m[1]
+                        )
+                    );
 
-                if ("'" === $m[2]) {
-                    return substr($m[1], 0, -2);
-                }
+                    if ("'" === $m[2]) {
+                        return substr($m[1], 0, -2);
+                    }
 
-                if (str_ends_with($m[1], 'n".\'')) {
-                    return substr_replace($m[1], "\n".$subIndent.".'".$m[2], -2);
-                }
+                    if (str_ends_with($m[1], 'n".\'')) {
+                        return substr_replace($m[1], "\n".$subIndent.".'".$m[2], -2);
+                    }
 
-                return $m[1].$m[2];
-            }, $code, -1, $count);
+                    return $m[1].$m[2];
+                }, $code, -1, $count
+            );
 
             if ($count && str_starts_with($code, "''.")) {
                 $code = substr($code, 3);

@@ -34,13 +34,15 @@ final class TwigTest
     {
         $this->name = $name;
         $this->callable = $callable;
-        $this->options = array_merge([
+        $this->options = array_merge(
+            [
             'is_variadic' => false,
             'node_class' => TestExpression::class,
             'deprecated' => false,
             'alternative' => null,
             'one_mandatory_argument' => false,
-        ], $options);
+            ], $options
+        );
     }
 
     public function getName(): string

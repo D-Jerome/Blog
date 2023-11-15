@@ -50,7 +50,8 @@ class HeaderUtils
 
         $quotedSeparators = preg_quote($separators, '/');
 
-        preg_match_all('
+        preg_match_all(
+            '
             /
                 (?!\s)
                     (?:
@@ -66,7 +67,8 @@ class HeaderUtils
                 \s*
                 (?<separator>['.$quotedSeparators.'])
                 \s*
-            /x', trim($header), $matches, \PREG_SET_ORDER);
+            /x', trim($header), $matches, \PREG_SET_ORDER
+        );
 
         return self::groupParts($matches, $separators);
     }

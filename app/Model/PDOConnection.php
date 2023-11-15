@@ -51,10 +51,12 @@ class PDOConnection
             $dsn .= "; " . $datasource['port'];
         }
 
-        $this->dbConnect = new PDO($dsn, $datasource['username'], $datasource['password'], [
+        $this->dbConnect = new PDO(
+            $dsn, $datasource['username'], $datasource['password'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
-        ]);
+            ]
+        );
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
     }//end __construct

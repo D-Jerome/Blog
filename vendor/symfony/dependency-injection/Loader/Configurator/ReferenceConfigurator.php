@@ -18,10 +18,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ReferenceConfigurator extends AbstractConfigurator
 {
-    /** @internal */
+    /**
+     * @internal 
+     */
     protected string $id;
 
-    /** @internal */
+    /**
+     * @internal 
+     */
     protected int $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
 
     public function __construct(string $id)

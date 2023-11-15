@@ -100,7 +100,7 @@ final class BigRational extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigRational|null $zero
+         * @var            BigRational|null $zero
          */
         static $zero;
 
@@ -120,7 +120,7 @@ final class BigRational extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigRational|null $one
+         * @var            BigRational|null $one
          */
         static $one;
 
@@ -140,7 +140,7 @@ final class BigRational extends BigNumber
     {
         /**
          * @psalm-suppress ImpureStaticVariable
-         * @var BigRational|null $ten
+         * @var            BigRational|null $ten
          */
         static $ten;
 

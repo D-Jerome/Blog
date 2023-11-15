@@ -15,8 +15,8 @@ class Text extends \Faker\Provider\Text
      *
      * @licence https://creativecommons.org/licenses/by-sa/3.0/deed.ko
      *
-     * @see     https://wikimediafoundation.org/wiki/Terms_of_Use/
-     * @see    https://ko.wikisource.org/wiki/유정
+     * @see https://wikimediafoundation.org/wiki/Terms_of_Use/
+     * @see https://ko.wikisource.org/wiki/유정
      *
      * @var string
      */

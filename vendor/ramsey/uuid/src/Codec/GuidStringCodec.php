@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -34,7 +34,9 @@ class GuidStringCodec extends StringCodec
     {
         $hex = bin2hex($uuid->getFields()->getBytes());
 
-        /** @var non-empty-string */
+        /**
+ * @var non-empty-string 
+*/
         return sprintf(
             '%02s%02s%02s%02s-%02s%02s-%02s%02s-%04s-%012s',
             substr($hex, 6, 2),

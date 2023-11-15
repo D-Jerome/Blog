@@ -239,7 +239,9 @@ class Request
         self::HEADER_X_FORWARDED_PREFIX => 'X_FORWARDED_PREFIX',
     ];
 
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $isIisRewrite = false;
 
     /**
@@ -327,7 +329,8 @@ class Request
      */
     public static function create(string $uri, string $method = 'GET', array $parameters = [], array $cookies = [], array $files = [], array $server = [], $content = null): static
     {
-        $server = array_replace([
+        $server = array_replace(
+            [
             'SERVER_NAME' => 'localhost',
             'SERVER_PORT' => 80,
             'HTTP_HOST' => 'localhost',
@@ -341,7 +344,8 @@ class Request
             'SERVER_PROTOCOL' => 'HTTP/1.1',
             'REQUEST_TIME' => time(),
             'REQUEST_TIME_FLOAT' => microtime(true),
-        ], $server);
+            ], $server
+        );
 
         $server['PATH_INFO'] = '';
         $server['REQUEST_METHOD'] = strtoupper($method);
@@ -384,21 +388,21 @@ class Request
         }
 
         switch (strtoupper($method)) {
-            case 'POST':
-            case 'PUT':
-            case 'DELETE':
-                if (!isset($server['CONTENT_TYPE'])) {
-                    $server['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
-                }
-                // no break
-            case 'PATCH':
-                $request = $parameters;
-                $query = [];
-                break;
-            default:
-                $request = [];
-                $query = $parameters;
-                break;
+        case 'POST':
+        case 'PUT':
+        case 'DELETE':
+            if (!isset($server['CONTENT_TYPE'])) {
+                $server['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
+            }
+            // no break
+        case 'PATCH':
+            $request = $parameters;
+            $query = [];
+            break;
+        default:
+            $request = [];
+            $query = $parameters;
+            break;
         }
 
         $queryString = '';
@@ -581,15 +585,17 @@ class Request
      */
     public static function setTrustedProxies(array $proxies, int $trustedHeaderSet)
     {
-        self::$trustedProxies = array_reduce($proxies, function ($proxies, $proxy) {
-            if ('REMOTE_ADDR' !== $proxy) {
-                $proxies[] = $proxy;
-            } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-                $proxies[] = $_SERVER['REMOTE_ADDR'];
-            }
+        self::$trustedProxies = array_reduce(
+            $proxies, function ($proxies, $proxy) {
+                if ('REMOTE_ADDR' !== $proxy) {
+                    $proxies[] = $proxy;
+                } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+                    $proxies[] = $_SERVER['REMOTE_ADDR'];
+                }
 
-            return $proxies;
-        }, []);
+                return $proxies;
+            }, []
+        );
         self::$trustedHeaderSet = $trustedHeaderSet;
     }
 

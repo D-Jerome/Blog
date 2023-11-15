@@ -21,9 +21,10 @@ return static function (ContainerConfigurator $container) {
         ->alias(HttpHeaderSerializer::class, 'web_link.http_header_serializer')
 
         ->set('web_link.add_link_header_listener', AddLinkHeaderListener::class)
-            ->args([
+        ->args(
+            [
                 service('web_link.http_header_serializer'),
-            ])
-            ->tag('kernel.event_subscriber')
-    ;
+                ]
+        )
+        ->tag('kernel.event_subscriber');
 };

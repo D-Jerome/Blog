@@ -46,7 +46,6 @@ class RegisterLocaleAwareServicesPass implements CompilerPassInterface
 
         $container
             ->getDefinition('locale_aware_listener')
-            ->setArgument(0, new IteratorArgument($services))
-        ;
+            ->setArgument(0, new IteratorArgument($services));
     }
 }

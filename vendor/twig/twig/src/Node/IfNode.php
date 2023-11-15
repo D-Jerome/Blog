@@ -38,19 +38,16 @@ class IfNode extends Node
             if ($i > 0) {
                 $compiler
                     ->outdent()
-                    ->write('} elseif (')
-                ;
+                    ->write('} elseif (');
             } else {
                 $compiler
-                    ->write('if (')
-                ;
+                    ->write('if (');
             }
 
             $compiler
                 ->subcompile($this->getNode('tests')->getNode($i))
                 ->raw(") {\n")
-                ->indent()
-            ;
+                ->indent();
             // The node might not exists if the content is empty
             if ($this->getNode('tests')->hasNode($i + 1)) {
                 $compiler->subcompile($this->getNode('tests')->getNode($i + 1));
@@ -62,8 +59,7 @@ class IfNode extends Node
                 ->outdent()
                 ->write("} else {\n")
                 ->indent()
-                ->subcompile($this->getNode('else'))
-            ;
+                ->subcompile($this->getNode('else'));
         }
 
         $compiler

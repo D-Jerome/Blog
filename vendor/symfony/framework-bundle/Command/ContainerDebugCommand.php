@@ -41,7 +41,8 @@ class ContainerDebugCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::OPTIONAL, 'A service name (foo)'),
                 new InputOption('show-arguments', null, InputOption::VALUE_NONE, 'Show arguments in services'),
                 new InputOption('show-hidden', null, InputOption::VALUE_NONE, 'Show hidden (internal) services'),
@@ -55,8 +56,10 @@ class ContainerDebugCommand extends Command
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'txt'),
                 new InputOption('raw', null, InputOption::VALUE_NONE, 'To output raw description'),
                 new InputOption('deprecations', null, InputOption::VALUE_NONE, 'Display deprecations generated when compiling and warming up the container'),
-            ])
-            ->setHelp(<<<'EOF'
+                ]
+            )
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command displays all configured <comment>public</comment> services:
 
   <info>php %command.full_name%</info>
@@ -107,8 +110,7 @@ using the <info>--show-hidden</info> flag:
   <info>php %command.full_name% --show-hidden</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -217,11 +219,13 @@ EOF
             && !$input->getOption('env-var') && !$input->getOption('env-vars')
             && !$input->getOption('types') && !$input->getOption('deprecations')
         ) {
-            $suggestions->suggestValues($this->findServiceIdsContaining(
-                $object,
-                $input->getCompletionValue(),
-                (bool) $input->getOption('show-hidden')
-            ));
+            $suggestions->suggestValues(
+                $this->findServiceIdsContaining(
+                    $object,
+                    $input->getCompletionValue(),
+                    (bool) $input->getOption('show-hidden')
+                )
+            );
 
             return;
         }

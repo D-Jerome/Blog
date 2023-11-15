@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -77,14 +77,14 @@ class FeatureSet
     private ValidatorInterface $validator;
 
     /**
-     * @param bool $useGuids True build UUIDs using the GuidStringCodec
-     * @param bool $force32Bit True to force the use of 32-bit functionality
-     *     (primarily for testing purposes)
+     * @param bool $useGuids         True build UUIDs using the GuidStringCodec
+     * @param bool $force32Bit       True to force the use of 32-bit functionality
+     *                               (primarily for testing purposes)
      * @param bool $forceNoBigNumber (obsolete)
      * @param bool $ignoreSystemNode True to disable attempts to check for the
-     *     system node ID (primarily for testing purposes)
-     * @param bool $enablePecl True to enable the use of the PeclUuidTimeGenerator
-     *     to generate version 1 UUIDs
+     *                               system node ID (primarily for testing purposes)
+     * @param bool $enablePecl       True to enable the use of the PeclUuidTimeGenerator
+     *                               to generate version 1 UUIDs
      */
     public function __construct(
         bool $useGuids = false,
@@ -212,7 +212,9 @@ class FeatureSet
         $this->numberConverter = $this->buildNumberConverter($calculator);
         $this->timeConverter = $this->buildTimeConverter($calculator);
 
-        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        /**
+ * @psalm-suppress RedundantPropertyInitializationCheck 
+*/
         if (isset($this->timeProvider)) {
             $this->timeGenerator = $this->buildTimeGenerator($this->timeProvider);
         }
@@ -291,10 +293,12 @@ class FeatureSet
             return new RandomNodeProvider();
         }
 
-        return new FallbackNodeProvider([
+        return new FallbackNodeProvider(
+            [
             new SystemNodeProvider(),
             new RandomNodeProvider(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -321,7 +325,7 @@ class FeatureSet
      * Returns a time generator configured for this environment
      *
      * @param TimeProviderInterface $timeProvider The time provider to use with
-     *     the time generator
+     *                                            the time generator
      */
     private function buildTimeGenerator(TimeProviderInterface $timeProvider): TimeGeneratorInterface
     {
@@ -381,10 +385,12 @@ class FeatureSet
             return new GuidBuilder($this->numberConverter, $this->timeConverter);
         }
 
-        return new FallbackBuilder([
+        return new FallbackBuilder(
+            [
             new Rfc4122UuidBuilder($this->numberConverter, $this->timeConverter),
             new NonstandardUuidBuilder($this->numberConverter, $this->timeConverter),
-        ]);
+            ]
+        );
     }
 
     /**

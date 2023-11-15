@@ -36,8 +36,7 @@ Or all template files in a bundle:
   <info>php %command.full_name% @AcmeDemoBundle</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function findFiles(string $filename): iterable

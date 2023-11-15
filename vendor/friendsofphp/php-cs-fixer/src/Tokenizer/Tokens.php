@@ -1139,14 +1139,16 @@ class Tokens extends \SplFixedArray
 
     public function hasAlternativeSyntax(): bool
     {
-        return $this->isAnyTokenKindsFound([
+        return $this->isAnyTokenKindsFound(
+            [
             T_ENDDECLARE,
             T_ENDFOR,
             T_ENDFOREACH,
             T_ENDIF,
             T_ENDSWITCH,
             T_ENDWHILE,
-        ]);
+            ]
+        );
     }
 
     public function clearTokenAndMergeSurroundingWhitespace(int $index): void

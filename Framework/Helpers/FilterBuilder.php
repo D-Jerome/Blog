@@ -13,14 +13,16 @@ class FilterBuilder
 
     private ?array $list = null ;
 
+    private ?array $listSelect = null;
+
     private ?array $listNames = null ;
 
 
     /**
      * __construct : Construct filter data
      *
-     * @param string $typeObj : Name of the object to list
-     * @param  array $config
+     * @param  string $typeObj : Name of the object to list
+     * @param  array  $config
      * @return void
      */
     public function __construct(array $config, string $typeObj)
@@ -29,6 +31,7 @@ class FilterBuilder
         $this->dir = $config['dir'];
         if (!empty($config[$typeObj]['list'])) {
             $this->list = $config[$typeObj]['list'];
+            $this->listSelect = $config[$typeObj]['listSelect'];
             $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
             $listNames = new  $objectManagerName(Application::getDatasource());
             $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
@@ -69,8 +72,13 @@ class FilterBuilder
     }
 
 
+    public function getListSelect(): ?array
+    {
+        return $this->listSelect;
+    }
+
     /**
-     * getCategoriesNames: names of each category
+     * getListNames: names of each option case
      *
      * @return array|null
      */

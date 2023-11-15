@@ -60,7 +60,9 @@ abstract class Calculator
     final public static function get() : Calculator
     {
         if (self::$instance === null) {
-            /** @psalm-suppress ImpureMethodCall */
+            /**
+ * @psalm-suppress ImpureMethodCall 
+*/
             self::$instance = self::detect();
         }
 
@@ -381,7 +383,8 @@ abstract class Calculator
             $index = \strpos($alphabet, $number[$i]);
 
             if ($index !== 0) {
-                $result = $this->add($result, ($index === 1)
+                $result = $this->add(
+                    $result, ($index === 1)
                     ? $power
                     : $this->mul($power, (string) $index)
                 );
@@ -444,7 +447,7 @@ abstract class Calculator
         $hasDiscardedFraction = ($remainder !== '0');
         $isPositiveOrZero = ($a[0] === '-') === ($b[0] === '-');
 
-        $discardedFractionSign = function() use ($remainder, $b) : int {
+        $discardedFractionSign = function () use ($remainder, $b) : int {
             $r = $this->abs($this->mul($remainder, '2'));
             $b = $this->abs($b);
 
@@ -454,51 +457,51 @@ abstract class Calculator
         $increment = false;
 
         switch ($roundingMode) {
-            case RoundingMode::UNNECESSARY:
-                if ($hasDiscardedFraction) {
-                    throw RoundingNecessaryException::roundingNecessary();
-                }
-                break;
+        case RoundingMode::UNNECESSARY:
+            if ($hasDiscardedFraction) {
+                throw RoundingNecessaryException::roundingNecessary();
+            }
+            break;
 
-            case RoundingMode::UP:
-                $increment = $hasDiscardedFraction;
-                break;
+        case RoundingMode::UP:
+            $increment = $hasDiscardedFraction;
+            break;
 
-            case RoundingMode::DOWN:
-                break;
+        case RoundingMode::DOWN:
+            break;
 
-            case RoundingMode::CEILING:
-                $increment = $hasDiscardedFraction && $isPositiveOrZero;
-                break;
+        case RoundingMode::CEILING:
+            $increment = $hasDiscardedFraction && $isPositiveOrZero;
+            break;
 
-            case RoundingMode::FLOOR:
-                $increment = $hasDiscardedFraction && ! $isPositiveOrZero;
-                break;
+        case RoundingMode::FLOOR:
+            $increment = $hasDiscardedFraction && ! $isPositiveOrZero;
+            break;
 
-            case RoundingMode::HALF_UP:
-                $increment = $discardedFractionSign() >= 0;
-                break;
+        case RoundingMode::HALF_UP:
+            $increment = $discardedFractionSign() >= 0;
+            break;
 
-            case RoundingMode::HALF_DOWN:
-                $increment = $discardedFractionSign() > 0;
-                break;
+        case RoundingMode::HALF_DOWN:
+            $increment = $discardedFractionSign() > 0;
+            break;
 
-            case RoundingMode::HALF_CEILING:
-                $increment = $isPositiveOrZero ? $discardedFractionSign() >= 0 : $discardedFractionSign() > 0;
-                break;
+        case RoundingMode::HALF_CEILING:
+            $increment = $isPositiveOrZero ? $discardedFractionSign() >= 0 : $discardedFractionSign() > 0;
+            break;
 
-            case RoundingMode::HALF_FLOOR:
-                $increment = $isPositiveOrZero ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
-                break;
+        case RoundingMode::HALF_FLOOR:
+            $increment = $isPositiveOrZero ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
+            break;
 
-            case RoundingMode::HALF_EVEN:
-                $lastDigit = (int) $quotient[-1];
-                $lastDigitIsEven = ($lastDigit % 2 === 0);
-                $increment = $lastDigitIsEven ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
-                break;
+        case RoundingMode::HALF_EVEN:
+            $lastDigit = (int) $quotient[-1];
+            $lastDigitIsEven = ($lastDigit % 2 === 0);
+            $increment = $lastDigitIsEven ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
+            break;
 
-            default:
-                throw new \InvalidArgumentException('Invalid rounding mode.');
+        default:
+            throw new \InvalidArgumentException('Invalid rounding mode.');
         }
 
         if ($increment) {
@@ -572,24 +575,24 @@ abstract class Calculator
         }
 
         switch ($operator) {
-            case 'and':
-                $value = $aBin & $bBin;
-                $negative = ($aNeg and $bNeg);
-                break;
+        case 'and':
+            $value = $aBin & $bBin;
+            $negative = ($aNeg and $bNeg);
+            break;
 
-            case 'or':
-                $value = $aBin | $bBin;
-                $negative = ($aNeg or $bNeg);
-                break;
+        case 'or':
+            $value = $aBin | $bBin;
+            $negative = ($aNeg or $bNeg);
+            break;
 
-            case 'xor':
-                $value = $aBin ^ $bBin;
-                $negative = ($aNeg xor $bNeg);
-                break;
+        case 'xor':
+            $value = $aBin ^ $bBin;
+            $negative = ($aNeg xor $bNeg);
+            break;
 
             // @codeCoverageIgnoreStart
-            default:
-                throw new \InvalidArgumentException('Invalid bitwise operator.');
+        default:
+            throw new \InvalidArgumentException('Invalid bitwise operator.');
             // @codeCoverageIgnoreEnd
         }
 
@@ -660,7 +663,8 @@ abstract class Calculator
             $index = \ord($bytes[$i]);
 
             if ($index !== 0) {
-                $result = $this->add($result, ($index === 1)
+                $result = $this->add(
+                    $result, ($index === 1)
                     ? $power
                     : $this->mul($power, (string) $index)
                 );

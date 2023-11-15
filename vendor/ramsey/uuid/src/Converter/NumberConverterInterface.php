@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -44,8 +44,8 @@ interface NumberConverterInterface
      * representation of the number
      *
      * @param string $number A string integer representation to convert; this
-     *     must be a numeric string to accommodate unsigned integers greater
-     *     than PHP_INT_MAX.
+     *                       must be a numeric string to accommodate unsigned integers greater
+     *                       than PHP_INT_MAX.
      *
      * @return string Hexadecimal string
      *

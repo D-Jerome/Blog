@@ -16,6 +16,5 @@ use Twig\Extra\String\StringExtension;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('twig.extension.string', StringExtension::class)
-            ->tag('twig.extension')
-    ;
+        ->tag('twig.extension');
 };

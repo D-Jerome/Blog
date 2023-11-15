@@ -22,25 +22,28 @@ return static function (ContainerConfigurator $container) {
     $service = \function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\service') ? 'Symfony\Component\DependencyInjection\Loader\Configurator\service' : 'Symfony\Component\DependencyInjection\Loader\Configurator\ref';
     $container->services()
         ->set('twig.extension.cache', CacheExtension::class)
-            ->tag('twig.extension')
+        ->tag('twig.extension')
 
         ->set('twig.runtime.cache', CacheRuntime::class)
-            ->args([
+        ->args(
+            [
                 $service('twig.cache'),
-            ])
-            ->tag('twig.runtime')
+                ]
+        )
+        ->tag('twig.runtime')
 
         ->set('twig.cache', TagAwareAdapter::class)
-            ->args([
+        ->args(
+            [
                 $service('.twig.cache.inner'),
-            ])
+                ]
+        )
 
         ->set('.twig.cache.inner')
-            ->parent('cache.app')
-            ->tag('cache.pool', ['name' => 'twig.cache'])
+        ->parent('cache.app')
+        ->tag('cache.pool', ['name' => 'twig.cache'])
 
         ->alias(TagAwareCacheInterface::class.' $twigCache', 'twig.cache')
         ->alias(CacheInterface::class.' $twigCache', '.twig.cache.inner')
-        ->alias(CacheItemPoolInterface::class.' $twigCache', '.twig.cache.inner')
-    ;
+        ->alias(CacheItemPoolInterface::class.' $twigCache', '.twig.cache.inner');
 };

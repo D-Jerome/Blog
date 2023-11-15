@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -41,7 +41,9 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
      */
     public function getUid(): IntegerObject
     {
-        /** @var int|float|string|IntegerObject|null $uid */
+        /**
+         * @var int|float|string|IntegerObject|null $uid 
+         */
         static $uid = null;
 
         if ($uid instanceof IntegerObject) {
@@ -72,7 +74,9 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
      */
     public function getGid(): IntegerObject
     {
-        /** @var int|float|string|IntegerObject|null $gid */
+        /**
+         * @var int|float|string|IntegerObject|null $gid 
+         */
         static $gid = null;
 
         if ($gid instanceof IntegerObject) {
@@ -143,7 +147,7 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     {
         /**
          * @psalm-suppress UnnecessaryVarAnnotation
-         * @var string $phpOs
+         * @var            string $phpOs
          */
         $phpOs = constant('PHP_OS');
 
@@ -202,7 +206,9 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
             return '';
         }
 
-        /** @var string[] $userGroups */
+        /**
+ * @var string[] $userGroups 
+*/
         $userGroups = preg_split('/\s{2,}/', (string) $response, -1, PREG_SPLIT_NO_EMPTY);
 
         $firstGroup = trim($userGroups[1] ?? '', "* \t\n\r\0\x0B");
@@ -217,7 +223,9 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
             return '';
         }
 
-        /** @var string[] $userGroup */
+        /**
+ * @var string[] $userGroup 
+*/
         $userGroup = preg_split('/\s{2,}/', (string) $response, -1, PREG_SPLIT_NO_EMPTY);
 
         $sid = $userGroup[1] ?? '';

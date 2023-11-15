@@ -4,7 +4,7 @@ namespace Faker\Calculator;
 
 /**
  * @deprecated moved to tr_TR\Person, use {@link \Faker\Provider\tr_TR\Person}.
- * @see \Faker\Provider\tr_TR\Person
+ * @see        \Faker\Provider\tr_TR\Person
  */
 class TCNo
 {
@@ -19,7 +19,7 @@ class TCNo
      * @return string Checksum (two digit)
      *
      * @deprecated use {@link \Faker\Provider\tr_TR\Person::tcNoChecksum()} instead
-     * @see \Faker\Provider\tr_TR\Person::tcNoChecksum()
+     * @see        \Faker\Provider\tr_TR\Person::tcNoChecksum()
      */
     public static function checksum($identityPrefix)
     {
@@ -34,7 +34,7 @@ class TCNo
      * @return bool
      *
      * @deprecated use {@link \Faker\Provider\tr_TR\Person::tcNoIsValid()} instead
-     * @see \Faker\Provider\tr_TR\Person::tcNoIsValid()
+     * @see        \Faker\Provider\tr_TR\Person::tcNoIsValid()
      */
     public static function isValid($tcNo)
     {

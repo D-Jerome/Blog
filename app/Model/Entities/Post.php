@@ -8,191 +8,191 @@ use PDO;
 class Post extends Entity
 {
 
-	protected int $id;
+    protected int $id;
 
-	protected string $name;
+    protected string $name;
 
-	protected string $slug;
+    protected string $slug;
 
-	protected string $content;
+    protected string $content;
 
-	protected string $createdAt;
+    protected string $createdAt;
 
-	protected ?string $modifiedAt;
+    protected ?string $modifiedAt;
 
-	protected bool $publishState;
+    protected bool $publishState;
 
-	protected ?string $publishAt;
+    protected ?string $publishAt;
 
-	protected ?int $publishUserId;
+    protected ?int $publishUserId;
 
-	protected string $excerptContent;
+    protected string $excerptContent;
 
-	protected array $categories = [];
+    protected array $categories = [];
 
-	protected int $countComments;
+    protected int $countComments;
 
-	protected int $userId;
+    protected int $userId;
 
-	protected string $username;
-
-
-	/**
-	 * getId
-	 *
-	 * @return int
-	 */
-	public function getId(): int
-	{
-		return $this->id;
-	}
+    protected string $username;
 
 
-	/**
-	 * getName
-	 *
-	 * @return string
-	 */
-	public function getName(): string
-	{
-		return $this->name;
-	}
+    /**
+     * getId
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
 
-	/**
-	 * getSlug
-	 *
-	 * @return string
-	 */
-	public function getSlug(): string
-	{
-		return $this->slug;
-	}
+    /**
+     * getName
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
 
-	/**
-	 * getContent
-	 *
-	 * @return string
-	 */
-	public function getContent(): string
-	{
-		return $this->content;
-	}
+    /**
+     * getSlug
+     *
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
 
 
-	/**
-	 * getCreatedAt
-	 *
-	 * @return string
-	 */
-	public function getCreatedAt(): string
-	{
-		return $this->createdAt;
-	}
+    /**
+     * getContent
+     *
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
 
 
-	/**
-	 * getModifiedAt
-	 *
-	 * @return string
-	 */
-	public function getModifiedAt(): string
-	{
-		return $this->ModifiedAt;
-	}
+    /**
+     * getCreatedAt
+     *
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
 
 
-	/**
-	 * getUserId
-	 *
-	 * @return int
-	 */
-	public function getUserId(): int
-	{
-		return $this->userId;
-	}
+    /**
+     * getModifiedAt
+     *
+     * @return string
+     */
+    public function getModifiedAt(): string
+    {
+        return $this->ModifiedAt;
+    }
 
 
-	/**
-	 * getExcerptContent
-	 *
-	 * @return void
-	 */
-	public function getExcerptContent()
-	{
-		$excerpt = substr($this->content, 0, 60) . '...';
-		if (str_contains($excerpt, "<img ")){
-			$excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
-		}
-		return $excerpt;
-	}
+    /**
+     * getUserId
+     *
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
 
 
-	/**
-	 * getCategories
-	 *
-	 * @return array
-	 */
-	public function getCategories(): ?array
-	{
-		return $this->categories;
-	}
+    /**
+     * getExcerptContent
+     *
+     * @return void
+     */
+    public function getExcerptContent()
+    {
+        $excerpt = substr($this->content, 0, 60) . '...';
+        if (str_contains($excerpt, "<img ")) {
+            $excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
+        }
+        return $excerpt;
+    }
 
 
-	/**
-	 * getCountComments
-	 *
-	 * @return int
-	 */
-	public function getCountComments(): int
-	{
-		return $this->countComments;
-	}
+    /**
+     * getCategories
+     *
+     * @return array
+     */
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
 
 
-	/**
-	 * getUsername
-	 *
-	 * @return string
-	 */
-	public function getUsername(): string
-	{
-		return $this->username;
-	}
+    /**
+     * getCountComments
+     *
+     * @return int
+     */
+    public function getCountComments(): int
+    {
+        return $this->countComments;
+    }
 
 
-	/**
-	 * getPublishState
-	 *
-	 * @return bool
-	 */
-	public function getPublishState(): bool
-	{
-		return $this->publishState;
-	}
+    /**
+     * getUsername
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
 
 
-	/**
-	 * getPublishAt
-	 *
-	 * @return string
-	 */
-	public function getPublishAt(): string
-	{
-		return $this->publishAt;
-	}
+    /**
+     * getPublishState
+     *
+     * @return bool
+     */
+    public function getPublishState(): bool
+    {
+        return $this->publishState;
+    }
 
 
-	/**
-	 * getPublishUserId
-	 *
-	 * @return int
-	 */
-	public function getPublishUserId(): int
-	{
-		return $this->publishUserId;
-	}
+    /**
+     * getPublishAt
+     *
+     * @return string
+     */
+    public function getPublishAt(): string
+    {
+        return $this->publishAt;
+    }
+
+
+    /**
+     * getPublishUserId
+     *
+     * @return int
+     */
+    public function getPublishUserId(): int
+    {
+        return $this->publishUserId;
+    }
 
 
 }

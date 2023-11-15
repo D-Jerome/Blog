@@ -43,12 +43,15 @@ class ConfigDumpReferenceCommand extends AbstractConfigCommand
         $helpFormats = implode('", "', $commentedHelpFormats);
 
         $this
-            ->setDefinition([
+            ->setDefinition(
+                [
                 new InputArgument('name', InputArgument::OPTIONAL, 'The Bundle name or the extension alias'),
                 new InputArgument('path', InputArgument::OPTIONAL, 'The configuration option path'),
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'yaml'),
-            ])
-            ->setHelp(<<<EOF
+                ]
+            )
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command dumps the default configuration for an
 extension/bundle.
 
@@ -67,8 +70,7 @@ For dumping a specific option, add its path as second argument (only available f
   <info>php %command.full_name% framework http_client.default_options</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -83,10 +85,12 @@ EOF
             $this->listBundles($errorIo);
             $this->listNonBundleExtensions($errorIo);
 
-            $errorIo->comment([
+            $errorIo->comment(
+                [
                 'Provide the name of a bundle as the first argument of this command to dump its default configuration. (e.g. <comment>config:dump-reference FrameworkBundle</comment>)',
                 'For dumping a specific option, add its path as the second argument of this command. (e.g. <comment>config:dump-reference FrameworkBundle http_client.default_options</comment> to dump the <comment>framework.http_client.default_options</comment> configuration)',
-            ]);
+                ]
+            );
 
             return 0;
         }
@@ -128,17 +132,17 @@ EOF
         }
 
         switch ($format) {
-            case 'yaml':
-                $io->writeln(sprintf('# %s', $message));
-                $dumper = new YamlReferenceDumper();
-                break;
-            case 'xml':
-                $io->writeln(sprintf('<!-- %s -->', $message));
-                $dumper = new XmlReferenceDumper();
-                break;
-            default:
-                $io->writeln($message);
-                throw new InvalidArgumentException(sprintf('Supported formats are "%s".', implode('", "', $this->getAvailableFormatOptions())));
+        case 'yaml':
+            $io->writeln(sprintf('# %s', $message));
+            $dumper = new YamlReferenceDumper();
+            break;
+        case 'xml':
+            $io->writeln(sprintf('<!-- %s -->', $message));
+            $dumper = new XmlReferenceDumper();
+            break;
+        default:
+            $io->writeln($message);
+            throw new InvalidArgumentException(sprintf('Supported formats are "%s".', implode('", "', $this->getAvailableFormatOptions())));
         }
 
         $io->writeln(null === $path ? $dumper->dump($configuration, $extension->getNamespace()) : $dumper->dumpAtPath($configuration, $path));

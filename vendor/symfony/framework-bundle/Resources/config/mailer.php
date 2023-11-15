@@ -26,62 +26,77 @@ use Symfony\Component\Mailer\Transport\Transports;
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('mailer.mailer', Mailer::class)
-            ->args([
+        ->args(
+            [
                 service('mailer.transports'),
                 abstract_arg('message bus'),
                 service('event_dispatcher')->ignoreOnInvalid(),
-            ])
+                ]
+        )
         ->alias('mailer', 'mailer.mailer')
         ->alias(MailerInterface::class, 'mailer.mailer')
 
         ->set('mailer.transports', Transports::class)
-            ->factory([service('mailer.transport_factory'), 'fromStrings'])
-            ->args([
+        ->factory([service('mailer.transport_factory'), 'fromStrings'])
+        ->args(
+            [
                 abstract_arg('transports'),
-            ])
+                ]
+        )
 
         ->set('mailer.transport_factory', Transport::class)
-            ->args([
+        ->args(
+            [
                 tagged_iterator('mailer.transport_factory'),
-            ])
+                ]
+        )
 
         ->set('mailer.default_transport', TransportInterface::class)
-            ->factory([service('mailer.transport_factory'), 'fromString'])
-            ->args([
+        ->factory([service('mailer.transport_factory'), 'fromString'])
+        ->args(
+            [
                 abstract_arg('env(MAILER_DSN)'),
-            ])
+                ]
+        )
         ->alias(TransportInterface::class, 'mailer.default_transport')
 
         ->set('mailer.messenger.message_handler', MessageHandler::class)
-            ->args([
+        ->args(
+            [
                 service('mailer.transports'),
-            ])
-            ->tag('messenger.message_handler')
+                ]
+        )
+        ->tag('messenger.message_handler')
 
         ->set('mailer.envelope_listener', EnvelopeListener::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('sender'),
                 abstract_arg('recipients'),
-            ])
-            ->tag('kernel.event_subscriber')
+                ]
+        )
+        ->tag('kernel.event_subscriber')
 
         ->set('mailer.message_listener', MessageListener::class)
-            ->args([
+        ->args(
+            [
                 abstract_arg('headers'),
-            ])
-            ->tag('kernel.event_subscriber')
+                ]
+        )
+        ->tag('kernel.event_subscriber')
 
         ->set('mailer.message_logger_listener', MessageLoggerListener::class)
-            ->tag('kernel.event_subscriber')
-            ->tag('kernel.reset', ['method' => 'reset'])
+        ->tag('kernel.event_subscriber')
+        ->tag('kernel.reset', ['method' => 'reset'])
 
         ->set('mailer.messenger_transport_listener', MessengerTransportListener::class)
-            ->tag('kernel.event_subscriber')
+        ->tag('kernel.event_subscriber')
 
         ->set('console.command.mailer_test', MailerTestCommand::class)
-            ->args([
+        ->args(
+            [
                 service('mailer.transports'),
-            ])
-            ->tag('console.command')
-    ;
+                ]
+        )
+        ->tag('console.command');
 };

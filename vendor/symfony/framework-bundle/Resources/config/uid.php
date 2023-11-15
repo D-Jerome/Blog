@@ -26,16 +26,15 @@ return static function (ContainerConfigurator $container) {
         ->alias(UuidFactory::class, 'uuid.factory')
 
         ->set('name_based_uuid.factory', NameBasedUuidFactory::class)
-            ->factory([service('uuid.factory'), 'nameBased'])
-            ->args([abstract_arg('Please set the "framework.uid.name_based_uuid_namespace" configuration option to use the "name_based_uuid.factory" service')])
+        ->factory([service('uuid.factory'), 'nameBased'])
+        ->args([abstract_arg('Please set the "framework.uid.name_based_uuid_namespace" configuration option to use the "name_based_uuid.factory" service')])
         ->alias(NameBasedUuidFactory::class, 'name_based_uuid.factory')
 
         ->set('random_based_uuid.factory', RandomBasedUuidFactory::class)
-            ->factory([service('uuid.factory'), 'randomBased'])
+        ->factory([service('uuid.factory'), 'randomBased'])
         ->alias(RandomBasedUuidFactory::class, 'random_based_uuid.factory')
 
         ->set('time_based_uuid.factory', TimeBasedUuidFactory::class)
-            ->factory([service('uuid.factory'), 'timeBased'])
-        ->alias(TimeBasedUuidFactory::class, 'time_based_uuid.factory')
-    ;
+        ->factory([service('uuid.factory'), 'timeBased'])
+        ->alias(TimeBasedUuidFactory::class, 'time_based_uuid.factory');
 };

@@ -60,9 +60,11 @@ class MarkdownDescriptor extends Descriptor
             $output .= "\n".'- Condition: '.$route->getCondition();
         }
 
-        $this->write(isset($options['name'])
+        $this->write(
+            isset($options['name'])
             ? $options['name']."\n".str_repeat('-', \strlen($options['name']))."\n\n".$output
-            : $output);
+            : $output
+        );
         $this->write("\n");
     }
 

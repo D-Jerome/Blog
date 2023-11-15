@@ -70,23 +70,25 @@ class StreamedJsonResponse extends StreamedResponse
         $generators = [];
         $structure = $this->data;
 
-        array_walk_recursive($structure, function (&$item, $key) use (&$generators) {
-            if (self::PLACEHOLDER === $key) {
-                // if the placeholder is already in the structure it should be replaced with a new one that explode
-                // works like expected for the structure
-                $generators[] = $key;
-            }
+        array_walk_recursive(
+            $structure, function (&$item, $key) use (&$generators) {
+                if (self::PLACEHOLDER === $key) {
+                    // if the placeholder is already in the structure it should be replaced with a new one that explode
+                    // works like expected for the structure
+                    $generators[] = $key;
+                }
 
-            // generators should be used but for better DX all kind of Traversable and objects are supported
-            if (\is_object($item)) {
-                $generators[] = $item;
-                $item = self::PLACEHOLDER;
-            } elseif (self::PLACEHOLDER === $item) {
-                // if the placeholder is already in the structure it should be replaced with a new one that explode
-                // works like expected for the structure
-                $generators[] = $item;
+                // generators should be used but for better DX all kind of Traversable and objects are supported
+                if (\is_object($item)) {
+                    $generators[] = $item;
+                    $item = self::PLACEHOLDER;
+                } elseif (self::PLACEHOLDER === $item) {
+                    // if the placeholder is already in the structure it should be replaced with a new one that explode
+                    // works like expected for the structure
+                    $generators[] = $item;
+                }
             }
-        });
+        );
 
         $jsonEncodingOptions = \JSON_THROW_ON_ERROR | $this->encodingOptions;
         $keyEncodingOptions = $jsonEncodingOptions & ~\JSON_NUMERIC_CHECK;

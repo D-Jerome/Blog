@@ -423,8 +423,9 @@ class TextDescriptor extends Descriptor
             ['Parameter', 'Value'],
             [
                 [$options['parameter'], $this->formatParameter($parameter),
-            ],
-        ]);
+                ],
+            ]
+        );
     }
 
     protected function describeContainerEnvVars(array $envs, array $options = []): void
@@ -440,11 +441,13 @@ class TextDescriptor extends Descriptor
                 if ($name === $env['name'] || false !== stripos($env['name'], $name)) {
                     $matches = true;
                     $options['output']->section('%env('.$env['processor'].':'.$env['name'].')%');
-                    $options['output']->table([], [
+                    $options['output']->table(
+                        [], [
                         ['<info>Default value</>', $env['default_available'] ? $dump($env['default_value']) : 'n/a'],
                         ['<info>Real value</>', $env['runtime_available'] ? $dump($env['runtime_value']) : 'n/a'],
                         ['<info>Processed value</>', $env['default_available'] || $env['runtime_available'] ? $dump($env['processed_value']) : 'n/a'],
-                    ]);
+                        ]
+                    );
                 }
             }
 

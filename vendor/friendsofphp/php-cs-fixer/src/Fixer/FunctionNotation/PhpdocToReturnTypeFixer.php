@@ -143,7 +143,9 @@ final class Foo {
                 continue;
             }
 
-            /** @var Annotation $returnTypeAnnotation */
+            /**
+ * @var Annotation $returnTypeAnnotation 
+*/
             $returnTypeAnnotation = current($returnTypeAnnotations);
 
             $typesExpression = $returnTypeAnnotation->getTypeExpression();

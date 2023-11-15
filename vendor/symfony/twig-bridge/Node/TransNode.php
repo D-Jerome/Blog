@@ -56,8 +56,7 @@ final class TransNode extends Node
 
         $compiler
             ->write('echo $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->trans(')
-            ->subcompile($msg)
-        ;
+            ->subcompile($msg);
 
         $compiler->raw(', ');
 
@@ -67,8 +66,7 @@ final class TransNode extends Node
                 ->subcompile($defaults)
                 ->raw(', ')
                 ->subcompile($this->getNode('vars'))
-                ->raw(')')
-            ;
+                ->raw(')');
         } else {
             $compiler->subcompile($defaults);
         }
@@ -84,8 +82,7 @@ final class TransNode extends Node
         if ($this->hasNode('locale')) {
             $compiler
                 ->raw(', ')
-                ->subcompile($this->getNode('locale'))
-            ;
+                ->subcompile($this->getNode('locale'));
         } elseif ($this->hasNode('count')) {
             $compiler->raw(', null');
         }
@@ -93,8 +90,7 @@ final class TransNode extends Node
         if ($this->hasNode('count')) {
             $compiler
                 ->raw(', ')
-                ->subcompile($this->getNode('count'))
-            ;
+                ->subcompile($this->getNode('count'));
         }
 
         $compiler->raw(");\n");

@@ -18,10 +18,9 @@ return static function (ContainerConfigurator $container) {
     $container->services()
 
         ->set('twig.runtime.importmap', ImportMapRuntime::class)
-            ->args([service('asset_mapper.importmap.renderer')])
-            ->tag('twig.runtime')
+        ->args([service('asset_mapper.importmap.renderer')])
+        ->tag('twig.runtime')
 
         ->set('twig.extension.importmap', ImportMapExtension::class)
-            ->tag('twig.extension')
-    ;
+        ->tag('twig.extension');
 };

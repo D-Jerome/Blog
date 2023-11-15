@@ -54,12 +54,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 return static function (ContainerConfigurator $container) {
     $container->parameters()
-        ->set('serializer.mapping.cache.file', '%kernel.cache_dir%/serialization.php')
-    ;
+        ->set('serializer.mapping.cache.file', '%kernel.cache_dir%/serialization.php');
 
     $container->services()
         ->set('serializer', Serializer::class)
-            ->args([[], []])
+        ->args([[], []])
 
         ->alias(SerializerInterface::class, 'serializer')
         ->alias(NormalizerInterface::class, 'serializer')
@@ -71,138 +70,145 @@ return static function (ContainerConfigurator $container) {
 
         // Discriminator Map
         ->set('serializer.mapping.class_discriminator_resolver', ClassDiscriminatorFromClassMetadata::class)
-            ->args([service('serializer.mapping.class_metadata_factory')])
+        ->args([service('serializer.mapping.class_metadata_factory')])
 
         ->alias(ClassDiscriminatorResolverInterface::class, 'serializer.mapping.class_discriminator_resolver')
 
         // Normalizer
         ->set('serializer.normalizer.constraint_violation_list', ConstraintViolationListNormalizer::class)
-            ->args([1 => service('serializer.name_converter.metadata_aware')])
-            ->autowire(true)
-            ->tag('serializer.normalizer', ['priority' => -915])
+        ->args([1 => service('serializer.name_converter.metadata_aware')])
+        ->autowire(true)
+        ->tag('serializer.normalizer', ['priority' => -915])
 
         ->set('serializer.normalizer.mime_message', MimeMessageNormalizer::class)
-            ->args([service('serializer.normalizer.property')])
-            ->tag('serializer.normalizer', ['priority' => -915])
+        ->args([service('serializer.normalizer.property')])
+        ->tag('serializer.normalizer', ['priority' => -915])
 
         ->set('serializer.normalizer.datetimezone', DateTimeZoneNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -915])
+        ->tag('serializer.normalizer', ['priority' => -915])
 
         ->set('serializer.normalizer.dateinterval', DateIntervalNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -915])
+        ->tag('serializer.normalizer', ['priority' => -915])
 
         ->set('serializer.normalizer.data_uri', DataUriNormalizer::class)
-            ->args([service('mime_types')->nullOnInvalid()])
-            ->tag('serializer.normalizer', ['priority' => -920])
+        ->args([service('mime_types')->nullOnInvalid()])
+        ->tag('serializer.normalizer', ['priority' => -920])
 
         ->set('serializer.normalizer.datetime', DateTimeNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -910])
+        ->tag('serializer.normalizer', ['priority' => -910])
 
         ->set('serializer.normalizer.json_serializable', JsonSerializableNormalizer::class)
-            ->args([null, null])
-            ->tag('serializer.normalizer', ['priority' => -950])
+        ->args([null, null])
+        ->tag('serializer.normalizer', ['priority' => -950])
 
         ->set('serializer.normalizer.problem', ProblemNormalizer::class)
-            ->args([param('kernel.debug'), '$translator' => service('translator')->nullOnInvalid()])
-            ->tag('serializer.normalizer', ['priority' => -890])
+        ->args([param('kernel.debug'), '$translator' => service('translator')->nullOnInvalid()])
+        ->tag('serializer.normalizer', ['priority' => -890])
 
         ->set('serializer.denormalizer.unwrapping', UnwrappingDenormalizer::class)
-            ->args([service('serializer.property_accessor')])
-            ->tag('serializer.normalizer', ['priority' => 1000])
+        ->args([service('serializer.property_accessor')])
+        ->tag('serializer.normalizer', ['priority' => 1000])
 
         ->set('serializer.normalizer.uid', UidNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -890])
+        ->tag('serializer.normalizer', ['priority' => -890])
 
         ->set('serializer.normalizer.form_error', FormErrorNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -915])
+        ->tag('serializer.normalizer', ['priority' => -915])
 
         ->set('serializer.normalizer.object', ObjectNormalizer::class)
-            ->args([
+        ->args(
+            [
                 service('serializer.mapping.class_metadata_factory'),
                 service('serializer.name_converter.metadata_aware'),
                 service('serializer.property_accessor'),
                 service('property_info')->ignoreOnInvalid(),
                 service('serializer.mapping.class_discriminator_resolver')->ignoreOnInvalid(),
                 null,
-            ])
-            ->tag('serializer.normalizer', ['priority' => -1000])
+                ]
+        )
+        ->tag('serializer.normalizer', ['priority' => -1000])
 
         ->alias(ObjectNormalizer::class, 'serializer.normalizer.object')
-            ->deprecate('symfony/serializer', '6.2', 'The "%alias_id%" service alias is deprecated, type-hint against "'.NormalizerInterface::class.'" or implement "'.NormalizerAwareInterface::class.'" instead.')
+        ->deprecate('symfony/serializer', '6.2', 'The "%alias_id%" service alias is deprecated, type-hint against "'.NormalizerInterface::class.'" or implement "'.NormalizerAwareInterface::class.'" instead.')
 
         ->set('serializer.normalizer.property', PropertyNormalizer::class)
-            ->args([
+        ->args(
+            [
                 service('serializer.mapping.class_metadata_factory'),
                 service('serializer.name_converter.metadata_aware'),
                 service('property_info')->ignoreOnInvalid(),
                 service('serializer.mapping.class_discriminator_resolver')->ignoreOnInvalid(),
                 null,
-            ])
+                ]
+        )
 
         ->alias(PropertyNormalizer::class, 'serializer.normalizer.property')
-            ->deprecate('symfony/serializer', '6.2', 'The "%alias_id%" service alias is deprecated, type-hint against "'.NormalizerInterface::class.'" or implement "'.NormalizerAwareInterface::class.'" instead.')
+        ->deprecate('symfony/serializer', '6.2', 'The "%alias_id%" service alias is deprecated, type-hint against "'.NormalizerInterface::class.'" or implement "'.NormalizerAwareInterface::class.'" instead.')
 
         ->set('serializer.denormalizer.array', ArrayDenormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -990])
+        ->tag('serializer.normalizer', ['priority' => -990])
 
         // Loader
         ->set('serializer.mapping.chain_loader', LoaderChain::class)
-            ->args([[]])
+        ->args([[]])
 
         // Class Metadata Factory
         ->set('serializer.mapping.class_metadata_factory', ClassMetadataFactory::class)
-            ->args([service('serializer.mapping.chain_loader')])
+        ->args([service('serializer.mapping.chain_loader')])
 
         ->alias(ClassMetadataFactoryInterface::class, 'serializer.mapping.class_metadata_factory')
 
         // Cache
         ->set('serializer.mapping.cache_warmer', SerializerCacheWarmer::class)
-            ->args([abstract_arg('The serializer metadata loaders'), param('serializer.mapping.cache.file')])
-            ->tag('kernel.cache_warmer')
+        ->args([abstract_arg('The serializer metadata loaders'), param('serializer.mapping.cache.file')])
+        ->tag('kernel.cache_warmer')
 
         ->set('serializer.mapping.cache.symfony', CacheItemPoolInterface::class)
-            ->factory([PhpArrayAdapter::class, 'create'])
-            ->args([param('serializer.mapping.cache.file'), service('cache.serializer')])
+        ->factory([PhpArrayAdapter::class, 'create'])
+        ->args([param('serializer.mapping.cache.file'), service('cache.serializer')])
 
         ->set('serializer.mapping.cache_class_metadata_factory', CacheClassMetadataFactory::class)
-            ->decorate('serializer.mapping.class_metadata_factory')
-            ->args([
+        ->decorate('serializer.mapping.class_metadata_factory')
+        ->args(
+            [
                 service('serializer.mapping.cache_class_metadata_factory.inner'),
                 service('serializer.mapping.cache.symfony'),
-            ])
+                ]
+        )
 
         // Encoders
         ->set('serializer.encoder.xml', XmlEncoder::class)
-            ->tag('serializer.encoder')
+        ->tag('serializer.encoder')
 
         ->set('serializer.encoder.json', JsonEncoder::class)
-            ->args([null, null])
-            ->tag('serializer.encoder')
+        ->args([null, null])
+        ->tag('serializer.encoder')
 
         ->set('serializer.encoder.yaml', YamlEncoder::class)
-            ->args([null, null])
-            ->tag('serializer.encoder')
+        ->args([null, null])
+        ->tag('serializer.encoder')
 
         ->set('serializer.encoder.csv', CsvEncoder::class)
-            ->tag('serializer.encoder')
+        ->tag('serializer.encoder')
 
         // Name converter
         ->set('serializer.name_converter.camel_case_to_snake_case', CamelCaseToSnakeCaseNameConverter::class)
 
         ->set('serializer.name_converter.metadata_aware', MetadataAwareNameConverter::class)
-            ->args([service('serializer.mapping.class_metadata_factory')])
+        ->args([service('serializer.mapping.class_metadata_factory')])
 
         // PropertyInfo extractor
         ->set('property_info.serializer_extractor', SerializerExtractor::class)
-            ->args([service('serializer.mapping.class_metadata_factory')])
-            ->tag('property_info.list_extractor', ['priority' => -999])
+        ->args([service('serializer.mapping.class_metadata_factory')])
+        ->tag('property_info.list_extractor', ['priority' => -999])
 
         // ErrorRenderer integration
         ->alias('error_renderer', 'error_renderer.serializer')
         ->alias('error_renderer.serializer', 'error_handler.error_renderer.serializer')
 
         ->set('error_handler.error_renderer.serializer', SerializerErrorRenderer::class)
-            ->args([
+        ->args(
+            [
                 service('serializer'),
                 inline_service()
                     ->factory([SerializerErrorRenderer::class, 'getPreferredFormat'])
@@ -211,13 +217,12 @@ return static function (ContainerConfigurator $container) {
                 inline_service()
                     ->factory([HtmlErrorRenderer::class, 'isDebug'])
                     ->args([service('request_stack'), param('kernel.debug')]),
-            ])
-    ;
+                ]
+        );
 
     if (interface_exists(\BackedEnum::class)) {
         $container->services()
             ->set('serializer.normalizer.backed_enum', BackedEnumNormalizer::class)
-            ->tag('serializer.normalizer', ['priority' => -915])
-        ;
+            ->tag('serializer.normalizer', ['priority' => -915]);
     }
 };

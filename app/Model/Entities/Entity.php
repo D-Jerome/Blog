@@ -23,8 +23,8 @@ abstract class Entity
     /**
      * __set
      *
-     * @param string|null $name
-     * @param   $value Multiple types of values
+     * @param  string|null $name
+     * @param  $value Multiple types of values
      * @return void
      */
     public function __set(?string $name, $value): void

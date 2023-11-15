@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -26,21 +26,27 @@ use function hash;
  */
 class DefaultNameGenerator implements NameGeneratorInterface
 {
-    /** @psalm-pure */
+    /**
+     * @psalm-pure 
+     */
     public function generate(UuidInterface $ns, string $name, string $hashAlgorithm): string
     {
         try {
-            /** @var string|bool $bytes */
+            /**
+ * @var string|bool $bytes 
+*/
             $bytes = @hash($hashAlgorithm, $ns->getBytes() . $name, true);
         } catch (ValueError $e) {
             $bytes = false; // keep same behavior than PHP 7
         }
 
         if ($bytes === false) {
-            throw new NameException(sprintf(
-                'Unable to hash namespace and name with algorithm \'%s\'',
-                $hashAlgorithm
-            ));
+            throw new NameException(
+                sprintf(
+                    'Unable to hash namespace and name with algorithm \'%s\'',
+                    $hashAlgorithm
+                )
+            );
         }
 
         return (string) $bytes;

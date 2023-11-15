@@ -32,7 +32,9 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
     public const REQUIREMENT_MISMATCH = 1;
     public const ROUTE_MATCH = 2;
 
-    /** @var RequestContext */
+    /**
+     * @var RequestContext 
+     */
     protected $context;
 
     /**
@@ -230,11 +232,14 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         }
 
         // expression condition
-        if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate($route->getCondition(), [
+        if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate(
+            $route->getCondition(), [
             'context' => $this->context,
             'request' => $this->request ?: $this->createRequest($pathinfo),
             'params' => $routeParameters,
-        ])) {
+            ]
+        )
+        ) {
             return [self::REQUIREMENT_MISMATCH, null];
         }
 
@@ -279,9 +284,11 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
             return null;
         }
 
-        return Request::create($this->context->getScheme().'://'.$this->context->getHost().$this->context->getBaseUrl().$pathinfo, $this->context->getMethod(), $this->context->getParameters(), [], [], [
+        return Request::create(
+            $this->context->getScheme().'://'.$this->context->getHost().$this->context->getBaseUrl().$pathinfo, $this->context->getMethod(), $this->context->getParameters(), [], [], [
             'SCRIPT_FILENAME' => $this->context->getBaseUrl(),
             'SCRIPT_NAME' => $this->context->getBaseUrl(),
-        ]);
+            ]
+        );
     }
 }

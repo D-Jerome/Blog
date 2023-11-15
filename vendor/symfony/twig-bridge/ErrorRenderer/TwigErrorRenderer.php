@@ -48,11 +48,15 @@ class TwigErrorRenderer implements ErrorRendererInterface
             return $this->fallbackErrorRenderer->render($exception);
         }
 
-        return $flattenException->setAsString($this->twig->render($template, [
-            'exception' => $flattenException,
-            'status_code' => $flattenException->getStatusCode(),
-            'status_text' => $flattenException->getStatusText(),
-        ]));
+        return $flattenException->setAsString(
+            $this->twig->render(
+                $template, [
+                'exception' => $flattenException,
+                'status_code' => $flattenException->getStatusCode(),
+                'status_text' => $flattenException->getStatusText(),
+                ]
+            )
+        );
     }
 
     public static function isDebug(RequestStack $requestStack, bool $debug): \Closure

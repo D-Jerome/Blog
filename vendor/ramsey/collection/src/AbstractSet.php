@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 declare(strict_types=1);
@@ -20,7 +20,7 @@ namespace Ramsey\Collection;
  * this specific type of collection.
  *
  * @template T
- * @extends AbstractCollection<T>
+ * @extends  AbstractCollection<T>
  */
 abstract class AbstractSet extends AbstractCollection
 {
