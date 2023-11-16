@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Mail
 {
+
     private string $host;
 
     private bool $smtpAuth;
@@ -81,8 +82,8 @@ class Mail
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Inscription à notre blog';
-        $mail->Body    = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
-        $mail->AltBody = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
+        $mail->Body    = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
+        $mail->AltBody = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
 
         if (!$mail->send()) {
             echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
@@ -128,16 +129,16 @@ class Mail
                         Bonjour Jérôme, <br>
                         Voici un nouveau message d\'un utilisateur. <br>
                         <br>
-                        Message de : ' . $contact['name'] . '<br>
-                        Email : ' . $contact['email'] . '<br>
-                        Message : ' . $contact['message'] . '<br>
+                        Message de : '.$contact['name'].'<br>
+                        Email : '.$contact['email'].'<br>
+                        Message : '.$contact['message'].'<br>
                         ';
         $mail->AltBody = '
                         Bonjour Jérôme, 
                         Voici un nouveau message d\'un utilisateur.
-                        Message de : ' . $contact['name'] . '
-                        Email : ' . $contact['email'] . '
-                        Message : ' . $contact['message'] . '
+                        Message de : '.$contact['name'].'
+                        Email : '.$contact['email'].'
+                        Message : '.$contact['message'].'
                         ';
 
         if (!$mail->send()) {

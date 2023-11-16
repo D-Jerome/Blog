@@ -9,6 +9,7 @@ use Framework\Helpers\Text;
 
 class Router
 {
+
     protected array $routes;
 
 
@@ -19,7 +20,7 @@ class Router
      */
     public function __construct()
     {
-        $routes = json_decode(file_get_contents(__DIR__ . '/../config/routes.json'), true);
+        $routes = json_decode(file_get_contents(__DIR__ . "/../config/routes.json"), true);
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }

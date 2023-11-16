@@ -4,6 +4,7 @@ namespace Framework;
 
 class Request
 {
+
     protected string $uri;
 
     protected string $method;

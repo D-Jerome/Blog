@@ -6,6 +6,7 @@ use Framework\Request;
 
 class Route
 {
+
     protected string $path;
 
     protected string $method;

@@ -9,6 +9,7 @@ use Twig\Extra\Intl\IntlExtension;
 
 class BaseController
 {
+
     protected Environment $twig;
 
     protected Session $session;

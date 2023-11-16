@@ -4,6 +4,7 @@ namespace Framework\Security;
 
 class AuthUser
 {
+
     protected int $id;
 
     protected string $roleName;

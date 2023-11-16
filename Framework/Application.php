@@ -8,6 +8,7 @@ use Framework\Exception\NoRouteFoundException;
 
 final class Application
 {
+
     private Request $request;
 
     private Router $router;
@@ -22,7 +23,7 @@ final class Application
      */
     public function __construct()
     {
-        self::$config = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
+        self::$config = json_decode(file_get_contents(__DIR__ . "/../config/config.json"), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
 

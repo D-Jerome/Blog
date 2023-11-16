@@ -7,6 +7,7 @@ use Framework\Application;
 
 class FilterBuilder
 {
+
     private array $sort;
 
     private array $dir;
