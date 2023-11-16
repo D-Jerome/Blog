@@ -5,10 +5,25 @@ namespace Framework\Security;
 class AuthUser
 {
 
+    /**
+     * [Description for $id]
+     *
+     * @var int
+     */
     protected int $id;
 
+    /**
+     * [Description for $roleName]
+     *
+     * @var string
+     */
     protected string $roleName;
 
+    /**
+     * [Description for $username]
+     *
+     * @var string
+     */
     protected string $username;
 
     /**

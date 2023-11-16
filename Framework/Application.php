@@ -9,10 +9,25 @@ use Framework\Exception\NoRouteFoundException;
 final class Application
 {
 
+    /**
+     * http request information
+     *
+     * @var Request
+     */
     private Request $request;
 
+    /**
+     *  router object
+     *
+     * @var Router
+     */
     private Router $router;
 
+    /**
+     * datas from config file
+     *
+     * @var array<string, string|array<string, string>>
+     */
     private static array $config;
 
 
@@ -53,7 +68,7 @@ final class Application
 
             if ($route->isAuthorize($authRoles)) {
 
-
+                $id = null;
                 if (preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
                     $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
@@ -88,7 +103,7 @@ final class Application
     /**
      * getDatasource : get the config information of database in array
      *
-     * @return array
+     * @return array<string, string>
      */
     public static function getDatasource(): array
     {
@@ -99,7 +114,7 @@ final class Application
     /**
      * getEmailSource: get the config information of email in array
      *
-     * @return array
+     * @return array<string,string>
      */
     public static function getEmailSource(): array
     {
@@ -121,7 +136,7 @@ final class Application
     /**
      * getFilter
      *
-     * @return array
+     * @return array<string, string>
      */
     public static function getFilter(): array
     {

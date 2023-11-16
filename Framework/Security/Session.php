@@ -33,7 +33,7 @@ class Session
     /**
      * connect : keep information of user un session
      *
-     * @param  User $user :user connected
+     * @param  User $user User connected
      * @return void
      */
     public function connect(User $user)

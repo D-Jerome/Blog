@@ -9,35 +9,95 @@ use PHPMailer\PHPMailer\SMTP;
 class Mail
 {
 
+    /**
+     * smtp address
+     *
+     * @var string
+     */
     private string $host;
 
+    /**
+     * authentification required(true)
+     *
+     * @var bool
+     */
     private bool $smtpAuth;
 
+    /**
+     * login for smtp  connect
+     *
+     * @var string
+     */
     private string $userName;
 
+    /**
+     * password for smtp connect
+     *
+     * @var string
+     */
     private string $password;
 
+    /**
+     * secure type
+     *
+     * @var string
+     */
     private string $smtpSecure;
 
-    private string $port;
+    /**
+     * port use for connection
+     *
+     * @var int
+     */
+    private int $port;
 
+    /**
+     * from email address
+     *
+     * @var string
+     */
     private string $fromAddress;
 
+    /**
+     * from user name
+     *
+     * @var string|null
+     */
     private ?string $fromName;
 
+    /**
+     * ReplyTo Address
+     *
+     * @var string
+     */
     private string $replyToAddress;
 
+    /**
+     * ReplyTo Name
+     *
+     * @var string|null
+     */
     private ?string $replyToName;
 
+    /**
+     * copy address
+     *
+     * @var string|null
+     */
     private ?string $ccAddress;
 
+    /**
+     * blind copy address
+     *
+     * @var string|null
+     */
     private ?string $bccAddress;
 
 
     /**
      * __construct : each data of email config
      *
-     * @param  array $config : from the config file
+     * @param array<string, string> $config From the config file
      * @return void
      */
     public function __construct(array $config)
@@ -52,7 +112,7 @@ class Mail
     /**
      * sendMailToUser : send Email to User
      *
-     * @param  User $user : receiver ot email
+     * @param User $user Receiver of email
      * @return void
      */
     public function sendMailToUser(User $user)
@@ -70,7 +130,7 @@ class Mail
 
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress($user->getEmail(), "$user->getFirstName() $user->lastName()");
+        $mail->addAddress($user->getEmail(), $user->getFirstName().' '.$user->getLastName());
         $mail->addReplyTo($this->replyToAddress, $this->replyToName);
         $mail->addCC($this->ccAddress);
         $mail->addBCC($this->bccAddress);
@@ -97,7 +157,7 @@ class Mail
     /**
      * sendMailToAdmin : send email to admin
      *
-     * @param  array $contact : informations of the contact
+     * @param array<string, string> $contact Informations of the contact
      * @return void
      */
     public function sendMailToAdmin(array $contact)
@@ -134,7 +194,7 @@ class Mail
                         Message : '.$contact['message'].'<br>
                         ';
         $mail->AltBody = '
-                        Bonjour Jérôme, 
+                        Bonjour Jérôme,
                         Voici un nouveau message d\'un utilisateur.
                         Message de : '.$contact['name'].'
                         Email : '.$contact['email'].'

@@ -10,17 +10,32 @@ use Twig\Extra\Intl\IntlExtension;
 class BaseController
 {
 
+    /**
+     * twig environment
+     *
+     * @var Environment
+     */
     protected Environment $twig;
 
+    /**
+     * session information
+     *
+     * @var Session
+     */
     protected Session $session;
 
+    /**
+     * route found
+     *
+     * @var Route
+     */
     protected Route $route;
 
 
     /**
      * __construct :
      *
-     * @param  Route $route : Route found
+     * @param Route $route Route found
      * @return void
      */
     public function __construct(Route $route)
@@ -54,8 +69,8 @@ class BaseController
     /**
      * view : Twig Template view construct
      *
-     * @param  string $template : NAme of the template
-     * @param  array  $params   : params to show in template
+     * @param string $template Name of the template
+     * @param array<string, string> $params Params to show in template
      * @return void
      */
     protected function view(string $template, array $params)
@@ -67,7 +82,7 @@ class BaseController
     /**
      * isAuthorize: verify if user has the right to access to the page
      *
-     * @param  array $authRoles : roles authorized in page
+     * @param  array<string> $authRoles : roles authorized in page
      * @return bool
      */
     public function isAuthorize(array $authRoles): bool

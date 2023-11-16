@@ -38,7 +38,7 @@ class Route
     /**
      * authorized roles for route
      *
-     * @var array<int, string>
+     * @var array<string>
      */
     protected array $authRoles;
 
@@ -118,7 +118,7 @@ class Route
     /**
      * getAuthRoles
      *
-     * @return array<int, string>
+     * @return array<string>
      */
     public function getAuthRoles(): array
     {

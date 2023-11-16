@@ -5,17 +5,32 @@ namespace Framework;
 class Request
 {
 
+    /**
+     * URI of page
+     *
+     * @var string
+     */
     protected string $uri;
 
+    /**
+     * method used (post, get)
+     *
+     * @var string
+     */
     protected string $method;
 
+    /**
+     * params of page(post or get)
+     *
+     * @var array<string, string>
+     */
     protected array $params = [];
 
 
     /**
      * __construct
      *
-     * @param  string $baseUrl : base of url directory
+     * @param string $baseUrl Base of url directory
      * @return void
      */
     public function __construct(string $baseUrl)
@@ -52,7 +67,7 @@ class Request
     /**
      * getParams
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getParams(): array
     {

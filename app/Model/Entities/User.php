@@ -6,24 +6,74 @@ use DateTime;
 
 class User extends Entity
 {
+    /**
+     * user id
+     *
+     * @var int
+     */
     protected int $id;
 
+    /**
+     * firstname information
+     *
+     * @var string
+     */
     protected string $firstname;
 
+    /**
+     * lastname information
+     *
+     * @var string
+     */
     protected string $lastname;
 
+    /**
+     * username = login
+     *
+     * @var string
+     */
     protected string $username;
 
+    /**
+     * email information for forgot password
+     *
+     * @var string
+     */
     protected string $email;
 
+    /**
+     * crypted password
+     *
+     * @var string
+     */
     protected string $password;
 
+    /**
+     * date of creation of user
+     *
+     * @var string
+     */
     protected string $createdAt;
 
+    /**
+     * roleID (link to role.id)
+     *
+     * @var int
+     */
     protected int $roleId;
 
+    /**
+     * name of the role
+     *
+     * @var string
+     */
     protected string $roleName;
 
+    /**
+     * true = active , false = inactive
+     *
+     * @var bool
+     */
     protected bool $active;
 
 
