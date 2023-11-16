@@ -30,7 +30,7 @@ class Router
     /**
      * findRoute: compare and match route and request
      *
-     * @param  Request $request
+     * @param  Request $request : request object of page
      * @return Route
      */
     public function findRoute(Request $request): ?Route
@@ -64,10 +64,10 @@ class Router
 
 
     /**
-     * validateRoute: verify the Existance of page and return Ture or False
+     * validateRoute: verify the Existance of page and return True or False
      *
-     * @param  string $typeObj
-     * @param  array  $matches
+     * @param  string $typeObj : Object used
+     * @param  array  $matches : result of preg_match route
      * @return bool
      */
     private function validateRoute(string $typeObj, array $matches): bool

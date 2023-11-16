@@ -127,5 +127,5 @@ final class Application
     {
         return self::$config['filter'];
     }
-    
+
 }

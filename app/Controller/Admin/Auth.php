@@ -20,7 +20,7 @@ class Auth extends BaseController
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
-        $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        $this->view('backoffice/'.$user['roleName'].'.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 
 

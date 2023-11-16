@@ -33,7 +33,7 @@ class Session
     /**
      * connect : keep information of user un session
      *
-     * @param  User $user
+     * @param  User $user :user connected
      * @return void
      */
     public function connect(User $user)
@@ -42,4 +42,5 @@ class Session
         $_SESSION['roleName'] = $user->getRoleName();
         $_SESSION['username'] = $user->getUsername();
     }
+
 }

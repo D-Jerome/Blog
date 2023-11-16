@@ -20,7 +20,7 @@ class BaseController
     /**
      * __construct :
      *
-     * @param  Route $route
+     * @param  Route $route : Route found
      * @return void
      */
     public function __construct(Route $route)
@@ -88,7 +88,6 @@ class BaseController
         }
 
         return true;
-
     }
 
 }

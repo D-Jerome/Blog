@@ -6,8 +6,16 @@ use Exception;
 
 class InvalidUserException extends Exception
 {
-    public function __construct($message = "invalid user")
+
+    /**
+     * __construct
+     *
+     * @param  string $message
+     * @return void
+     */
+    public function __construct(string $message = "invalid user")
     {
         parent::__construct($message, "0011");
-    }
+    }//end __construct
+    
 }
