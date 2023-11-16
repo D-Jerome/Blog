@@ -39,11 +39,7 @@ class Post extends BaseController
         }
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-        $sortList = $filter->getSort();
-        $dirList = $filter->getDir();
-        $list = $filter->getList();
-        $listNames = $filter->getListNames();
-
+        
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
 
@@ -72,12 +68,13 @@ class Post extends BaseController
             'backoffice/admin.posts.html.twig',
             [
             'posts' => $statementPosts,
-            'sort' => $sortList,
-            'dir' => $dirList,
+            'sort' => $filter->getSort(),
+            'dir' => $filter->getDir(),
             'sortDir' => $sortDir,
             'sortBy' => $sortBy,
-            'list' => $list ,
-            'listNames' => $listNames,
+            'list' => $filter->getList() ,
+            'listSelect' => $filter->getListSelect(),
+            'listNames' => $filter->getListNames(),
             'pages' => $pages,
             'authUser' => $user
             ]
@@ -294,11 +291,6 @@ class Post extends BaseController
         }
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-        $sortList = $filter->getSort();
-        $dirList = $filter->getDir();
-        $list = $filter->getList();
-        $listNames = $filter->getListNames();
-
 
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
@@ -333,12 +325,13 @@ class Post extends BaseController
             'backoffice/admin.moderation.posts.html.twig',
             [
             'posts' => $statementPosts,
-            'sort' => $sortList,
-            'dir' => $dirList,
+            'sort' => $filter->getSort(),
+            'dir' => $filter->getDir(),
             'sortDir' => $sortDir,
             'sortBy' => $sortBy,
-            'list' => $list ,
-            'listNames' => $listNames,
+            'list' => $filter->getList() ,
+            'listSelect' => $filter->getListSelect(),
+            'listNames' => $filter->getListNames(),
             'pages' => $pages,
             'authUser' => $user
             ]

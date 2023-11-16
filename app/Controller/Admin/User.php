@@ -39,11 +39,6 @@ class User extends BaseController
         }
         
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-        $sortList = $filter->getSort();
-        $dirList = $filter->getDir();
-        $list = $filter->getList();
-        $listNames = $filter->getListNames();
-
 
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
@@ -63,12 +58,13 @@ class User extends BaseController
         $this->view(
             'backoffice/admin.users.html.twig', [
                 'registredUsers' => $statementUsers,
-                'sort' => $sortList,
-                'dir' => $dirList,
+                'sort' => $filter->getSort(),
+                'dir' => $filter->getDir(),
                 'sortDir' => $sortDir,
                 'sortBy' => $sortBy,
-                'list' => $list ,
-                'listNames' => $listNames,
+                'list' => $filter->getList() ,
+                'listSelect' => $filter->getListSelect(),
+                'listNames' => $filter->getListNames(),
                 'pages' => $pages,
                 'authUser' => $user
             ]

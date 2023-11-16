@@ -35,21 +35,14 @@ class Post extends BaseController
         }
 
         $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId()
-            ];
-        }
-
-        $user = $this->session->getUser();
         if (null === $user) {
             return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
         }
 
         $user = [
             'name' => $user->getUsername(),
-            'id' => $user->getId()
+            'id' => $user->getId(),
+            'roleName' => $user->getRoleName()
         ];
         return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
@@ -81,11 +74,7 @@ class Post extends BaseController
         }
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-        $sortList = $filter->getSort();
-        $dirList = $filter->getDir();
-        $list = $filter->getList();
-        $listNames = $filter->getListNames();
-        $listSelect = $filter->getListSelect();
+
         $listSortSelect = isset(($this->getRoute()->getParams())['listSelect']) ? ($this->getRoute()->getParams())['listSelect'] : null;
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
@@ -122,15 +111,16 @@ class Post extends BaseController
             'frontoffice/posts.html.twig',
             [
                 'posts' => $statementPosts,
-                'sort' => $sortList,
-                'dir' => $dirList,
+                'sort' => $filter->getSort(),
+                'dir' => $filter->getDir(),
                 'sortDir' => $sortDir,
                 'sortBy' => $sortBy,
-                'list' => $list ,
-                'listSelect' => $listSelect,
-                'listNames' => $listNames,
+                'list' => $filter->getList() ,
+                'listSelect' => $filter->getListSelect(),
+                'listNames' => $filter->getListNames(),
                 'pages' => $pages,
-            'authUser' => $user]
+                'authUser' => $user
+                ]
         );
     }
 
