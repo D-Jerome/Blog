@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Pagination;
 use App\Model\Manager\{UserManager, BaseManager, RoleManager};
 use Framework\Application;
 use Framework\BaseController;
@@ -19,6 +20,24 @@ class User extends BaseController
      */
     public function userList(): void
     {
+        $user = $this->session->getUser();
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
+
+        $currentPage = null;
+        $perPage = null;
+
+        if (isset(($this->getRoute()->getParams())['page'])) {
+            $currentPage = ($this->getRoute()->getParams())['page'];
+        }
+
+        if (isset(($this->getRoute()->getParams())['perPage'])) {
+            $perPage = ($this->getRoute()->getParams())['perPage'];
+        }
+        
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $sortList = $filter->getSort();
         $dirList = $filter->getDir();
@@ -28,52 +47,18 @@ class User extends BaseController
 
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
-        $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
 
-        $currentPage = ($this->getRoute()->getParams())['page'] ?? 1;
-        $currentPage = (int)$currentPage;
         $sqlParams=[];
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
         $users = (new UserManager(Application::getDatasource()));
-        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
+        
+        $count = count($users->getAll());
+        
+        $pagination = new Pagination($this->getRoute(), $count, $currentPage, $perPage);
+        $pages = $pagination->pagesInformations();
 
-       
-            $count = count($users->getAll());
-    
-
-        $user = $this->session->getUser();
-        $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
-
-        if ((int)(ceil(($count / $perPage))) === 1) {
-            $pages['nextActive'] = false;
-            $pages['previousActive'] = false;
-        } elseif ($currentPage >= (ceil(($count / $perPage)))) {
-            $pages['previousActive'] = true;
-            $pages['nextActive'] = false;
-        } elseif ($currentPage === 1) {
-            $pages['previousActive'] = false;
-            $pages['nextActive'] = true;
-        } else {
-            $pages['nextActive'] = true;
-            $pages['previousActive'] = true;
-        }//end if
-
-        //pagination
-        $temp = ($this->getRoute()->getParams());
-        unset($temp['page']);
-        $this->getRoute()->setParams($temp);
-        $query = http_build_query($this->getRoute()->getParams());
-        if (!empty($query)) {
-            $query = "&$query";
-        }
-        $pages['previousUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage - 1) . $query;
-        $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
-
+        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getperPage(), $pagination->getcurrentPage(), $sqlParams);
 
         $this->view(
             'backoffice/admin.users.html.twig', [

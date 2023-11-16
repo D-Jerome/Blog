@@ -62,6 +62,24 @@ class Post extends BaseController
      */
     public function posts()
     {
+        $user = $this->session->getUser();
+        $user = [
+                 'name' => $user->getUsername(),
+                 'id' => $user->getId(),
+                 'roleName' => $user->getRoleName()
+                ];
+
+        $currentPage = null;
+        $perPage = null;
+
+        if (isset(($this->getRoute()->getParams())['page'])) {
+            $currentPage = ($this->getRoute()->getParams())['page'];
+        }
+
+        if (isset(($this->getRoute()->getParams())['perPage'])) {
+            $perPage = ($this->getRoute()->getParams())['perPage'];
+        }
+
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $sortList = $filter->getSort();
         $dirList = $filter->getDir();
@@ -71,26 +89,12 @@ class Post extends BaseController
         $listSortSelect = isset(($this->getRoute()->getParams())['listSelect']) ? ($this->getRoute()->getParams())['listSelect'] : null;
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
-        $perPage = ($this->getRoute()->getParams())['perPage'] ?? 8;
 
-        $currentPage = ($this->getRoute()->getParams())['page'] ?? 1;
-        $currentPage = (int)$currentPage;
         $sqlParams = [ "publish_state" => true];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
-        if (!$listSortSelect) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams);
-        } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $sortDir, $perPage, $currentPage, $sqlParams, $listSortSelect);
-        }
-        
-        
-        foreach ($statementPosts as $statementPost) {
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
-            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
-        }
+
 
         if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
@@ -98,41 +102,25 @@ class Post extends BaseController
             $count = count($posts->getAll());
         }//enf id
 
-        if ((int)(ceil(($count / $perPage))) === 1) {
-            $pages['nextActive'] = false;
-            $pages['previousActive'] = false;
-        } elseif ($currentPage >= (ceil(($count / $perPage)))) {
-            $pages['previousActive'] = true;
-            $pages['nextActive'] = false;
-        } elseif ($currentPage === 1) {
-            $pages['previousActive'] = false;
-            $pages['nextActive'] = true;
+        $pagination = new Pagination($this->getRoute(), $count, $currentPage, $perPage);
+        $pages = $pagination->pagesInformations();
+
+        if (!$listSortSelect) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $pages['nextActive'] = true;
-            $pages['previousActive'] = true;
-        }//end if
-
-        //pagination
-        $temp = ($this->getRoute()->getParams());
-        unset($temp['page']);
-        $this->getRoute()->setParams($temp);
-        $query = http_build_query($this->getRoute()->getParams());
-        if (!empty($query)) {
-            $query = "&$query";
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $listSortSelect);
         }
-        $pages['previousUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage - 1) . $query;
-        $pages['nextUri'] = Application::getBaseUrl(). $this->getRoute()->getPath() . '?page=' . ($currentPage + 1) . $query;
 
-        $user = $this->session->getUser();
 
-        if (null !== $user) {
-            $user = [
-                        'name' => $user->getUsername(),
-                        'id' => $user->getId()
-                    ];
+        foreach ($statementPosts as $statementPost) {
+            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
+            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
+            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
         }
+
         return $this->view(
-            'frontoffice/posts.html.twig', [
+            'frontoffice/posts.html.twig',
+            [
                 'posts' => $statementPosts,
                 'sort' => $sortList,
                 'dir' => $dirList,
