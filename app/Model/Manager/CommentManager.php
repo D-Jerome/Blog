@@ -10,16 +10,30 @@ use PDO;
 
 class CommentManager extends BaseManager
 {
-    public function __construct($datasource)
+
+    /**
+     * __construct
+     *
+     * @param  array $datasource : connection database informations
+     * @return void
+     */
+    public function __construct(array $datasource)
     {
         parent::__construct('comment', Comment::class, $datasource);
-    }
+    }//end _construct
 
-    public function getCommentsByPostId($id)
+
+    /**
+     * getCommentsByPostId: get all comments od a post
+     *
+     * @param  int $id
+     * @return Comment
+     */
+    public function getCommentsByPostId(int $id): Comment
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT * FROM comment com 
+            SELECT * FROM comment com
             WHERE com.post_id = ? and com.publish_state = true
             '
         );
@@ -30,11 +44,17 @@ class CommentManager extends BaseManager
     }
 
 
-    public function getCountCommentsByPostId(int $id)
+    /**
+     * getCountCommentsByPostId : Number of comments of a post
+     *
+     * @param  int $id ; post id
+     * @return int
+     */
+    public function getCountCommentsByPostId(int $id): int
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT com.id FROM comment com 
+            SELECT com.id FROM comment com
             WHERE p.id = ? and com.publish_state = true
             '
         );
@@ -43,7 +63,14 @@ class CommentManager extends BaseManager
         return $statement->rowCount();
     }
 
-    public function getCommentUsername(int $id)
+
+    /**
+     * getCommentUsername: get username of post
+     *
+     * @param  int $id
+     * @return string
+     */
+    public function getCommentUsername(int $id): string
     {
         $query = $this->dbConnect->prepare(
             '
@@ -56,11 +83,18 @@ class CommentManager extends BaseManager
         return $query->fetch();
     }
 
-    public function getCommentsByUserId(int $id)
+
+    /**
+     * getCommentsByUserId : get comment by user
+     *
+     * @param  int $id: user id
+     * @return Comment
+     */
+    public function getCommentsByUserId(int $id): Comment
     {
         $query = $this->dbConnect->prepare(
             "
-            SELECT * FROM  $this->table 
+            SELECT * FROM  $this->table
             WHERE user_id = :user_id
         "
         );
@@ -72,11 +106,18 @@ class CommentManager extends BaseManager
         return $query->fetchAll();
     }
 
+
+    /**
+     * insertNewComment ; inser new comment in database
+     *
+     * @param  array $params : data to insert
+     * @return void
+     */
     public function insertNewComment(array $params)
     {
         $query = $this->dbConnect->prepare(
             '
-            INSERT INTO ' . $this->table . '(content, created_at, modified_at, post_id, user_id) 
+            INSERT INTO ' . $this->table . '(content, created_at, modified_at, post_id, user_id)
             VALUES (:content, :created_at, :modified_at, :post_id, :user_id)
         '
         );
@@ -91,13 +132,21 @@ class CommentManager extends BaseManager
         $query->execute();
     }
 
+
+    /**
+     * verifyCouple : verify the existance of a couple post and comment pass in address
+     *
+     * @param  int $postId
+     * @param  int $commentId
+     * @return int
+     */
     public function verifyCouple(int $postId, int $commentId): int
     {
         $query = $this->dbConnect->prepare(
             '
             SELECT id FROM ' . $this->table . '
             WHERE post_id = :postId AND id = :commentId
-        '
+            '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':postId', $postId);
@@ -106,31 +155,45 @@ class CommentManager extends BaseManager
         return $query->rowCount();
     }
 
+
+    /**
+     * unpublish : Unpublish comment
+     *
+     * @param  int $id : id of comment to unpublish
+     * @return void
+     */
     public function unpublish(int $id): void
     {
 
         $query = $this->dbConnect->prepare(
             '
-            UPDATE ' . $this->table . ' 
-            SET 
+            UPDATE ' . $this->table . '
+            SET
                 publish_state = false
-            WHERE id = :id 
-        '
+            WHERE id = :id
+            '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
     }
 
+
+    /**
+     * publish: Publish comment
+     *
+     * @param  int $id : id of comment to publish
+     * @return void
+     */
     public function publish(int $id): void
     {
         $query = $this->dbConnect->prepare(
             '
-            UPDATE ' . $this->table . ' 
-            SET 
+            UPDATE ' . $this->table . '
+            SET
                 publish_state = true
-            WHERE id = :id 
-        '
+            WHERE id = :id
+            '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);

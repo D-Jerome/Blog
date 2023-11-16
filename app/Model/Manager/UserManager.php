@@ -9,11 +9,25 @@ use PhpParser\Node\Stmt\Else_;
 
 class UserManager extends BaseManager
 {
-    public function __construct($datasource)
+
+    /**
+     * __construct
+     *
+     * @param  array $datasource : database connection informations from config file
+     * @return void
+     */
+    public function __construct(array $datasource)
     {
         parent::__construct('user', User::class, $datasource);
-    }
+    }//end __construct
 
+
+    /**
+     * getByUsername : get User Object of the user
+     *
+     * @param  string $login : username passed in login form
+     * @return User
+     */
     public function getByUsername(string $login): ?User
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
@@ -22,11 +36,18 @@ class UserManager extends BaseManager
         return $statement->fetch() ?: null;
     }
 
+
+    /**
+     * getRoleById : get Role object of the user-role-id
+     *
+     * @param  int $id : id of the Role of the user
+     * @return Role
+     */
     public function getRoleById(int $id): Role
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT r.* FROM role r 
+            SELECT r.* FROM role r
             WHERE r.id = ?
             '
         );
@@ -35,6 +56,13 @@ class UserManager extends BaseManager
         return $statement->fetch();
     }
 
+
+    /**
+     * insertNewUser : add new user in database
+     *
+     * @param  array $params : user information 
+     * @return void
+     */
     public function insertNewUser(array $params)
     {
 
@@ -52,7 +80,7 @@ class UserManager extends BaseManager
                 VALUES (:firstname, :lastname, :username, :email , :password, :created_at)
             '
             );
-        }
+        }//endif
 
         if (isset($params['password'])) {
             $password = password_hash($params['password'], PASSWORD_BCRYPT);
@@ -78,6 +106,13 @@ class UserManager extends BaseManager
         return $this->dbConnect->lastInsertId();
     }
 
+
+    /**
+     * updateUser ; Update user information
+     *
+     * @param  array $params : new data user
+     * @return void
+     */
     public function updateUser(array $params)
     {
 
@@ -97,12 +132,21 @@ class UserManager extends BaseManager
                 $query->bindParam(':value', $param);
                 $query->bindParam(':id', $params['id']);
                 $query->execute();
-            }
-        }
+            }//indif
+
+        }//endforeach
         return $actualUser->getId();
     }
 
-    public function verifyCouple(int $id, string $string): int
+
+    /**
+     * verifyCouple : verify the existance of a user with id and username pass in address
+     *
+     * @param  int $id : user id pass in the address
+     * @param  string $username : username in the address
+     * @return int
+     */
+    public function verifyCouple(int $id, string $username): int
     {
 
         $query = $this->dbConnect->prepare(
@@ -113,11 +157,18 @@ class UserManager extends BaseManager
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
-        $query->bindParam(':username', $string);
+        $query->bindParam(':username', $username);
         $query->execute();
         return $query->rowCount();
     }
 
+
+    /**
+     * disable : disable an user
+     *
+     * @param  int $id : id of user to disable
+     * @return void
+     */
     public function disable(int $id): void
     {
         $query = $this->dbConnect->prepare(
@@ -131,6 +182,13 @@ class UserManager extends BaseManager
         $query->execute();
     }
 
+
+    /**
+     * enable : enable an user
+     *
+     * @param  int $id : id of user to enable
+     * @return void
+     */
     public function enable(int $id): void
     {
         $query = $this->dbConnect->prepare(
@@ -143,4 +201,5 @@ class UserManager extends BaseManager
         $query->bindParam(':id', $id);
         $query->execute();
     }
+
 }

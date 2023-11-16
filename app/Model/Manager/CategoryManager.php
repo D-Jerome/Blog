@@ -8,8 +8,16 @@ use PDO;
 
 class CategoryManager extends BaseManager
 {
-    public function __construct($datasource)
+
+    /**
+     * __construct
+     *
+     * @param  array $datasource : connection datas
+     * @return void
+     */
+    public function __construct(array $datasource)
     {
         parent::__construct('category', Category::class, $datasource);
-    }
+    }//end __construct
+
 }

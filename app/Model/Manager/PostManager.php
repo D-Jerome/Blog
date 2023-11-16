@@ -13,11 +13,25 @@ use PDO;
 
 class PostManager extends BaseManager
 {
-    public function __construct($datasource)
+
+    /**
+     * __construct
+     *
+     * @param  array $datasource database connection informations from config file
+     * @return void
+     */
+    public function __construct(array $datasource)
     {
         parent::__construct('post', Post::class, $datasource);
     }
 
+
+    /**
+     * getCategoriesById : all Categories of post
+     *
+     * @param  int $id : id of post
+     * @return void
+     */
     public function getCategoriesById(int $id)
     {
         $statement = $this->dbConnect->prepare(
@@ -33,10 +47,15 @@ class PostManager extends BaseManager
         return $statement->fetchAll();
     }
 
+
+    /**
+     * getPostsbyCategory : get all posts linked to Category selected
+     *
+     * @param  Category $category : category object
+     * @return Post
+     */
     public function getPostsbyCategory(Category $category)
     {
-
-
         $query = $this->dbConnect->prepare(
             '
             SELECT p.* FROM post p
@@ -53,15 +72,22 @@ class PostManager extends BaseManager
 
             $statementByCategory->categories =  $this->getCategoriesById($statementByCategory->id);
             $statementByCategory->countComments = (int)$this->getCountCommentsByPostId($statementByCategory->id);
-            $statementByCategory->username =  current($this->getPostUsername($statementByCategory->getUserId()));
+            $statementByCategory->username =  ($this->getPostUsername($statementByCategory->getUserId()));
 
-        }
+        }//end foreach
+
         return $statementByCategories;
-
 
     }
 
-    public function getCountCommentsByPostId(int $id)
+
+    /**
+     * getCountCommentsByPostId : count comments of post
+     *
+     * @param  int $id
+     * @return int
+     */
+    public function getCountCommentsByPostId(int $id): int
     {
         $statement = $this->dbConnect->prepare(
             '
@@ -74,7 +100,14 @@ class PostManager extends BaseManager
         return $statement->rowcount();
     }
 
-    public function getPostUsername(int $id)
+
+    /**
+     * getPostUsername : get username from user_id
+     *
+     * @param  int $id
+     * @return string
+     */
+    public function getPostUsername(int $id): string
     {
         $query = $this->dbConnect->prepare(
             '
@@ -87,6 +120,14 @@ class PostManager extends BaseManager
         return $query->fetch();
     }
 
+
+    /**
+     * verifyCouple : verify the existance of a post with id and slug pass in address
+     *
+     * @param  int $id
+     * @param  string $slug
+     * @return int
+     */
     public function verifyCouple(int $id, string $slug): int
     {
 
@@ -103,7 +144,14 @@ class PostManager extends BaseManager
         return $query->rowCount();
     }
 
-    public function insertNewPost(array $params)
+
+    /**
+     * insertNewPost : Create a new post (unpublished post)
+     *
+     * @param  array $params : information to create a new post
+     * @return void
+     */
+    public function insertNewPost(array $params): void
     {
         $query = $this->dbConnect->prepare(
             '
@@ -135,12 +183,25 @@ class PostManager extends BaseManager
                 $query->bindParam(':post_id', $postId);
                 $query->bindParam(':category_id', $category);
                 $query->execute();
-            }
-        }
+            }//end foreach
+
+        }//end if
+
     }
 
 
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId)
+    /**
+     * getAllOrderLimitCat : get paged Posts about specifical category
+     *
+     * @param  string $field : name of field to order
+     * @param  string $dir : direction of order
+     * @param  int $limit : number of posts by page
+     * @param  int $page : current page
+     * @param  array $params : differents parameters for WHERE clause
+     * @param  int $catId : id of category to filter
+     * @return Post
+     */
+    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId) : Post
     {
         $sql = 'SELECT post.* FROM ' . $this->table;
         $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
@@ -178,6 +239,12 @@ class PostManager extends BaseManager
     }
 
 
+    /**
+     * unpublish : unpublish post
+     *
+     * @param  int $id: post id
+     * @return void
+     */
     public function unpublish(int $id): void
     {
         $query = $this->dbConnect->prepare(
@@ -193,6 +260,13 @@ class PostManager extends BaseManager
         $query->execute();
     }
 
+
+    /**
+     * publish : publish post
+     *
+     * @param  int $id : post id
+     * @return void
+     */
     public function publish(int $id): void
     {
         $query = $this->dbConnect->prepare(

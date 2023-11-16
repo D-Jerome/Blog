@@ -12,19 +12,31 @@ abstract class BaseManager
     protected string $table;
     public $object;
 
-    public function __construct(string $table, $objectName, $datasource)
-    {
 
+    /**
+     * __construct
+     *
+     * @param  string $table : name of the table to query database
+     * @param  string $objectName : name of object to return information
+     * @param  array $datasource : database connection informations
+     * @return void
+     */
+    public function __construct(string $table, string $objectName, array $datasource)
+    {
         $this->table = $table;
         $this->object = $objectName;
         $this->dbConnect = PDOConnection::getInstance($datasource);
-    }
+    }//end __construct
 
-    public function getById($id)
+
+    /**
+     * getById : get all datas of specified id of object
+     *
+     * @param  int $id : id of object to search
+     * @return object
+     */
+    public function getById($id): object
     {
-        //don't work
-        // $query = $this->dbConnect->prepare('SELECT * FROM  $this->table WHERE id =?');
-        // $query->execute(array($id));
 
         $query = $this->dbConnect->prepare('SELECT * FROM ' . $this->table . ' WHERE id = ?');
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
@@ -32,6 +44,12 @@ abstract class BaseManager
         return $query->fetch();
     }
 
+
+    /**
+     * getAll : get all data from called object
+     *
+     * @return void
+     */
     public function getAll()
     {
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table);
@@ -54,13 +72,30 @@ abstract class BaseManager
     }
 
 
-    public function getAllPublish()
+    /**
+     * getAllPublish: get all published object
+     *
+     * @return object
+     */
+    public function getAllPublish(): object
     {
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table ." WHERE publish_state = true");
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
+
+    /**
+     * getAllOrderLimit : get paged Posts
+     *
+     * @param  string $field : name of field to order
+     * @param  string $dir : direction of order
+     * @param  int $limit : number of posts by page
+     * @param  int $page : current page
+     * @param  array $params : differents parameters for WHERE clause
+     *
+     * @return Post
+     */
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params)
     {
         $sql = 'SELECT * FROM ' . $this->table;
@@ -73,7 +108,8 @@ abstract class BaseManager
                 }
                 $sql .= $k .' = '. $value;
             }
-        }
+        }//end if
+
         if (isset($field)) {
             $sql .= ' ORDER BY ' . $field;
         }
@@ -88,14 +124,22 @@ abstract class BaseManager
                 $offset = ($page - 1) * $limit;
                 $sql .= ' OFFSET ' .  $offset;
             }
-        }
+        }//end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
 
-    public function insert($obj, $param)
+
+    /**
+     * insert : insert data in database
+     *
+     * @param  object $obj
+     * @param  array $param
+     * @return void
+     */
+    public function insert(object $obj, array $param): void
     {
         $paramNumber = count($param);
         $valueArray = array_fill(1, $paramNumber, "?");
@@ -114,7 +158,14 @@ abstract class BaseManager
     }
 
 
-    public function update($obj, $param)
+    /**
+     * update : update data of an object
+     *
+     * @param  object $obj
+     * @param  array $param
+     * @return void
+     */
+    public function update(object $obj, array $param): void
     {
 
         $sql = "UPDATE " . $this->table . " SET ";
@@ -125,10 +176,13 @@ abstract class BaseManager
             if ($paramName !== 'id') {
                 $sql = $sql . Text::camelCaseToSnakeCase($paramName) . " = :" . Text::camelCaseToSnakeCase($paramName);
             }
+
             if ($i !== $countParam) {
                 $sql = $sql . ", ";
             }
-        }
+
+        }//end foreach
+
         $sql = $sql . " WHERE id = :id ";
         $req = $this->dbConnect->prepare($sql);
         $param['id'] = $obj->getId();
@@ -139,13 +193,20 @@ abstract class BaseManager
             } else {
                 throw new PropertyNotFoundException($this->object, $paramName);
             }
-        }
 
-        // dd($sql,$boundParam);
+        }//end foreach
+
         $req->execute($boundParam);
     }
 
-    public function delete($id): bool
+
+    /**
+     * delete : delete data of id
+     *
+     * @param  int $id : id of item to delete
+     * @return bool
+     */
+    public function delete(int $id): bool
     {
         try {
             $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= ?");

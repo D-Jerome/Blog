@@ -8,8 +8,16 @@ use PDO;
 
 class RoleManager extends BaseManager
 {
-    public function __construct($datasource)
+
+    /**
+     * __construct
+     *
+     * @param  array $datasource : database connection informations from config file
+     * @return void
+     */
+    public function __construct(array $datasource)
     {
         parent::__construct('role', Role::class, $datasource);
-    }
+    }//end __construct
+
 }

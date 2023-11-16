@@ -2,12 +2,12 @@
 
 namespace App\Model;
 
-use Exception;
 use PDO;
 use PhpParser\json_decode;
 
 class PDOConnection
 {
+
     private $dbConnect;
 
     private static $pdoInstance;
@@ -16,7 +16,7 @@ class PDOConnection
     /**
      * getInstance : create instance pdo if no set
      *
-     * @param  array $datasource
+     * @param  array $datasource: database connection informations from config file
      * @return void
      */
     public static function getInstance(array $datasource)
@@ -33,7 +33,7 @@ class PDOConnection
     /**
      * __construct
      *
-     * @param  array $datasource
+     * @param  array $datasource : database connection informations from config file
      * @return void
      */
     private function __construct(array $datasource)
@@ -61,6 +61,5 @@ class PDOConnection
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
     }//end __construct
-
 
 }
