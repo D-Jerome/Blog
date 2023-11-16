@@ -4,16 +4,15 @@ namespace Framework;
 
 class Request
 {
-
     protected string $uri;
-    
+
     protected string $method;
-    
+
     protected array $params = [];
-    
+
 
     /**
-     * __construct 
+     * __construct
      *
      * @param  string $baseUrl
      * @return void
@@ -26,7 +25,7 @@ class Request
 
     }//end __construct
 
-    
+
     /**
      * getUri
      *
@@ -37,7 +36,7 @@ class Request
         return $this->uri;
     }
 
-    
+
     /**
      * getMethod
      *
@@ -47,7 +46,7 @@ class Request
     {
         return $this->method;
     }
-    
+
 
     /**
      * getParams

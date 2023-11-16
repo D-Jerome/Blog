@@ -238,7 +238,7 @@
     const foldl = (xs, f, acc) => {
         each$1(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -415,7 +415,7 @@
         const parent$1 = parent(marker);
         parent$1.each(
             v => {
-                v.dom.insertBefore(element.dom, marker.dom);
+            v.dom.insertBefore(element.dom, marker.dom);
             }
         );
     };
@@ -423,14 +423,14 @@
         const sibling = nextSibling(marker);
         sibling.fold(
             () => {
-                const parent$1 = parent(marker);
-                parent$1.each(
-                v => {
-                        append$1(v, element);
-                }
-            );
+            const parent$1 = parent(marker);
+            parent$1.each(
+                    v => {
+                    append$1(v, element);
+                    }
+                );
             }, v => {
-                before$1(v, element);
+            before$1(v, element);
             }
         );
     };
@@ -438,9 +438,9 @@
         const firstChild$1 = firstChild(parent);
         firstChild$1.fold(
             () => {
-                append$1(parent, element);
+            append$1(parent, element);
             }, v => {
-                parent.dom.insertBefore(element.dom, v.dom);
+            parent.dom.insertBefore(element.dom, v.dom);
             }
         );
     };
@@ -451,14 +451,14 @@
     const before = (marker, elements) => {
         each$1(
             elements, x => {
-                before$1(marker, x);
+            before$1(marker, x);
             }
         );
     };
     const append = (parent, elements) => {
         each$1(
             elements, x => {
-                append$1(parent, x);
+            append$1(parent, x);
             }
         );
     };
@@ -467,7 +467,7 @@
         element.dom.textContent = '';
         each$1(
             children(element), rogue => {
-                remove(rogue);
+            remove(rogue);
             }
         );
     };
@@ -501,7 +501,7 @@
     const internalFilter = (obj, pred, onTrue, onFalse) => {
         each(
             obj, (x, i) => {
-                (pred(x, i) ? onTrue : onFalse)(x, i);
+            (pred(x, i) ? onTrue : onFalse)(x, i);
             }
         );
     };
@@ -523,14 +523,14 @@
         const dom = element.dom;
         each(
             attrs, (v, k) => {
-                rawSet(dom, k, v);
+            rawSet(dom, k, v);
             }
         );
     };
     const clone$1 = element => foldl(
         element.dom.attributes, (acc, attr) => {
-            acc[attr.name] = attr.value;
-            return acc;
+        acc[attr.name] = attr.value;
+        return acc;
         }, {}
     );
 
@@ -596,7 +596,7 @@
                 processor: 'boolean',
                 default: true
                     }
-        );
+                    );
                     };
                     const shouldIndentOnTab = option('lists_indent_on_tab');
                     const getForcedRootBlock = option('forced_root_block');
@@ -644,7 +644,7 @@
             if (parent) {
                 global$2.each(
                     bookmarks, node => {
-                    parent.insertBefore(node, li.parentNode);
+                        parent.insertBefore(node, li.parentNode);
                     }
                 );
             }
@@ -756,7 +756,7 @@
         } else {
             return filter$1(
                 selectedBlocks, elm => {
-                    return isListNode(elm) && parentList !== elm;
+                return isListNode(elm) && parentList !== elm;
                 }
             );
         }
@@ -764,8 +764,8 @@
     const findParentListItemsNodes = (editor, elms) => {
         const listItemsElms = global$2.map(
             elms, elm => {
-                const parentLi = editor.dom.getParent(elm, 'li,dd,dt', getClosestListHost(editor, elm));
-                return parentLi ? parentLi : elm;
+            const parentLi = editor.dom.getParent(elm, 'li,dd,dt', getClosestListHost(editor, elm));
+            return parentLi ? parentLi : elm;
             }
         );
       return unique(listItemsElms);
@@ -837,7 +837,7 @@
         const fragment = doc.createDocumentFragment();
         each$1(
             elements, element => {
-                fragment.appendChild(element.dom);
+            fragment.appendChild(element.dom);
             }
         );
       return SugarElement.fromDom(fragment);
@@ -887,14 +887,14 @@
     };
     const createEntry = (li, depth, isSelected) => parent(li).filter(isElement$1).map(
         list => ({
-        depth,
-        dirty: false,
-        isSelected,
-        content: cloneItemContent(li),
-        itemAttributes: clone$1(li),
-        listAttributes: clone$1(list),
-        listType: name(list),
-        isInPreviousLi: false
+            depth,
+            dirty: false,
+            isSelected,
+            content: cloneItemContent(li),
+            itemAttributes: clone$1(li),
+            listAttributes: clone$1(list),
+            listType: name(list),
+            isInPreviousLi: false
         })
     );
 
@@ -930,9 +930,9 @@
         }
         last(segments).each(
             segment => {
-            setAll(segment.list, entry.listAttributes);
-            setAll(segment.item, entry.itemAttributes);
-            append(segment.item, entry.content);
+                setAll(segment.list, entry.listAttributes);
+                setAll(segment.item, entry.itemAttributes);
+                append(segment.item, entry.content);
             }
         );
     };
@@ -962,16 +962,16 @@
         const newCast = cast.slice(0, entry.depth);
         last(newCast).each(
             segment => {
-            if (isEntryList(entry)) {
-                const item = createItem(scope, entry.itemAttributes, entry.content);
-                appendItem(segment, item);
-                normalizeSegment(segment, entry);
-            } else if (isEntryNoList(entry)) {
+                if (isEntryList(entry)) {
+                    const item = createItem(scope, entry.itemAttributes, entry.content);
+                    appendItem(segment, item);
+                    normalizeSegment(segment, entry);
+                } else if (isEntryNoList(entry)) {
                     if (entry.isInPreviousLi) {
                         const item = createInPreviousLiItem(scope, entry.attributes, entry.content, entry.type);
                         append$1(segment.item, item);
-                    }
-            } else {
+                        }
+                } else {
                     const item = SugarElement.fromHtml(`<!--${ entry.content }-->`);
                     append$1(segment.list, item);
                 }
@@ -990,25 +990,25 @@
         let firstCommentEntryOpt = Optional.none();
         const cast = foldl(
             entries, (cast, entry, i) => {
-            if (isEntryList(entry)) {
-                return entry.depth > cast.length ? writeDeep(scope, cast, entry) : writeShallow(scope, cast, entry);
-            } else {
+                if (isEntryList(entry)) {
+                    return entry.depth > cast.length ? writeDeep(scope, cast, entry) : writeShallow(scope, cast, entry);
+                } else {
                     if (i === 0 && isEntryComment(entry)) {
                         firstCommentEntryOpt = Optional.some(entry);
                         return cast;
-                    }
-                    return writeShallow(scope, cast, entry);
-            }
+                        }
+            return writeShallow(scope, cast, entry);
+                }
             }, []
         );
     firstCommentEntryOpt.each(
         firstCommentEntry => {
-        const item = SugarElement.fromHtml(`<!--${ firstCommentEntry.content }-->`);
-        head(cast).each(
-                fistCast => {
-                prepend(fistCast.list, item);
-                }
-            );
+            const item = SugarElement.fromHtml(`<!--${ firstCommentEntry.content }-->`);
+            head(cast).each(
+            fistCast => {
+                    prepend(fistCast.list, item);
+            }
+        );
         }
     );
       return head(cast).map(segment => segment.list);
@@ -1046,13 +1046,13 @@
     const normalizeEntries = entries => {
         each$1(
             entries, (entry, i) => {
-            closestSiblingEntry(entries, i).fold(
-                    () => {
-                    if (entry.dirty && isEntryList(entry)) {
-                        cleanListProperties(entry);
-                    }
-                    }, matchingEntry => cloneListProperties(entry, matchingEntry)
-                );
+                closestSiblingEntry(entries, i).fold(
+                () => {
+                        if (entry.dirty && isEntryList(entry)) {
+                            cleanListProperties(entry);
+                        }
+                }, matchingEntry => cloneListProperties(entry, matchingEntry)
+            );
             }
         );
       return entries;
@@ -1100,17 +1100,17 @@
         }
         itemSelection.each(
             selection => {
-            if (eq(selection.start, item)) {
-                selectionState.set(true);
-            }
+                if (eq(selection.start, item)) {
+                    selectionState.set(true);
+                }
             }
         );
       const currentItemEntry = createEntry(item, depth, selectionState.get());
     itemSelection.each(
         selection => {
-        if (eq(selection.end, item)) {
-            selectionState.set(false);
-        }
+            if (eq(selection.end, item)) {
+                selectionState.set(false);
+            }
         }
     );
       const childListEntries = lastChild(item).filter(isList).map(list => parseList(depth, itemSelection, selectionState, list)).getOr([]);
@@ -1118,24 +1118,24 @@
     };
     const parseItem = (depth, itemSelection, selectionState, item) => firstChild(item).filter(isList).fold(
         () => parseSingleItem(depth, itemSelection, selectionState, item), list => {
-        const parsedSiblings = foldl(
-                children(item), (acc, s, i) => {
-                if (i === 0) {
-                    return acc;
-                } else {
-                    const parsedSibling = parseSingleItem(depth, itemSelection, selectionState, s).map(e => entryToEntryNoList(e, s.dom.nodeName.toLowerCase(), true));
-                    return acc.concat(parsedSibling);
-                }
+            const parsedSiblings = foldl(
+            children(item), (acc, s, i) => {
+                    if (i === 0) {
+                        return acc;
+                    } else {
+                        const parsedSibling = parseSingleItem(depth, itemSelection, selectionState, s).map(e => entryToEntryNoList(e, s.dom.nodeName.toLowerCase(), true));
+                        return acc.concat(parsedSibling);
+                    }
                 }, []
-            );
+        );
         return parseList(depth, itemSelection, selectionState, list).concat(parsedSiblings);
         }
     );
     const parseList = (depth, itemSelection, selectionState, list) => bind(
         children(list), element => {
-        const parser = isList(element) ? parseList : parseItem;
-        const newDepth = depth + 1;
-        return parser(newDepth, itemSelection, selectionState, element);
+            const parser = isList(element) ? parseList : parseItem;
+            const newDepth = depth + 1;
+            return parser(newDepth, itemSelection, selectionState, element);
         }
     );
     const parseLists = (lists, itemSelection) => {
@@ -1143,8 +1143,8 @@
         const initialDepth = 0;
         return map(
             lists, list => ({
-            sourceList: list,
-            entries: parseList(initialDepth, itemSelection, selectionState, list)
+                sourceList: list,
+                entries: parseList(initialDepth, itemSelection, selectionState, list)
             })
         );
     };
@@ -1153,8 +1153,8 @@
         const normalizedEntries = normalizeEntries(entries);
         return map(
             normalizedEntries, entry => {
-            const content = !isEntryComment(entry) ? fromElements(entry.content) : fromElements([SugarElement.fromHtml(`<!--${ entry.content }-->`)]);
-            return SugarElement.fromDom(createTextBlock(editor, content.dom));
+                const content = !isEntryComment(entry) ? fromElements(entry.content) : fromElements([SugarElement.fromHtml(`<!--${ entry.content }-->`)]);
+                return SugarElement.fromDom(createTextBlock(editor, content.dom));
             }
         );
     };
@@ -1164,8 +1164,8 @@
     };
     const composeEntries = (editor, entries) => bind(
         groupBy(entries, isIndented), entries => {
-        const groupIsIndented = head(entries).exists(isIndented);
-        return groupIsIndented ? indentedComposer(editor, entries) : outdentedComposer(editor, entries);
+            const groupIsIndented = head(entries).exists(isIndented);
+            return groupIsIndented ? indentedComposer(editor, entries) : outdentedComposer(editor, entries);
         }
     );
     const indentSelectedEntries = (entries, indentation) => {
@@ -1175,8 +1175,8 @@
         const selectedListItems = map(getSelectedListItems(editor), SugarElement.fromDom);
         return lift2(
             find(selectedListItems, not(hasFirstChildList)), find(reverse(selectedListItems), not(hasFirstChildList)), (start, end) => ({
-            start,
-            end
+                start,
+                end
             })
         );
     };
@@ -1184,13 +1184,13 @@
         const entrySets = parseLists(lists, getItemSelection(editor));
         each$1(
             entrySets, entrySet => {
-            indentSelectedEntries(entrySet.entries, indentation);
-            const composedLists = composeEntries(editor, entrySet.entries);
-            each$1(
-                    composedLists, composedList => {
-                    fireListEvent(editor, indentation === 'Indent' ? 'IndentList' : 'OutdentList', composedList.dom);
-                    }
-                );
+                indentSelectedEntries(entrySet.entries, indentation);
+                const composedLists = composeEntries(editor, entrySet.entries);
+                each$1(
+                composedLists, composedList => {
+                        fireListEvent(editor, indentation === 'Indent' ? 'IndentList' : 'OutdentList', composedList.dom);
+                }
+            );
             before(entrySet.sourceList, composedLists);
             remove(entrySet.sourceList);
             }
@@ -1318,7 +1318,7 @@
     const setAttribs = (elm, attrs) => {
         global$2.each(
             attrs, (value, key) => {
-            elm.setAttribute(key, value);
+                elm.setAttribute(key, value);
             }
         );
     };
@@ -1326,7 +1326,7 @@
         setAttribs(el, detail['list-attributes']);
         global$2.each(
             dom.select('li', el), li => {
-            setAttribs(li, detail['list-item-attributes']);
+                setAttribs(li, detail['list-item-attributes']);
             }
         );
     };
@@ -1416,32 +1416,32 @@
         }
         global$2.each(
             siblings, node => {
-            var _a;
-                if (isTextBlock(editor, node)) {
-                    textBlocks.push(node);
-                    block = null;
-                    return;
-                }
-            if (dom.isBlock(node) || isBr(node)) {
-                if (isBr(node)) {
-                    dom.remove(node);
-                }
+                var _a;
+            if (isTextBlock(editor, node)) {
+                textBlocks.push(node);
                 block = null;
                 return;
             }
-            const nextSibling = node.nextSibling;
-            if (global$1.isBookmarkNode(node)) {
-                if (isListNode(nextSibling) || isTextBlock(editor, nextSibling) || !nextSibling && node.parentNode === root) {
+                if (dom.isBlock(node) || isBr(node)) {
+                    if (isBr(node)) {
+                        dom.remove(node);
+                    }
                     block = null;
                     return;
                 }
-            }
-                if (!block) {
-                    block = dom.create('p');
-                    (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.insertBefore(block, node);
-                    textBlocks.push(block);
+                const nextSibling = node.nextSibling;
+                if (global$1.isBookmarkNode(node)) {
+                    if (isListNode(nextSibling) || isTextBlock(editor, nextSibling) || !nextSibling && node.parentNode === root) {
+                        block = null;
+                        return;
+                    }
                 }
-            block.appendChild(node);
+            if (!block) {
+                block = dom.create('p');
+                (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.insertBefore(block, node);
+                textBlocks.push(block);
+            }
+                block.appendChild(node);
             }
         );
       return textBlocks;
@@ -1477,37 +1477,37 @@
         const selectedTextBlocks = filter$1(getSelectedTextBlocks(editor, rng, root), editor.dom.isEditable);
         global$2.each(
             selectedTextBlocks, block => {
-            let listBlock;
-            const sibling = block.previousSibling;
-            const parent = block.parentNode;
-            if (!isListItemNode(parent)) {
-                if (sibling && isListNode(sibling) && sibling.nodeName === listName && hasCompatibleStyle(dom, sibling, detail)) {
-                    listBlock = sibling;
-                    block = dom.rename(block, listItemName);
-                    sibling.appendChild(block);
-                } else {
-                    listBlock = dom.create(listName);
-                    parent.insertBefore(listBlock, block);
-                    listBlock.appendChild(block);
-                    block = dom.rename(block, listItemName);
+                let listBlock;
+                const sibling = block.previousSibling;
+                const parent = block.parentNode;
+                if (!isListItemNode(parent)) {
+                    if (sibling && isListNode(sibling) && sibling.nodeName === listName && hasCompatibleStyle(dom, sibling, detail)) {
+                        listBlock = sibling;
+                        block = dom.rename(block, listItemName);
+                        sibling.appendChild(block);
+                    } else {
+                        listBlock = dom.create(listName);
+                        parent.insertBefore(listBlock, block);
+                        listBlock.appendChild(block);
+                        block = dom.rename(block, listItemName);
+                    }
+                    removeStyles(
+                    dom, block, [
+                    'margin',
+                    'margin-right',
+                    'margin-bottom',
+                    'margin-left',
+                    'margin-top',
+                    'padding',
+                    'padding-right',
+                    'padding-bottom',
+                    'padding-left',
+                    'padding-top'
+                    ]
+                    );
+                    updateListWithDetails(dom, listBlock, detail);
+                    mergeWithAdjacentLists(editor.dom, listBlock);
                 }
-                removeStyles(
-                dom, block, [
-                'margin',
-                'margin-right',
-                'margin-bottom',
-                'margin-left',
-                'margin-top',
-                'padding',
-                'padding-right',
-                'padding-bottom',
-                'padding-left',
-                'padding-top'
-                ]
-                );
-                updateListWithDetails(dom, listBlock, detail);
-                mergeWithAdjacentLists(editor.dom, listBlock);
-            }
             }
         );
       editor.selection.setRng(resolveBookmark(bookmark));
@@ -1558,12 +1558,12 @@
     const updateCustomList = (editor, list, listName, detail) => {
         list.classList.forEach(
             (cls, _, classList) => {
-            if (cls.startsWith('tox-')) {
-                classList.remove(cls);
-                if (classList.length === 0) {
-                    list.removeAttribute('class');
+                if (cls.startsWith('tox-')) {
+                    classList.remove(cls);
+                    if (classList.length === 0) {
+                        list.removeAttribute('class');
+                    }
                 }
-            }
             }
         );
     if (list.nodeName !== listName) {
@@ -1589,7 +1589,7 @@
             const updateFunction = parentIsList && isCustomList(parentList) ? updateCustomList : updateList$1;
             global$2.each(
                 allLists, elm => {
-                updateFunction(editor, elm, listName, detail);
+                    updateFunction(editor, elm, listName, detail);
                 }
             );
             editor.selection.setRng(resolveBookmark(bookmark));
@@ -1610,12 +1610,12 @@
                 if (isCustomList(parentList)) {
                     parentList.classList.forEach(
                         (cls, _, classList) => {
-                        if (cls.startsWith('tox-')) {
-                            classList.remove(cls);
-                            if (classList.length === 0) {
-                                  parentList.removeAttribute('class');
+                            if (cls.startsWith('tox-')) {
+                                classList.remove(cls);
+                                if (classList.length === 0) {
+                                      parentList.removeAttribute('class');
+                                }
                             }
-                        }
                         }
                     );
                 }
@@ -1670,7 +1670,7 @@
         const lists = global$2.grep(dom.select('ol,ul', element));
         global$2.each(
             lists, list => {
-            normalizeList(dom, list);
+                normalizeList(dom, list);
             }
         );
     };
@@ -1754,9 +1754,9 @@
         dom.remove(fromElm);
         each$1(
             nestedLists, list => {
-                if (isEmpty$2(dom, list) && list !== dom.getRoot()) {
-                    dom.remove(list);
-                }
+            if (isEmpty$2(dom, list) && list !== dom.getRoot()) {
+                dom.remove(list);
+            }
             }
         );
     };
@@ -1796,15 +1796,15 @@
             if (otherLi && otherLi !== li) {
                 editor.undoManager.transact(
                     () => {
-                        if (isForward) {
-                            mergeForward(editor, rng, otherLi, li);
-                        } else {
+                    if (isForward) {
+                        mergeForward(editor, rng, otherLi, li);
+                    } else {
                             if (isFirstChild(li)) {
                                 outdentListSelection(editor);
-                                } else {
-                    mergeBackward(editor, rng, li, otherLi);
-                                }
-                        }
+                            } else {
+                                mergeBackward(editor, rng, li, otherLi);
+                            }
+                    }
                     }
                 );
                 return true;
@@ -1812,7 +1812,7 @@
                 if (!isForward && rng.startOffset === 0 && rng.endOffset === 0) {
                     editor.undoManager.transact(
                         () => {
-                        flattenListSelection(editor);
+                            flattenListSelection(editor);
                         }
                     );
                     return true;
@@ -1852,11 +1852,11 @@
                 }
                 editor.undoManager.transact(
                     () => {
-                        const parentNode = otherLi.parentNode;
-                        removeBlock(dom, block, root);
-                        mergeWithAdjacentLists(dom, parentNode);
-                        editor.selection.select(otherLi, true);
-                        editor.selection.collapse(isForward);
+                    const parentNode = otherLi.parentNode;
+                    removeBlock(dom, block, root);
+                    mergeWithAdjacentLists(dom, parentNode);
+                    editor.selection.select(otherLi, true);
+                    editor.selection.collapse(isForward);
                     }
                 );
                 return true;
@@ -1877,8 +1877,8 @@
         if (hasListSelection(editor)) {
             editor.undoManager.transact(
                 () => {
-                editor.execCommand('Delete');
-                normalizeLists(editor.dom, editor.getBody());
+                    editor.execCommand('Delete');
+                    normalizeLists(editor.dom, editor.getBody());
                 }
             );
             return true;
@@ -1892,23 +1892,23 @@
     const setup$2 = editor => {
         editor.on(
             'ExecCommand', e => {
-            const cmd = e.command.toLowerCase();
-                if ((cmd === 'delete' || cmd === 'forwarddelete') && hasListSelection(editor)) {
-                    normalizeLists(editor.dom, editor.getBody());
-                }
+                const cmd = e.command.toLowerCase();
+            if ((cmd === 'delete' || cmd === 'forwarddelete') && hasListSelection(editor)) {
+                normalizeLists(editor.dom, editor.getBody());
+            }
             }
         );
     editor.on(
         'keydown', e => {
-        if (e.keyCode === global$4.BACKSPACE) {
-            if (backspaceDelete(editor, false)) {
-                e.preventDefault();
-            }
-        } else if (e.keyCode === global$4.DELETE) {
-                if (backspaceDelete(editor, true)) {
+            if (e.keyCode === global$4.BACKSPACE) {
+                if (backspaceDelete(editor, false)) {
                     e.preventDefault();
                 }
-        }
+            } else if (e.keyCode === global$4.DELETE) {
+                if (backspaceDelete(editor, true)) {
+                    e.preventDefault();
+                    }
+            }
         }
     );
     };
@@ -1926,12 +1926,12 @@
         }
         editor.undoManager.transact(
             () => {
-                if (isObject(update.styles)) {
-                    editor.dom.setStyles(parentList, update.styles);
-                }
-                if (isObject(update.attrs)) {
-                    each(update.attrs, (v, k) => editor.dom.setAttrib(parentList, k, v));
-                }
+            if (isObject(update.styles)) {
+                editor.dom.setStyles(parentList, update.styles);
+            }
+            if (isObject(update.attrs)) {
+                each(update.attrs, (v, k) => editor.dom.setAttrib(parentList, k, v));
+            }
             }
         );
     };
@@ -1940,8 +1940,8 @@
         const chars = reverse(trim(str).split(''));
         const values = map(
             chars, (char, i) => {
-            const charValue = char.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
-            return Math.pow(26, i) * charValue;
+                const charValue = char.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+                return Math.pow(26, i) * charValue;
             }
         );
       return foldl(values, (sum, v) => sum + v, 0);
@@ -2061,12 +2061,12 @@
                     const data = api.getData();
                     parseStartValue(data.start).each(
                         detail => {
-                            editor.execCommand(
-                            'mceListUpdate', false, {
-                                    attrs: { start: detail.start === '1' ? '' : detail.start },
-                                    styles: { 'list-style-type': detail.listStyleType.getOr('') }
+                        editor.execCommand(
+                                'mceListUpdate', false, {
+                                attrs: { start: detail.start === '1' ? '' : detail.start },
+                                styles: { 'list-style-type': detail.listStyleType.getOr('') }
                                 }
-                        );
+                            );
                         }
                     );
                 api.close();
@@ -2082,47 +2082,47 @@
     const registerDialog = editor => {
         editor.addCommand(
             'mceListProps', () => {
-            open(editor);
+                open(editor);
             }
         );
     };
     const register$2 = editor => {
         editor.on(
             'BeforeExecCommand', e => {
-            const cmd = e.command.toLowerCase();
-                if (cmd === 'indent') {
-                    indentListSelection(editor);
-                } else if (cmd === 'outdent') {
-            outdentListSelection(editor);
-            }
+                const cmd = e.command.toLowerCase();
+            if (cmd === 'indent') {
+                indentListSelection(editor);
+            } else if (cmd === 'outdent') {
+                    outdentListSelection(editor);
+                }
             }
         );
     editor.addCommand(
         'InsertUnorderedList', (ui, detail) => {
-        toggleList(editor, 'UL', detail);
+            toggleList(editor, 'UL', detail);
         }
     );
     editor.addCommand(
         'InsertOrderedList', (ui, detail) => {
-        toggleList(editor, 'OL', detail);
+            toggleList(editor, 'OL', detail);
         }
     );
     editor.addCommand(
         'InsertDefinitionList', (ui, detail) => {
-        toggleList(editor, 'DL', detail);
+            toggleList(editor, 'DL', detail);
         }
     );
     editor.addCommand(
         'RemoveList', () => {
-        flattenListSelection(editor);
+            flattenListSelection(editor);
         }
     );
       registerDialog(editor);
     editor.addCommand(
         'mceListUpdate', (ui, detail) => {
-        if (isObject(detail)) {
-            updateList(editor, detail);
-        }
+            if (isObject(detail)) {
+                updateList(editor, detail);
+            }
         }
     );
       editor.addQueryStateHandler('InsertUnorderedList', queryListCommandState(editor, 'UL'));
@@ -2165,8 +2165,8 @@
     const setup$1 = editor => {
         editor.on(
             'PreInit', () => {
-            const {parser} = editor;
-            parser.addNodeFilter('ul,ol', nodes => each$1(nodes, wrapInvalidChildren));
+                const {parser} = editor;
+                parser.addNodeFilter('ul,ol', nodes => each$1(nodes, wrapInvalidChildren));
             }
         );
     };
@@ -2174,16 +2174,16 @@
     const setupTabKey = editor => {
         editor.on(
             'keydown', e => {
-                if (e.keyCode !== global$4.TAB || global$4.metaKeyPressed(e)) {
-                    return;
+            if (e.keyCode !== global$4.TAB || global$4.metaKeyPressed(e)) {
+                return;
+            }
+                editor.undoManager.transact(
+                () => {
+                        if (e.shiftKey ? outdentListSelection(editor) : indentListSelection(editor)) {
+                            e.preventDefault();
+                        }
                 }
-            editor.undoManager.transact(
-                    () => {
-                    if (e.shiftKey ? outdentListSelection(editor) : indentListSelection(editor)) {
-                        e.preventDefault();
-                    }
-                    }
-                );
+            );
             }
         );
     };
@@ -2251,17 +2251,17 @@
     var Plugin = () => {
         global$7.add(
             'lists', editor => {
-            register$3(editor);
-            setup$1(editor);
-                if (!editor.hasPlugin('rtc', true)) {
-                    setup(editor);
-                    register$2(editor);
-                } else {
-            registerDialog(editor);
-            }
+                register$3(editor);
+                setup$1(editor);
+            if (!editor.hasPlugin('rtc', true)) {
+                setup(editor);
+                register$2(editor);
+            } else {
+                    registerDialog(editor);
+                }
                 register$1(editor);
-            register(editor);
-            return get(editor);
+                register(editor);
+                return get(editor);
             }
         );
     };

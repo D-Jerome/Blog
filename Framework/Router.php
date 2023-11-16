@@ -9,10 +9,9 @@ use Framework\Helpers\Text;
 
 class Router
 {
-
     protected array $routes;
-    
-    
+
+
     /**
      * __construct : Construct all routes of config file
      *
@@ -26,7 +25,7 @@ class Router
         }
     } //end _construct
 
-    
+
     /**
      * findRoute: compare and match route and request
      *
@@ -38,7 +37,7 @@ class Router
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
                 preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
-                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());     
+                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
@@ -51,7 +50,7 @@ class Router
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
                     $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
-                    if ($this->validateRoute($typeControllerObj, $paramsValues) === true ) {
+                    if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
                         $route->setParams($request->getParams());
                         return $route;
                     }
@@ -61,7 +60,7 @@ class Router
         } //end foreach
         return null;
     }
-    
+
 
     /**
      * validateRoute: verify the Existance of page and return Ture or False
@@ -73,7 +72,7 @@ class Router
     private function validateRoute(string $typeObj, array $matches): bool
     {
         $valid = false;
-        $matchesKey = array_keys($matches);    
+        $matchesKey = array_keys($matches);
         $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
         if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = new $objectManagerName(Application::getDatasource());
@@ -86,5 +85,5 @@ class Router
         return $valid;
     }
 
-    
+
 }

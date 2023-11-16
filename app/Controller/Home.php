@@ -14,7 +14,6 @@ use Framework\Session;
 
 class Home extends BaseController
 {
-
     /**
      * home
      *

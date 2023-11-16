@@ -4,13 +4,12 @@ namespace Framework\Security;
 
 class AuthUser
 {
-
     protected int $id;
 
     protected string $roleName;
 
     protected string $username;
-    
+
     /**
      * __construct keep auth user information
      *
@@ -19,14 +18,14 @@ class AuthUser
      * @param  string $username
      * @return void
      */
-    public function __construct(int $id, string $roleName, string $username )
+    public function __construct(int $id, string $roleName, string $username)
     {
         $this->id = $id;
         $this->roleName = $roleName;
         $this->username = $username;
     }//end __construct
 
-        
+
     /**
      * getId
      *
@@ -37,7 +36,7 @@ class AuthUser
         return  $this->id;
     }
 
-        
+
     /**
      * getRoleName
      *
@@ -48,7 +47,7 @@ class AuthUser
         return  $this->roleName;
     }
 
-        
+
     /**
      * getUsername
      *

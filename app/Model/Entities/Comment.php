@@ -7,7 +7,6 @@ use PDO;
 
 class Comment extends Entity
 {
-
     protected int $id;
 
     protected string $content;

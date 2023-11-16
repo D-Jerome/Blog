@@ -22,7 +22,7 @@
                 processor: 'boolean',
                 default: true
                     }
-        );
+                    );
                     registerOption('save_onsavecallback', { processor: 'function' });
                     registerOption('save_oncancelcallback', { processor: 'function' });
                     };
@@ -77,12 +77,12 @@
                     const register$1 = editor => {
                         editor.addCommand(
                             'mceSave', () => {
-                            save(editor);
+                                save(editor);
                             }
                         );
                         editor.addCommand(
                             'mceCancel', () => {
-                                cancel(editor);
+                            cancel(editor);
                             }
                         );
                     };
@@ -120,9 +120,9 @@
     var Plugin = () => {
         global$2.add(
             'save', editor => {
-                register$2(editor);
-                register(editor);
-                register$1(editor);
+            register$2(editor);
+            register(editor);
+            register$1(editor);
             }
         );
     };

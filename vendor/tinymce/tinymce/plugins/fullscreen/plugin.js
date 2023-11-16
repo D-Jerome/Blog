@@ -236,8 +236,8 @@
             if (isNull(timer)) {
                 timer = setTimeout(
                     () => {
-                        timer = null;
-                        fn.apply(null, args);
+                    timer = null;
+                    fn.apply(null, args);
                     }, rate
                 );
             }
@@ -507,7 +507,7 @@
         const dom = element.dom;
         each(
             css, (v, k) => {
-            internalSet(dom, k, v);
+                internalSet(dom, k, v);
             }
         );
     };
@@ -634,18 +634,18 @@
     const detectBrowser$1 = (browsers, userAgentData) => {
         return findMap(
             userAgentData.brands, uaBrand => {
-            const lcBrand = uaBrand.brand.toLowerCase();
-            return find$1(
-                    browsers, browser => {
-                    var _a;
-                    return lcBrand === ((_a = browser.brand) === null || _a === void 0 ? void 0 : _a.toLowerCase());
-                    }
-                ).map(
-                info => ({
-                        current: info.name,
-                        version: Version.nu(parseInt(uaBrand.version, 10), 0)
+                const lcBrand = uaBrand.brand.toLowerCase();
+                return find$1(
+                browsers, browser => {
+                        var _a;
+                        return lcBrand === ((_a = browser.brand) === null || _a === void 0 ? void 0 : _a.toLowerCase());
+                }
+            ).map(
+                    info => ({
+                    current: info.name,
+                    version: Version.nu(parseInt(uaBrand.version, 10), 0)
                     })
-            );
+                );
             }
         );
     };
@@ -654,15 +654,15 @@
         const agent = String(userAgent).toLowerCase();
         return find$1(
             candidates, candidate => {
-            return candidate.search(agent);
+                return candidate.search(agent);
             }
         );
     };
     const detectBrowser = (browsers, userAgent) => {
         return detect$2(browsers, userAgent).map(
             browser => {
-            const version = Version.detect(browser.versionRegexes, userAgent);
-            return {
+                const version = Version.detect(browser.versionRegexes, userAgent);
+                return {
                     current: browser.name,
                     version
                 };
@@ -672,8 +672,8 @@
     const detectOs = (oses, userAgent) => {
         return detect$2(oses, userAgent).map(
             os => {
-            const version = Version.detect(os.versionRegexes, userAgent);
-            return {
+                const version = Version.detect(os.versionRegexes, userAgent);
+                return {
                     current: os.name,
                     version
                 };
@@ -936,18 +936,18 @@
         const scroll = get$1(SugarElement.fromDom(doc));
         return get(win).fold(
             () => {
-            const html = win.document.documentElement;
-            const width = html.clientWidth;
-            const height = html.clientHeight;
-            return bounds(scroll.left, scroll.top, width, height);
+                const html = win.document.documentElement;
+                const width = html.clientWidth;
+                const height = html.clientHeight;
+                return bounds(scroll.left, scroll.top, width, height);
             }, visualViewport => bounds(Math.max(visualViewport.pageLeft, scroll.left), Math.max(visualViewport.pageTop, scroll.top), visualViewport.width, visualViewport.height)
         );
     };
     const bind = (name, callback, _win) => get(_win).map(
         visualViewport => {
-        const handler = e => callback(fromRawEvent(e));
-        visualViewport.addEventListener(name, handler);
-        return { unbind: () => visualViewport.removeEventListener(name, handler) };
+            const handler = e => callback(fromRawEvent(e));
+            visualViewport.addEventListener(name, handler);
+            return { unbind: () => visualViewport.removeEventListener(name, handler) };
         }
     ).getOrThunk(() => ({ unbind: noop }));
 
@@ -968,7 +968,7 @@
                 processor: 'boolean',
                 default: false
                     }
-        );
+                    );
                     };
                     const getFullscreenNative = option('fullscreen_native');
 
@@ -1063,12 +1063,12 @@
         const clobberedEls = all('[' + attr + ']');
         each$1(
             clobberedEls, element => {
-            const restore = get$3(element, attr);
-            if (restore && restore !== 'no-styles') {
-                setAll(element, dom.parseStyle(restore));
-            } else {
-                    remove(element, 'style');
-            }
+                const restore = get$3(element, attr);
+                if (restore && restore !== 'no-styles') {
+                    setAll(element, dom.parseStyle(restore));
+                } else {
+            remove(element, 'style');
+                }
                 remove(element, attr);
             }
         );
@@ -1079,54 +1079,54 @@
     const setScrollPos = pos => window.scrollTo(pos.x, pos.y);
     const viewportUpdate = get().fold(
         () => ({
-        bind: noop,
-        unbind: noop
+            bind: noop,
+            unbind: noop
         }), visualViewport => {
-        const editorContainer = value();
-        const resizeBinder = unbindable();
-        const scrollBinder = unbindable();
-        const refreshScroll = () => {
-                document.body.scrollTop = 0;
-                document.documentElement.scrollTop = 0;
-        };
-        const refreshVisualViewport = () => {
-                window.requestAnimationFrame(
-            () => {
+            const editorContainer = value();
+            const resizeBinder = unbindable();
+            const scrollBinder = unbindable();
+            const refreshScroll = () => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+            };
+            const refreshVisualViewport = () => {
+        window.requestAnimationFrame(
+                () => {
                     editorContainer.on(
-                    container => setAll(
-                    container, {
+                        container => setAll(
+                        container, {
                         top: visualViewport.offsetTop + 'px',
                         left: visualViewport.offsetLeft + 'px',
                         height: visualViewport.height + 'px',
                         width: visualViewport.width + 'px'
                                 }
-                    )
-                );
-            }
-        );
-        };
-        const update = first(
-                () => {
-                refreshScroll();
-                refreshVisualViewport();
-                }, 50
+                        )
+                    );
+                }
             );
-        const bind$1 = element => {
-        editorContainer.set(element);
-        update.throttle();
-        resizeBinder.set(bind('resize', update.throttle));
-        scrollBinder.set(bind('scroll', update.throttle));
-        };
-        const unbind = () => {
-                editorContainer.on(
+            };
+            const update = first(
             () => {
+                    refreshScroll();
+                    refreshVisualViewport();
+            }, 50
+        );
+        const bind$1 = element => {
+            editorContainer.set(element);
+            update.throttle();
+            resizeBinder.set(bind('resize', update.throttle));
+            scrollBinder.set(bind('scroll', update.throttle));
+            };
+            const unbind = () => {
+        editorContainer.on(
+                () => {
                     resizeBinder.clear();
                     scrollBinder.clear();
-            }
-        );
-        editorContainer.clear();
-        };
-        return {
+                }
+            );
+            editorContainer.clear();
+            };
+            return {
                 bind: bind$1,
                 unbind
             };
@@ -1150,8 +1150,8 @@
             handler(editorContainer, 'tox-fullscreen');
             getShadowRoot(editorContainerS).map(root => getShadowHost(root).dom).each(
                 host => {
-                handler(host, 'tox-fullscreen');
-                handler(host, 'tox-shadowhost');
+                    handler(host, 'tox-fullscreen');
+                    handler(host, 'tox-shadowhost');
                 }
             );
         };
@@ -1166,11 +1166,11 @@
         if (!fullscreenInfo) {
             const fullscreenChangeHandler = bind$1(
                 owner(fullscreenRoot), getFullscreenchangeEventName(), _evt => {
-                if (getFullscreenNative(editor)) {
-                    if (!isFullscreenElement(fullscreenRoot) && fullscreenState.get() !== null) {
-                        toggleFullscreen(editor, fullscreenState);
+                    if (getFullscreenNative(editor)) {
+                        if (!isFullscreenElement(fullscreenRoot) && fullscreenState.get() !== null) {
+                            toggleFullscreen(editor, fullscreenState);
+                        }
                     }
-                }
                 }
             );
             const newFullScreenInfo = {
@@ -1218,7 +1218,7 @@
     const register$1 = (editor, fullscreenState) => {
         editor.addCommand(
             'mceFullScreen', () => {
-            toggleFullscreen(editor, fullscreenState);
+                toggleFullscreen(editor, fullscreenState);
             }
         );
     };
@@ -1253,15 +1253,15 @@
     var Plugin = () => {
         global$2.add(
             'fullscreen', editor => {
-            const fullscreenState = Cell(null);
-            if (editor.inline) {
+                const fullscreenState = Cell(null);
+                if (editor.inline) {
+                    return get$5(fullscreenState);
+                }
+                register$2(editor);
+                register$1(editor, fullscreenState);
+                register(editor, fullscreenState);
+                editor.addShortcut('Meta+Shift+F', '', 'mceFullScreen');
                 return get$5(fullscreenState);
-            }
-            register$2(editor);
-            register$1(editor, fullscreenState);
-            register(editor, fullscreenState);
-            editor.addShortcut('Meta+Shift+F', '', 'mceFullScreen');
-            return get$5(fullscreenState);
             }
         );
     };

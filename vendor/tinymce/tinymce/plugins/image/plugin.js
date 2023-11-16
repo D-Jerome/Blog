@@ -188,7 +188,7 @@
     const internalFilter = (obj, pred, onTrue, onFalse) => {
         each(
             obj, (x, i) => {
-                (pred(x, i) ? onTrue : onFalse)(x, i);
+            (pred(x, i) ? onTrue : onFalse)(x, i);
             }
         );
     };
@@ -290,44 +290,44 @@
                 processor: 'boolean',
                 default: true
                     }
-        );
+                    );
                     registerOption(
                         'image_advtab', {
                             processor: 'boolean',
                             default: false
                                 }
-                    );
+                                );
                                 registerOption(
                                     'image_uploadtab', {
                                         processor: 'boolean',
                                         default: true
                                             }
-                                );
+                                            );
                                             registerOption(
                                                 'image_prepend_url', {
                                                     processor: 'string',
                                                     default: ''
                                                         }
-                                            );
+                                                        );
                                                         registerOption('image_class_list', { processor: 'object[]' });
                                                         registerOption(
                                                             'image_description', {
                                                                 processor: 'boolean',
                                                                 default: true
                                                                     }
-                                                                    );
+                                                        );
                                                                     registerOption(
                                                                         'image_title', {
                                                                             processor: 'boolean',
                                                                             default: false
                                                                                 }
-                                                                    );
+                                                                                );
                                                                                 registerOption(
                                                                                     'image_caption', {
                                                                                         processor: 'boolean',
                                                                                         default: false
                                                                                             }
-                                                                                            );
+                                                                                );
                                                                                             registerOption(
                                                                                                 'image_list', {
                                                                                                     processor: value => {
@@ -342,7 +342,7 @@
                                                                                                     },
                                                                                                     default: false
                                                                                                         }
-                                                                                                        );
+                                                                                            );
                                                                                                         };
                                                                                                         const hasDimensions = option('image_dimensions');
                                                                                                         const hasAdvTab = option('image_advtab');
@@ -361,33 +361,33 @@
                                                                                                         const parseIntAndGetMax = (val1, val2) => Math.max(parseInt(val1, 10), parseInt(val2, 10));
                                                                                                         const getImageSize = url => new Promise(
                                                                                                             callback => {
-                                                                                                                const img = document.createElement('img');
-                                                                                                                const done = dimensions => {
-                                                                                                            img.onload = img.onerror = null;
+                                                                                                            const img = document.createElement('img');
+                                                                                                            const done = dimensions => {
+                                                                                                                    img.onload = img.onerror = null;
                                                                                                                     if (img.parentNode) {
                                                                                                                         img.parentNode.removeChild(img);
-                                                                                                                        }
-                                                                                                            callback(dimensions);
-                                                                                                                };
-                                                                                                                img.onload = () => {
-                                                                                                            const width = parseIntAndGetMax(img.width, img.clientWidth);
-                                                                                                            const height = parseIntAndGetMax(img.height, img.clientHeight);
-                                                                                                            const dimensions = {
+                                                                                                                    }
+                                                                                                                    callback(dimensions);
+                                                                                                            };
+                                                                                                            img.onload = () => {
+                                                                                                                    const width = parseIntAndGetMax(img.width, img.clientWidth);
+                                                                                                                    const height = parseIntAndGetMax(img.height, img.clientHeight);
+                                                                                                                    const dimensions = {
                                                                                                                         width,
                                                                                                                         height
-                                                                                                                        };
-                                                                                                            done(Promise.resolve(dimensions));
-                                                                                                                };
-                                                                                                                img.onerror = () => {
-                                                                                                            done(Promise.reject(`Failed to get image dimensions for: ${ url }`));
-                                                                                                                };
-                                                                                                                const style = img.style;
-                                                                                                                style.visibility = 'hidden';
-                                                                                                                style.position = 'fixed';
-                                                                                                                style.bottom = style.left = '0px';
-                                                                                                                style.width = style.height = 'auto';
-                                                                                                                document.body.appendChild(img);
-                                                                                                                img.src = url;
+                                                                                                                    };
+                                                                                                                    done(Promise.resolve(dimensions));
+                                                                                                            };
+                                                                                                            img.onerror = () => {
+                                                                                                                    done(Promise.reject(`Failed to get image dimensions for: ${ url }`));
+                                                                                                            };
+                                                                                                            const style = img.style;
+                                                                                                            style.visibility = 'hidden';
+                                                                                                            style.position = 'fixed';
+                                                                                                            style.bottom = style.left = '0px';
+                                                                                                            style.width = style.height = 'auto';
+                                                                                                            document.body.appendChild(img);
+                                                                                                            img.src = url;
                                                                                                             }
                                                                                                         );
                                                                                                             const removePixelSuffix = value => {
@@ -439,9 +439,9 @@
         if (isString(imageList)) {
             fetch(imageList).then(
                 res => {
-                    if (res.ok) {
-                        res.json().then(callback);
-                    }
+                if (res.ok) {
+                    res.json().then(callback);
+                }
                 }
             );
         } else if (isFunction(imageList)) {
@@ -473,15 +473,15 @@
     };
     const blobToDataUri = blob => new Promise(
         (resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-        resolve(reader.result);
-            };
-            reader.onerror = () => {
-        var _a;
-        reject((_a = reader.error) === null || _a === void 0 ? void 0 : _a.message);
-            };
-            reader.readAsDataURL(blob);
+        const reader = new FileReader();
+        reader.onload = () => {
+                resolve(reader.result);
+        };
+        reader.onerror = () => {
+                var _a;
+                reject((_a = reader.error) === null || _a === void 0 ? void 0 : _a.message);
+        };
+        reader.readAsDataURL(blob);
         }
     );
     const isPlaceholderImage = imgElm => imgElm.nodeName === 'IMG' && (imgElm.hasAttribute('data-mce-object') || imgElm.hasAttribute('data-mce-placeholder'));
@@ -875,24 +875,24 @@
         const out = [];
         global.each(
             list, item => {
-                const text = getText(item);
-            if (item.menu !== undefined) {
-                const items = sanitizeList(item.menu, extractValue);
-                out.push(
-                {
-                    text,
-                    items
-                    }
-                );
-            } else {
-                    const value = extractValue(item);
+            const text = getText(item);
+                if (item.menu !== undefined) {
+                    const items = sanitizeList(item.menu, extractValue);
                     out.push(
-                {
+                    {
+                        text,
+                        items
+                        }
+                    );
+                } else {
+            const value = extractValue(item);
+            out.push(
+                    {
                             text,
                             value
                         }
-            );
-                }
+                );
+            }
             }
         );
       return out;
@@ -908,11 +908,11 @@
     const isGroup = item => has(item, 'items');
     const findEntryDelegate = (list, value) => findMap(
         list, item => {
-        if (isGroup(item)) {
-            return findEntryDelegate(item.items, value);
-        } else if (item.value === value) {
-                return Optional.some(item);
-            } else {
+            if (isGroup(item)) {
+                return findEntryDelegate(item.items, value);
+            } else if (item.value === value) {
+        return Optional.some(item);
+        } else {
                 return Optional.none();
             }
         }
@@ -1009,23 +1009,23 @@
         const urlListSanitizer = ListUtils.sanitizer(item => editor.convertURL(item.value || item.url || '', 'src'));
         const futureImageList = new Promise(
             completer => {
-                createImageList(
-                editor, imageList => {
-                        completer(
-                        urlListSanitizer(imageList).map(
-                                items => flatten(
-                                [
+            createImageList(
+                    editor, imageList => {
+                    completer(
+                            urlListSanitizer(imageList).map(
+                            items => flatten(
+                            [
                                     [{
                                         text: 'None',
                                         value: ''
                                     }],
                                     items
                                     ]
-                                )
                             )
-                    );
-                }
-            );
+                        )
+                        );
+                    }
+                );
             }
         );
       const classList = ListUtils.sanitize(getClassList(editor));
@@ -1043,20 +1043,20 @@
       const prependURL = Optional.some(getPrependUrl(editor)).filter(preUrl => isString(preUrl) && preUrl.length > 0);
     return futureImageList.then(
         imageList => ({
-            image,
-            imageList,
-            classList,
-            hasAdvTab: hasAdvTab$1,
-            hasUploadTab: hasUploadTab$1,
-            hasUploadUrl: hasUploadUrl$1,
-            hasUploadHandler: hasUploadHandler$1,
-            hasDescription: hasDescription$1,
-            hasImageTitle: hasImageTitle$1,
-            hasDimensions: hasDimensions$1,
-            hasImageCaption: hasImageCaption$1,
-            prependURL,
-            hasAccessibilityOptions,
-            automaticUploads
+        image,
+        imageList,
+        classList,
+        hasAdvTab: hasAdvTab$1,
+        hasUploadTab: hasUploadTab$1,
+        hasUploadUrl: hasUploadUrl$1,
+        hasUploadHandler: hasUploadHandler$1,
+        hasDescription: hasDescription$1,
+        hasImageTitle: hasImageTitle$1,
+        hasDimensions: hasDimensions$1,
+        hasImageCaption: hasImageCaption$1,
+        prependURL,
+        hasAccessibilityOptions,
+        automaticUploads
             })
     );
     };
@@ -1070,10 +1070,10 @@
         };
         const imageList = info.imageList.map(
             items => ({
-                name: 'images',
-                type: 'listbox',
-                label: 'Image list',
-                items
+            name: 'images',
+            type: 'listbox',
+            label: 'Image list',
+            items
             })
         );
       const imageDescription = {
@@ -1102,10 +1102,10 @@
         };
         const classList = info.classList.map(
             items => ({
-                name: 'classes',
-                type: 'listbox',
-                label: 'Class',
-                items
+            name: 'classes',
+            type: 'listbox',
+            label: 'Class',
+            items
             })
         );
       const caption = {
@@ -1210,10 +1210,10 @@
         if (!/^(?:[a-zA-Z]+:)?\/\//.test(srcURL)) {
             return info.prependURL.bind(
                 prependUrl => {
-                    if (srcURL.substring(0, prependUrl.length) !== prependUrl) {
-                        return Optional.some(prependUrl + srcURL);
-                    }
-                    return Optional.none();
+                if (srcURL.substring(0, prependUrl.length) !== prependUrl) {
+                    return Optional.some(prependUrl + srcURL);
+                }
+                return Optional.none();
                 }
             );
         }
@@ -1223,14 +1223,14 @@
         const data = api.getData();
         addPrependUrl2(info, data.src.value).each(
             srcURL => {
-                api.setData(
-                {
-                        src: {
-                            value: srcURL,
-                            meta: data.src.meta
-                        }
+            api.setData(
+                    {
+                    src: {
+                        value: srcURL,
+                        meta: data.src.meta
                     }
-            );
+                    }
+                );
             }
         );
     };
@@ -1255,7 +1255,7 @@
         if (isString(meta.class)) {
             ListUtils.findEntry(info.classList, meta.class).each(
                 entry => {
-                    data.classes = entry.value;
+                data.classes = entry.value;
                 }
             );
         }
@@ -1299,9 +1299,9 @@
             if (isNotEmpty(url)) {
                 helpers.imageSize(url).then(
                     size => {
-                    if (state.open) {
-                        api.setData({ dimensions: size });
-                    }
+                        if (state.open) {
+                            api.setData({ dimensions: size });
+                        }
                     }
                 ).catch(e => console.error(e));
             } else {
@@ -1333,26 +1333,26 @@
         const image = ListUtils.findEntry(info.imageList, data.images);
         image.each(
             img => {
-                const updateAlt = data.alt === '' || state.prevImage.map(image => image.text === data.alt).getOr(false);
-                if (updateAlt) {
-                    if (img.value === '') {
-                        api.setData(
-                        {
-                            src: img,
-                            alt: state.prevAlt
-                        }
-                        );
-                    } else {
-                        api.setData(
-                        {
-                            src: img,
-                            alt: img.text
-                        }
-                        );
+            const updateAlt = data.alt === '' || state.prevImage.map(image => image.text === data.alt).getOr(false);
+            if (updateAlt) {
+                if (img.value === '') {
+                    api.setData(
+                    {
+                        src: img,
+                        alt: state.prevAlt
                     }
+                    );
                 } else {
-            api.setData({ src: img });
+                    api.setData(
+                    {
+                        src: img,
+                        alt: img.text
+                    }
+                    );
                 }
+            } else {
+                    api.setData({ src: img });
+            }
             }
         );
       state.prevImage = image;
@@ -1363,47 +1363,47 @@
         api.block('Uploading image');
         head(data.fileinput).fold(
             () => {
-                api.unblock();
-            }, file => {
-                const blobUri = URL.createObjectURL(file);
-                const finalize = () => {
             api.unblock();
-            URL.revokeObjectURL(blobUri);
-                };
-                const updateSrcAndSwitchTab = url => {
-            api.setData(
-                    {
+            }, file => {
+            const blobUri = URL.createObjectURL(file);
+            const finalize = () => {
+                    api.unblock();
+                    URL.revokeObjectURL(blobUri);
+            };
+            const updateSrcAndSwitchTab = url => {
+                    api.setData(
+                {
                         src: {
                             value: url,
                             meta: {}
-                            }
                         }
-                );
-            api.showTab('general');
-            changeSrc(helpers, info, state, api);
-                };
-                blobToDataUri(file).then(
-                dataUrl => {
-                        const blobInfo = helpers.createBlobCache(file, blobUri, dataUrl);
-                        if (info.automaticUploads) {
-                            helpers.uploadImage(blobInfo).then(
-                            result => {
-                                updateSrcAndSwitchTab(result.url);
-                                finalize();
-                                }
-                            ).catch(
-                                err => {
-                                    finalize();
-                                    helpers.alertErr(err);
-                                    }
-                            );
-                        } else {
-                            helpers.addToBlobCache(blobInfo);
-                            updateSrcAndSwitchTab(blobInfo.blobUri());
-                            api.unblock();
                         }
-                    }
             );
+                api.showTab('general');
+                changeSrc(helpers, info, state, api);
+            };
+            blobToDataUri(file).then(
+                    dataUrl => {
+                    const blobInfo = helpers.createBlobCache(file, blobUri, dataUrl);
+                    if (info.automaticUploads) {
+                        helpers.uploadImage(blobInfo).then(
+                        result => {
+                            updateSrcAndSwitchTab(result.url);
+                            finalize();
+                            }
+                        ).catch(
+                            err => {
+                                finalize();
+                                helpers.alertErr(err);
+                                }
+                        );
+                    } else {
+                        helpers.addToBlobCache(blobInfo);
+                        updateSrcAndSwitchTab(blobInfo.blobUri());
+                        api.unblock();
+                    }
+                    }
+                );
             }
         );
     };
@@ -1465,8 +1465,8 @@
         } else {
             return getImageSize(editor.documentBaseURI.toAbsolute(url)).then(
                 dimensions => ({
-                width: String(dimensions.width),
-                height: String(dimensions.height)
+                    width: String(dimensions.width),
+                    height: String(dimensions.height)
                 })
             );
         }
@@ -1494,12 +1494,12 @@
     const serializeStyle = editor => (stylesArg, name) => editor.dom.serializeStyle(stylesArg, name);
     const uploadImage = editor => blobInfo => global$1(editor).upload([blobInfo], false).then(
         results => {
-        var _a;
-            if (results.length === 0) {
-                return Promise.reject('Failed to upload image');
-            } else if (results[0].status === false) {
-        return Promise.reject((_a = results[0].error) === null || _a === void 0 ? void 0 : _a.message);
-        } else {
+            var _a;
+        if (results.length === 0) {
+            return Promise.reject('Failed to upload image');
+        } else if (results[0].status === false) {
+                return Promise.reject((_a = results[0].error) === null || _a === void 0 ? void 0 : _a.message);
+            } else {
                 return results[0];
             }
         }
@@ -1518,8 +1518,8 @@
         const open = () => {
             collect(editor).then(
                 info => {
-                const state = createState(info);
-                return {
+                    const state = createState(info);
+                    return {
                         title: 'Insert/Edit Image',
                         size: 'normal',
                         body: makeDialogBody(info),
@@ -1528,13 +1528,13 @@
                                 type: 'cancel',
                                 name: 'cancel',
                                 text: 'Cancel'
-                        },
+                            },
                           {
                                 type: 'submit',
                                 name: 'save',
                                 text: 'Save',
                                 primary: true
-                        }
+                            }
                         ],
                         initialData: fromImageData(info.image),
                         onSubmit: submitHandler(editor, info, helpers),
@@ -1551,7 +1551,7 @@
         editor.addCommand('mceImage', Dialog(editor).open);
         editor.addCommand(
             'mceUpdateImage', (_ui, data) => {
-            editor.undoManager.transact(() => insertOrUpdateImage(editor, data));
+                editor.undoManager.transact(() => insertOrUpdateImage(editor, data));
             }
         );
     };
@@ -1576,8 +1576,8 @@
     const setup = editor => {
         editor.on(
             'PreInit', () => {
-            editor.parser.addNodeFilter('figure', toggleContentEditableState(true));
-            editor.serializer.addNodeFilter('figure', toggleContentEditableState(false));
+                editor.parser.addNodeFilter('figure', toggleContentEditableState(true));
+                editor.serializer.addNodeFilter('figure', toggleContentEditableState(false));
             }
         );
     };
@@ -1623,10 +1623,10 @@
     var Plugin = () => {
         global$4.add(
             'image', editor => {
-            register$2(editor);
-            setup(editor);
-            register(editor);
-            register$1(editor);
+                register$2(editor);
+                setup(editor);
+                register(editor);
+                register$1(editor);
             }
         );
     };

@@ -262,7 +262,7 @@
     const foldr = (xs, f, acc) => {
         eachr(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -270,7 +270,7 @@
     const foldl = (xs, f, acc) => {
         each$2(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -362,8 +362,8 @@
     const map = (obj, f) => {
         return tupleMap(
             obj, (x, i) => ({
-                k: i,
-                v: f(x, i)
+            k: i,
+            v: f(x, i)
             })
         );
     };
@@ -371,8 +371,8 @@
         const r = {};
         each$1(
             obj, (x, i) => {
-                const tuple = f(x, i);
-                r[tuple.k] = tuple.v;
+            const tuple = f(x, i);
+            r[tuple.k] = tuple.v;
             }
         );
       return r;
@@ -383,7 +383,7 @@
     const internalFilter = (obj, pred, onTrue, onFalse) => {
         each$1(
             obj, (x, i) => {
-                (pred(x, i) ? onTrue : onFalse)(x, i);
+            (pred(x, i) ? onTrue : onFalse)(x, i);
             }
         );
     };
@@ -396,7 +396,7 @@
         const r = [];
         each$1(
             obj, (value, name) => {
-                r.push(f(value, name));
+            r.push(f(value, name));
             }
         );
       return r;
@@ -487,20 +487,20 @@
         const dom = element.dom;
         each$1(
             attrs, (v, k) => {
-                rawSet(dom, k, v);
+            rawSet(dom, k, v);
             }
         );
     };
     const setOptions = (element, attrs) => {
         each$1(
             attrs, (v, k) => {
-                v.fold(
-                () => {
-                        remove$7(element, k);
-                }, value => {
-                        rawSet(element.dom, k, value);
-                }
-            );
+            v.fold(
+                    () => {
+                    remove$7(element, k);
+                    }, value => {
+                    rawSet(element.dom, k, value);
+                    }
+                );
             }
         );
     };
@@ -514,8 +514,8 @@
     };
     const clone$2 = element => foldl(
         element.dom.attributes, (acc, attr) => {
-            acc[attr.name] = attr.value;
-            return acc;
+        acc[attr.name] = attr.value;
+        return acc;
         }, {}
     );
 
@@ -627,7 +627,7 @@
         const parent$1 = parent(marker);
         parent$1.each(
             v => {
-                v.dom.insertBefore(element.dom, marker.dom);
+            v.dom.insertBefore(element.dom, marker.dom);
             }
         );
     };
@@ -635,14 +635,14 @@
         const sibling = nextSibling(marker);
         sibling.fold(
             () => {
-                const parent$1 = parent(marker);
-                parent$1.each(
-                v => {
-                        append$1(v, element);
-                }
-            );
+            const parent$1 = parent(marker);
+            parent$1.each(
+                    v => {
+                    append$1(v, element);
+                    }
+                );
             }, v => {
-                before$3(v, element);
+            before$3(v, element);
             }
         );
     };
@@ -650,9 +650,9 @@
         const firstChild$1 = firstChild(parent);
         firstChild$1.fold(
             () => {
-                append$1(parent, element);
+            append$1(parent, element);
             }, v => {
-                parent.dom.insertBefore(element.dom, v.dom);
+            parent.dom.insertBefore(element.dom, v.dom);
             }
         );
     };
@@ -662,9 +662,9 @@
     const appendAt = (parent, element, index) => {
         child$2(parent, index).fold(
             () => {
-                append$1(parent, element);
+            append$1(parent, element);
             }, v => {
-                before$3(v, element);
+            before$3(v, element);
             }
         );
     };
@@ -676,15 +676,15 @@
     const after$4 = (marker, elements) => {
         each$2(
             elements, (x, i) => {
-                const e = i === 0 ? marker : elements[i - 1];
-                after$5(e, x);
+            const e = i === 0 ? marker : elements[i - 1];
+            after$5(e, x);
             }
         );
     };
     const append = (parent, elements) => {
         each$2(
             elements, x => {
-                append$1(parent, x);
+            append$1(parent, x);
             }
         );
     };
@@ -693,7 +693,7 @@
         element.dom.textContent = '';
         each$2(
             children$2(element), rogue => {
-                remove$6(rogue);
+            remove$6(rogue);
             }
         );
     };
@@ -855,10 +855,10 @@
         let result = [];
         each$2(
             children$2(scope), x => {
-            if (predicate(x)) {
-                result = result.concat([x]);
-            }
-            result = result.concat(descendants$1(x, predicate));
+                if (predicate(x)) {
+                    result = result.concat([x]);
+                }
+                result = result.concat(descendants$1(x, predicate));
             }
         );
       return result;
@@ -987,7 +987,7 @@
         const dom = element.dom;
         each$1(
             css, (v, k) => {
-            internalSet(dom, k, v);
+                internalSet(dom, k, v);
             }
         );
     };
@@ -1038,11 +1038,11 @@
     const filterFirstLayer = (scope, selector, predicate) => {
         return bind$2(
             children$2(scope), x => {
-            if (is$2(x, selector)) {
-                return predicate(x) ? [x] : [];
-            } else {
-                    return filterFirstLayer(x, selector, predicate);
-            }
+                if (is$2(x, selector)) {
+                    return predicate(x) ? [x] : [];
+                } else {
+            return filterFirstLayer(x, selector, predicate);
+                }
             }
         );
     };
@@ -1077,30 +1077,30 @@
 
     const fromRowsOrColGroups = (elems, getSection) => map$1(
         elems, row => {
-        if (name(row) === 'colgroup') {
-            const cells = map$1(
-                columns$1(row), column => {
-                    const colspan = getAttrValue(column, 'span', 1);
-                    return detail(column, 1, colspan);
-                }
-            );
-            return rowdetail(row, cells, 'colgroup');
-        } else {
+            if (name(row) === 'colgroup') {
                 const cells = map$1(
-            cells$1(row), cell => {
+                columns$1(row), column => {
+                const colspan = getAttrValue(column, 'span', 1);
+                return detail(column, 1, colspan);
+                    }
+                );
+                return rowdetail(row, cells, 'colgroup');
+            } else {
+        const cells = map$1(
+                cells$1(row), cell => {
                     const rowspan = getAttrValue(cell, 'rowspan', 1);
                     const colspan = getAttrValue(cell, 'colspan', 1);
                     return detail(cell, rowspan, colspan);
+                }
+            );
+        return rowdetail(row, cells, getSection(row));
             }
-        );
-                return rowdetail(row, cells, getSection(row));
-        }
         }
     );
     const getParentSection = group => parent(group).map(
         parent => {
-        const parentName = name(parent);
-        return isValidSection(parentName) ? parentName : 'tbody';
+            const parentName = name(parent);
+            return isValidSection(parentName) ? parentName : 'tbody';
         }
     ).getOr('tbody');
     const fromTable$1 = table => {
@@ -1195,18 +1195,18 @@
     const detectBrowser$1 = (browsers, userAgentData) => {
         return findMap(
             userAgentData.brands, uaBrand => {
-            const lcBrand = uaBrand.brand.toLowerCase();
-            return find$1(
-                    browsers, browser => {
-                    var _a;
-                    return lcBrand === ((_a = browser.brand) === null || _a === void 0 ? void 0 : _a.toLowerCase());
-                    }
-                ).map(
-                info => ({
-                        current: info.name,
-                        version: Version.nu(parseInt(uaBrand.version, 10), 0)
+                const lcBrand = uaBrand.brand.toLowerCase();
+                return find$1(
+                browsers, browser => {
+                        var _a;
+                        return lcBrand === ((_a = browser.brand) === null || _a === void 0 ? void 0 : _a.toLowerCase());
+                }
+            ).map(
+                    info => ({
+                    current: info.name,
+                    version: Version.nu(parseInt(uaBrand.version, 10), 0)
                     })
-            );
+                );
             }
         );
     };
@@ -1215,15 +1215,15 @@
         const agent = String(userAgent).toLowerCase();
         return find$1(
             candidates, candidate => {
-            return candidate.search(agent);
+                return candidate.search(agent);
             }
         );
     };
     const detectBrowser = (browsers, userAgent) => {
         return detect$4(browsers, userAgent).map(
             browser => {
-            const version = Version.detect(browser.versionRegexes, userAgent);
-            return {
+                const version = Version.detect(browser.versionRegexes, userAgent);
+                return {
                     current: browser.name,
                     version
                 };
@@ -1233,8 +1233,8 @@
     const detectOs = (oses, userAgent) => {
         return detect$4(oses, userAgent).map(
             os => {
-            const version = Version.detect(os.versionRegexes, userAgent);
-            return {
+                const version = Version.detect(os.versionRegexes, userAgent);
+                return {
                     current: os.name,
                     version
                 };
@@ -1479,9 +1479,9 @@
         const getOuter = get;
         const aggregate = (element, properties) => foldl(
             properties, (acc, property) => {
-            const val = get$a(element, property);
-            const value = val === undefined ? 0 : parseInt(val, 10);
-            return isNaN(value) ? acc : acc + value;
+                const val = get$a(element, property);
+                const value = val === undefined ? 0 : parseInt(val, 10);
+                return isNaN(value) ? acc : acc + value;
             }, 0
         );
       const max = (element, value, properties) => {
@@ -1560,13 +1560,13 @@
     const getLockedColumnsFromGrid = grid => {
         const locked = foldl(
             extractGridDetails(grid).rows, (acc, row) => {
-            each$2(
-                    row.cells, (cell, idx) => {
-                    if (cell.isLocked) {
-                        acc[idx] = true;
-                    }
-                    }
-                );
+                each$2(
+                row.cells, (cell, idx) => {
+                        if (cell.isLocked) {
+                            acc[idx] = true;
+                        }
+                }
+            );
             return acc;
             }, {}
         );
@@ -1581,7 +1581,7 @@
     const findItem = (warehouse, item, comparator) => {
         const filtered = filterItems(
             warehouse, detail => {
-            return comparator(item, detail.element);
+                return comparator(item, detail.element);
             }
         );
       return filtered.length > 0 ? Optional.some(filtered[0]) : Optional.none();
@@ -1589,7 +1589,7 @@
     const filterItems = (warehouse, predicate) => {
         const all = bind$2(
             warehouse.all, r => {
-            return r.cells;
+                return r.cells;
             }
         );
       return filter$2(all, predicate);
@@ -1599,13 +1599,13 @@
         let index = 0;
         each$2(
             rowData.cells, column => {
-            const colspan = column.colspan;
-            range$1(
-                    colspan, columnIndex => {
-                    const colIndex = index + columnIndex;
-                    columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
-                    }
-                );
+                const colspan = column.colspan;
+                range$1(
+                colspan, columnIndex => {
+                        const colIndex = index + columnIndex;
+                        columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
+                }
+            );
             index += colspan;
             }
         );
@@ -1625,27 +1625,27 @@
         } = partition(list, rowData => rowData.section === 'colgroup');
         each$2(
             rows, rowData => {
-            const currentRow = [];
-            each$2(
-                    rowData.cells, rowCell => {
-                    let start = 0;
-                    while (access[key(rowCount, start)] !== undefined) {
-                        start++;
-                    }
-                    const isLocked = hasNonNullableKey(lockedColumns, start.toString());
-                    const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
-                    for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
-                        for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
-                            const rowPosition = rowCount + occupiedRowPosition;
-                            const columnPosition = start + occupiedColumnPosition;
-                            const newpos = key(rowPosition, columnPosition);
-                            access[newpos] = current;
-                            maxColumns = Math.max(maxColumns, columnPosition + 1);
+                const currentRow = [];
+                each$2(
+                rowData.cells, rowCell => {
+                        let start = 0;
+                        while (access[key(rowCount, start)] !== undefined) {
+                            start++;
                         }
-                    }
-                    currentRow.push(current);
-                    }
-                );
+                        const isLocked = hasNonNullableKey(lockedColumns, start.toString());
+                        const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
+                        for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
+                            for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
+                                const rowPosition = rowCount + occupiedRowPosition;
+                                const columnPosition = start + occupiedColumnPosition;
+                                const newpos = key(rowPosition, columnPosition);
+                                access[newpos] = current;
+                                maxColumns = Math.max(maxColumns, columnPosition + 1);
+                            }
+                        }
+                        currentRow.push(current);
+                }
+            );
             maxRows++;
             cells.push(rowdetail(rowData.element, currentRow, rowData.section));
             rowCount++;
@@ -1653,17 +1653,17 @@
         );
     const {columns, colgroups} = last$2(colgroupRows).map(
         rowData => {
-        const columns = generateColumns(rowData);
-        const colgroup$1 = colgroup(rowData.element, values(columns));
-        return {
+            const columns = generateColumns(rowData);
+            const colgroup$1 = colgroup(rowData.element, values(columns));
+            return {
                 colgroups: [colgroup$1],
                     columns
             };
         }
     ).getOrThunk(
         () => ({
-        colgroups: [],
-        columns: {}
+            colgroups: [],
+            columns: {}
             })
     );
       const grid$1 = grid(maxRows, maxColumns);
@@ -1701,10 +1701,10 @@
         const rowsArr = range$1(grid.rows, identity);
         return map$1(
             cols, col => {
-            const getBlock = () => bind$2(rowsArr, r => Warehouse.getAt(warehouse, r, col).filter(detail => detail.column === col).toArray());
-            const isValid = detail => detail.colspan === 1 && isValidCell(detail.element);
-            const getFallback = () => Warehouse.getAt(warehouse, 0, col);
-            return decide(getBlock, isValid, getFallback);
+                const getBlock = () => bind$2(rowsArr, r => Warehouse.getAt(warehouse, r, col).filter(detail => detail.column === col).toArray());
+                const isValid = detail => detail.colspan === 1 && isValidCell(detail.element);
+                const getFallback = () => Warehouse.getAt(warehouse, 0, col);
+                return decide(getBlock, isValid, getFallback);
             }
         );
     };
@@ -1720,10 +1720,10 @@
         const cols = range$1(grid.columns, identity);
         return map$1(
             rowsArr, row => {
-            const getBlock = () => bind$2(cols, c => Warehouse.getAt(warehouse, row, c).filter(detail => detail.row === row).fold(constant([]), detail => [detail]));
-            const isSingle = detail => detail.rowspan === 1;
-            const getFallback = () => Warehouse.getAt(warehouse, row, 0);
-            return decide(getBlock, isSingle, getFallback);
+                const getBlock = () => bind$2(cols, c => Warehouse.getAt(warehouse, row, c).filter(detail => detail.row === row).fold(constant([]), detail => [detail]));
+                const isSingle = detail => detail.rowspan === 1;
+                const getFallback = () => Warehouse.getAt(warehouse, row, 0);
+                return decide(getBlock, isSingle, getFallback);
             }
         );
     };
@@ -1734,46 +1734,46 @@
         }
         const current = xs[index].fold(
             () => {
-            const rest = reverse(xs.slice(0, index));
-            return findMap(
-                    rest, (a, i) => a.map(
-                    aa => ({
-                    value: aa,
-                    delta: i + 1
+                const rest = reverse(xs.slice(0, index));
+                return findMap(
+                rest, (a, i) => a.map(
+                aa => ({
+                        value: aa,
+                        delta: i + 1
                         })
-                    )
-                );
+                )
+            );
             }, c => Optional.some(
-            {
-                    value: c,
-                    delta: 0
+                {
+                value: c,
+                delta: 0
                 }
             )
         );
     const next = xs[index + 1].fold(
         () => {
-        const rest = xs.slice(index + 1);
-        return findMap(
-                rest, (a, i) => a.map(
-                aa => ({
-                value: aa,
-                delta: i + 1
+            const rest = xs.slice(index + 1);
+            return findMap(
+            rest, (a, i) => a.map(
+            aa => ({
+                    value: aa,
+                    delta: i + 1
                         })
-                )
-            );
+            )
+        );
         }, n => Optional.some(
-        {
-                value: n,
-                delta: 1
+            {
+            value: n,
+            delta: 1
             }
         )
     );
     return current.bind(
         c => next.map(
-        n => {
-                const extras = n.delta + c.delta;
-                return Math.abs(n.value - c.value) / extras;
-            }
+            n => {
+        const extras = n.delta + c.delta;
+        return Math.abs(n.value - c.value) / extras;
+        }
         )
     );
     };
@@ -1783,8 +1783,8 @@
 
     const api$1 = Dimension(
         'height', element => {
-        const dom = element.dom;
-        return inBody(element) ? dom.getBoundingClientRect().height : dom.offsetHeight;
+            const dom = element.dom;
+            return inBody(element) ? dom.getBoundingClientRect().height : dom.offsetHeight;
         }
     );
     const get$8 = element => api$1.get(element);
@@ -1875,16 +1875,16 @@
         }
         const lines = map$1(
             array.slice(1), (cellOption, index) => {
-            return cellOption.map(
-                    cell => {
-                    return getInnerEdge(index, cell);
-                    }
-                );
+                return cellOption.map(
+                cell => {
+                        return getInnerEdge(index, cell);
+                }
+            );
             }
         );
     const lastLine = array[array.length - 1].map(
         cell => {
-        return getOuterEdge(array.length - 1, cell);
+            return getOuterEdge(array.length - 1, cell);
         }
     );
       return lines.concat([lastLine]);
@@ -1965,18 +1965,18 @@
         const match = Optional.from(pattern.exec(input));
         return match.bind(
             array => {
-            const value = Number(array[1]);
-            const unitRaw = array[2];
-            if (isUnit(unitRaw, accepted)) {
-                return Optional.some(
-                {
-                    value,
-                    unit: unitRaw
+                const value = Number(array[1]);
+                const unitRaw = array[2];
+                if (isUnit(unitRaw, accepted)) {
+                    return Optional.some(
+                    {
+                        value,
+                        unit: unitRaw
+                    }
+                    );
+                } else {
+            return Optional.none();
                 }
-                );
-            } else {
-                    return Optional.none();
-            }
             }
         );
     };
@@ -2001,8 +2001,8 @@
     const convert = (cell, number, getter, setter) => {
         const newSize = table(cell).map(
             table => {
-            const total = getter(table);
-            return Math.floor(number / 100 * total);
+                const total = getter(table);
+                return Math.floor(number / 100 * total);
             }
         ).getOr(number);
       setter(cell, newSize);
@@ -2027,7 +2027,7 @@
     const getRaw$1 = (element, prop) => {
         return getRaw$2(element, prop).orThunk(
             () => {
-            return getOpt(element, prop).map(val => val + 'px');
+                return getOpt(element, prop).map(val => val + 'px');
             }
         );
     };
@@ -2042,7 +2042,7 @@
         const width = getRawWidth$1(cell);
         return width.bind(
             w => parse(
-                w, [
+            w, [
                 'fixed',
                 'relative',
                 'empty'
@@ -2081,23 +2081,23 @@
         const colFilter = not(hasColspan);
         return map$1(
             columns$1, (cellOption, c) => {
-            return getDimension(
-                    cellOption, c, backups, colFilter, column => {
-                    if (isValidColumn(column)) {
-                        return getWidth(column);
-                    } else {
-                    const cell = bindFrom(columnCells[c], identity);
-                    return getDimension(cell, c, backups, colFilter, cell => fallback(Optional.some(get$9(cell))), fallback);
-                    }
+                return getDimension(
+                cellOption, c, backups, colFilter, column => {
+                        if (isValidColumn(column)) {
+                            return getWidth(column);
+                        } else {
+                        const cell = bindFrom(columnCells[c], identity);
+                        return getDimension(cell, c, backups, colFilter, cell => fallback(Optional.some(get$9(cell))), fallback);
+                        }
                     }, fallback
-                );
+            );
             }
         );
     };
     const getDeduced = deduced => {
         return deduced.map(
             d => {
-            return d + 'px';
+                return d + 'px';
             }
         ).getOr('');
     };
@@ -2107,20 +2107,20 @@
     const getPercentageWidths = (warehouse, table, tableSize) => {
         return getWidthFrom(
             warehouse, table, getPercentageWidth, deduced => {
-            return deduced.fold(
-                    () => {
-                    return tableSize.minCellWidth();
-                    }, cellWidth => {
-                    return cellWidth / tableSize.pixelWidth() * 100;
-                    }
-                );
+                return deduced.fold(
+                () => {
+                        return tableSize.minCellWidth();
+                }, cellWidth => {
+                        return cellWidth / tableSize.pixelWidth() * 100;
+                }
+            );
             }
         );
     };
     const getPixelWidths = (warehouse, table, tableSize) => {
         return getWidthFrom(
             warehouse, table, getPixelWidth$1, deduced => {
-            return deduced.getOrThunk(tableSize.minCellWidth);
+                return deduced.getOrThunk(tableSize.minCellWidth);
             }
         );
     };
@@ -2129,14 +2129,14 @@
         const backups = [Optional.some(direction.edge(table))].concat(map$1(direction.positions(rows$1, table), pos => pos.map(p => p.y)));
         return map$1(
             rows$1, (cellOption, c) => {
-            return getDimension(cellOption, c, backups, not(hasRowspan), getHeight, fallback);
+                return getDimension(cellOption, c, backups, not(hasRowspan), getHeight, fallback);
             }
         );
     };
     const getPixelHeights = (warehouse, table, direction) => {
         return getHeightFrom(
             warehouse, table, direction, getHeight, deduced => {
-            return deduced.getOrThunk(minHeight);
+                return deduced.getOrThunk(minHeight);
             }
         );
     };
@@ -2257,24 +2257,24 @@
         const selectedCells = [];
         each$1(
             house.access, detail => {
-            allCells.push(detail);
-            if (isSelected(detail)) {
-                selectedCells.push(detail);
-                const startRow = detail.row;
-                const endRow = startRow + detail.rowspan - 1;
-                const startCol = detail.column;
-                const endCol = startCol + detail.colspan - 1;
-                if (startRow < minRow) {
-                    minRow = startRow;
-                } else if (endRow > maxRow) {
-                    maxRow = endRow;
+                allCells.push(detail);
+                if (isSelected(detail)) {
+                    selectedCells.push(detail);
+                    const startRow = detail.row;
+                    const endRow = startRow + detail.rowspan - 1;
+                    const startCol = detail.column;
+                    const endCol = startCol + detail.colspan - 1;
+                    if (startRow < minRow) {
+                        minRow = startRow;
+                    } else if (endRow > maxRow) {
+                        maxRow = endRow;
+                    }
+                    if (startCol < minCol) {
+                        minCol = startCol;
+                    } else if (endCol > maxCol) {
+                        maxCol = endCol;
+                    }
                 }
-                if (startCol < minCol) {
-                    minCol = startCol;
-                } else if (endCol > maxCol) {
-                    maxCol = endCol;
-                }
-            }
             }
         );
       return statsStruct(minRow, minCol, maxRow, maxCol, allCells, selectedCells);
@@ -2307,9 +2307,9 @@
     const clean = (replica, stats, house, widthDelta) => {
         each$1(
             house.columns, col => {
-            if (col.column < stats.minCol || col.column > stats.maxCol) {
-                remove$6(col.element);
-            }
+                if (col.column < stats.minCol || col.column > stats.maxCol) {
+                    remove$6(col.element);
+                }
             }
         );
       const emptyRows = filter$2(firstLayer(replica, 'tr'), row => row.dom.childElementCount === 0);
@@ -2317,8 +2317,8 @@
     if (stats.minCol === stats.maxCol || stats.minRow === stats.maxRow) {
         each$2(
             firstLayer(replica, 'th,td'), cell => {
-            remove$7(cell, 'rowspan');
-            remove$7(cell, 'colspan');
+                remove$7(cell, 'rowspan');
+                remove$7(cell, 'colspan');
             }
         );
     }
@@ -2439,11 +2439,11 @@
         const replica = copy$2(cell, tag);
         each$1(
             attrs, (v, k) => {
-            if (v === null) {
-                remove$7(replica, k);
-            } else {
-                    set$2(replica, k, v);
-            }
+                if (v === null) {
+                    remove$7(replica, k);
+                } else {
+            set$2(replica, k, v);
+                }
             }
         );
       return replica;
@@ -2455,17 +2455,17 @@
         const first$1 = first(oldCell);
         return first$1.map(
             firstText => {
-            const formatSelector = formats.join(',');
-            const parents = ancestors$3(
-                    firstText, formatSelector, element => {
-                    return eq$1(element, oldCell);
-                    }
-                );
+                const formatSelector = formats.join(',');
+                const parents = ancestors$3(
+                firstText, formatSelector, element => {
+                        return eq$1(element, oldCell);
+                }
+            );
             return foldr(
                 parents, (last, parent) => {
-                const clonedFormat = shallow(parent);
-                append$1(last, clonedFormat);
-                return clonedFormat;
+                    const clonedFormat = shallow(parent);
+                    append$1(last, clonedFormat);
+                    return clonedFormat;
                 }, newCell
             );
             }
@@ -2591,7 +2591,7 @@
                 processor: 'boolean',
                 default: true
                     }
-        );
+                    );
                     registerOption(
                         'table_header_type', {
                             processor: value => {
@@ -2613,25 +2613,25 @@
                             },
                             default: 'section'
                                 }
-                                );
+                    );
                                 registerOption(
                                     'table_sizing_mode', {
                                         processor: 'string',
                                         default: 'auto'
                                             }
-                                            );
+                                );
                                             registerOption(
                                                 'table_default_attributes', {
                                                     processor: 'object',
                                                     default: { border: '1' }
                                                         }
-                                                        );
+                                            );
                                                         registerOption(
                                                             'table_default_styles', {
                                                                 processor: 'object',
                                                                 default: { 'border-collapse': 'collapse' }
                                                                     }
-                                                        );
+                                                                    );
                                                                     registerOption(
                                                                         'table_column_resizing', {
                                                                             processor: value => {
@@ -2651,25 +2651,25 @@
                                                                             },
                                                                             default: 'preservetable'
                                                                                 }
-                                                                    );
+                                                                                );
                                                                                 registerOption(
                                                                                     'table_resize_bars', {
                                                                                         processor: 'boolean',
                                                                                         default: true
                                                                                             }
-                                                                                            );
+                                                                                );
                                                                                             registerOption(
                                                                                                 'table_style_by_css', {
                                                                                                     processor: 'boolean',
                                                                                                     default: true
                                                                                                         }
-                                                                                            );
+                                                                                                        );
                                                                                                         registerOption(
                                                                                                             'table_merge_content_on_paste', {
                                                                                                                 processor: 'boolean',
                                                                                                                 default: true
                                                                                                                     }
-                                                                                                        );
+                                                                                                                    );
                                                                                                                     };
                                                                                                                     const getTableCloneElements = editor => {
                                                                                                                           return Optional.from(editor.options.get('table_clone_elements'));
@@ -2760,18 +2760,18 @@
         const finishCoords = Warehouse.findItem(warehouse, finishCell, eq$1);
         return startCoords.bind(
             sc => {
-            return finishCoords.map(
-                    fc => {
-                    return getBounds(sc, fc);
-                    }
-                );
+                return finishCoords.map(
+                fc => {
+                        return getBounds(sc, fc);
+                }
+            );
             }
         );
     };
     const getBox$1 = (warehouse, startCell, finishCell) => {
         return getAnyBox(warehouse, startCell, finishCell).bind(
             bounds => {
-            return isRectangular(warehouse, bounds);
+                return isRectangular(warehouse, bounds);
             }
         );
     };
@@ -2779,26 +2779,26 @@
     const moveBy$1 = (warehouse, cell, row, column) => {
         return Warehouse.findItem(warehouse, cell, eq$1).bind(
             detail => {
-            const startRow = row > 0 ? detail.row + detail.rowspan - 1 : detail.row;
-            const startCol = column > 0 ? detail.column + detail.colspan - 1 : detail.column;
-            const dest = Warehouse.getAt(warehouse, startRow + row, startCol + column);
-            return dest.map(
-                    d => {
-                    return d.element;
-                    }
-                );
+                const startRow = row > 0 ? detail.row + detail.rowspan - 1 : detail.row;
+                const startCol = column > 0 ? detail.column + detail.colspan - 1 : detail.column;
+                const dest = Warehouse.getAt(warehouse, startRow + row, startCol + column);
+                return dest.map(
+                d => {
+                        return d.element;
+                }
+            );
             }
         );
     };
     const intercepts$1 = (warehouse, start, finish) => {
         return getAnyBox(warehouse, start, finish).map(
             bounds => {
-            const inside = Warehouse.filterItems(warehouse, curry(inSelection, bounds));
-            return map$1(
-                    inside, detail => {
-                    return detail.element;
-                    }
-                );
+                const inside = Warehouse.filterItems(warehouse, curry(inSelection, bounds));
+                return map$1(
+                inside, detail => {
+                        return detail.element;
+                }
+            );
             }
         );
     };
@@ -2808,7 +2808,7 @@
         };
         return Warehouse.findItem(warehouse, innerCell, isContainedBy).map(
             detail => {
-            return detail.element;
+                return detail.element;
             }
         );
     };
@@ -2816,8 +2816,8 @@
     const moveBy = (cell, deltaRow, deltaColumn) => {
         return table(cell).bind(
             table => {
-            const warehouse = getWarehouse(table);
-            return moveBy$1(warehouse, cell, deltaRow, deltaColumn);
+                const warehouse = getWarehouse(table);
+                return moveBy$1(warehouse, cell, deltaRow, deltaColumn);
             }
         );
     };
@@ -3020,15 +3020,15 @@
         const start = look(universe, head);
         return foldr(
             tail, (b, a) => {
-            const current = look(universe, a);
-            return commonElement(universe, b, current);
+                const current = look(universe, a);
+                return commonElement(universe, b, current);
             }, start
         );
     };
     const commonElement = (universe, start, end) => {
         return start.bind(
             s => {
-            return end.filter(curry(universe.eq, s));
+                return end.filter(curry(universe.eq, s));
             }
         );
     };
@@ -3043,9 +3043,9 @@
             const index = findIndex(path, isRoot);
             return index.fold(
                 () => {
-                return path;
+                    return path;
                 }, ind => {
-                return path.slice(0, ind + 1);
+                    return path.slice(0, ind + 1);
                 }
             );
         };
@@ -3053,7 +3053,7 @@
         const pruned2 = prune(ps2);
         const shared = find$1(
             pruned1, x => {
-            return exists(pruned2, eq(universe, x));
+                return exists(pruned2, eq(universe, x));
             }
         );
       return {
@@ -3070,7 +3070,7 @@
     const sharedOne = (look, elements) => {
         return sharedOne$1(
             universe$3, (_universe, element) => {
-            return look(element);
+                return look(element);
             }, elements
         );
     };
@@ -3098,59 +3098,59 @@
         } else {
             return lookupTable(start).bind(
                 startTable => {
-                return lookupTable(finish).bind(
-                        finishTable => {
-                        if (eq$1(startTable, finishTable)) {
-                            return Optional.some(
-                            {
-                              boxes: intercepts(startTable, start, finish),
-                              start,
-                              finish
-                                }
-                            );
-                        } else if (contains$1(startTable, finishTable)) {
-                            const ancestorCells = ancestors$3(finish, 'td,th', getIsRoot(startTable));
-                            const finishCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : finish;
-                            return Optional.some(
-                            {
-                                boxes: nestedIntercepts(startTable, start, startTable, finish, finishTable),
-                                start,
-                                finish: finishCell
-                                }
-                            );
-                        } else if (contains$1(finishTable, startTable)) {
-                            const ancestorCells = ancestors$3(start, 'td,th', getIsRoot(finishTable));
-                            const startCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : start;
-                            return Optional.some(
-                            {
-                                boxes: nestedIntercepts(finishTable, start, startTable, finish, finishTable),
-                                start,
-                                finish: startCell
-                                }
-                            );
-                        } else {
-                            return ancestors(start, finish).shared.bind(
-                            lca => {
-                                return closest$1(lca, 'table', isRoot).bind(
-                                lcaTable => {
-                                    const finishAncestorCells = ancestors$3(finish, 'td,th', getIsRoot(lcaTable));
-                                    const finishCell = finishAncestorCells.length > 0 ? finishAncestorCells[finishAncestorCells.length - 1] : finish;
-                                    const startAncestorCells = ancestors$3(start, 'td,th', getIsRoot(lcaTable));
-                                    const startCell = startAncestorCells.length > 0 ? startAncestorCells[startAncestorCells.length - 1] : start;
-                                    return Optional.some(
-                                    {
-                                        boxes: nestedIntercepts(lcaTable, start, startTable, finish, finishTable),
-                                        start: startCell,
-                                        finish: finishCell
-                                        }
+                    return lookupTable(finish).bind(
+                    finishTable => {
+                            if (eq$1(startTable, finishTable)) {
+                                return Optional.some(
+                                {
+                                  boxes: intercepts(startTable, start, finish),
+                                  start,
+                                  finish
+                                    }
                                 );
+                            } else if (contains$1(startTable, finishTable)) {
+                                const ancestorCells = ancestors$3(finish, 'td,th', getIsRoot(startTable));
+                                const finishCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : finish;
+                                return Optional.some(
+                                {
+                                    boxes: nestedIntercepts(startTable, start, startTable, finish, finishTable),
+                                    start,
+                                    finish: finishCell
+                                    }
+                                );
+                            } else if (contains$1(finishTable, startTable)) {
+                                const ancestorCells = ancestors$3(start, 'td,th', getIsRoot(finishTable));
+                                const startCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : start;
+                                return Optional.some(
+                                {
+                                    boxes: nestedIntercepts(finishTable, start, startTable, finish, finishTable),
+                                    start,
+                                    finish: startCell
+                                    }
+                                );
+                            } else {
+                                return ancestors(start, finish).shared.bind(
+                                lca => {
+                                    return closest$1(lca, 'table', isRoot).bind(
+                                    lcaTable => {
+                                        const finishAncestorCells = ancestors$3(finish, 'td,th', getIsRoot(lcaTable));
+                                        const finishCell = finishAncestorCells.length > 0 ? finishAncestorCells[finishAncestorCells.length - 1] : finish;
+                                        const startAncestorCells = ancestors$3(start, 'td,th', getIsRoot(lcaTable));
+                                        const startCell = startAncestorCells.length > 0 ? startAncestorCells[startAncestorCells.length - 1] : start;
+                                        return Optional.some(
+                                        {
+                                            boxes: nestedIntercepts(lcaTable, start, startTable, finish, finishTable),
+                                            start: startCell,
+                                            finish: finishCell
+                                            }
+                                    );
+                                    }
+                              );
                                 }
-                          );
+                                );
                             }
-                            );
                         }
-                        }
-                    );
+                );
                 }
             );
         }
@@ -3162,65 +3162,65 @@
     const getLast = (boxes, lastSelectedSelector) => {
         return find$1(
             boxes, box => {
-            return is$2(box, lastSelectedSelector);
+                return is$2(box, lastSelectedSelector);
             }
         );
     };
     const getEdges = (container, firstSelectedSelector, lastSelectedSelector) => {
         return descendant(container, firstSelectedSelector).bind(
             first => {
-            return descendant(container, lastSelectedSelector).bind(
-                    last => {
-                    return sharedOne(
-                            lookupTable, [
+                return descendant(container, lastSelectedSelector).bind(
+                last => {
+                        return sharedOne(
+                        lookupTable, [
                             first,
                             last
                             ]
-                        ).map(
-                        table => {
-                                return {
+                    ).map(
+                            table => {
+                            return {
                                     first,
                                     last,
                                     table
-                                };
-                        }
-                    );
-                    }
-                );
+                            };
+                            }
+                        );
+                }
+            );
             }
         );
     };
     const expandTo = (finish, firstSelectedSelector) => {
         return ancestor$1(finish, 'table').bind(
             table => {
-            return descendant(table, firstSelectedSelector).bind(
-                    start => {
-                    return identify(start, finish).bind(
-                            identified => {
-                            return identified.boxes.map(
-                                    boxes => {
-                                    return {
+                return descendant(table, firstSelectedSelector).bind(
+                start => {
+                        return identify(start, finish).bind(
+                        identified => {
+                                return identified.boxes.map(
+                                boxes => {
+                                        return {
                                             boxes,
                                             start: identified.start,
                                             finish: identified.finish
-                                    };
-                                    }
-                                );
-                            }
-                        );
-                    }
-                );
+                                        };
+                                }
+                            );
+                        }
+                    );
+                }
+            );
             }
         );
     };
     const shiftSelection = (boxes, deltaRow, deltaColumn, firstSelectedSelector, lastSelectedSelector) => {
         return getLast(boxes, lastSelectedSelector).bind(
             last => {
-            return moveBy(last, deltaRow, deltaColumn).bind(
-                    finish => {
-                    return expandTo(finish, firstSelectedSelector);
-                    }
-                );
+                return moveBy(last, deltaRow, deltaColumn).bind(
+                finish => {
+                        return expandTo(finish, firstSelectedSelector);
+                }
+            );
             }
         );
     };
@@ -3231,21 +3231,21 @@
     const retrieveBox = (container, firstSelectedSelector, lastSelectedSelector) => {
         return getEdges(container, firstSelectedSelector, lastSelectedSelector).bind(
             edges => {
-            const isRoot = ancestor => {
-                    return eq$1(container, ancestor);
-            };
-            const sectionSelector = 'thead,tfoot,tbody,table';
-            const firstAncestor = ancestor$1(edges.first, sectionSelector, isRoot);
-            const lastAncestor = ancestor$1(edges.last, sectionSelector, isRoot);
-            return firstAncestor.bind(
-                    fA => {
-                    return lastAncestor.bind(
-                            lA => {
-                            return eq$1(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
-                            }
-                        );
-                    }
-                );
+                const isRoot = ancestor => {
+            return eq$1(container, ancestor);
+                };
+                const sectionSelector = 'thead,tfoot,tbody,table';
+                const firstAncestor = ancestor$1(edges.first, sectionSelector, isRoot);
+                const lastAncestor = ancestor$1(edges.last, sectionSelector, isRoot);
+                return firstAncestor.bind(
+                fA => {
+                        return lastAncestor.bind(
+                        lA => {
+                                return eq$1(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
+                        }
+                    );
+                }
+            );
             }
         );
     };
@@ -3262,8 +3262,8 @@
         } else {
             return retrieveBox(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(
                 bounds => ({
-                bounds,
-                cells: selectedCells
+                    bounds,
+                    cells: selectedCells
                 })
             );
         }
@@ -3317,9 +3317,9 @@
     const extractSelected = cells => {
         return table(cells[0]).map(
             table => {
-            const replica = extract$1(table, attributeSelector);
-            removeDataStyle(replica);
-            return [replica];
+                const replica = extract$1(table, attributeSelector);
+                removeDataStyle(replica);
+                return [replica];
             }
         );
     };
@@ -3328,20 +3328,20 @@
     const registerEvents = (editor, actions) => {
         editor.on(
             'BeforeGetContent', e => {
-            const multiCellContext = cells => {
-                    e.preventDefault();
-                    extractSelected(cells).each(
-                elements => {
+                const multiCellContext = cells => {
+            e.preventDefault();
+            extractSelected(cells).each(
+                    elements => {
                         e.content = e.format === 'text' ? getTextContent(elements) : serializeElements(editor, elements);
+                    }
+                );
+                };
+                if (e.selection === true) {
+                    const cells = getCellsFromFakeSelection(editor);
+                    if (cells.length >= 1) {
+                        multiCellContext(cells);
+                    }
                 }
-            );
-            };
-            if (e.selection === true) {
-                const cells = getCellsFromFakeSelection(editor);
-                if (cells.length >= 1) {
-                    multiCellContext(cells);
-                }
-            }
             }
         );
     editor.on(
@@ -3350,27 +3350,27 @@
                 const selectedCells = getCellsFromSelection(editor);
                 head(selectedCells).each(
                     cell => {
-                    table(cell).each(
-                            table => {
-                            const elements = filter$2(
-                                    fromHtml(e.content), content => {
-                                    return name(content) !== 'meta';
-                                    }
-                                );
-                            const isTable = isTag('table');
-                        if (shouldMergeContentOnPaste(editor) && elements.length === 1 && isTable(elements[0])) {
-                            e.preventDefault();
-                            const doc = SugarElement.fromDom(editor.getDoc());
-                            const generators = paste$1(doc);
-                            const targets = paste(cell, elements[0], generators);
-                            actions.pasteCells(table, targets).each(
-                            () => {
-                                    editor.focus();
+                        table(cell).each(
+                        table => {
+                                const elements = filter$2(
+                                fromHtml(e.content), content => {
+                                        return name(content) !== 'meta';
                                 }
                             );
-                        }
+                        const isTable = isTag('table');
+                            if (shouldMergeContentOnPaste(editor) && elements.length === 1 && isTable(elements[0])) {
+                                e.preventDefault();
+                                const doc = SugarElement.fromDom(editor.getDoc());
+                                const generators = paste$1(doc);
+                                const targets = paste(cell, elements[0], generators);
+                                actions.pasteCells(table, targets).each(
+                                () => {
+                                editor.focus();
+                                    }
+                                );
                             }
-                        );
+                        }
+                    );
                     }
                 );
             }
@@ -3387,11 +3387,11 @@
         if (universe.property().isText(element) && universe.property().getText(element).trim().length === 0 || universe.property().isComment(element)) {
             return direction(element).bind(
                 elem => {
-                return scan$1(universe, elem, direction).orThunk(
-                        () => {
-                        return Optional.some(elem);
-                        }
-                    );
+                    return scan$1(universe, elem, direction).orThunk(
+                    () => {
+                            return Optional.some(elem);
+                    }
+                );
                 }
             );
         } else {
@@ -3426,9 +3426,9 @@
             const width = getGenericWidth(main);
             width.each(
                 w => {
-                const newWidth = w.value / 2;
-                setGenericWidth(main, newWidth, w.unit);
-                setGenericWidth(other, newWidth, w.unit);
+                    const newWidth = w.value / 2;
+                    setGenericWidth(main, newWidth, w.unit);
+                    setGenericWidth(other, newWidth, w.unit);
                 }
             );
         }
@@ -3462,8 +3462,8 @@
             const newThis = Math.max(minCellSize, (sizes[index] + delta) / ratio);
             return map$1(
                 sizes, (size, idx) => {
-                const newSize = idx === index ? newThis : size / ratio;
-                return newSize - size;
+                    const newSize = idx === index ? newThis : size / ratio;
+                    return newSize - size;
                 }
             );
         };
@@ -3619,8 +3619,8 @@
     };
     const findTableRowHeaderType = warehouse => findMap(
         warehouse.all, row => {
-        const rowType = getRowType(row);
-        return rowType.type === 'header' ? Optional.from(rowType.subType) : Optional.none();
+            const rowType = getRowType(row);
+            return rowType.type === 'header' ? Optional.from(rowType.subType) : Optional.none();
         }
     );
 
@@ -3682,12 +3682,12 @@
     const generateSection = (table, sectionName) => {
         const section = child(table, sectionName).getOrThunk(
             () => {
-            const newSection = SugarElement.fromTag(sectionName, owner(table).dom);
-            if (sectionName === 'thead') {
-                insert$1(table, 'caption,colgroup', newSection);
-            } else if (sectionName === 'colgroup') {
-                    insert$1(table, 'caption', newSection);
-            } else {
+                const newSection = SugarElement.fromTag(sectionName, owner(table).dom);
+                if (sectionName === 'thead') {
+                    insert$1(table, 'caption,colgroup', newSection);
+                } else if (sectionName === 'colgroup') {
+            insert$1(table, 'caption', newSection);
+                } else {
                     append$1(table, newSection);
                 }
                 return newSection;
@@ -3701,30 +3701,30 @@
         const newCells = [];
         const syncRows = gridSection => map$1(
             gridSection, row => {
-            if (row.isNew) {
-                newRows.push(row.element);
-            }
-            const tr = row.element;
-            empty(tr);
-            each$2(
-                    row.cells, cell => {
-                    if (cell.isNew) {
-                        newCells.push(cell.element);
-                    }
-                    setIfNot(cell.element, 'colspan', cell.colspan, 1);
-                    setIfNot(cell.element, 'rowspan', cell.rowspan, 1);
-                    append$1(tr, cell.element);
-                    }
-                );
+                if (row.isNew) {
+                    newRows.push(row.element);
+                }
+                const tr = row.element;
+                empty(tr);
+                each$2(
+                row.cells, cell => {
+                        if (cell.isNew) {
+                            newCells.push(cell.element);
+                        }
+                        setIfNot(cell.element, 'colspan', cell.colspan, 1);
+                        setIfNot(cell.element, 'rowspan', cell.rowspan, 1);
+                        append$1(tr, cell.element);
+                }
+            );
             return tr;
             }
         );
     const syncColGroup = gridSection => bind$2(
         gridSection, colGroup => map$1(
-            colGroup.cells, col => {
-        setIfNot(col.element, 'span', col.colspan, 1);
-        return col.element;
-            }
+        colGroup.cells, col => {
+                setIfNot(col.element, 'span', col.colspan, 1);
+                return col.element;
+        }
         )
     );
       const renderSection = (gridSection, sectionName) => {
@@ -3749,20 +3749,20 @@
         const columnGroupsSection = [];
         each$2(
             grid, row => {
-            switch (row.section) {
-            case 'thead':
-                headSection.push(row);
-              break;
-            case 'tbody':
-                bodySection.push(row);
-              break;
-            case 'tfoot':
-                footSection.push(row);
-              break;
-            case 'colgroup':
-                columnGroupsSection.push(row);
-              break;
-            }
+                switch (row.section) {
+                case 'thead':
+                    headSection.push(row);
+                  break;
+                case 'tbody':
+                    bodySection.push(row);
+                  break;
+                case 'tfoot':
+                    footSection.push(row);
+                  break;
+                case 'colgroup':
+                    columnGroupsSection.push(row);
+                  break;
+                }
             }
         );
       renderOrRemoveSection(columnGroupsSection, 'colgroup');
@@ -3776,15 +3776,15 @@
     };
     const copy = grid => map$1(
         grid, row => {
-        const tr = shallow(row.element);
-        each$2(
-                row.cells, cell => {
-                const clonedCell = deep(cell.element);
-                setIfNot(clonedCell, 'colspan', cell.colspan, 1);
-                setIfNot(clonedCell, 'rowspan', cell.rowspan, 1);
-                append$1(tr, clonedCell);
-                }
-            );
+            const tr = shallow(row.element);
+            each$2(
+            row.cells, cell => {
+                    const clonedCell = deep(cell.element);
+                    setIfNot(clonedCell, 'colspan', cell.colspan, 1);
+                    setIfNot(clonedCell, 'rowspan', cell.rowspan, 1);
+                    append$1(tr, clonedCell);
+            }
+        );
         return tr;
         }
     );
@@ -3792,7 +3792,7 @@
     const getColumn = (grid, index) => {
         return map$1(
             grid, row => {
-            return getCell(row, index);
+                return getCell(row, index);
             }
         );
     };
@@ -3806,7 +3806,7 @@
         const first = xs[0];
         const index = findIndex(
             xs, x => {
-            return !comp(first.element, x.element);
+                return !comp(first.element, x.element);
             }
         );
       return index.getOr(xs.length);
@@ -3833,17 +3833,17 @@
         };
         return map$1(
             grid, (row, rowIndex) => {
-            const details = bind$2(
-                    row.cells, (cell, columnIndex) => {
-                    if (seen[rowIndex][columnIndex] === false) {
-                        const result = subgrid(grid, rowIndex, columnIndex, comparator);
-                        updateSeen(rowIndex, columnIndex, result.rowspan, result.colspan);
-                        return [detailnew(cell.element, result.rowspan, result.colspan, cell.isNew)];
-                    } else {
-                        return [];
+                const details = bind$2(
+                row.cells, (cell, columnIndex) => {
+                        if (seen[rowIndex][columnIndex] === false) {
+                            const result = subgrid(grid, rowIndex, columnIndex, comparator);
+                            updateSeen(rowIndex, columnIndex, result.rowspan, result.colspan);
+                            return [detailnew(cell.element, result.rowspan, result.colspan, cell.isNew)];
+                        } else {
+                            return [];
+                        }
                     }
-                    }
-                );
+            );
             return rowdetailnew(row.element, details, row.section, row.isNew);
             }
         );
@@ -3852,12 +3852,12 @@
         const grid = [];
         each$2(
             warehouse.colgroups, colgroup => {
-            const colgroupCols = [];
-            for (let columnIndex = 0; columnIndex < warehouse.grid.columns; columnIndex++) {
-                const element = Warehouse.getColumnAt(warehouse, columnIndex).map(column => elementnew(column.element, isNew, false)).getOrThunk(() => elementnew(generators.colGap(), true, false));
-                colgroupCols.push(element);
-            }
-            grid.push(rowcells(colgroup.element, colgroupCols, 'colgroup', isNew));
+                const colgroupCols = [];
+                for (let columnIndex = 0; columnIndex < warehouse.grid.columns; columnIndex++) {
+                    const element = Warehouse.getColumnAt(warehouse, columnIndex).map(column => elementnew(column.element, isNew, false)).getOrThunk(() => elementnew(generators.colGap(), true, false));
+                    colgroupCols.push(element);
+                }
+                grid.push(rowcells(colgroup.element, colgroupCols, 'colgroup', isNew));
             }
         );
     for (let rowIndex = 0; rowIndex < warehouse.grid.rows; rowIndex++) {
@@ -3879,7 +3879,7 @@
     const extractCells = (warehouse, target, predicate) => {
         const details = map$1(
             target.selection, cell$1 => {
-            return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
+                return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
             }
         );
       const cells = cat(details);
@@ -3890,11 +3890,11 @@
         const tableSection = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.section).getOrThunk(TableSection.fallback);
         const output = extract(warehouse, target).map(
             info => {
-            const model = fromWarehouse(warehouse, generators);
-            const result = operation(model, info, eq$1, genWrappers(generators), tableSection);
-            const lockedColumns = getLockedColumnsFromGrid(result.grid);
-            const grid = toDetailList(result.grid);
-            return {
+                const model = fromWarehouse(warehouse, generators);
+                const result = operation(model, info, eq$1, genWrappers(generators), tableSection);
+                const lockedColumns = getLockedColumnsFromGrid(result.grid);
+                const grid = toDetailList(result.grid);
+                return {
                     info,
                     grid,
                     cursor: result.cursor,
@@ -3904,16 +3904,16 @@
         );
     return output.bind(
         out => {
-        const newElements = render$1(table, out.grid);
-        const tableSizing = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.sizing).getOrThunk(() => TableSize.getTableSize(table));
-        const resizing = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.resize).getOrThunk(preserveTable);
-        adjustment(
-                table, out.grid, out.info, {
-                sizing: tableSizing,
-                resize: resizing,
-                section: tableSection
+            const newElements = render$1(table, out.grid);
+            const tableSizing = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.sizing).getOrThunk(() => TableSize.getTableSize(table));
+            const resizing = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.resize).getOrThunk(preserveTable);
+            adjustment(
+            table, out.grid, out.info, {
+                    sizing: tableSizing,
+                    resize: resizing,
+                    section: tableSection
                     }
-            );
+        );
         postAction(table);
         remove$7(table, LOCKED_COL_ATTR);
         if (out.lockedColumns.length > 0) {
@@ -3931,21 +3931,21 @@
     };
     const onPaste = (warehouse, target) => cell(target.element).bind(
         cell => findInWarehouse(warehouse, cell).map(
-        details => {
-                const value = {
+            details => {
+        const value = {
                         ...details,
                     generators: target.generators,
                     clipboard: target.clipboard
-                };
-                return value;
-        }
+            };
+        return value;
+            }
         )
     );
     const onPasteByEditor = (warehouse, target) => extractCells(warehouse, target, always).map(
         cells => ({
-        cells,
-        generators: target.generators,
-        clipboard: target.clipboard
+            cells,
+            generators: target.generators,
+            clipboard: target.clipboard
         })
     );
     const onMergable = (_warehouse, target) => target.mergable;
@@ -3992,11 +3992,11 @@
     const uniqueCells = (row, comparator) => {
         return foldl(
             row, (rest, cell) => {
-            return exists(
-                    rest, currentCell => {
-                    return comparator(currentCell.element, cell.element);
-                    }
-                ) ? rest : rest.concat([cell]);
+                return exists(
+                rest, currentCell => {
+                        return comparator(currentCell.element, cell.element);
+                }
+            ) ? rest : rest.concat([cell]);
             }, []
         );
     };
@@ -4004,13 +4004,13 @@
         if (index > 0 && index < grid[0].cells.length) {
             each$2(
                 grid, row => {
-                const prevCell = row.cells[index - 1];
-                let offset = 0;
-                const substitute = substitution();
-                while (row.cells.length > index + offset && comparator(prevCell.element, row.cells[index + offset].element)) {
-                    mutateCell(row, index + offset, elementnew(substitute, true, row.cells[index + offset].isLocked));
-                    offset++;
-                }
+                    const prevCell = row.cells[index - 1];
+                    let offset = 0;
+                    const substitute = substitution();
+                    while (row.cells.length > index + offset && comparator(prevCell.element, row.cells[index + offset].element)) {
+                        mutateCell(row, index + offset, elementnew(substitute, true, row.cells[index + offset].isLocked));
+                        offset++;
+                    }
                 }
             );
         }
@@ -4023,7 +4023,7 @@
             const cells = uniqueCells(rowPrevCells, comparator);
             each$2(
                 cells, cell => {
-                let replacement = Optional.none();
+                    let replacement = Optional.none();
                     for (let i = index; i < rows.length; i++) {
                         for (let j = 0; j < cellLength(rows[0]); j++) {
                             const row = rows[i];
@@ -4034,8 +4034,8 @@
                                     replacement = Optional.some(substitution());
                                 }
                                 replacement.each(
-                                sub => {
-                                mutateCell(row, j, elementnew(sub, true, current.isLocked));
+                                    sub => {
+                                    mutateCell(row, j, elementnew(sub, true, current.isLocked));
                                     }
                                 );
                             }
@@ -4144,28 +4144,28 @@
         return grid.concat(
             range$1(
                 amount, () => {
-                const generator = exampleRow.section === 'colgroup' ? generators.colgroup : generators.row;
-                const row = clone(exampleRow, generator, identity);
-                const elements = generateElements(row.cells.length, row, generators, idx => has$1(lockedColumns, idx.toString()));
-                return setCells(row, elements);
+                    const generator = exampleRow.section === 'colgroup' ? generators.colgroup : generators.row;
+                    const row = clone(exampleRow, generator, identity);
+                    const elements = generateElements(row.cells.length, row, generators, idx => has$1(lockedColumns, idx.toString()));
+                    return setCells(row, elements);
                 }
             )
         );
     };
     const colFill = (grid, amount, generators, startIndex) => map$1(
         grid, row => {
-        const newChildren = generateElements(amount, row, generators, never);
-        return addCells(row, startIndex, newChildren);
+            const newChildren = generateElements(amount, row, generators, never);
+            return addCells(row, startIndex, newChildren);
         }
     );
     const lockedColFill = (grid, generators, lockedColumns) => map$1(
         grid, row => {
-        return foldl(
-                lockedColumns, (acc, colNum) => {
-                const newChild = generateElements(1, row, generators, always)[0];
-                return addCell(acc, colNum, newChild);
-                }, row
-            );
+            return foldl(
+            lockedColumns, (acc, colNum) => {
+                    const newChild = generateElements(1, row, generators, always)[0];
+                    return addCell(acc, colNum, newChild);
+            }, row
+        );
         }
     );
     const tailor = (gridA, delta, generators) => {
@@ -4231,14 +4231,14 @@
         const result = measure(validStartAddress, gridA, gridBRows);
         return result.map(
             diff => {
-            const delta = {
+                const delta = {
                     ...diff,
                     colDelta: diff.colDelta - lockedColumnsWithinBounds.length
                 };
-            const fittedGrid = tailor(gridA, delta, generator);
-            const newLockedColumns = getLockedColumnsFromGrid(fittedGrid);
-            const newLockedColumnsWithinBounds = getLockedColumnsWithinBounds(validStartAddress, gridBRows, newLockedColumns);
-            return mergeTables(validStartAddress, fittedGrid, gridBRows, generator, comparator, newLockedColumnsWithinBounds);
+                const fittedGrid = tailor(gridA, delta, generator);
+                const newLockedColumns = getLockedColumnsFromGrid(fittedGrid);
+                const newLockedColumnsWithinBounds = getLockedColumnsWithinBounds(validStartAddress, gridBRows, newLockedColumns);
+                return mergeTables(validStartAddress, fittedGrid, gridBRows, generator, comparator, newLockedColumnsWithinBounds);
             }
         );
     };
@@ -4250,7 +4250,7 @@
         const fittedOldGrid = tailor(gridA, secondDelta, generator);
         return map$1(
             fittedOldGrid, (gridRow, i) => {
-            return addCells(gridRow, index, fittedNewGrid[i].cells);
+                return addCells(gridRow, index, fittedNewGrid[i].cells);
             }
         );
     };
@@ -4290,9 +4290,9 @@
         const after = rows.slice(index);
         const newRow = cloneRow(
             rows[example], (ex, c) => {
-            const withinSpan = index > 0 && index < rows.length && comparator(getCellElement(rows[index - 1], c), getCellElement(rows[index], c));
-            const ret = withinSpan ? getCell(rows[index], c) : elementnew(substitution(ex.element, comparator), true, ex.isLocked);
-            return ret;
+                const withinSpan = index > 0 && index < rows.length && comparator(getCellElement(rows[index - 1], c), getCellElement(rows[index], c));
+                const ret = withinSpan ? getCell(rows[index], c) : elementnew(substitution(ex.element, comparator), true, ex.isLocked);
+                return ret;
             }, comparator, substitution
         );
       return [
@@ -4312,16 +4312,16 @@
     };
     const insertColumnAt = (grid, index, example, comparator, substitution) => map$1(
         grid, row => {
-        const withinSpan = index > 0 && index < cellLength(row) && comparator(getCellElement(row, index - 1), getCellElement(row, index));
-        const sub = getElementFor(row, index, row.section, withinSpan, example, comparator, substitution);
-        return addCell(row, index, sub);
+            const withinSpan = index > 0 && index < cellLength(row) && comparator(getCellElement(row, index - 1), getCellElement(row, index));
+            const sub = getElementFor(row, index, row.section, withinSpan, example, comparator, substitution);
+            return addCell(row, index, sub);
         }
     );
     const deleteColumnsAt = (grid, columns) => bind$2(
         grid, row => {
-        const existingCells = row.cells;
-        const cells = foldr(columns, (acc, column) => column >= 0 && column < acc.length ? acc.slice(0, column).concat(acc.slice(column + 1)) : acc, existingCells);
-        return cells.length > 0 ? [rowcells(row.element, cells, row.section, row.isNew)] : [];
+            const existingCells = row.cells;
+            const cells = foldr(columns, (acc, column) => column >= 0 && column < acc.length ? acc.slice(0, column).concat(acc.slice(column + 1)) : acc, existingCells);
+            return cells.length > 0 ? [rowcells(row.element, cells, row.section, row.isNew)] : [];
         }
     );
     const deleteRowsAt = (grid, start, finish) => {
@@ -4369,40 +4369,40 @@
         const isTarget = cell => {
             return exists(
                 targets, target => {
-                return comparator(cell.element, target.element);
+                    return comparator(cell.element, target.element);
                 }
             );
         };
         return map$1(
             grid, (row, rowIndex) => {
-            return mapCells(
-                    row, (cell, colIndex) => {
-                    if (isTarget(cell)) {
-                        const newCell = shouldReplace(cell, rowIndex, colIndex) ? replacer(cell, comparator, substitute) : cell;
-                        genScope(newCell, rowIndex, colIndex).each(
-                        scope => {
-                                setOptions(newCell.element, { scope: Optional.from(scope) });
-                                }
-                        );
-                        return newCell;
-                    } else {
-                        return cell;
+                return mapCells(
+                row, (cell, colIndex) => {
+                        if (isTarget(cell)) {
+                            const newCell = shouldReplace(cell, rowIndex, colIndex) ? replacer(cell, comparator, substitute) : cell;
+                            genScope(newCell, rowIndex, colIndex).each(
+                            scope => {
+                            setOptions(newCell.element, { scope: Optional.from(scope) });
+                            }
+                            );
+                            return newCell;
+                        } else {
+                            return cell;
+                        }
                     }
-                    }
-                );
+            );
             }
         );
     };
     const getColumnCells = (rows, columnIndex, comparator) => bind$2(
         rows, (row, i) => {
-        return isDuplicatedCell(rows, i, columnIndex, comparator) ? [] : [getCell(row, columnIndex)];
+            return isDuplicatedCell(rows, i, columnIndex, comparator) ? [] : [getCell(row, columnIndex)];
         }
     );
     const getRowCells = (rows, rowIndex, comparator) => {
         const targetRow = rows[rowIndex];
         return bind$2(
             targetRow.cells, (item, i) => {
-            return isDuplicatedCell(rows, rowIndex, i, comparator) ? [] : [item];
+                return isDuplicatedCell(rows, rowIndex, i, comparator) ? [] : [item];
             }
         );
     };
@@ -4422,7 +4422,7 @@
         const newRows = [...rows];
         each$2(
             indexes, index => {
-            newRows[index] = tableSection.transformRow(rows[index], section);
+                newRows[index] = tableSection.transformRow(rows[index], section);
             }
         );
       const newGrid = [
@@ -4450,48 +4450,48 @@
         const adt = {};
         each$2(
             cases, (acase, count) => {
-            const keys$1 = keys(acase);
-            if (keys$1.length !== 1) {
-                throw new Error('one and only one name per case');
-            }
-            const key = keys$1[0];
-            const value = acase[key];
-            if (adt[key] !== undefined) {
-                throw new Error('duplicate key detected:' + key);
-            } else if (key === 'cata') {
-                    throw new Error('cannot have a case named cata (sorry)');
-            } else if (!isArray(value)) {
+                const keys$1 = keys(acase);
+                if (keys$1.length !== 1) {
+                    throw new Error('one and only one name per case');
+                }
+                const key = keys$1[0];
+                const value = acase[key];
+                if (adt[key] !== undefined) {
+                    throw new Error('duplicate key detected:' + key);
+                } else if (key === 'cata') {
+            throw new Error('cannot have a case named cata (sorry)');
+                } else if (!isArray(value)) {
                     throw new Error('case arguments must be an array');
                 }
                 constructors.push(key);
-            adt[key] = (...args) => {
-                    const argLength = args.length;
+                adt[key] = (...args) => {
+            const argLength = args.length;
                     if (argLength !== value.length) {
                         throw new Error('Wrong number of arguments to case ' + key + '. Expected ' + value.length + ' (' + value + '), got ' + argLength);
-                    }
-                    const match = branches => {
-            const branchKeys = keys(branches);
+                        }
+            const match = branches => {
+                        const branchKeys = keys(branches);
                         if (constructors.length !== branchKeys.length) {
                             throw new Error('Wrong number of arguments to match. Expected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
-                                }
-            const allReqd = forall(
-                        constructors, reqKey => {
-                        return contains$2(branchKeys, reqKey);
                         }
-                    );
-                    if (!allReqd) {
-                        throw new Error('Not all branches were specified when using match. Specified: ' + branchKeys.join(', ') + '\nRequired: ' + constructors.join(', '));
-                    }
-                    return branches[key].apply(null, args);
-                    };
-                    return {
+                        const allReqd = forall(
+                constructors, reqKey => {
+                            return contains$2(branchKeys, reqKey);
+                }
+            );
+            if (!allReqd) {
+                throw new Error('Not all branches were specified when using match. Specified: ' + branchKeys.join(', ') + '\nRequired: ' + constructors.join(', '));
+            }
+            return branches[key].apply(null, args);
+            };
+            return {
                         fold: (...foldArgs) => {
                             if (foldArgs.length !== cases.length) {
                                 throw new Error('Wrong number of arguments to fold. Expected ' + cases.length + ', got ' + foldArgs.length);
                             }
                             const target = foldArgs[count];
                             return target.apply(null, args);
-                                },
+                        },
                         match,
                         log: label => {
                             console.log(
@@ -4502,8 +4502,8 @@
                                 }
                             );
                         }
-                    };
-            };
+                        };
+                };
             }
         );
       return adt;
@@ -4577,8 +4577,8 @@
         const all = Warehouse.justCells(warehouse);
         return map$1(
             all, cell => {
-            const width = total(cell.column, cell.column + cell.colspan, widths);
-            return {
+                const width = total(cell.column, cell.column + cell.colspan, widths);
+                return {
                     element: cell.element,
                     width,
                     colspan: cell.colspan
@@ -4590,9 +4590,9 @@
         const groups = Warehouse.justColumns(warehouse);
         return map$1(
             groups, (column, index) => ({
-            element: column.element,
-            width: widths[index],
-            colspan: column.colspan
+                element: column.element,
+                width: widths[index],
+                colspan: column.colspan
             })
         );
     };
@@ -4600,8 +4600,8 @@
         const all = Warehouse.justCells(warehouse);
         return map$1(
             all, cell => {
-            const height = total(cell.row, cell.row + cell.rowspan, heights);
-            return {
+                const height = total(cell.row, cell.row + cell.rowspan, heights);
+                return {
                     element: cell.element,
                     height,
                     rowspan: cell.rowspan
@@ -4612,7 +4612,7 @@
     const matchRowHeight = (warehouse, heights) => {
         return map$1(
             warehouse.all, (row, i) => {
-            return {
+                return {
                     element: row.element,
                     height: heights[i]
                 };
@@ -4632,7 +4632,7 @@
         const newSizes = recalculate(warehouse, widths);
         each$2(
             newSizes, cell => {
-            tableSize.setElementWidth(cell.element, cell.width);
+                tableSize.setElementWidth(cell.element, cell.width);
             }
         );
     };
@@ -4655,12 +4655,12 @@
         const newRowSizes = matchRowHeight(warehouse, newHeights);
         each$2(
             newRowSizes, row => {
-            setHeight(row.element, row.height);
+                setHeight(row.element, row.height);
             }
         );
     each$2(
         newCellSizes, cell => {
-        setHeight(cell.element, cell.height);
+            setHeight(cell.element, cell.height);
         }
     );
       const total = sumUp(newHeights);
@@ -4722,9 +4722,9 @@
         const getOrInit = (element, comparator) => {
             return recent.fold(
                 () => {
-                return add(element);
+                    return add(element);
                 }, p => {
-                return comparator(element, p.item) ? p.replacement : add(element);
+                    return comparator(element, p.item) ? p.replacement : add(element);
                 }
             );
         };
@@ -4736,7 +4736,7 @@
             const find = (element, comparator) => {
                 return find$1(
                     list, x => {
-                    return comparator(x.item, element);
+                        return comparator(x.item, element);
                     }
                 );
             };
@@ -4758,9 +4758,9 @@
                     const cell = element;
                     return find(cell, comparator).fold(
                         () => {
-                        return makeNew(cell);
+                            return makeNew(cell);
                         }, p => {
-                        return comparator(element, p.item) ? p.sub : makeNew(cell);
+                            return comparator(element, p.item) ? p.sub : makeNew(cell);
                         }
                     );
                 }
@@ -4800,7 +4800,7 @@
                     ];
                     const isMixed = exists(
                         stringAttributes, attribute => {
-                        return attribute !== baseScope && contains$2(scopes, attribute);
+                            return attribute !== baseScope && contains$2(scopes, attribute);
                         }
                     );
                     return isMixed ? Optional.none() : Optional.from(baseScope);
@@ -4893,7 +4893,7 @@
         const advancedBr = children => {
             return forall(
                 children, c => {
-                return isBr(c) || isText(c) && get$6(c).trim().length === 0;
+                    return isBr(c) || isText(c) && get$6(c).trim().length === 0;
                 }
             );
         };
@@ -4903,33 +4903,33 @@
         const siblingIsBlock = el => {
             return nextSibling(el).map(
                 rightSibling => {
-                if (isBlock(rightSibling)) {
-                    return true;
-                }
-                if (isEmptyTag(rightSibling)) {
-                    return name(rightSibling) === 'img' ? false : true;
-                }
-                return false;
+                    if (isBlock(rightSibling)) {
+                        return true;
+                    }
+                    if (isEmptyTag(rightSibling)) {
+                        return name(rightSibling) === 'img' ? false : true;
+                    }
+                    return false;
                 }
             ).getOr(false);
         };
         const markCell = cell => {
             return last$1(cell).bind(
                 rightEdge => {
-                const rightSiblingIsBlock = siblingIsBlock(rightEdge);
-                return parent(rightEdge).map(
-                        parent => {
-                        return rightSiblingIsBlock === true || isListItem(parent) || isBr(rightEdge) || isBlock(parent) && !eq$1(cell, parent) ? [] : [SugarElement.fromTag('br')];
-                        }
-                    );
+                    const rightSiblingIsBlock = siblingIsBlock(rightEdge);
+                    return parent(rightEdge).map(
+                    parent => {
+                            return rightSiblingIsBlock === true || isListItem(parent) || isBr(rightEdge) || isBlock(parent) && !eq$1(cell, parent) ? [] : [SugarElement.fromTag('br')];
+                    }
+                );
                 }
             ).getOr([]);
         };
         const markContent = () => {
             const content = bind$2(
                 cells, cell => {
-                const children = children$2(cell);
-                return advancedBr(children) ? [] : children.concat(markCell(cell));
+                    const children = children$2(cell);
+                    return advancedBr(children) ? [] : children.concat(markCell(cell));
                 }
             );
         return content.length === 0 ? [SugarElement.fromTag('br')] : content;
@@ -4952,10 +4952,10 @@
     });
     const findEditableCursorPosition = rows => findMap(
         rows, row => findMap(
-        row.cells, cell => {
-                const elem = cell.element;
-                return someIf(isEditable(elem), elem);
-        }
+            row.cells, cell => {
+        const elem = cell.element;
+        return someIf(isEditable(elem), elem);
+            }
         )
     );
     const elementFromGrid = (grid, row, column) => {
@@ -4979,8 +4979,8 @@
         const rows = uniqueRows(details);
         const newGrid = foldr(
             rows, (acc, row) => {
-            const newG = insertRowAt(acc.grid, targetIndex, row.row + acc.delta, comparator, genWrappers.getOrInit);
-            return {
+                const newG = insertRowAt(acc.grid, targetIndex, row.row + acc.delta, comparator, genWrappers.getOrInit);
+                return {
                     grid: newG,
                     delta: acc.delta + 1
                 };
@@ -4997,7 +4997,7 @@
         const targetIndex = target.row + target.rowspan;
         const newGrid = foldr(
             rows, (newG, row) => {
-            return insertRowAt(newG, targetIndex, row.row, comparator, genWrappers.getOrInit);
+                return insertRowAt(newG, targetIndex, row.row, comparator, genWrappers.getOrInit);
             }, grid
         );
       return bundle(newGrid, targetIndex, details[0].column);
@@ -5008,8 +5008,8 @@
         const targetIndex = columns[0].column;
         const newGrid = foldr(
             columns, (acc, col) => {
-            const newG = insertColumnAt(acc.grid, targetIndex, col.column + acc.delta, comparator, genWrappers.getOrInit);
-            return {
+                const newG = insertColumnAt(acc.grid, targetIndex, col.column + acc.delta, comparator, genWrappers.getOrInit);
+                return {
                     grid: newG,
                     delta: acc.delta + 1
                 };
@@ -5027,7 +5027,7 @@
         const columns = uniqueColumns(details);
         const newGrid = foldr(
             columns, (newG, col) => {
-            return insertColumnAt(newG, targetIndex, col.column, comparator, genWrappers.getOrInit);
+                return insertColumnAt(newG, targetIndex, col.column, comparator, genWrappers.getOrInit);
             }, grid
         );
       return bundle(newGrid, details[0].row, targetIndex);
@@ -5094,7 +5094,7 @@
         const mergedGrid = merge$1(startAddress, grid, gridB, pasteDetails.generators, comparator);
         return mergedGrid.fold(
             () => outcome(grid, Optional.some(pasteDetails.element)), newGrid => {
-            return bundle(newGrid, pasteDetails.row, pasteDetails.column);
+                return bundle(newGrid, pasteDetails.row, pasteDetails.column);
             }
         );
     };
@@ -5140,11 +5140,11 @@
         const details = onCells(house, target);
         return details.bind(
             selectedCells => {
-            const lastSelectedCell = selectedCells[selectedCells.length - 1];
-            const minColRange = selectedCells[0].column;
-            const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
-            const selectedColumnCells = flatten(map$1(house.all, row => filter$2(row.cells, cell => cell.column >= minColRange && cell.column < maxColRange)));
-            return findCommonCellType(selectedColumnCells);
+                const lastSelectedCell = selectedCells[selectedCells.length - 1];
+                const minColRange = selectedCells[0].column;
+                const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
+                const selectedColumnCells = flatten(map$1(house.all, row => filter$2(row.cells, cell => cell.column >= minColRange && cell.column < maxColRange)));
+                return findCommonCellType(selectedColumnCells);
             }
         ).getOr('');
     };
@@ -5158,11 +5158,11 @@
         const details = onCells(house, target);
         return details.bind(
             selectedCells => {
-            const lastSelectedCell = selectedCells[selectedCells.length - 1];
-            const minRowRange = selectedCells[0].row;
-            const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
-            const selectedRows = house.all.slice(minRowRange, maxRowRange);
-            return findCommonRowType(selectedRows);
+                const lastSelectedCell = selectedCells[selectedCells.length - 1];
+                const minRowRange = selectedCells[0].row;
+                const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
+                const selectedRows = house.all.slice(minRowRange, maxRowRange);
+                return findCommonRowType(selectedRows);
             }
         ).getOr('');
     };
@@ -5175,33 +5175,33 @@
         const uniqueCols = uniqueColumns(details);
         return foldl(
             uniqueCols, (acc, detail) => {
-            const column = columns$1[detail.column];
-            const colWidth = column.map(getOuter$2).getOr(0);
-            return acc + colWidth;
+                const column = columns$1[detail.column];
+                const colWidth = column.map(getOuter$2).getOr(0);
+                return acc + colWidth;
             }, 0
         );
     };
     const insertColumnsExtractor = before => (warehouse, target) => onCells(warehouse, target).filter(
         details => {
-        const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
-        return !checkLocked(warehouse, details);
+            const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
+            return !checkLocked(warehouse, details);
         }
     ).map(
         details => ({
-        details,
-        pixelDelta: getColumnsWidth(warehouse, details)
+            details,
+            pixelDelta: getColumnsWidth(warehouse, details)
             })
     );
     const eraseColumnsExtractor = (warehouse, target) => onUnlockedCells(warehouse, target).map(
         details => ({
-        details,
-        pixelDelta: -getColumnsWidth(warehouse, details)
+            details,
+            pixelDelta: -getColumnsWidth(warehouse, details)
         })
     );
     const pasteColumnsExtractor = before => (warehouse, target) => onPasteByEditor(warehouse, target).filter(
         details => {
-        const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
-        return !checkLocked(warehouse, details.cells);
+            const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
+            return !checkLocked(warehouse, details.cells);
         }
     );
     const headerCellGenerator = Generators.transform('th');
@@ -5316,25 +5316,25 @@
         };
         const setSelectionFromAction = (table, result) => result.cursor.fold(
             () => {
-            const cells = cells$1(table);
-            return head(cells).filter(inBody).map(
-                    firstCell => {
-                    cellSelectionHandler.clearSelectedCells(table.dom);
-                    const rng = editor.dom.createRng();
-                    rng.selectNode(firstCell.dom);
-                    editor.selection.setRng(rng);
-                    set$2(firstCell, 'data-mce-selected', '1');
-                    return rng;
-                    }
-                );
+                const cells = cells$1(table);
+                return head(cells).filter(inBody).map(
+                firstCell => {
+                        cellSelectionHandler.clearSelectedCells(table.dom);
+                        const rng = editor.dom.createRng();
+                        rng.selectNode(firstCell.dom);
+                        editor.selection.setRng(rng);
+                        set$2(firstCell, 'data-mce-selected', '1');
+                        return rng;
+                }
+            );
             }, cell => {
-            const des = freefallRtl(cell);
-            const rng = editor.dom.createRng();
-            rng.setStart(des.element.dom, des.offset);
-            rng.setEnd(des.element.dom, des.offset);
-            editor.selection.setRng(rng);
-            cellSelectionHandler.clearSelectedCells(table.dom);
-            return Optional.some(rng);
+                const des = freefallRtl(cell);
+                const rng = editor.dom.createRng();
+                rng.setStart(des.element.dom, des.offset);
+                rng.setEnd(des.element.dom, des.offset);
+                editor.selection.setRng(rng);
+                cellSelectionHandler.clearSelectedCells(table.dom);
+                return Optional.some(rng);
             }
         );
       const execute = (operation, guard, mutate, effect) => (table, target, noEvents = false) => {
@@ -5348,15 +5348,15 @@
             };
             return guard(table) ? operation(table, target, generators, behaviours).bind(
                 result => {
-                resizeHandler.refresh(table.dom);
-                each$2(
-                        result.newRows, row => {
-                        fireNewRow(editor, row.dom);
-                        }
-                    );
+                    resizeHandler.refresh(table.dom);
+                    each$2(
+                    result.newRows, row => {
+                            fireNewRow(editor, row.dom);
+                    }
+                );
                 each$2(
                     result.newCells, cell => {
-                    fireNewCell(editor, cell.dom);
+                        fireNewCell(editor, cell.dom);
                     }
                 );
                 const range = setSelectionFromAction(table, result);
@@ -5368,8 +5368,8 @@
                 }
                 return range.map(
                     rng => ({
-                    rng,
-                    effect
+                        rng,
+                        effect
                     })
                 );
                 }
@@ -5443,9 +5443,9 @@
             const colsToCopy = filter$2(Warehouse.justColumns(house), isColInRange(minColRange, maxColRange));
             const copiedCols = map$1(
                 colsToCopy, c => {
-                const clonedCol = deep(c.element);
-                constrainSpan(clonedCol, 'span', maxColRange - minColRange);
-                return clonedCol;
+                    const clonedCol = deep(c.element);
+                    constrainSpan(clonedCol, 'span', maxColRange - minColRange);
+                    return clonedCol;
                 }
             );
             const fakeColgroup = SugarElement.fromTag('colgroup');
@@ -5457,14 +5457,14 @@
     };
     const generateRows = (house, minColRange, maxColRange) => map$1(
         house.all, row => {
-        const cellsToCopy = filter$2(row.cells, isColInRange(minColRange, maxColRange));
-        const copiedCells = map$1(
-                cellsToCopy, cell => {
-                const clonedCell = deep(cell.element);
-                constrainSpan(clonedCell, 'colspan', maxColRange - minColRange);
-                return clonedCell;
-                }
-            );
+            const cellsToCopy = filter$2(row.cells, isColInRange(minColRange, maxColRange));
+            const copiedCells = map$1(
+            cellsToCopy, cell => {
+                    const clonedCell = deep(cell.element);
+                    constrainSpan(clonedCell, 'colspan', maxColRange - minColRange);
+                    return clonedCell;
+            }
+        );
         const fakeTR = SugarElement.fromTag('tr');
         append(fakeTR, copiedCells);
         return fakeTR;
@@ -5475,12 +5475,12 @@
         const details = onUnlockedCells(house, target);
         return details.map(
             selectedCells => {
-            const lastSelectedCell = selectedCells[selectedCells.length - 1];
-            const minColRange = selectedCells[0].column;
-            const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
-            const fakeColGroups = generateColGroup(house, minColRange, maxColRange);
-            const fakeRows = generateRows(house, minColRange, maxColRange);
-            return [
+                const lastSelectedCell = selectedCells[selectedCells.length - 1];
+                const minColRange = selectedCells[0].column;
+                const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
+                const fakeColGroups = generateColGroup(house, minColRange, maxColRange);
+                const fakeRows = generateRows(house, minColRange, maxColRange);
+                return [
                 ...fakeColGroups,
                 ...fakeRows
                 ];
@@ -5493,18 +5493,18 @@
         const details = onCells(warehouse, target);
         return details.bind(
             selectedCells => {
-            const grid = toGrid(warehouse, generators, false);
-            const rows = extractGridDetails(grid).rows;
-            const slicedGrid = rows.slice(selectedCells[0].row, selectedCells[selectedCells.length - 1].row + selectedCells[selectedCells.length - 1].rowspan);
-            const filteredGrid = bind$2(
-                    slicedGrid, row => {
-                    const newCells = filter$2(row.cells, cell => !cell.isLocked);
-                    return newCells.length > 0 ? [{
+                const grid = toGrid(warehouse, generators, false);
+                const rows = extractGridDetails(grid).rows;
+                const slicedGrid = rows.slice(selectedCells[0].row, selectedCells[selectedCells.length - 1].row + selectedCells[selectedCells.length - 1].rowspan);
+                const filteredGrid = bind$2(
+                slicedGrid, row => {
+                        const newCells = filter$2(row.cells, cell => !cell.isLocked);
+                        return newCells.length > 0 ? [{
                               ...row,
                             cells: newCells
-                    }] : [];
-                    }
-                );
+                        }] : [];
+                }
+            );
             const slicedDetails = toDetailList(filteredGrid);
             return someIf(slicedDetails.length > 0, slicedDetails);
             }
@@ -5540,17 +5540,17 @@
     const redistributeToPercent = (widths, totalWidth) => {
         return map$1(
             widths, w => {
-            const colType = Size.from(w);
-            return colType.fold(
-                    () => {
-                    return w;
-                    }, px => {
-                    const ratio = px / totalWidth * 100;
-                    return ratio + '%';
-                    }, pc => {
-                    return pc + '%';
-                    }
-                );
+                const colType = Size.from(w);
+                return colType.fold(
+                () => {
+                        return w;
+                }, px => {
+                        const ratio = px / totalWidth * 100;
+                        return ratio + '%';
+                }, pc => {
+                        return pc + '%';
+                }
+            );
             }
         );
     };
@@ -5558,27 +5558,27 @@
         const scale = newTotalWidth / totalWidth;
         return map$1(
             widths, w => {
-            const colType = Size.from(w);
-            return colType.fold(
-                    () => {
-                    return w;
-                    }, px => {
-                    return px * scale + 'px';
-                    }, pc => {
-                    return pc / 100 * newTotalWidth + 'px';
-                    }
-                );
+                const colType = Size.from(w);
+                return colType.fold(
+                () => {
+                        return w;
+                }, px => {
+                        return px * scale + 'px';
+                }, pc => {
+                        return pc / 100 * newTotalWidth + 'px';
+                }
+            );
             }
         );
     };
     const redistributeEmpty = (newWidthType, columns) => {
         const f = newWidthType.fold(
             () => constant(''), pixels => {
-            const num = pixels / columns;
-            return constant(num + 'px');
+                const num = pixels / columns;
+                return constant(num + 'px');
             }, () => {
-            const num = 100 / columns;
-            return constant(num + '%');
+                const num = 100 / columns;
+                return constant(num + '%');
             }
         );
       return range$1(columns, f);
@@ -5586,11 +5586,11 @@
     const redistributeValues = (newWidthType, widths, totalWidth) => {
         return newWidthType.fold(
             () => {
-            return widths;
+                return widths;
             }, px => {
-            return redistributeToPx(widths, totalWidth, px);
+                return redistributeToPx(widths, totalWidth, px);
             }, _pc => {
-            return redistributeToPercent(widths, totalWidth);
+                return redistributeToPercent(widths, totalWidth);
             }
         );
     };
@@ -5598,7 +5598,7 @@
         const newType = Size.from(newWidth);
         const floats = forall(
             widths, s => {
-            return s === '0px';
+                return s === '0px';
             }
         ) ? redistributeEmpty(newType, widths.length) : redistributeValues(newType, widths, totalWidth);
       return normalize(floats);
@@ -5609,7 +5609,7 @@
         }
         return foldr(
             values, (rest, v) => {
-            return Size.from(v).fold(constant(0), identity, identity) + rest;
+                return Size.from(v).fold(constant(0), identity, identity) + rest;
             }, 0
         );
     };
@@ -5623,9 +5623,9 @@
     const add$3 = (value, amount) => {
         return Size.from(value).fold(
             constant(value), px => {
-            return px + amount + 'px';
+                return px + amount + 'px';
             }, pc => {
-            return pc + amount + '%';
+                return pc + amount + '%';
             }
         );
     };
@@ -5635,15 +5635,15 @@
         }
         const scan = foldr(
             values, (rest, value) => {
-            const info = Size.from(value).fold(
-                    () => ({
-                    value,
-                    remainder: 0
+                const info = Size.from(value).fold(
+                () => ({
+                        value,
+                        remainder: 0
                     }), num => roundDown(num, 'px'), num => ({
-                    value: num + '%',
-                    remainder: 0
+                        value: num + '%',
+                        remainder: 0
                     })
-                );
+            );
             return {
                 output: [info.value].concat(rest.output),
                 remainder: rest.remainder + info.remainder
@@ -5661,31 +5661,31 @@
     const redistributeToW = (newWidths, cells, unit) => {
         each$2(
             cells, cell => {
-            const widths = newWidths.slice(cell.column, cell.colspan + cell.column);
-            const w = sum(widths, minWidth());
-            set$1(cell.element, 'width', w + unit);
+                const widths = newWidths.slice(cell.column, cell.colspan + cell.column);
+                const w = sum(widths, minWidth());
+                set$1(cell.element, 'width', w + unit);
             }
         );
     };
     const redistributeToColumns = (newWidths, columns, unit) => {
         each$2(
             columns, (column, index) => {
-            const width = sum([newWidths[index]], minWidth());
-            set$1(column.element, 'width', width + unit);
+                const width = sum([newWidths[index]], minWidth());
+                set$1(column.element, 'width', width + unit);
             }
         );
     };
     const redistributeToH = (newHeights, rows, cells, unit) => {
         each$2(
             cells, cell => {
-            const heights = newHeights.slice(cell.row, cell.rowspan + cell.row);
-            const h = sum(heights, minHeight());
-            set$1(cell.element, 'height', h + unit);
+                const heights = newHeights.slice(cell.row, cell.rowspan + cell.row);
+                const h = sum(heights, minHeight());
+                set$1(cell.element, 'height', h + unit);
             }
         );
     each$2(
         rows, (row, i) => {
-        set$1(row.element, 'height', newHeights[i]);
+            set$1(row.element, 'height', newHeights[i]);
         }
     );
     };
@@ -5699,26 +5699,26 @@
         const columns = Warehouse.justColumns(warehouse);
         optWidth.each(
             newWidth => {
-            const widthUnit = getUnit(newWidth);
-            const totalWidth = get$9(table);
-            const oldWidths = getRawWidths(warehouse, table);
-            const nuWidths = redistribute$1(oldWidths, totalWidth, newWidth);
-            if (Warehouse.hasColumns(warehouse)) {
-                redistributeToColumns(nuWidths, columns, widthUnit);
-            } else {
-                    redistributeToW(nuWidths, cells, widthUnit);
-            }
+                const widthUnit = getUnit(newWidth);
+                const totalWidth = get$9(table);
+                const oldWidths = getRawWidths(warehouse, table);
+                const nuWidths = redistribute$1(oldWidths, totalWidth, newWidth);
+                if (Warehouse.hasColumns(warehouse)) {
+                    redistributeToColumns(nuWidths, columns, widthUnit);
+                } else {
+            redistributeToW(nuWidths, cells, widthUnit);
+                }
                 set$1(table, 'width', newWidth);
             }
         );
     optHeight.each(
         newHeight => {
-        const hUnit = getUnit(newHeight);
-        const totalHeight = get$8(table);
-        const oldHeights = getRawHeights(warehouse, table, height);
-        const nuHeights = redistribute$1(oldHeights, totalHeight, newHeight);
-        redistributeToH(nuHeights, rows, cells, hUnit);
-        set$1(table, 'height', newHeight);
+            const hUnit = getUnit(newHeight);
+            const totalHeight = get$8(table);
+            const oldHeights = getRawHeights(warehouse, table, height);
+            const nuHeights = redistribute$1(oldHeights, totalHeight, newHeight);
+            redistributeToH(nuHeights, rows, cells, hUnit);
+            set$1(table, 'height', newHeight);
         }
     );
     };
@@ -5745,8 +5745,8 @@
         const rowElements = columns.length > 0 ? columns : cells$1(table);
         each$2(
             rowElements, cell => {
-            remove$5(cell, 'width');
-            cleanupLegacyAttributes(cell);
+                remove$5(cell, 'width');
+                cleanupLegacyAttributes(cell);
             }
         );
       cleanupLegacyAttributes(table);
@@ -5827,12 +5827,12 @@
     const fireEvents = (editor, table) => {
         each$2(
             descendants(table, 'tr'), row => {
-            fireNewRow(editor, row.dom);
-            each$2(
-                    descendants(row, 'th,td'), cell => {
-                    fireNewCell(editor, cell.dom);
-                    }
-                );
+                fireNewRow(editor, row.dom);
+                each$2(
+                descendants(row, 'th,td'), cell => {
+                        fireNewCell(editor, cell.dom);
+                }
+            );
             }
         );
     };
@@ -5846,27 +5846,27 @@
         };
         editor.undoManager.ignore(
             () => {
-            const table = render(rows, columns, rowHeaders, colHeaders, getTableHeaderType(editor), options);
-            set$2(table, 'data-mce-id', '__mce');
-            const html = getOuter(table);
-            editor.insertContent(html);
-            editor.addVisual();
+                const table = render(rows, columns, rowHeaders, colHeaders, getTableHeaderType(editor), options);
+                set$2(table, 'data-mce-id', '__mce');
+                const html = getOuter(table);
+                editor.insertContent(html);
+                editor.addVisual();
             }
         );
     return descendant(getBody(editor), 'table[data-mce-id="__mce"]').map(
         table => {
-        if (isTablePixelsForced(editor)) {
-            convertToPixelSize(table);
-        } else if (isTableResponsiveForced(editor)) {
-                convertToNoneSize(table);
-        } else if (isTablePercentagesForced(editor) || isPercentage(defaultStyles.width)) {
+            if (isTablePixelsForced(editor)) {
+                convertToPixelSize(table);
+            } else if (isTableResponsiveForced(editor)) {
+        convertToNoneSize(table);
+            } else if (isTablePercentagesForced(editor) || isPercentage(defaultStyles.width)) {
                     convertToPercentSize(table);
             }
                 removeDataStyle(table);
-        remove$7(table, 'data-mce-id');
-        fireEvents(editor, table);
-        selectFirstCellInTable(editor, table);
-        return table.dom;
+            remove$7(table, 'data-mce-id');
+            fireEvents(editor, table);
+            selectFirstCellInTable(editor, table);
+            return table.dom;
         }
     ).getOrNull();
     };
@@ -5918,40 +5918,40 @@
         const isRoot = getIsRoot(editor);
         const eraseTable = () => getSelectionStartCellOrCaption(editor).each(
             cellOrCaption => {
-            table(cellOrCaption, isRoot).filter(not(isRoot)).each(
-                    table => {
-                    const cursor = SugarElement.fromText('');
-                    after$5(table, cursor);
-                    remove$6(table);
-                    if (editor.dom.isEmpty(editor.getBody())) {
-                        editor.setContent('');
-                        editor.selection.setCursorLocation();
-                    } else {
-                        const rng = editor.dom.createRng();
-                        rng.setStart(cursor.dom, 0);
-                        rng.setEnd(cursor.dom, 0);
-                        editor.selection.setRng(rng);
-                        editor.nodeChanged();
+                table(cellOrCaption, isRoot).filter(not(isRoot)).each(
+                table => {
+                        const cursor = SugarElement.fromText('');
+                        after$5(table, cursor);
+                        remove$6(table);
+                        if (editor.dom.isEmpty(editor.getBody())) {
+                            editor.setContent('');
+                            editor.selection.setCursorLocation();
+                        } else {
+                            const rng = editor.dom.createRng();
+                            rng.setStart(cursor.dom, 0);
+                            rng.setEnd(cursor.dom, 0);
+                            editor.selection.setRng(rng);
+                            editor.nodeChanged();
+                        }
                     }
-                    }
-                );
+            );
             }
         );
     const setSizingMode = sizing => getSelectionStartCellOrCaption(editor).each(
         cellOrCaption => {
-        const isForcedSizing = isTableResponsiveForced(editor) || isTablePixelsForced(editor) || isTablePercentagesForced(editor);
+            const isForcedSizing = isTableResponsiveForced(editor) || isTablePixelsForced(editor) || isTablePercentagesForced(editor);
             if (!isForcedSizing) {
                 table(cellOrCaption, isRoot).each(
                     table => {
-                    if (sizing === 'relative' && !isPercentSizing(table)) {
-                          convertToPercentSize(table);
-                    } else if (sizing === 'fixed' && !isPixelSizing(table)) {
-                            convertToPixelSize(table);
-                    } else if (sizing === 'responsive' && !isNoneSizing(table)) {
+                        if (sizing === 'relative' && !isPercentSizing(table)) {
+                              convertToPercentSize(table);
+                        } else if (sizing === 'fixed' && !isPixelSizing(table)) {
+                    convertToPixelSize(table);
+                        } else if (sizing === 'responsive' && !isNoneSizing(table)) {
                             convertToNoneSize(table);
                         }
                         removeDataStyle(table);
-                    fireTableModified(editor, table.dom, structureModified);
+                        fireTableModified(editor, table.dom, structureModified);
                     }
                 );
             }
@@ -5962,43 +5962,43 @@
       const toggleTableClass = (_ui, clazz) => {
             performActionOnSelection(
                 table => {
-                editor.formatter.toggle('tableclass', { value: clazz }, table.dom);
-                fireTableModified(editor, table.dom, styleModified);
+                    editor.formatter.toggle('tableclass', { value: clazz }, table.dom);
+                    fireTableModified(editor, table.dom, styleModified);
                 }
             );
         };
         const toggleTableCellClass = (_ui, clazz) => {
             performActionOnSelection(
                 table => {
-                const selectedCells = getCellsFromSelection(editor);
-                const allHaveClass = forall(selectedCells, cell => editor.formatter.match('tablecellclass', { value: clazz }, cell.dom));
-                const formatterAction = allHaveClass ? editor.formatter.remove : editor.formatter.apply;
-                each$2(selectedCells, cell => formatterAction('tablecellclass', { value: clazz }, cell.dom));
-                fireTableModified(editor, table.dom, styleModified);
+                    const selectedCells = getCellsFromSelection(editor);
+                    const allHaveClass = forall(selectedCells, cell => editor.formatter.match('tablecellclass', { value: clazz }, cell.dom));
+                    const formatterAction = allHaveClass ? editor.formatter.remove : editor.formatter.apply;
+                    each$2(selectedCells, cell => formatterAction('tablecellclass', { value: clazz }, cell.dom));
+                    fireTableModified(editor, table.dom, styleModified);
                 }
             );
         };
         const toggleCaption = () => {
             getSelectionStartCellOrCaption(editor).each(
                 cellOrCaption => {
-                table(cellOrCaption, isRoot).each(
-                        table => {
-                        child(table, 'caption').fold(
-                                () => {
-                                const caption = SugarElement.fromTag('caption');
-                                append$1(caption, SugarElement.fromText('Caption'));
-                                appendAt(table, caption, 0);
-                                editor.selection.setCursorLocation(caption.dom, 0);
-                                }, caption => {
-                                if (isTag('caption')(cellOrCaption)) {
-                                    one('td', table).each(td => editor.selection.setCursorLocation(td.dom, 0));
-                                }
-                                remove$6(caption);
-                                }
-                            );
-                        fireTableModified(editor, table.dom, structureModified);
-                        }
-                    );
+                    table(cellOrCaption, isRoot).each(
+                    table => {
+                            child(table, 'caption').fold(
+                            () => {
+                                    const caption = SugarElement.fromTag('caption');
+                                    append$1(caption, SugarElement.fromText('Caption'));
+                                    appendAt(table, caption, 0);
+                                    editor.selection.setCursorLocation(caption.dom, 0);
+                            }, caption => {
+                                    if (isTag('caption')(cellOrCaption)) {
+                                        one('td', table).each(td => editor.selection.setCursorLocation(td.dom, 0));
+                                    }
+                                    remove$6(caption);
+                            }
+                        );
+                    fireTableModified(editor, table.dom, structureModified);
+                    }
+                );
                 }
             );
         };
@@ -6007,38 +6007,38 @@
         };
         const actOnSelection = (execute, noEvents = false) => performActionOnSelection(
             (table, startCell) => {
-            const targets = forMenu(getCellsFromSelection(editor), table, startCell);
-            execute(table, targets, noEvents).each(postExecute);
+                const targets = forMenu(getCellsFromSelection(editor), table, startCell);
+                execute(table, targets, noEvents).each(postExecute);
             }
         );
     const copyRowSelection = () => performActionOnSelection(
         (table, startCell) => {
-        const targets = forMenu(getCellsFromSelection(editor), table, startCell);
-        const generators = cellOperations(noop, SugarElement.fromDom(editor.getDoc()), Optional.none());
-        return copyRows(table, targets, generators);
+            const targets = forMenu(getCellsFromSelection(editor), table, startCell);
+            const generators = cellOperations(noop, SugarElement.fromDom(editor.getDoc()), Optional.none());
+            return copyRows(table, targets, generators);
         }
     );
     const copyColSelection = () => performActionOnSelection(
         (table, startCell) => {
-        const targets = forMenu(getCellsFromSelection(editor), table, startCell);
-        return copyCols(table, targets);
+            const targets = forMenu(getCellsFromSelection(editor), table, startCell);
+            return copyCols(table, targets);
         }
     );
     const pasteOnSelection = (execute, getRows) => getRows().each(
         rows => {
-        const clonedRows = map$1(rows, row => deep(row));
-        performActionOnSelection(
-                (table, startCell) => {
-                const generators = paste$1(SugarElement.fromDom(editor.getDoc()));
-                const targets = pasteRows(getCellsFromSelection(editor), startCell, clonedRows, generators);
-                execute(table, targets).each(postExecute);
-                }
-            );
+            const clonedRows = map$1(rows, row => deep(row));
+            performActionOnSelection(
+            (table, startCell) => {
+                    const generators = paste$1(SugarElement.fromDom(editor.getDoc()));
+                    const targets = pasteRows(getCellsFromSelection(editor), startCell, clonedRows, generators);
+                    execute(table, targets).each(postExecute);
+            }
+        );
         }
     );
     const actOnType = getAction => (_ui, args) => get$c(args, 'type').each(
         type => {
-        actOnSelection(getAction(type), args.no_events);
+            actOnSelection(getAction(type), args.no_events);
         }
     );
     each$1(
@@ -6053,14 +6053,14 @@
             mceTableDeleteRow: () => actOnSelection(actions.deleteRow),
             mceTableCutCol: () => copyColSelection().each(
                 selection => {
-                setColumns(selection);
-                actOnSelection(actions.deleteColumn);
+                    setColumns(selection);
+                    actOnSelection(actions.deleteColumn);
                 }
             ),
         mceTableCutRow: () => copyRowSelection().each(
             selection => {
-            setRows(selection);
-            actOnSelection(actions.deleteRow);
+                setRows(selection);
+                actOnSelection(actions.deleteRow);
             }
         ),
         mceTableCopyCol: () => copyColSelection().each(selection => setColumns(selection)),
@@ -6078,51 +6078,51 @@
         mceTableColType: actOnType(type => type === 'th' ? actions.makeColumnsHeader : actions.unmakeColumnsHeader),
         mceTableRowType: actOnType(
             type => {
-            switch (type) {
-            case 'header':
-              return actions.makeRowsHeader;
-            case 'footer':
-              return actions.makeRowsFooter;
-            default:
-              return actions.makeRowsBody;
-            }
+                switch (type) {
+                case 'header':
+                  return actions.makeRowsHeader;
+                case 'footer':
+                  return actions.makeRowsFooter;
+                default:
+                  return actions.makeRowsBody;
+                }
             }
         )
         }, (func, name) => editor.addCommand(name, func)
     );
     editor.addCommand(
         'mceInsertTable', (_ui, args) => {
-        insertTable(editor, args.rows, args.columns, args.options);
+            insertTable(editor, args.rows, args.columns, args.options);
         }
     );
     editor.addCommand(
         'mceTableApplyCellStyle', (_ui, args) => {
-        const getFormatName = style => 'tablecell' + style.toLowerCase().replace('-', '');
-        if (!isObject(args)) {
-            return;
-        }
-        const cells = filter$2(getCellsFromSelection(editor), isInEditableContext$1);
-        if (cells.length === 0) {
-            return;
-        }
-        const validArgs = filter$1(args, (value, style) => editor.formatter.has(getFormatName(style)) && isString(value));
-        if (isEmpty(validArgs)) {
-            return;
-        }
-        each$1(
-                validArgs, (value, style) => {
-                const formatName = getFormatName(style);
-                each$2(
-                        cells, cell => {
-                        if (value === '') {
-                            editor.formatter.remove(formatName, { value: null }, cell.dom, true);
-                        } else {
-                          editor.formatter.apply(formatName, { value }, cell.dom);
-                        }
+            const getFormatName = style => 'tablecell' + style.toLowerCase().replace('-', '');
+            if (!isObject(args)) {
+                return;
+            }
+            const cells = filter$2(getCellsFromSelection(editor), isInEditableContext$1);
+            if (cells.length === 0) {
+                return;
+            }
+            const validArgs = filter$1(args, (value, style) => editor.formatter.has(getFormatName(style)) && isString(value));
+            if (isEmpty(validArgs)) {
+                return;
+            }
+            each$1(
+            validArgs, (value, style) => {
+                    const formatName = getFormatName(style);
+                    each$2(
+                    cells, cell => {
+                            if (value === '') {
+                                editor.formatter.remove(formatName, { value: null }, cell.dom, true);
+                            } else {
+                              editor.formatter.apply(formatName, { value }, cell.dom);
                             }
-                    );
-                }
-            );
+                            }
+                );
+            }
+        );
         getTableFromCell(cells[0]).each(table => fireTableModified(editor, table.dom, styleModified));
         }
     );
@@ -6132,10 +6132,10 @@
         const isRoot = getIsRoot(editor);
         const lookupOnSelection = action => getSelectionCell(getSelectionStart(editor)).bind(
             cell => table(cell, isRoot).map(
-                table => {
-            const targets = forMenu(getCellsFromSelection(editor), table, cell);
-            return action(table, targets);
-                }
+            table => {
+                    const targets = forMenu(getCellsFromSelection(editor), table, cell);
+                    return action(table, targets);
+            }
             )
         ).getOr('');
     each$1(
@@ -6192,22 +6192,22 @@
     const setStart = (rng, situ) => {
         situ.fold(
             e => {
-            rng.setStartBefore(e.dom);
+                rng.setStartBefore(e.dom);
             }, (e, o) => {
-            rng.setStart(e.dom, o);
+                rng.setStart(e.dom, o);
             }, e => {
-            rng.setStartAfter(e.dom);
+                rng.setStartAfter(e.dom);
             }
         );
     };
     const setFinish = (rng, situ) => {
         situ.fold(
             e => {
-            rng.setEndBefore(e.dom);
+                rng.setEndBefore(e.dom);
             }, (e, o) => {
-            rng.setEnd(e.dom, o);
+                rng.setEnd(e.dom, o);
             }, e => {
-            rng.setEndAfter(e.dom);
+                rng.setEndAfter(e.dom);
             }
         );
     };
@@ -6341,11 +6341,11 @@
         if (!(eq$1(start, finish) && soffset === foffset)) {
             return closest$1(start, 'td,th', isRoot).bind(
                 s => {
-                return closest$1(finish, 'td,th', isRoot).bind(
-                        f => {
-                        return detect(container, isRoot, s, f, selectRange);
-                        }
-                    );
+                    return closest$1(finish, 'td,th', isRoot).bind(
+                    f => {
+                            return detect(container, isRoot, s, f, selectRange);
+                    }
+                );
                 }
             );
         } else {
@@ -6356,13 +6356,13 @@
         if (!eq$1(start, finish)) {
             return identify(start, finish, isRoot).bind(
                 cellSel => {
-                const boxes = cellSel.boxes.getOr([]);
-                if (boxes.length > 1) {
-                    selectRange(container, boxes, cellSel.start, cellSel.finish);
-                    return Optional.some(Response.create(Optional.some(makeSitus(start, 0, start, getEnd(start))), true));
-                } else {
-                        return Optional.none();
-                }
+                    const boxes = cellSel.boxes.getOr([]);
+                    if (boxes.length > 1) {
+                        selectRange(container, boxes, cellSel.start, cellSel.finish);
+                        return Optional.some(Response.create(Optional.some(makeSitus(start, 0, start, getEnd(start))), true));
+                    } else {
+                return Optional.none();
+                    }
                 }
             );
         } else {
@@ -6385,14 +6385,14 @@
     const backtrack = (universe, item, _direction, transition = sidestep) => {
         return universe.property().parent(item).map(
             p => {
-            return traverse(p, transition);
+                return traverse(p, transition);
             }
         );
     };
     const sidestep = (universe, item, direction, transition = advance) => {
         return direction.sibling(universe, item).map(
             p => {
-            return traverse(p, transition);
+                return traverse(p, transition);
             }
         );
     };
@@ -6401,7 +6401,7 @@
         const result = direction.first(children);
         return result.map(
             r => {
-            return traverse(r, transition);
+                return traverse(r, transition);
             }
         );
     };
@@ -6425,20 +6425,20 @@
     const go = (universe, item, mode, direction, rules = successors) => {
         const ruleOpt = find$1(
             rules, succ => {
-            return succ.current === mode;
+                return succ.current === mode;
             }
         );
     return ruleOpt.bind(
         rule => {
-        return rule.current(universe, item, direction, rule.next).orThunk(
-                () => {
-                return rule.fallback.bind(
-                        fb => {
-                        return go(universe, item, fb, direction);
-                        }
-                    );
-                }
-            );
+            return rule.current(universe, item, direction, rule.next).orThunk(
+            () => {
+                    return rule.fallback.bind(
+                    fb => {
+                            return go(universe, item, fb, direction);
+                    }
+                );
+            }
+        );
         }
     );
     };
@@ -6476,11 +6476,11 @@
         const next = go(universe, item, mode, direction);
         return next.bind(
             n => {
-            if (isRoot(n.item)) {
-                return Optional.none();
-            } else {
-                    return predicate(n.item) ? Optional.some(n.item) : hone(universe, n.item, predicate, n.mode, direction, isRoot);
-            }
+                if (isRoot(n.item)) {
+                    return Optional.none();
+                } else {
+            return predicate(n.item) ? Optional.some(n.item) : hone(universe, n.item, predicate, n.mode, direction, isRoot);
+                }
             }
         );
     };
@@ -6536,26 +6536,26 @@
     const verify = (bridge, before, beforeOffset, after, afterOffset, failure, isRoot) => {
         return closest$1(after, 'td,th', isRoot).bind(
             afterCell => {
-            return closest$1(before, 'td,th', isRoot).map(
-                    beforeCell => {
-                    if (!eq$1(afterCell, beforeCell)) {
-                        return sharedOne(
-                        isRow, [
-                        afterCell,
-                        beforeCell
-                        ]
-                        ).fold(
-                            () => {
-                                return isOverlapping(bridge, beforeCell, afterCell) ? adt$2.success() : failure(beforeCell);
-                                }, _sharedRow => {
-                                return failure(beforeCell);
-                                }
-                        );
-                    } else {
-                        return eq$1(after, afterCell) && getEnd(afterCell) === afterOffset ? failure(beforeCell) : adt$2.none('in same cell');
+                return closest$1(before, 'td,th', isRoot).map(
+                beforeCell => {
+                        if (!eq$1(afterCell, beforeCell)) {
+                            return sharedOne(
+                            isRow, [
+                            afterCell,
+                            beforeCell
+                            ]
+                            ).fold(
+                                () => {
+                                    return isOverlapping(bridge, beforeCell, afterCell) ? adt$2.success() : failure(beforeCell);
+                                    }, _sharedRow => {
+                                    return failure(beforeCell);
+                                    }
+                            );
+                        } else {
+                            return eq$1(after, afterCell) && getEnd(afterCell) === afterOffset ? failure(beforeCell) : adt$2.none('in same cell');
+                        }
                     }
-                    }
-                );
+            );
             }
         ).getOr(adt$2.none('default'));
     };
@@ -6576,8 +6576,8 @@
     });
     const indexInParent = element => parent(element).bind(
         parent => {
-        const children = children$2(parent);
-        return indexOf(children, element).map(index => inParent(parent, children, element, index));
+            const children = children$2(parent);
+            return indexOf(children, element).map(index => inParent(parent, children, element, index));
         }
     );
     const indexOf = (elements, element) => findIndex(elements, curry(eq$1, element));
@@ -6586,38 +6586,38 @@
     const gatherer = (cand, gather, isRoot) => {
         return gather(cand, isRoot).bind(
             target => {
-            return isText(target) && get$6(target).trim().length === 0 ? gatherer(target, gather, isRoot) : Optional.some(target);
+                return isText(target) && get$6(target).trim().length === 0 ? gatherer(target, gather, isRoot) : Optional.some(target);
             }
         );
     };
     const handleBr = (isRoot, element, direction) => {
         return direction.traverse(element).orThunk(
             () => {
-            return gatherer(element, direction.gather, isRoot);
+                return gatherer(element, direction.gather, isRoot);
             }
         ).map(direction.relative);
     };
     const findBr = (element, offset) => {
         return child$2(element, offset).filter(isBr).orThunk(
             () => {
-            return child$2(element, offset - 1).filter(isBr);
+                return child$2(element, offset - 1).filter(isBr);
             }
         );
     };
     const handleParent = (isRoot, element, offset, direction) => {
         return findBr(element, offset).bind(
             br => {
-            return direction.traverse(br).fold(
-                    () => {
-                    return gatherer(br, direction.gather, isRoot).map(direction.relative);
-                    }, adjacent => {
-                    return indexInParent(adjacent).map(
-                            info => {
-                            return Situ.on(info.parent, info.index);
-                            }
-                        );
-                    }
-                );
+                return direction.traverse(br).fold(
+                () => {
+                        return gatherer(br, direction.gather, isRoot).map(direction.relative);
+                }, adjacent => {
+                        return indexInParent(adjacent).map(
+                        info => {
+                                return Situ.on(info.parent, info.index);
+                        }
+                    );
+                }
+            );
             }
         );
     };
@@ -6625,7 +6625,7 @@
         const target = isBr(element) ? handleBr(isRoot, element, direction) : handleParent(isRoot, element, offset, direction);
         return target.map(
             tgt => {
-            return {
+                return {
                     start: tgt,
                     finish: tgt
                 };
@@ -6635,13 +6635,13 @@
     const process = analysis => {
         return BeforeAfter.cata(
             analysis, _message => {
-            return Optional.none();
+                return Optional.none();
             }, () => {
-            return Optional.none();
+                return Optional.none();
             }, cell => {
-            return Optional.some(point(cell, 0));
+                return Optional.some(point(cell, 0));
             }, cell => {
-            return Optional.some(point(cell, getEnd(cell)));
+                return Optional.some(point(cell, getEnd(cell)));
             }
         );
     };
@@ -6727,11 +6727,11 @@
     const inOutsideBlock = (bridge, element, caret) => {
         return closest$2(element, isBlock).fold(
             never, cell => {
-            return getEntireBox(bridge, cell).exists(
-                    box => {
-                    return isOutside(caret, box);
-                    }
-                );
+                return getEntireBox(bridge, cell).exists(
+                box => {
+                        return isOutside(caret, box);
+                }
+            );
             }
         );
     };
@@ -6774,7 +6774,7 @@
     const isAtTable = (bridge, x, y) => {
         return bridge.elementFromPoint(x, y).filter(
             elm => {
-            return name(elm) === 'table';
+                return name(elm) === 'table';
             }
         ).isSome();
     };
@@ -6790,23 +6790,23 @@
         }
         return bridge.situsFromPoint(caret.left, movement.point(caret)).bind(
             guess => {
-            return guess.start.fold(
-                    Optional.none, element => {
-                    return getEntireBox(bridge, element).bind(
-                            guessBox => {
-                            return movement.adjuster(bridge, element, guessBox, original, caret).fold(
-                                    Optional.none, newCaret => {
-                                    return adjustTil(bridge, movement, original, newCaret, numRetries - 1);
-                                    }
-                                );
-                            }
-                        ).orThunk(
-                        () => {
-                                return Optional.some(caret);
+                return guess.start.fold(
+                Optional.none, element => {
+                        return getEntireBox(bridge, element).bind(
+                        guessBox => {
+                                return movement.adjuster(bridge, element, guessBox, original, caret).fold(
+                                Optional.none, newCaret => {
+                                        return adjustTil(bridge, movement, original, newCaret, numRetries - 1);
+                                }
+                            );
                         }
-                    );
-                    }, Optional.none
-                );
+                    ).orThunk(
+                            () => {
+                            return Optional.some(caret);
+                            }
+                        );
+                }, Optional.none
+            );
             }
         );
     };
@@ -6824,10 +6824,10 @@
         const adjusted = adjustTil(bridge, movement, caret, moved, NUM_RETRIES).getOr(moved);
         return checkScroll(movement, adjusted, bridge).fold(
             () => {
-            return bridge.situsFromPoint(adjusted.left, movement.point(adjusted));
+                return bridge.situsFromPoint(adjusted.left, movement.point(adjusted));
             }, delta => {
-            bridge.scrollBy(0, delta);
-            return bridge.situsFromPoint(adjusted.left, movement.point(adjusted) - delta);
+                bridge.scrollBy(0, delta);
+                return bridge.situsFromPoint(adjusted.left, movement.point(adjusted) - delta);
             }
         );
     };
@@ -6841,15 +6841,15 @@
     const findSpot = (bridge, isRoot, direction) => {
         return bridge.getSelection().bind(
             sel => {
-            return tryBr(isRoot, sel.finish, sel.foffset, direction).fold(
-                    () => {
-                    return Optional.some(point(sel.finish, sel.foffset));
-                    }, brNeighbour => {
-                    const range = bridge.fromSitus(brNeighbour);
-                    const analysis = BeforeAfter.verify(bridge, sel.finish, sel.foffset, range.finish, range.foffset, direction.failure, isRoot);
-                    return process(analysis);
-                    }
-                );
+                return tryBr(isRoot, sel.finish, sel.foffset, direction).fold(
+                () => {
+                        return Optional.some(point(sel.finish, sel.foffset));
+                }, brNeighbour => {
+                        const range = bridge.fromSitus(brNeighbour);
+                        const analysis = BeforeAfter.verify(bridge, sel.finish, sel.foffset, range.finish, range.foffset, direction.failure, isRoot);
+                        return process(analysis);
+                }
+            );
             }
         );
     };
@@ -6859,34 +6859,34 @@
         }
         return tryCursor(bridge, isRoot, element, offset, direction).bind(
             situs => {
-            const range = bridge.fromSitus(situs);
-            const analysis = BeforeAfter.verify(bridge, element, offset, range.finish, range.foffset, direction.failure, isRoot);
-            return BeforeAfter.cata(
-                    analysis, () => {
-                    return Optional.none();
-                    }, () => {
-                    return Optional.some(situs);
-                    }, cell => {
-                    if (eq$1(element, cell) && offset === 0) {
-                        return tryAgain(bridge, element, offset, moveUp, direction);
-                    } else {
-                    return scan(bridge, isRoot, cell, 0, direction, numRetries - 1);
-                    }
-                    }, cell => {
-                        if (eq$1(element, cell) && offset === getEnd(cell)) {
-                            return tryAgain(bridge, element, offset, moveDown, direction);
+                const range = bridge.fromSitus(situs);
+                const analysis = BeforeAfter.verify(bridge, element, offset, range.finish, range.foffset, direction.failure, isRoot);
+                return BeforeAfter.cata(
+                analysis, () => {
+                        return Optional.none();
+                }, () => {
+                        return Optional.some(situs);
+                }, cell => {
+                        if (eq$1(element, cell) && offset === 0) {
+                            return tryAgain(bridge, element, offset, moveUp, direction);
                         } else {
-                    return scan(bridge, isRoot, cell, getEnd(cell), direction, numRetries - 1);
+                        return scan(bridge, isRoot, cell, 0, direction, numRetries - 1);
+                        }
+                    }, cell => {
+                if (eq$1(element, cell) && offset === getEnd(cell)) {
+                    return tryAgain(bridge, element, offset, moveDown, direction);
+                } else {
+                            return scan(bridge, isRoot, cell, getEnd(cell), direction, numRetries - 1);
+                        }
                     }
-                    }
-                );
+            );
             }
         );
     };
     const tryAgain = (bridge, element, offset, move, direction) => {
         return getBoxAt(bridge, element, offset).bind(
             box => {
-            return tryAt(bridge, direction, move(box, Retries.getJumpSize()));
+                return tryAt(bridge, direction, move(box, Retries.getJumpSize()));
             }
         );
     };
@@ -6901,14 +6901,14 @@
     const tryCursor = (bridge, isRoot, element, offset, direction) => {
         return getBoxAt(bridge, element, offset).bind(
             box => {
-            return tryAt(bridge, direction, box);
+                return tryAt(bridge, direction, box);
             }
         );
     };
     const handle$1 = (bridge, isRoot, direction) => {
         return findSpot(bridge, isRoot, direction).bind(
             spot => {
-            return scan(bridge, isRoot, spot.element, spot.offset, direction, MAX_RETRIES).map(bridge.fromSitus);
+                return scan(bridge, isRoot, spot.element, spot.offset, direction, MAX_RETRIES).map(bridge.fromSitus);
             }
         );
     };
@@ -6916,105 +6916,105 @@
     const inSameTable = (elem, table) => {
         return ancestor(
             elem, e => {
-            return parent(e).exists(
-                    p => {
-                    return eq$1(p, table);
-                    }
-                );
+                return parent(e).exists(
+                p => {
+                        return eq$1(p, table);
+                }
+            );
             }
         );
     };
     const simulate = (bridge, isRoot, direction, initial, anchor) => {
         return closest$1(initial, 'td,th', isRoot).bind(
             start => {
-            return closest$1(start, 'table', isRoot).bind(
-                    table => {
-                    if (!inSameTable(anchor, table)) {
-                        return Optional.none();
-                    }
-                    return handle$1(bridge, isRoot, direction).bind(
-                            range => {
-                            return closest$1(range.finish, 'td,th', isRoot).map(
-                                    finish => {
-                                    return {
+                return closest$1(start, 'table', isRoot).bind(
+                table => {
+                        if (!inSameTable(anchor, table)) {
+                            return Optional.none();
+                        }
+                        return handle$1(bridge, isRoot, direction).bind(
+                        range => {
+                                return closest$1(range.finish, 'td,th', isRoot).map(
+                                finish => {
+                                        return {
                                             start,
                                             finish,
                                             range
-                                    };
-                                    }
-                                );
-                            }
-                        );
-                    }
-                );
+                                        };
+                                }
+                            );
+                        }
+                    );
+                }
+            );
             }
         );
     };
     const navigate = (bridge, isRoot, direction, initial, anchor, precheck) => {
         return precheck(initial, isRoot).orThunk(
             () => {
-            return simulate(bridge, isRoot, direction, initial, anchor).map(
-                    info => {
-                    const range = info.range;
-                    return Response.create(Optional.some(makeSitus(range.start, range.soffset, range.finish, range.foffset)), true);
-                    }
-                );
+                return simulate(bridge, isRoot, direction, initial, anchor).map(
+                info => {
+                        const range = info.range;
+                        return Response.create(Optional.some(makeSitus(range.start, range.soffset, range.finish, range.foffset)), true);
+                }
+            );
             }
         );
     };
     const firstUpCheck = (initial, isRoot) => {
         return closest$1(initial, 'tr', isRoot).bind(
             startRow => {
-            return closest$1(startRow, 'table', isRoot).bind(
-                    table => {
-                    const rows = descendants(table, 'tr');
-                    if (eq$1(startRow, rows[0])) {
-                        return seekLeft(
-                        table, element => {
-                                return last$1(element).isSome();
-                                }, isRoot
-                        ).map(
-                            last => {
-                                const lastOffset = getEnd(last);
-                                return Response.create(Optional.some(makeSitus(last, lastOffset, last, lastOffset)), true);
-                                }
-                        );
-                    } else {
-                        return Optional.none();
+                return closest$1(startRow, 'table', isRoot).bind(
+                table => {
+                        const rows = descendants(table, 'tr');
+                        if (eq$1(startRow, rows[0])) {
+                            return seekLeft(
+                            table, element => {
+                            return last$1(element).isSome();
+                            }, isRoot
+                            ).map(
+                                last => {
+                                    const lastOffset = getEnd(last);
+                                    return Response.create(Optional.some(makeSitus(last, lastOffset, last, lastOffset)), true);
+                                    }
+                            );
+                        } else {
+                            return Optional.none();
+                        }
                     }
-                    }
-                );
+            );
             }
         );
     };
     const lastDownCheck = (initial, isRoot) => {
         return closest$1(initial, 'tr', isRoot).bind(
             startRow => {
-            return closest$1(startRow, 'table', isRoot).bind(
-                    table => {
-                    const rows = descendants(table, 'tr');
-                    if (eq$1(startRow, rows[rows.length - 1])) {
-                        return seekRight(
-                        table, element => {
-                                return first(element).isSome();
-                                }, isRoot
-                        ).map(
-                            first => {
-                                return Response.create(Optional.some(makeSitus(first, 0, first, 0)), true);
-                                }
-                        );
-                    } else {
-                        return Optional.none();
+                return closest$1(startRow, 'table', isRoot).bind(
+                table => {
+                        const rows = descendants(table, 'tr');
+                        if (eq$1(startRow, rows[rows.length - 1])) {
+                            return seekRight(
+                            table, element => {
+                            return first(element).isSome();
+                            }, isRoot
+                            ).map(
+                                first => {
+                                    return Response.create(Optional.some(makeSitus(first, 0, first, 0)), true);
+                                    }
+                            );
+                        } else {
+                            return Optional.none();
+                        }
                     }
-                    }
-                );
+            );
             }
         );
     };
     const select = (bridge, container, isRoot, direction, initial, anchor, selectRange) => {
         return simulate(bridge, isRoot, direction, initial, anchor).bind(
             info => {
-            return detect(container, isRoot, info.start, info.finish, selectRange);
+                return detect(container, isRoot, info.start, info.finish, selectRange);
             }
         );
     };
@@ -7070,28 +7070,28 @@
         const applySelection = event => {
             cursor.on(
                 start => {
-                annotations.clearBeforeUpdate(container);
-                findCell(event.target, isRoot).each(
-                        finish => {
-                        identify(start, finish, isRoot).each(
-                                cellSel => {
-                                const boxes = cellSel.boxes.getOr([]);
-                                if (boxes.length === 1) {
-                                    const singleCell = boxes[0];
-                                    const isNonEditableCell = getRaw(singleCell) === 'false';
-                                    const isCellClosestContentEditable = is(closest(event.target), singleCell, eq$1);
-                                    if (isNonEditableCell && isCellClosestContentEditable) {
-                                        annotations.selectRange(container, boxes, singleCell, singleCell);
-                                        bridge.selectContents(singleCell);
+                    annotations.clearBeforeUpdate(container);
+                    findCell(event.target, isRoot).each(
+                    finish => {
+                            identify(start, finish, isRoot).each(
+                            cellSel => {
+                                    const boxes = cellSel.boxes.getOr([]);
+                                    if (boxes.length === 1) {
+                                        const singleCell = boxes[0];
+                                        const isNonEditableCell = getRaw(singleCell) === 'false';
+                                        const isCellClosestContentEditable = is(closest(event.target), singleCell, eq$1);
+                                        if (isNonEditableCell && isCellClosestContentEditable) {
+                                            annotations.selectRange(container, boxes, singleCell, singleCell);
+                                            bridge.selectContents(singleCell);
+                                        }
+                                    } else if (boxes.length > 1) {
+                                        annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
+                                        bridge.selectContents(finish);
                                     }
-                                } else if (boxes.length > 1) {
-                                    annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
-                                    bridge.selectContents(finish);
                                 }
-                                }
-                            );
-                        }
-                    );
+                        );
+                    }
+                );
                 }
             );
         };
@@ -7210,13 +7210,13 @@
         var _a, _b;
         return Optional.from((_b = (_a = doc.dom).caretPositionFromPoint) === null || _b === void 0 ? void 0 : _b.call(_a, x, y)).bind(
             pos => {
-            if (pos.offsetNode === null) {
-                return Optional.none();
-            }
-            const r = doc.dom.createRange();
-            r.setStart(pos.offsetNode, pos.offset);
-            r.collapse();
-            return Optional.some(r);
+                if (pos.offsetNode === null) {
+                    return Optional.none();
+                }
+                const r = doc.dom.createRange();
+                r.setStart(pos.offsetNode, pos.offset);
+                r.collapse();
+                return Optional.some(r);
             }
         );
     };
@@ -7282,8 +7282,8 @@
     const doSetNativeRange = (win, rng) => {
         getNativeSelection(win).each(
             selection => {
-            selection.removeAllRanges();
-            selection.addRange(rng);
+                selection.removeAllRanges();
+                selection.addRange(rng);
             }
         );
     };
@@ -7303,15 +7303,15 @@
             rtl: (start, soffset, finish, foffset) => {
                 getNativeSelection(win).each(
                     selection => {
-                    if (selection.setBaseAndExtent) {
-                        selection.setBaseAndExtent(start.dom, soffset, finish.dom, foffset);
-                    } else if (selection.extend) {
+                        if (selection.setBaseAndExtent) {
+                            selection.setBaseAndExtent(start.dom, soffset, finish.dom, foffset);
+                        } else if (selection.extend) {
                             try {
                                 setLegacyRtlRange(win, selection, start, soffset, finish, foffset);
-                            } catch (e) {
-                    doSetRange(win, finish, foffset, start, soffset);
-                            }
-                    } else {
+                                } catch (e) {
+                                doSetRange(win, finish, foffset, start, soffset);
+                                }
+                        } else {
                             doSetRange(win, finish, foffset, start, soffset);
                         }
                     }
@@ -7375,7 +7375,7 @@
         const getSelection = () => {
             return get$2(win).map(
                 exactAdt => {
-                return convertToRange(win, exactAdt);
+                    return convertToRange(win, exactAdt);
                 }
             );
         };
@@ -7386,7 +7386,7 @@
         const situsFromPoint = (x, y) => {
             return getAtPoint(win, x, y).map(
                 exact => {
-                return Situs.create(exact.start, exact.soffset, exact.finish, exact.foffset);
+                    return Situs.create(exact.start, exact.soffset, exact.finish, exact.foffset);
                 }
             );
         };
@@ -7396,14 +7396,14 @@
         const collapseSelection = (toStart = false) => {
             get$2(win).each(
                 sel => sel.fold(
-                    rng => rng.collapse(toStart), (startSitu, finishSitu) => {
-                const situ = toStart ? startSitu : finishSitu;
-                setRelative(win, situ, situ);
-                    }, (start, soffset, finish, foffset) => {
-                const node = toStart ? start : finish;
-                const offset = toStart ? soffset : foffset;
-                setExact(win, node, offset, node, offset);
-                    }
+                rng => rng.collapse(toStart), (startSitu, finishSitu) => {
+                        const situ = toStart ? startSitu : finishSitu;
+                        setRelative(win, situ, situ);
+                }, (start, soffset, finish, foffset) => {
+                        const node = toStart ? start : finish;
+                        const offset = toStart ? soffset : foffset;
+                        setExact(win, node, offset, node, offset);
+                }
                 )
             );
         };
@@ -7476,14 +7476,14 @@
             const shiftKey = realEvent.shiftKey === true;
             const handler = retrieve$1(container, annotations.selectedSelector).fold(
                 () => {
-                if (isNavigation(keycode) && !shiftKey) {
-                    annotations.clearBeforeUpdate(container);
-                }
-                if (isNavigation(keycode) && shiftKey && !isEditableSelection(start, finish)) {
-                    return Optional.none;
-                } else if (isDown(keycode) && shiftKey) {
-                        return curry(select, bridge, container, isRoot, down, finish, start, annotations.selectRange);
-                } else if (isUp(keycode) && shiftKey) {
+                    if (isNavigation(keycode) && !shiftKey) {
+                        annotations.clearBeforeUpdate(container);
+                    }
+                    if (isNavigation(keycode) && shiftKey && !isEditableSelection(start, finish)) {
+                        return Optional.none;
+                    } else if (isDown(keycode) && shiftKey) {
+                return curry(select, bridge, container, isRoot, down, finish, start, annotations.selectRange);
+                    } else if (isUp(keycode) && shiftKey) {
                         return curry(select, bridge, container, isRoot, up, finish, start, annotations.selectRange);
                     } else if (isDown(keycode)) {
                         return curry(navigate, bridge, isRoot, down, finish, start, lastDownCheck);
@@ -7493,34 +7493,34 @@
                         return Optional.none;
                     }
                 }, selected => {
-                const update$1 = attempts => {
-                        return () => {
-                const navigation = findMap(
-                            attempts, delta => {
-                            return update(delta.rows, delta.cols, container, selected, annotations);
-                            }
-                        );
-                        return navigation.fold(
-                    () => {
-                            return getEdges(container, annotations.firstSelectedSelector, annotations.lastSelectedSelector).map(
-                            edges => {
-                            const relative = isDown(keycode) || direction.isForward(keycode) ? Situ.after : Situ.before;
-                            bridge.setRelativeSelection(Situ.on(edges.first, 0), relative(edges.table));
-                            annotations.clear(container);
-                            return Response.create(Optional.none(), true);
-                            }
-                        );
-                    }, _ => {
-                            return Optional.some(Response.create(Optional.none(), true));
-                                }
+                    const update$1 = attempts => {
+                return () => {
+                            const navigation = findMap(
+                    attempts, delta => {
+                                return update(delta.rows, delta.cols, container, selected, annotations);
+                    }
                 );
-                        };
+                return navigation.fold(
+                        () => {
+                            return getEdges(container, annotations.firstSelectedSelector, annotations.lastSelectedSelector).map(
+                                edges => {
+                                const relative = isDown(keycode) || direction.isForward(keycode) ? Situ.after : Situ.before;
+                                bridge.setRelativeSelection(Situ.on(edges.first, 0), relative(edges.table));
+                                annotations.clear(container);
+                                return Response.create(Optional.none(), true);
+                                }
+                            );
+                        }, _ => {
+                            return Optional.some(Response.create(Optional.none(), true));
+                            }
+                        );
                 };
-                if (isNavigation(keycode) && shiftKey && !isEditableSelection(start, finish)) {
-                    return Optional.none;
-                } else if (isDown(keycode) && shiftKey) {
-                        return update$1([rc(+1, 0)]);
-                } else if (isUp(keycode) && shiftKey) {
+                    };
+                    if (isNavigation(keycode) && shiftKey && !isEditableSelection(start, finish)) {
+                        return Optional.none;
+                    } else if (isDown(keycode) && shiftKey) {
+                return update$1([rc(+1, 0)]);
+                    } else if (isUp(keycode) && shiftKey) {
                         return update$1([rc(-1, 0)]);
                     } else if (direction.isBackward(keycode) && shiftKey) {
                         return update$1(
@@ -7548,17 +7548,17 @@
         const keyup = (event, start, soffset, finish, foffset) => {
             return retrieve$1(container, annotations.selectedSelector).fold(
                 () => {
-                const realEvent = event.raw;
-                const keycode = realEvent.which;
-                const shiftKey = realEvent.shiftKey === true;
-                if (!shiftKey) {
-                    return Optional.none();
-                }
-                if (isNavigation(keycode) && isEditableSelection(start, finish)) {
-                    return sync(container, isRoot, start, soffset, finish, foffset, annotations.selectRange);
-                } else {
+                    const realEvent = event.raw;
+                    const keycode = realEvent.which;
+                    const shiftKey = realEvent.shiftKey === true;
+                    if (!shiftKey) {
                         return Optional.none();
-                }
+                    }
+                    if (isNavigation(keycode) && isEditableSelection(start, finish)) {
+                        return sync(container, isRoot, start, soffset, finish, foffset, annotations.selectRange);
+                    } else {
+                return Optional.none();
+                    }
                 }, Optional.none
             );
         };
@@ -7573,10 +7573,10 @@
             annotations.clearBeforeUpdate(container);
             identify(start, finish, isRoot).each(
                 cellSel => {
-                const boxes = cellSel.boxes.getOr([]);
-                annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
-                bridge.selectContents(finish);
-                bridge.collapseSelection();
+                    const boxes = cellSel.boxes.getOr([]);
+                    annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
+                    bridge.selectContents(finish);
+                    bridge.collapseSelection();
                 }
             );
         };
@@ -7634,7 +7634,7 @@
     const remove$1 = (element, classes) => {
         each$2(
             classes, x => {
-            remove$2(element, x);
+                remove$2(element, x);
             }
         );
     };
@@ -7742,8 +7742,8 @@
         const upDetails = toDetailList(upGrid);
         return bind$2(
             upDetails, detail => {
-            const slicedCells = detail.cells.slice(0, selectedCells[selectedCells.length - 1].column + 1);
-            return map$1(slicedCells, cell => cell.element);
+                const slicedCells = detail.cells.slice(0, selectedCells[selectedCells.length - 1].column + 1);
+                return map$1(slicedCells, cell => cell.element);
             }
         );
     };
@@ -7752,8 +7752,8 @@
         const downDetails = toDetailList(downGrid);
         return bind$2(
             downDetails, detail => {
-            const slicedCells = detail.cells.slice(selectedCells[0].column + selectedCells[0].colspan - 1, detail.cells.length);
-            return map$1(slicedCells, cell => cell.element);
+                const slicedCells = detail.cells.slice(selectedCells[0].column + selectedCells[0].colspan - 1, detail.cells.length);
+                return map$1(slicedCells, cell => cell.element);
             }
         );
     };
@@ -7762,11 +7762,11 @@
         const details = onCells(warehouse, target);
         return details.map(
             selectedCells => {
-            const grid = toGrid(warehouse, generators, false);
-            const {rows} = extractGridDetails(grid);
-            const upOrLeftCells = getUpOrLeftCells(rows, selectedCells);
-            const downOrRightCells = getDownOrRightCells(rows, selectedCells);
-            return {
+                const grid = toGrid(warehouse, generators, false);
+                const {rows} = extractGridDetails(grid);
+                const upOrLeftCells = getUpOrLeftCells(rows, selectedCells);
+                const downOrRightCells = getDownOrRightCells(rows, selectedCells);
+                return {
                     upOrLeftCells,
                     downOrRightCells
                 };
@@ -7816,11 +7816,11 @@
             const tableOpt = table(start);
             tableOpt.each(
                 table => {
-                const cloneFormats = getTableCloneElements(editor);
-                const generators = cellOperations(noop, SugarElement.fromDom(editor.getDoc()), cloneFormats);
-                const selectedCells = getCellsFromSelection(editor);
-                const otherCells = getOtherCells(table, { selection: selectedCells }, generators);
-                fireTableSelectionChange(editor, cells, start, finish, otherCells);
+                    const cloneFormats = getTableCloneElements(editor);
+                    const generators = cellOperations(noop, SugarElement.fromDom(editor.getDoc()), cloneFormats);
+                    const selectedCells = getCellsFromSelection(editor);
+                    const otherCells = getOtherCells(table, { selection: selectedCells }, generators);
+                    fireTableSelectionChange(editor, cells, start, finish, otherCells);
                 }
             );
         };
@@ -7828,98 +7828,98 @@
         const annotations = SelectionAnnotation.byAttr(ephemera, onSelection, onClear);
         editor.on(
             'init', _e => {
-            const win = editor.getWin();
-            const body = getBody(editor);
-            const isRoot = getIsRoot(editor);
-            const syncSelection = () => {
-                    const sel = editor.selection;
-                    const start = SugarElement.fromDom(sel.getStart());
-                    const end = SugarElement.fromDom(sel.getEnd());
-                    const shared = sharedOne(
-                table, [
+                const win = editor.getWin();
+                const body = getBody(editor);
+                const isRoot = getIsRoot(editor);
+                const syncSelection = () => {
+            const sel = editor.selection;
+            const start = SugarElement.fromDom(sel.getStart());
+            const end = SugarElement.fromDom(sel.getEnd());
+            const shared = sharedOne(
+                    table, [
                         start,
                         end
                         ]
-            );
-            shared.fold(() => annotations.clear(body), noop);
-            };
-            const mouseHandlers = mouse(win, body, isRoot, annotations);
-            const keyHandlers = keyboard(win, body, isRoot, annotations);
-            const external$1 = external(win, body, isRoot, annotations);
-            const hasShiftKey = event => event.raw.shiftKey === true;
-            editor.on('TableSelectorChange', e => external$1(e.start, e.finish));
-            const handleResponse = (event, response) => {
+                );
+                shared.fold(() => annotations.clear(body), noop);
+                };
+                const mouseHandlers = mouse(win, body, isRoot, annotations);
+                const keyHandlers = keyboard(win, body, isRoot, annotations);
+                const external$1 = external(win, body, isRoot, annotations);
+                const hasShiftKey = event => event.raw.shiftKey === true;
+                editor.on('TableSelectorChange', e => external$1(e.start, e.finish));
+                const handleResponse = (event, response) => {
                     if (!hasShiftKey(event)) {
                         return;
-                    }
+                        }
                     if (response.kill) {
                         event.kill();
-                    }
-                    response.selection.each(
-                ns => {
+                        }
+            response.selection.each(
+                    ns => {
                         const relative = SimSelection.relative(ns.start, ns.finish);
                         const rng = asLtrRange(win, relative);
                         editor.selection.setRng(rng);
-                }
-            );
-            };
-            const keyup = event => {
-                    const wrappedEvent = fromRawEvent(event);
+                    }
+                );
+                };
+                const keyup = event => {
+            const wrappedEvent = fromRawEvent(event);
                     if (wrappedEvent.raw.shiftKey && isNavigation(wrappedEvent.raw.which)) {
                         const rng = editor.selection.getRng();
                         const start = SugarElement.fromDom(rng.startContainer);
                         const end = SugarElement.fromDom(rng.endContainer);
                         keyHandlers.keyup(wrappedEvent, start, rng.startOffset, end, rng.endOffset).each(
                             response => {
-                            handleResponse(wrappedEvent, response);
+                                handleResponse(wrappedEvent, response);
                             }
                         );
-                    }
-            };
-            const keydown = event => {
-                    const wrappedEvent = fromRawEvent(event);
-                    resizeHandler.hide();
-                    const rng = editor.selection.getRng();
-                    const start = SugarElement.fromDom(rng.startContainer);
-                    const end = SugarElement.fromDom(rng.endContainer);
-                    const direction = onDirection(ltr, rtl)(SugarElement.fromDom(editor.selection.getStart()));
-                    keyHandlers.keydown(wrappedEvent, start, rng.startOffset, end, rng.endOffset, direction).each(
-                response => {
+                        }
+                };
+                const keydown = event => {
+            const wrappedEvent = fromRawEvent(event);
+            resizeHandler.hide();
+            const rng = editor.selection.getRng();
+            const start = SugarElement.fromDom(rng.startContainer);
+            const end = SugarElement.fromDom(rng.endContainer);
+            const direction = onDirection(ltr, rtl)(SugarElement.fromDom(editor.selection.getStart()));
+            keyHandlers.keydown(wrappedEvent, start, rng.startOffset, end, rng.endOffset, direction).each(
+                    response => {
                         handleResponse(wrappedEvent, response);
-                }
-            );
-            resizeHandler.show();
-            };
-            const isLeftMouse = raw => raw.button === 0;
-            const isLeftButtonPressed = raw => {
+                    }
+                );
+                resizeHandler.show();
+                };
+                const isLeftMouse = raw => raw.button === 0;
+                const isLeftButtonPressed = raw => {
                     if (raw.buttons === undefined) {
                         return true;
-                    }
-                    return (raw.buttons & 1) !== 0;
-            };
-            const dragStart = _e => {
-                    mouseHandlers.clearstate();
-            };
-            const mouseDown = e => {
+                        }
+            return (raw.buttons & 1) !== 0;
+                };
+                const dragStart = _e => {
+            mouseHandlers.clearstate();
+                };
+                const mouseDown = e => {
                     if (isLeftMouse(e) && hasInternalTarget(e)) {
                         mouseHandlers.mousedown(fromRawEvent(e));
-                    }
-            };
-            const mouseOver = e => {
+                        }
+                };
+                const mouseOver = e => {
                     if (isLeftButtonPressed(e) && hasInternalTarget(e)) {
                         mouseHandlers.mouseover(fromRawEvent(e));
-                    }
-            };
-            const mouseUp = e => {
+                        }
+                };
+                const mouseUp = e => {
                     if (isLeftMouse(e) && hasInternalTarget(e)) {
                         mouseHandlers.mouseup(fromRawEvent(e));
-                    }
-            };
-            const getDoubleTap = () => {
-                    const lastTarget = Cell(SugarElement.fromDom(body));
-                    const lastTimeStamp = Cell(0);
-                    const touchEnd = t => {
-            const target = SugarElement.fromDom(t.target);
+                        }
+                };
+                const getDoubleTap = () => {
+            const lastTarget = Cell(SugarElement.fromDom(body));
+            const lastTimeStamp = Cell(0);
+            const touchEnd = t => {
+                        const target = SugarElement.fromDom(t.target);
                         if (isTag('td')(target) || isTag('th')(target)) {
                             const lT = lastTarget.get();
                             const lTS = lastTimeStamp.get();
@@ -7927,33 +7927,33 @@
                                   t.preventDefault();
                                   external$1(target, target);
                             }
-                                }
-            lastTarget.set(target);
-            lastTimeStamp.set(t.timeStamp);
-                    };
-                    return { touchEnd };
-            };
-            const doubleTap = getDoubleTap();
-            editor.on('dragstart', dragStart);
-            editor.on('mousedown', mouseDown);
-            editor.on('mouseover', mouseOver);
-            editor.on('mouseup', mouseUp);
-            editor.on('touchend', doubleTap.touchEnd);
-            editor.on('keyup', keyup);
-            editor.on('keydown', keydown);
-            editor.on('NodeChange', syncSelection);
+                        }
+                        lastTarget.set(target);
+                        lastTimeStamp.set(t.timeStamp);
+                        };
+            return { touchEnd };
+                };
+                const doubleTap = getDoubleTap();
+                editor.on('dragstart', dragStart);
+                editor.on('mousedown', mouseDown);
+                editor.on('mouseover', mouseOver);
+                editor.on('mouseup', mouseUp);
+                editor.on('touchend', doubleTap.touchEnd);
+                editor.on('keyup', keyup);
+                editor.on('keydown', keydown);
+                editor.on('NodeChange', syncSelection);
             }
         );
     editor.on(
         'PreInit', () => {
-        editor.serializer.addTempAttr(ephemera.firstSelected);
-        editor.serializer.addTempAttr(ephemera.lastSelected);
+            editor.serializer.addTempAttr(ephemera.firstSelected);
+            editor.serializer.addTempAttr(ephemera.lastSelected);
         }
     );
       const clearSelectedCells = container => annotations.clear(SugarElement.fromDom(container));
     const getSelectedCells = () => fold(
         cellSelection.get(), constant([]), cells => {
-        return map$1(cells, cell => cell.dom);
+            return map$1(cells, cell => cell.dom);
         }, cell => [cell.dom]
     );
       return {
@@ -7973,7 +7973,7 @@
         const unbind = handler => {
             handlers = filter$2(
                 handlers, h => {
-                return h !== handler;
+                    return h !== handler;
                 }
             );
         };
@@ -7981,12 +7981,12 @@
             const event = {};
             each$2(
                 fields, (name, i) => {
-                event[name] = args[i];
+                    event[name] = args[i];
                 }
             );
         each$2(
             handlers, handler => {
-            handler(event);
+                handler(event);
             }
         );
         };
@@ -8000,7 +8000,7 @@
     const create$1 = typeDefs => {
         const registry = map(
             typeDefs, event => {
-            return {
+                return {
                     bind: event.bind,
                     unbind: event.unbind
                 };
@@ -8008,7 +8008,7 @@
         );
     const trigger = map(
         typeDefs, event => {
-        return event.trigger;
+            return event.trigger;
         }
     );
       return {
@@ -8029,8 +8029,8 @@
             cancel();
             timer = setTimeout(
                 () => {
-                timer = null;
-                fn.apply(null, args);
+                    timer = null;
+                    fn.apply(null, args);
                 }, rate
             );
         };
@@ -8055,9 +8055,9 @@
         }
         each$2(
             array, a => {
-            if (!isString(a)) {
-                throw new Error('The value ' + a + ' in the ' + label + ' fields was not a string.');
-            }
+                if (!isString(a)) {
+                    throw new Error('The value ' + a + ' in the ' + label + ' fields was not a string.');
+                }
             }
         );
     };
@@ -8068,12 +8068,12 @@
         const sorted = sort(everything);
         const dupe = find$1(
             sorted, (s, i) => {
-            return i < sorted.length - 1 && s === sorted[i + 1];
+                return i < sorted.length - 1 && s === sorted[i + 1];
             }
         );
     dupe.each(
         d => {
-        throw new Error('The field: ' + d + ' occurs more than once in the combined fields: [' + sorted.join(', ') + '].');
+            throw new Error('The field: ' + d + ' occurs more than once in the combined fields: [' + sorted.join(', ') + '].');
         }
     );
     };
@@ -8096,7 +8096,7 @@
             const keys$1 = keys(obj);
             const allReqd = forall(
                 required, req => {
-                return contains$2(keys$1, req);
+                    return contains$2(keys$1, req);
                 }
             );
         if (!allReqd) {
@@ -8105,7 +8105,7 @@
         handleUnsupported(required, keys$1);
         const invalidKeys = filter$2(
             required, key => {
-            return !pred.validate(obj[key], key);
+                return !pred.validate(obj[key], key);
             }
         );
         if (invalidKeys.length > 0) {
@@ -8117,7 +8117,7 @@
     const handleExact = (required, keys) => {
         const unsupported = filter$2(
             keys, key => {
-            return !contains$2(required, key);
+                return !contains$2(required, key);
             }
         );
     if (unsupported.length > 0) {
@@ -8159,7 +8159,7 @@
         const update = (mode, nu) => {
             const result = previous.map(
                 old => {
-                return mode.compare(old, nu);
+                    return mode.compare(old, nu);
                 }
             );
         previous = Optional.some(nu);
@@ -8169,12 +8169,12 @@
             const dataOption = mode.extract(event);
             dataOption.each(
                 data => {
-                const offset = update(mode, data);
-                offset.each(
-                        d => {
-                        events.trigger.move(d);
-                        }
-                    );
+                    const offset = update(mode, data);
+                    offset.each(
+                    d => {
+                            events.trigger.move(d);
+                    }
+                );
                 }
             );
         };
@@ -8250,7 +8250,7 @@
         };
         movement.events.move.bind(
             event => {
-            mode.mutate(mutation, event.info);
+                mode.mutate(mutation, event.info);
             }
         );
       const on = () => {
@@ -8421,11 +8421,11 @@
       const delegate = Mutation();
     delegate.events.drag.bind(
         event => {
-        target.each(
-                t => {
-                events.trigger.drag(event.xDelta, event.yDelta, t);
-                }
-            );
+            target.each(
+            t => {
+                    events.trigger.drag(event.xDelta, event.yDelta, t);
+            }
+        );
         }
     );
       const assign = t => {
@@ -8490,16 +8490,16 @@
         const resizableCols = [];
         range$1(
             warehouse.grid.columns, index => {
-            const colElmOpt = Warehouse.getColumnAt(warehouse, index).map(col => col.element);
-            if (colElmOpt.forall(isResizable)) {
-                resizableCols.push(index);
-            }
+                const colElmOpt = Warehouse.getColumnAt(warehouse, index).map(col => col.element);
+                if (colElmOpt.forall(isResizable)) {
+                    resizableCols.push(index);
+                }
             }
         );
     return filter$2(
         resizableCols, colIndex => {
-        const columnCells = Warehouse.filterItems(warehouse, cell => cell.column === colIndex);
-        return forall(columnCells, cell => isResizable(cell.element));
+            const columnCells = Warehouse.filterItems(warehouse, cell => cell.column === colIndex);
+            return forall(columnCells, cell => isResizable(cell.element));
         }
     );
     };
@@ -8511,31 +8511,31 @@
         const origin = wire.origin();
         each$2(
             positions, cpOption => {
-            cpOption.each(
-                    cp => {
-                    const bar = create(origin, cp);
-                    add(bar, resizeBar);
-                    append$1(wire.parent(), bar);
-                    }
-                );
+                cpOption.each(
+                cp => {
+                        const bar = create(origin, cp);
+                        add(bar, resizeBar);
+                        append$1(wire.parent(), bar);
+                }
+            );
             }
         );
     };
     const refreshCol = (wire, colPositions, position, tableHeight) => {
         drawBar(
             wire, colPositions, (origin, cp) => {
-            const colBar = col(cp.col, cp.x - origin.left, position.top - origin.top, BAR_THICKNESS, tableHeight);
-            add(colBar, resizeColBar);
-            return colBar;
+                const colBar = col(cp.col, cp.x - origin.left, position.top - origin.top, BAR_THICKNESS, tableHeight);
+                add(colBar, resizeColBar);
+                return colBar;
             }
         );
     };
     const refreshRow = (wire, rowPositions, position, tableWidth) => {
         drawBar(
             wire, rowPositions, (origin, cp) => {
-            const rowBar = row(cp.row, position.left - origin.left, cp.y - origin.top, tableWidth, BAR_THICKNESS);
-            add(rowBar, resizeRowBar);
-            return rowBar;
+                const rowBar = row(cp.row, position.left - origin.left, cp.y - origin.top, tableWidth, BAR_THICKNESS);
+                add(rowBar, resizeRowBar);
+                return rowBar;
             }
         );
     };
@@ -8567,14 +8567,14 @@
     const hide = wire => {
         each(
             wire, bar => {
-            set$1(bar, 'display', 'none');
+                set$1(bar, 'display', 'none');
             }
         );
     };
     const show = wire => {
         each(
             wire, bar => {
-            set$1(bar, 'display', 'block');
+                set$1(bar, 'display', 'block');
             }
         );
     };
@@ -8595,16 +8595,16 @@
         };
         mutation.events.drag.bind(
             event => {
-            getResizer(event.target, 'data-row').each(
-                    _dataRow => {
-                    const currentRow = getCssValue(event.target, 'top');
-                    set$1(event.target, 'top', currentRow + event.yDelta + 'px');
-                    }
-                );
+                getResizer(event.target, 'data-row').each(
+                _dataRow => {
+                        const currentRow = getCssValue(event.target, 'top');
+                        set$1(event.target, 'top', currentRow + event.yDelta + 'px');
+                }
+            );
             getResizer(event.target, 'data-column').each(
                 _dataCol => {
-                const currentCol = getCssValue(event.target, 'left');
-                set$1(event.target, 'left', currentCol + event.xDelta + 'px');
+                    const currentCol = getCssValue(event.target, 'left');
+                    set$1(event.target, 'left', currentCol + event.xDelta + 'px');
                 }
             );
             }
@@ -8616,29 +8616,29 @@
         };
         resizing.events.stop.bind(
             () => {
-            mutation.get().each(
-                    target => {
-                    hoverTable.each(
-                            table => {
-                            getResizer(target, 'data-row').each(
-                                    row => {
-                                    const delta = getDelta(target, 'top');
-                                    remove$7(target, 'data-initial-top');
-                                    events.trigger.adjustHeight(table, delta, parseInt(row, 10));
-                                    }
-                                );
-                            getResizer(target, 'data-column').each(
-                            column => {
-                                    const delta = getDelta(target, 'left');
-                                    remove$7(target, 'data-initial-left');
-                                    events.trigger.adjustWidth(table, delta, parseInt(column, 10));
-                            }
-                        );
-                            refresh(wire, table);
-                            }
-                        );
-                    }
-                );
+                mutation.get().each(
+                target => {
+                        hoverTable.each(
+                        table => {
+                                getResizer(target, 'data-row').each(
+                                row => {
+                                        const delta = getDelta(target, 'top');
+                                        remove$7(target, 'data-initial-top');
+                                        events.trigger.adjustHeight(table, delta, parseInt(row, 10));
+                                }
+                            );
+                        getResizer(target, 'data-column').each(
+                                column => {
+                                const delta = getDelta(target, 'left');
+                                remove$7(target, 'data-initial-left');
+                                events.trigger.adjustWidth(table, delta, parseInt(column, 10));
+                                }
+                            );
+                        refresh(wire, table);
+                        }
+                    );
+                }
+            );
             }
         );
       const handler = (target, dir) => {
@@ -8651,12 +8651,12 @@
         };
         const mousedown = bind(
             wire.parent(), 'mousedown', event => {
-            if (isRowBar(event.target)) {
-                handler(event.target, 'top');
-            }
-            if (isColBar(event.target)) {
-                handler(event.target, 'left');
-            }
+                if (isRowBar(event.target)) {
+                    handler(event.target, 'top');
+                }
+                if (isColBar(event.target)) {
+                    handler(event.target, 'left');
+                }
             }
         );
       const isRoot = e => {
@@ -8665,18 +8665,18 @@
         const findClosestEditableTable = target => closest$1(target, 'table', isRoot).filter(isEditable$1);
         const mouseover = bind(
             wire.view(), 'mouseover', event => {
-            findClosestEditableTable(event.target).fold(
-                    () => {
-                    if (inBody(event.target)) {
-                        destroy(wire);
-                    }
-                    }, table => {
-                    if (resizing.isActive()) {
-                        hoverTable = Optional.some(table);
-                        refresh(wire, table);
-                    }
-                    }
-                );
+                findClosestEditableTable(event.target).fold(
+                () => {
+                        if (inBody(event.target)) {
+                            destroy(wire);
+                        }
+                }, table => {
+                        if (resizing.isActive()) {
+                            hoverTable = Optional.some(table);
+                            refresh(wire, table);
+                        }
+                }
+            );
             }
         );
       const destroy$1 = () => {
@@ -8741,26 +8741,26 @@
         );
     manager.events.adjustHeight.bind(
         event => {
-        const table = event.table;
-        events.trigger.beforeResize(table, 'row');
-        const delta = hdirection.delta(event.delta, table);
-        adjustHeight(table, delta, event.row, hdirection);
-        events.trigger.afterResize(table, 'row');
+            const table = event.table;
+            events.trigger.beforeResize(table, 'row');
+            const delta = hdirection.delta(event.delta, table);
+            adjustHeight(table, delta, event.row, hdirection);
+            events.trigger.afterResize(table, 'row');
         }
     );
     manager.events.startAdjust.bind(
         _event => {
-        events.trigger.startDrag();
+            events.trigger.startDrag();
         }
     );
     manager.events.adjustWidth.bind(
         event => {
-        const table = event.table;
-        events.trigger.beforeResize(table, 'col');
-        const delta = vdirection.delta(event.delta, table);
-        const tableSize = lazySizing(table);
-        adjustWidth(table, delta, event.column, resizing, tableSize);
-        events.trigger.afterResize(table, 'col');
+            const table = event.table;
+            events.trigger.beforeResize(table, 'col');
+            const delta = vdirection.delta(event.delta, table);
+            const tableSize = lazySizing(table);
+            adjustWidth(table, delta, event.column, resizing, tableSize);
+            events.trigger.afterResize(table, 'col');
         }
     );
       return {
@@ -8839,9 +8839,9 @@
         if (!Warehouse.hasColumns(warehouse)) {
             each$2(
                 cells$1(table), cell => {
-                const computedWidth = get$a(cell, 'width');
-                set$1(cell, 'width', computedWidth);
-                remove$7(cell, 'width');
+                    const computedWidth = get$a(cell, 'width');
+                    set$1(cell, 'width', computedWidth);
+                    remove$7(cell, 'width');
                 }
             );
         }
@@ -8878,61 +8878,61 @@
         const destroy = () => {
             tableResize.on(
                 sz => {
-                sz.destroy();
+                    sz.destroy();
                 }
             );
         resizeWire.on(
             w => {
-            remove(editor, w);
+                remove(editor, w);
             }
         );
         };
         editor.on(
             'init', () => {
-            const rawWire = get(editor, isResizable);
-            resizeWire.set(rawWire);
-            if (hasTableObjectResizing(editor) && hasTableResizeBars(editor)) {
-                const resizing = lazyResizingBehaviour();
-                const sz = TableResize.create(rawWire, resizing, lazySizing);
-                sz.on();
-                sz.events.startDrag.bind(
-                _event => {
-                    selectionRng.set(editor.selection.getRng());
+                const rawWire = get(editor, isResizable);
+                resizeWire.set(rawWire);
+                if (hasTableObjectResizing(editor) && hasTableResizeBars(editor)) {
+                    const resizing = lazyResizingBehaviour();
+                    const sz = TableResize.create(rawWire, resizing, lazySizing);
+                    sz.on();
+                    sz.events.startDrag.bind(
+                    _event => {
+                        selectionRng.set(editor.selection.getRng());
+                    }
+                    );
+                    sz.events.beforeResize.bind(
+                    event => {
+                        const rawTable = event.table.dom;
+                        fireObjectResizeStart(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
+                    }
+                    );
+                    sz.events.afterResize.bind(
+                    event => {
+                        const table = event.table;
+                        const rawTable = table.dom;
+                        removeDataStyle(table);
+                        selectionRng.on(
+                        rng => {
+                            editor.selection.setRng(rng);
+                            editor.focus();
+                            }
+                    );
+                    fireObjectResized(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
+                    editor.undoManager.add();
+                    }
+                    );
+                    tableResize.set(sz);
                 }
-                );
-                sz.events.beforeResize.bind(
-                event => {
-                    const rawTable = event.table.dom;
-                    fireObjectResizeStart(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
-                }
-                );
-                sz.events.afterResize.bind(
-                event => {
-                    const table = event.table;
-                    const rawTable = table.dom;
-                    removeDataStyle(table);
-                    selectionRng.on(
-                    rng => {
-                        editor.selection.setRng(rng);
-                        editor.focus();
-                        }
-                );
-                fireObjectResized(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
-                editor.undoManager.add();
-                }
-                );
-                tableResize.set(sz);
-            }
             }
         );
     editor.on(
         'ObjectResizeStart', e => {
-        const targetElm = e.target;
+            const targetElm = e.target;
             if (isTable(targetElm)) {
                 const table = SugarElement.fromDom(targetElm);
                 each$2(
                     editor.dom.select('.mce-clonedresizable'), clone => {
-                    editor.dom.addClass(clone, 'mce-' + getTableColumnResizingBehaviour(editor) + '-columns');
+                        editor.dom.addClass(clone, 'mce-' + getTableColumnResizingBehaviour(editor) + '-columns');
                     }
                 );
                 if (!isPixelSizing(table) && isTablePixelsForced(editor)) {
@@ -8950,49 +8950,49 @@
     );
     editor.on(
         'ObjectResized', e => {
-        const targetElm = e.target;
-        if (isTable(targetElm)) {
-            const table = SugarElement.fromDom(targetElm);
-            const origin = e.origin;
-            if (startsWith(origin, 'corner-')) {
-                afterCornerResize(table, origin, e.width);
+            const targetElm = e.target;
+            if (isTable(targetElm)) {
+                const table = SugarElement.fromDom(targetElm);
+                const origin = e.origin;
+                if (startsWith(origin, 'corner-')) {
+                    afterCornerResize(table, origin, e.width);
+                }
+                removeDataStyle(table);
+                fireTableModified(editor, table.dom, styleModified);
             }
-            removeDataStyle(table);
-            fireTableModified(editor, table.dom, styleModified);
-        }
         }
     );
     editor.on(
         'SwitchMode', () => {
-        tableResize.on(
-                resize => {
-                if (editor.mode.isReadOnly()) {
-                    resize.hideBars();
-                } else {
-                    resize.showBars();
-                }
+            tableResize.on(
+            resize => {
+                    if (editor.mode.isReadOnly()) {
+                        resize.hideBars();
+                    } else {
+                        resize.showBars();
                     }
-            );
+                    }
+        );
         }
     );
     editor.on(
         'dragstart dragend', e => {
-        tableResize.on(
-                resize => {
-                if (e.type === 'dragstart') {
-                    resize.hideBars();
-                    resize.off();
-                } else {
-                    resize.on();
-                    resize.showBars();
-                }
+            tableResize.on(
+            resize => {
+                    if (e.type === 'dragstart') {
+                        resize.hideBars();
+                        resize.off();
+                    } else {
+                        resize.on();
+                        resize.showBars();
                     }
-            );
+                    }
+        );
         }
     );
     editor.on(
         'remove', () => {
-        destroy();
+            destroy();
         }
     );
       const refresh = table => {

@@ -37,26 +37,27 @@ class User extends BaseController
         if (isset(($this->getRoute()->getParams())['perPage'])) {
             $perPage = ($this->getRoute()->getParams())['perPage'];
         }
-        
+
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
 
-        $sqlParams=[];
+        $sqlParams = [];
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
         $users = (new UserManager(Application::getDatasource()));
-        
+
         $count = count($users->getAll());
-        
+
         $pagination = new Pagination($this->getRoute(), $count, $currentPage, $perPage);
         $pages = $pagination->pagesInformations();
 
         $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getperPage(), $pagination->getcurrentPage(), $sqlParams);
 
         $this->view(
-            'backoffice/admin.users.html.twig', [
+            'backoffice/admin.users.html.twig',
+            [
                 'registredUsers' => $statementUsers,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),

@@ -37,18 +37,18 @@ class UserManager extends BaseManager
 
     public function insertNewUser(array $params)
     {
-        
+
         if (isset($params['roleId'])) {
             $query = $this->dbConnect->prepare(
                 '
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , file, created_at, role_id ) 
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , file, created_at, role_id )
                 VALUES (:firstname, :lastname, :username, :email , :password, :created_at, :role_id)
             '
             );
         } else {
             $query = $this->dbConnect->prepare(
                 '
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , password, created_at ) 
+                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , password, created_at )
                 VALUES (:firstname, :lastname, :username, :email , :password, :created_at)
             '
             );
@@ -62,7 +62,7 @@ class UserManager extends BaseManager
 
         $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
 
-        
+
         $query->bindParam(':firstname', $params['firstname']);
         $query->bindParam(':lastname', $params['lastname']);
         $query->bindParam(':username', $params['username']);
@@ -123,7 +123,7 @@ class UserManager extends BaseManager
         $query = $this->dbConnect->prepare(
             '
             UPDATE ' . $this->table . ' SET active = false
-            WHERE id = :id 
+            WHERE id = :id
         '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
@@ -136,7 +136,7 @@ class UserManager extends BaseManager
         $query = $this->dbConnect->prepare(
             '
             UPDATE ' . $this->table . ' SET active = true
-            WHERE id = :id 
+            WHERE id = :id
         '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);

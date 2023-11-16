@@ -369,7 +369,7 @@
         let regExp = '';
         each(
             charMap, (_value, key) => {
-                regExp += key;
+            regExp += key;
             }
         );
       return new RegExp('[' + regExp + ']', global ? 'g' : '');
@@ -378,10 +378,10 @@
         let selector = '';
         each(
             charMap, value => {
-            if (selector) {
-                selector += ',';
-            }
-            selector += 'span.mce-' + value;
+                if (selector) {
+                    selector += ',';
+                }
+                selector += 'span.mce-' + value;
             }
         );
       return selector;
@@ -419,10 +419,10 @@
         const isEditable = node => isWrappedNbsp(node.dom) || !isContentEditableFalse(node);
         each$1(
             children, x => {
-            if (editable && isEditable(x) && predicate(x)) {
-                result = result.concat([x]);
-            }
-            result = result.concat(filterEditableDescendants(x, predicate, isChildEditable(x, editable)));
+                if (editable && isEditable(x) && predicate(x)) {
+                    result = result.concat([x]);
+                }
+                result = result.concat(filterEditableDescendants(x, predicate, isChildEditable(x, editable)));
             }
         );
       return result;
@@ -443,19 +443,19 @@
         const nodeList = filterEditableDescendants(SugarElement.fromDom(rootElm), isMatch, editor.dom.isEditable(rootElm));
         each$1(
             nodeList, n => {
-            var _a;
-            const parent = n.dom.parentNode;
-            if (isWrappedNbsp(parent)) {
-                add(SugarElement.fromDom(parent), nbspClass);
-            } else {
-                    const withSpans = replaceWithSpans(dom.encode((_a = value(n)) !== null && _a !== void 0 ? _a : ''));
-                    const div = dom.create('div', {}, withSpans);
-                    let node;
+                var _a;
+                const parent = n.dom.parentNode;
+                if (isWrappedNbsp(parent)) {
+                    add(SugarElement.fromDom(parent), nbspClass);
+                } else {
+            const withSpans = replaceWithSpans(dom.encode((_a = value(n)) !== null && _a !== void 0 ? _a : ''));
+            const div = dom.create('div', {}, withSpans);
+            let node;
                     while (node = div.lastChild) {
                         dom.insertAfter(node, n.dom);
-                    }
-                    editor.dom.remove(n.dom);
-            }
+                        }
+            editor.dom.remove(n.dom);
+                }
             }
         );
     };
@@ -463,11 +463,11 @@
         const nodeList = editor.dom.select(selector, rootElm);
         each$1(
             nodeList, node => {
-            if (isWrappedNbsp(node)) {
-                remove(SugarElement.fromDom(node), nbspClass);
-            } else {
-                    editor.dom.remove(node, true);
-            }
+                if (isWrappedNbsp(node)) {
+                    remove(SugarElement.fromDom(node), nbspClass);
+                } else {
+            editor.dom.remove(node, true);
+                }
             }
         );
     };
@@ -500,7 +500,7 @@
     const register$2 = (editor, toggleState) => {
         editor.addCommand(
             'mceVisualChars', () => {
-            toggleVisualChars(editor, toggleState);
+                toggleVisualChars(editor, toggleState);
             }
         );
     };
@@ -513,14 +513,14 @@
                 processor: 'boolean',
                 default: false
                     }
-        );
+                    );
                     };
                     const isEnabledByDefault = option('visualchars_default_state');
 
                     const setup$1 = (editor, toggleState) => {
                         editor.on(
                             'init', () => {
-                            applyVisualChars(editor, toggleState);
+                                applyVisualChars(editor, toggleState);
                             }
                         );
                     };
@@ -537,8 +537,8 @@
                             if (isNull(timer)) {
                                 timer = setTimeout(
                                     () => {
-                                    timer = null;
-                                    fn.apply(null, args);
+                                        timer = null;
+                                        fn.apply(null, args);
                                     }, rate
                                 );
                             }
@@ -552,14 +552,14 @@
     const setup = (editor, toggleState) => {
         const debouncedToggle = first(
             () => {
-            toggle(editor);
+                toggle(editor);
             }, 300
         );
     editor.on(
         'keydown', e => {
-        if (toggleState.get() === true) {
-            e.keyCode === 13 ? toggle(editor) : debouncedToggle.throttle();
-        }
+            if (toggleState.get() === true) {
+                e.keyCode === 13 ? toggle(editor) : debouncedToggle.throttle();
+            }
         }
     );
       editor.on('remove', debouncedToggle.cancel);
@@ -594,13 +594,13 @@
     var Plugin = () => {
         global.add(
             'visualchars', editor => {
-            register$1(editor);
-            const toggleState = Cell(isEnabledByDefault(editor));
-            register$2(editor, toggleState);
-            register(editor, toggleState);
-            setup(editor, toggleState);
-            setup$1(editor, toggleState);
-            return get$2(toggleState);
+                register$1(editor);
+                const toggleState = Cell(isEnabledByDefault(editor));
+                register$2(editor, toggleState);
+                register(editor, toggleState);
+                setup(editor, toggleState);
+                setup$1(editor, toggleState);
+                return get$2(toggleState);
             }
         );
     };

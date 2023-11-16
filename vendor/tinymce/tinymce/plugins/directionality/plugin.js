@@ -340,33 +340,33 @@
     const setDirOnElements = (dom, blocks, dir) => {
         each(
             blocks, block => {
-                const blockElement = SugarElement.fromDom(block);
-                const isBlockElementListItem = isListItem(blockElement);
-                const normalizedBlock = getNormalizedBlock(blockElement, isBlockElementListItem);
-                const normalizedBlockParent = getParentElement(normalizedBlock);
-                normalizedBlockParent.each(
-                parent => {
-                        dom.setStyle(normalizedBlock.dom, 'direction', null);
-                        const parentDirection = getDirection(parent);
-                        if (parentDirection === dir) {
-                            remove(normalizedBlock, 'dir');
-                        } else {
-                          set(normalizedBlock, 'dir', dir);
-                        }
-                        if (getDirection(normalizedBlock) !== dir) {
-                          dom.setStyle(normalizedBlock.dom, 'direction', dir);
-                        }
-                        if (isBlockElementListItem) {
-                          const listItems = children(normalizedBlock, 'li[dir],li[style]');
-                          each(
-                            listItems, listItem => {
-                                remove(listItem, 'dir');
-                                dom.setStyle(listItem.dom, 'direction', null);
-                                }
-                            );
-                        }
+            const blockElement = SugarElement.fromDom(block);
+            const isBlockElementListItem = isListItem(blockElement);
+            const normalizedBlock = getNormalizedBlock(blockElement, isBlockElementListItem);
+            const normalizedBlockParent = getParentElement(normalizedBlock);
+            normalizedBlockParent.each(
+                    parent => {
+                    dom.setStyle(normalizedBlock.dom, 'direction', null);
+                    const parentDirection = getDirection(parent);
+                    if (parentDirection === dir) {
+                        remove(normalizedBlock, 'dir');
+                    } else {
+                      set(normalizedBlock, 'dir', dir);
                     }
-            );
+                    if (getDirection(normalizedBlock) !== dir) {
+                      dom.setStyle(normalizedBlock.dom, 'direction', dir);
+                    }
+                    if (isBlockElementListItem) {
+                      const listItems = children(normalizedBlock, 'li[dir],li[style]');
+                      each(
+                        listItems, listItem => {
+                            remove(listItem, 'dir');
+                            dom.setStyle(listItem.dom, 'direction', null);
+                            }
+                        );
+                    }
+                    }
+                );
             }
         );
     };
@@ -380,12 +380,12 @@
     const register$1 = editor => {
         editor.addCommand(
             'mceDirectionLTR', () => {
-                setDir(editor, 'ltr');
+            setDir(editor, 'ltr');
             }
         );
     editor.addCommand(
         'mceDirectionRTL', () => {
-            setDir(editor, 'rtl');
+        setDir(editor, 'rtl');
         }
     );
     };
@@ -422,8 +422,8 @@
     var Plugin = () => {
         global.add(
             'directionality', editor => {
-                register$1(editor);
-                register(editor);
+            register$1(editor);
+            register(editor);
             }
         );
     };

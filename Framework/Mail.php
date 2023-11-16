@@ -8,32 +8,31 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Mail
 {
-    
-    private string $host;                     
-    
-    private bool $smtpAuth;                       
-    
-    private string $userName;                    
-    
-    private string $password;                            
-    
-    private string $smtpSecure;     
-    
-    private string $port;                            
-    
+    private string $host;
+
+    private bool $smtpAuth;
+
+    private string $userName;
+
+    private string $password;
+
+    private string $smtpSecure;
+
+    private string $port;
+
     private string $fromAddress;
-    
+
     private ?string $fromName;
-    
+
     private string $replyToAddress;
-    
+
     private ?string $replyToName;
-    
+
     private ?string $ccAddress;
-    
+
     private ?string $bccAddress;
-    
-    
+
+
     /**
      * __construct : each data of email config
      *
@@ -42,13 +41,13 @@ class Mail
      */
     public function __construct(array $config)
     {
-        foreach ($config as $key => $value){
+        foreach ($config as $key => $value) {
             $this->$key = $value;
         }
 
     } //end __construct
-    
-        
+
+
     /**
      * sendMailToUser : send Email to User
      *
@@ -59,18 +58,18 @@ class Mail
     {
         $mail = new PHPMailer(true);
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
-        $mail->isSMTP();                                            
-        $mail->Host       = $this->host;                     
-        $mail->SMTPAuth   = $this->smtpAuth;                 
-        $mail->Username   = $this->userName;                 
-        $mail->Password   = $this->password;                
-        $mail->SMTPSecure = $this->smtpSecure;            
-        $mail->Port       = $this->port;                     
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = $this->host;
+        $mail->SMTPAuth   = $this->smtpAuth;
+        $mail->Username   = $this->userName;
+        $mail->Password   = $this->password;
+        $mail->SMTPSecure = $this->smtpSecure;
+        $mail->Port       = $this->port;
 
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress($user->getEmail(), "$user->getFirstName() $user->lastName()");     
+        $mail->addAddress($user->getEmail(), "$user->getFirstName() $user->lastName()");
         $mail->addReplyTo($this->replyToAddress, $this->replyToName);
         $mail->addCC($this->ccAddress);
         $mail->addBCC($this->bccAddress);
@@ -84,7 +83,7 @@ class Mail
         $mail->Subject = 'Inscription à notre blog';
         $mail->Body    = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
         $mail->AltBody = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
-        
+
         if (!$mail->send()) {
             echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
         } else {
@@ -93,7 +92,7 @@ class Mail
 
     }
 
-        
+
     /**
      * sendMailToAdmin : send email to admin
      *
@@ -104,18 +103,18 @@ class Mail
     {
         $mail = new PHPMailer(true);
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
-        $mail->isSMTP();                                            
-        $mail->Host       = $this->host;                     
-        $mail->SMTPAuth   = $this->smtpAuth;                 
-        $mail->Username   = $this->userName;                 
-        $mail->Password   = $this->password;                
-        $mail->SMTPSecure = $this->smtpSecure;            
-        $mail->Port       = $this->port;                     
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = $this->host;
+        $mail->SMTPAuth   = $this->smtpAuth;
+        $mail->Username   = $this->userName;
+        $mail->Password   = $this->password;
+        $mail->SMTPSecure = $this->smtpSecure;
+        $mail->Port       = $this->port;
 
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress("server@server.com", "Admin Server");     
+        $mail->addAddress("server@server.com", "Admin Server");
         $mail->addReplyTo("no-reply@servewr.com", "No-Reply");
 
         //Attachments
@@ -140,13 +139,13 @@ class Mail
                         Email : ' . $contact['email'] . '
                         Message : ' . $contact['message'] . '
                         ';
-        
+
         if (!$mail->send()) {
             echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
         } else {
             echo 'Message has been sent.';
         }
-        
+
     }
 
 

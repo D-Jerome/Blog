@@ -1418,7 +1418,7 @@
     const charmapFilter = charmap => {
         return global.grep(
             charmap, item => {
-                return isArray(item) && item.length === 2;
+            return isArray(item) && item.length === 2;
             }
         );
     };
@@ -1505,8 +1505,8 @@
             cancel();
             timer = setTimeout(
                 () => {
-                    timer = null;
-                    fn.apply(null, args);
+                timer = null;
+                fn.apply(null, args);
                 }, rate
             );
         };
@@ -1538,16 +1538,16 @@
         const lowerCasePattern = pattern.toLowerCase();
         each(
             group.characters, g => {
-            if (charMatches(g[0], g[1], lowerCasePattern)) {
-                matches.push(g);
-            }
+                if (charMatches(g[0], g[1], lowerCasePattern)) {
+                    matches.push(g);
+                }
             }
         );
     return map(
         matches, m => ({
-        text: m[1],
-        value: fromCodePoint(m[0]),
-        icon: fromCodePoint(m[0])
+            text: m[1],
+            value: fromCodePoint(m[0]),
+            icon: fromCodePoint(m[0])
             })
     );
     };
@@ -1567,9 +1567,9 @@
         ];
         const makeTabs = () => map(
             charMap, charGroup => ({
-            title: charGroup.name,
-            name: charGroup.name,
-            items: makeGroupItems()
+                title: charGroup.name,
+                name: charGroup.name,
+                items: makeGroupItems()
             })
         );
       const makePanel = () => ({
@@ -1584,16 +1584,16 @@
       const scanAndSet = (dialogApi, pattern) => {
             find(charMap, group => group.name === currentTab.get()).each(
                 f => {
-                const items = scan(f, pattern);
-                dialogApi.setData({ results: items });
+                    const items = scan(f, pattern);
+                    dialogApi.setData({ results: items });
                 }
             );
         };
         const SEARCH_DELAY = 40;
         const updateFilter = last(
             dialogApi => {
-            const pattern = dialogApi.getData().pattern;
-            scanAndSet(dialogApi, pattern);
+                const pattern = dialogApi.getData().pattern;
+                scanAndSet(dialogApi, pattern);
             }, SEARCH_DELAY
         );
       const body = charMap.length === 1 ? makePanel() : makeTabPanel();
@@ -1635,7 +1635,7 @@
     const register$1 = (editor, charMap) => {
         editor.addCommand(
             'mceShowCharmap', () => {
-            open(editor, charMap);
+                open(editor, charMap);
             }
         );
     };
@@ -1648,7 +1648,7 @@
                 minChars: 2,
                 fetch: (pattern, _maxResults) => new Promise(
                     (resolve, _reject) => {
-                    resolve(scan(all, pattern));
+                        resolve(scan(all, pattern));
                     }
                 ),
             onAction: (autocompleteApi, rng, value) => {
@@ -1693,12 +1693,12 @@
     var Plugin = () => {
         global$1.add(
             'charmap', editor => {
-            register$2(editor);
-            const charMap = getCharMap(editor);
-            register$1(editor, charMap);
-            register(editor);
-            init(editor, charMap[0]);
-            return get(editor);
+                register$2(editor);
+                const charMap = getCharMap(editor);
+                register$1(editor, charMap);
+                register(editor);
+                init(editor, charMap[0]);
+                return get(editor);
             }
         );
     };

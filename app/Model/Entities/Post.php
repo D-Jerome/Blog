@@ -7,7 +7,6 @@ use PDO;
 
 class Post extends Entity
 {
-
     protected int $id;
 
     protected string $name;

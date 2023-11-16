@@ -8,11 +8,10 @@ use Framework\Route;
 
 class Pagination extends BaseController
 {
-
     protected Route $route;
-    
+
     protected int $currentPage = 1;
-    
+
     protected int $previousPage;
 
     protected int $nextPage;
@@ -20,9 +19,9 @@ class Pagination extends BaseController
     protected int $totalPages;
 
     protected int $perPage = 8;
-    
 
-    public function __construct(Route $route, int $totalPages , ?int $currentPage, ?int $perPage)
+
+    public function __construct(Route $route, int $totalPages, ?int $currentPage, ?int $perPage)
     {
         $this->route = $route;
         $this->totalPages = $totalPages;
@@ -32,19 +31,19 @@ class Pagination extends BaseController
         if (isset($perPage)) {
             $this->perPage = $perPage;
         }
-       
+
 
     }
-    
-    
-    public function getCurrentPage():int
+
+
+    public function getCurrentPage(): int
     {
         return $this->currentPage;
     }
 
-        
+
     /**
-     * setCurrentPage 
+     * setCurrentPage
      *
      * @param  int $currentPage
      * @return void
@@ -54,7 +53,7 @@ class Pagination extends BaseController
         $this->currentPage = $currentPage;
     }
 
-    
+
     /**
      * getPerPage
      *
@@ -65,7 +64,7 @@ class Pagination extends BaseController
         return $this->perPage;
     }
 
-    
+
     /**
      * setPerPage : set number of articles per page
      *
@@ -83,7 +82,7 @@ class Pagination extends BaseController
      *
      * @return array
      */
-    public function pagesInformations():array
+    public function pagesInformations(): array
     {
 
         if ((int)(ceil(($this->totalPages / $this->perPage))) === 1) {
@@ -107,9 +106,9 @@ class Pagination extends BaseController
         if (!empty($query)) {
             $query = "&$query";
         }
-        $pages['previousUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage - 1 ) . $query;
-        $pages['nextUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage + 1 ) . $query;
-        
+        $pages['previousUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
+        $pages['nextUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
+
         return $pages;
     }
 

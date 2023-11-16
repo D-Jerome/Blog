@@ -197,7 +197,7 @@
     const internalFilter = (obj, pred, onTrue, onFalse) => {
         each$1(
             obj, (x, i) => {
-                (pred(x, i) ? onTrue : onFalse)(x, i);
+            (pred(x, i) ? onTrue : onFalse)(x, i);
             }
         );
     };
@@ -210,7 +210,7 @@
         const r = [];
         each$1(
             obj, (value, name) => {
-                r.push(f(value, name));
+            r.push(f(value, name));
             }
         );
       return r;
@@ -302,7 +302,7 @@
     const foldr = (xs, f, acc) => {
         eachr(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -310,7 +310,7 @@
     const foldl = (xs, f, acc) => {
         each(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -571,10 +571,10 @@
         let result = [];
         each(
             children$3(scope), x => {
-            if (predicate(x)) {
-                result = result.concat([x]);
-            }
-            result = result.concat(descendants$1(x, predicate));
+                if (predicate(x)) {
+                    result = result.concat([x]);
+                }
+                result = result.concat(descendants$1(x, predicate));
             }
         );
       return result;
@@ -598,7 +598,7 @@
         const dom = element.dom;
         each$1(
             attrs, (v, k) => {
-            rawSet(dom, k, v);
+                rawSet(dom, k, v);
             }
         );
     };
@@ -612,8 +612,8 @@
     };
     const clone = element => foldl(
         element.dom.attributes, (acc, attr) => {
-        acc[attr.name] = attr.value;
-        return acc;
+            acc[attr.name] = attr.value;
+            return acc;
         }, {}
     );
 
@@ -704,11 +704,11 @@
     const filterFirstLayer = (scope, selector, predicate) => {
         return bind(
             children$3(scope), x => {
-            if (is$2(x, selector)) {
-                return predicate(x) ? [x] : [];
-            } else {
-                    return filterFirstLayer(x, selector, predicate);
-            }
+                if (is$2(x, selector)) {
+                    return predicate(x) ? [x] : [];
+                } else {
+            return filterFirstLayer(x, selector, predicate);
+                }
             }
         );
     };
@@ -788,30 +788,30 @@
 
     const fromRowsOrColGroups = (elems, getSection) => map(
         elems, row => {
-        if (name(row) === 'colgroup') {
-            const cells = map(
+            if (name(row) === 'colgroup') {
+                const cells = map(
                 columns(row), column => {
-                    const colspan = getAttrValue(column, 'span', 1);
-                    return detail(column, 1, colspan);
-                }
-            );
-            return rowdetail(row, cells, 'colgroup');
-        } else {
-                const cells$1 = map(
-            cells(row), cell => {
+                const colspan = getAttrValue(column, 'span', 1);
+                return detail(column, 1, colspan);
+                    }
+                );
+                return rowdetail(row, cells, 'colgroup');
+            } else {
+        const cells$1 = map(
+                cells(row), cell => {
                     const rowspan = getAttrValue(cell, 'rowspan', 1);
                     const colspan = getAttrValue(cell, 'colspan', 1);
                     return detail(cell, rowspan, colspan);
+                }
+            );
+        return rowdetail(row, cells$1, getSection(row));
             }
-        );
-                return rowdetail(row, cells$1, getSection(row));
-        }
         }
     );
     const getParentSection = group => parent(group).map(
         parent => {
-        const parentName = name(parent);
-        return isValidSection(parentName) ? parentName : 'tbody';
+            const parentName = name(parent);
+            return isValidSection(parentName) ? parentName : 'tbody';
         }
     ).getOr('tbody');
     const fromTable$1 = table => {
@@ -834,7 +834,7 @@
     const findItem = (warehouse, item, comparator) => {
         const filtered = filterItems(
             warehouse, detail => {
-            return comparator(item, detail.element);
+                return comparator(item, detail.element);
             }
         );
       return filtered.length > 0 ? Optional.some(filtered[0]) : Optional.none();
@@ -842,7 +842,7 @@
     const filterItems = (warehouse, predicate) => {
         const all = bind(
             warehouse.all, r => {
-            return r.cells;
+                return r.cells;
             }
         );
       return filter(all, predicate);
@@ -852,13 +852,13 @@
         let index = 0;
         each(
             rowData.cells, column => {
-            const colspan = column.colspan;
-            range(
-                    colspan, columnIndex => {
-                    const colIndex = index + columnIndex;
-                    columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
-                    }
-                );
+                const colspan = column.colspan;
+                range(
+                colspan, columnIndex => {
+                        const colIndex = index + columnIndex;
+                        columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
+                }
+            );
             index += colspan;
             }
         );
@@ -878,27 +878,27 @@
         } = partition(list, rowData => rowData.section === 'colgroup');
         each(
             rows, rowData => {
-            const currentRow = [];
-            each(
-                    rowData.cells, rowCell => {
-                    let start = 0;
-                    while (access[key(rowCount, start)] !== undefined) {
-                        start++;
-                    }
-                    const isLocked = hasNonNullableKey(lockedColumns, start.toString());
-                    const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
-                    for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
-                        for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
-                            const rowPosition = rowCount + occupiedRowPosition;
-                            const columnPosition = start + occupiedColumnPosition;
-                            const newpos = key(rowPosition, columnPosition);
-                            access[newpos] = current;
-                            maxColumns = Math.max(maxColumns, columnPosition + 1);
+                const currentRow = [];
+                each(
+                rowData.cells, rowCell => {
+                        let start = 0;
+                        while (access[key(rowCount, start)] !== undefined) {
+                            start++;
                         }
-                    }
-                    currentRow.push(current);
-                    }
-                );
+                        const isLocked = hasNonNullableKey(lockedColumns, start.toString());
+                        const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
+                        for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
+                            for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
+                                const rowPosition = rowCount + occupiedRowPosition;
+                                const columnPosition = start + occupiedColumnPosition;
+                                const newpos = key(rowPosition, columnPosition);
+                                access[newpos] = current;
+                                maxColumns = Math.max(maxColumns, columnPosition + 1);
+                            }
+                        }
+                        currentRow.push(current);
+                }
+            );
             maxRows++;
             cells.push(rowdetail(rowData.element, currentRow, rowData.section));
             rowCount++;
@@ -906,17 +906,17 @@
         );
     const {columns, colgroups} = last(colgroupRows).map(
         rowData => {
-        const columns = generateColumns(rowData);
-        const colgroup$1 = colgroup(rowData.element, values(columns));
-        return {
+            const columns = generateColumns(rowData);
+            const colgroup$1 = colgroup(rowData.element, values(columns));
+            return {
                 colgroups: [colgroup$1],
                     columns
             };
         }
     ).getOrThunk(
         () => ({
-        colgroups: [],
-        columns: {}
+            colgroups: [],
+            columns: {}
             })
     );
       const grid$1 = grid(maxRows, maxColumns);
@@ -967,9 +967,9 @@
     const setAlign = (editor, elm, name) => {
         global$2.each(
             'left center right'.split(' '), align => {
-            if (align !== name) {
-                editor.formatter.remove('align' + align, {}, elm);
-            }
+                if (align !== name) {
+                    editor.formatter.remove('align' + align, {}, elm);
+                }
             }
         );
     if (name) {
@@ -979,9 +979,9 @@
     const setVAlign = (editor, elm, name) => {
         global$2.each(
             'top middle bottom'.split(' '), align => {
-            if (align !== name) {
-                editor.formatter.remove('valign' + align, {}, elm);
-            }
+                if (align !== name) {
+                    editor.formatter.remove('valign' + align, {}, elm);
+                }
             }
         );
     if (name) {
@@ -1021,8 +1021,8 @@
     const defaultTableToolbar = 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol';
     const defaultCellBorderWidths = range(
         5, i => {
-        const size = `${ i + 1 }px`;
-        return {
+            const size = `${ i + 1 }px`;
+            return {
                 title: size,
                 value: size
             };
@@ -1041,7 +1041,7 @@
         'None',
         'Hidden'
         ], type => {
-        return {
+            return {
                 title: type,
                 value: type.toLowerCase()
             };
@@ -1092,79 +1092,79 @@
                 processor: 'object[]',
                 default: defaultCellBorderWidths
                     }
-        );
+                    );
                     registerOption(
                         'table_border_styles', {
                             processor: 'object[]',
                             default: defaultCellBorderStyles
                                 }
-                                );
+                    );
                                 registerOption(
                                     'table_cell_advtab', {
                                         processor: 'boolean',
                                         default: true
                                             }
-                                            );
+                                );
                                             registerOption(
                                                 'table_row_advtab', {
                                                     processor: 'boolean',
                                                     default: true
                                                         }
-                                                        );
+                                            );
                                                         registerOption(
                                                             'table_advtab', {
                                                                 processor: 'boolean',
                                                                 default: true
                                                                     }
-                                                        );
+                                                                    );
                                                                     registerOption(
                                                                         'table_appearance_options', {
                                                                             processor: 'boolean',
                                                                             default: true
                                                                                 }
-                                                                                );
+                                                                    );
                                                                                 registerOption(
                                                                                     'table_grid', {
                                                                                         processor: 'boolean',
                                                                                         default: !global$1.deviceType.isTouch()
                                                                                             }
-                                                                                            );
+                                                                                );
                                                                                             registerOption(
                                                                                                 'table_cell_class_list', {
                                                                                                     processor: 'object[]',
                                                                                                     default: []
                                                                                                         }
-                                                                                                        );
+                                                                                            );
                                                                                                         registerOption(
                                                                                                             'table_row_class_list', {
                                                                                                                 processor: 'object[]',
                                                                                                                 default: []
                                                                                                                     }
-                                                                                                                    );
+                                                                                                        );
                                                                                                                     registerOption(
                                                                                                                         'table_class_list', {
                                                                                                                             processor: 'object[]',
                                                                                                                             default: []
                                                                                                                                 }
-                                                                                                                    );
+                                                                                                                                );
                                                                                                                                 registerOption(
                                                                                                                                     'table_toolbar', {
                                                                                                                                         processor: 'string',
                                                                                                                                         default: defaultTableToolbar
                                                                                                                                             }
-                                                                                                                                            );
+                                                                                                                                );
                                                                                                                                             registerOption(
                                                                                                                                                 'table_background_color_map', {
                                                                                                                                                     processor: 'object[]',
                                                                                                                                                     default: []
                                                                                                                                                         }
-                                                                                                                                            );
+                                                                                                                                                        );
                                                                                                                                                         registerOption(
                                                                                                                                                             'table_border_color_map', {
                                                                                                                                                                 processor: 'object[]',
                                                                                                                                                                 default: []
                                                                                                                                                                     }
-                                                                                                                                                        );
+                                                                                                                                                                    );
                                                                                                                                                                     };
                                                                                                                                                                     const getTableSizingMode = option('table_sizing_mode');
                                                                                                                                                                     const getTableBorderWidths = option('table_border_widths');
@@ -1216,18 +1216,18 @@
         const finishCoords = Warehouse.findItem(warehouse, finishCell, eq);
         return startCoords.bind(
             sc => {
-            return finishCoords.map(
-                    fc => {
-                    return getBounds(sc, fc);
-                    }
-                );
+                return finishCoords.map(
+                fc => {
+                        return getBounds(sc, fc);
+                }
+            );
             }
         );
     };
     const getBox$1 = (warehouse, startCell, finishCell) => {
         return getAnyBox(warehouse, startCell, finishCell).bind(
             bounds => {
-            return isRectangular(warehouse, bounds);
+                return isRectangular(warehouse, bounds);
             }
         );
     };
@@ -1242,7 +1242,7 @@
         const parent$1 = parent(marker);
         parent$1.each(
             v => {
-            v.dom.insertBefore(element.dom, marker.dom);
+                v.dom.insertBefore(element.dom, marker.dom);
             }
         );
     };
@@ -1250,14 +1250,14 @@
         const sibling = nextSibling(marker);
         sibling.fold(
             () => {
-            const parent$1 = parent(marker);
-            parent$1.each(
-                    v => {
-                    append$1(v, element);
-                    }
-                );
+                const parent$1 = parent(marker);
+                parent$1.each(
+                v => {
+                        append$1(v, element);
+                }
+            );
             }, v => {
-            before(v, element);
+                before(v, element);
             }
         );
     };
@@ -1265,9 +1265,9 @@
         const firstChild$1 = firstChild(parent);
         firstChild$1.fold(
             () => {
-            append$1(parent, element);
+                append$1(parent, element);
             }, v => {
-            parent.dom.insertBefore(element.dom, v.dom);
+                parent.dom.insertBefore(element.dom, v.dom);
             }
         );
     };
@@ -1282,15 +1282,15 @@
     const after = (marker, elements) => {
         each(
             elements, (x, i) => {
-            const e = i === 0 ? marker : elements[i - 1];
-            after$1(e, x);
+                const e = i === 0 ? marker : elements[i - 1];
+                after$1(e, x);
             }
         );
     };
     const append = (parent, elements) => {
         each(
             elements, x => {
-            append$1(parent, x);
+                append$1(parent, x);
             }
         );
     };
@@ -1517,15 +1517,15 @@
         const start = look(universe, head);
         return foldr(
             tail, (b, a) => {
-            const current = look(universe, a);
-            return commonElement(universe, b, current);
+                const current = look(universe, a);
+                return commonElement(universe, b, current);
             }, start
         );
     };
     const commonElement = (universe, start, end) => {
         return start.bind(
             s => {
-            return end.filter(curry(universe.eq, s));
+                return end.filter(curry(universe.eq, s));
             }
         );
     };
@@ -1536,7 +1536,7 @@
     const sharedOne = (look, elements) => {
         return sharedOne$1(
             universe, (_universe, element) => {
-            return look(element);
+                return look(element);
             }, elements
         );
     };
@@ -1551,24 +1551,24 @@
     const getEdges = (container, firstSelectedSelector, lastSelectedSelector) => {
         return descendant(container, firstSelectedSelector).bind(
             first => {
-            return descendant(container, lastSelectedSelector).bind(
-                    last => {
-                    return sharedOne(
-                            lookupTable, [
+                return descendant(container, lastSelectedSelector).bind(
+                last => {
+                        return sharedOne(
+                        lookupTable, [
                             first,
                             last
                             ]
-                        ).map(
-                        table => {
-                                return {
+                    ).map(
+                            table => {
+                            return {
                                     first,
                                     last,
                                     table
-                                };
-                        }
-                    );
-                    }
-                );
+                            };
+                            }
+                        );
+                }
+            );
             }
         );
     };
@@ -1579,21 +1579,21 @@
     const retrieveBox = (container, firstSelectedSelector, lastSelectedSelector) => {
         return getEdges(container, firstSelectedSelector, lastSelectedSelector).bind(
             edges => {
-            const isRoot = ancestor => {
-                    return eq(container, ancestor);
-            };
-            const sectionSelector = 'thead,tfoot,tbody,table';
-            const firstAncestor = ancestor(edges.first, sectionSelector, isRoot);
-            const lastAncestor = ancestor(edges.last, sectionSelector, isRoot);
-            return firstAncestor.bind(
-                    fA => {
-                    return lastAncestor.bind(
-                            lA => {
-                            return eq(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
-                            }
-                        );
-                    }
-                );
+                const isRoot = ancestor => {
+            return eq(container, ancestor);
+                };
+                const sectionSelector = 'thead,tfoot,tbody,table';
+                const firstAncestor = ancestor(edges.first, sectionSelector, isRoot);
+                const lastAncestor = ancestor(edges.last, sectionSelector, isRoot);
+                return firstAncestor.bind(
+                fA => {
+                        return lastAncestor.bind(
+                        lA => {
+                                return eq(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
+                        }
+                    );
+                }
+            );
             }
         );
     };
@@ -1696,20 +1696,20 @@
 
     const anyToHex = color => fromString$1(color).orThunk(() => fromString(color).map(fromRgba)).getOrThunk(
         () => {
-        const canvas = document.createElement('canvas');
-        canvas.height = 1;
-        canvas.width = 1;
-        const canvasContext = canvas.getContext('2d');
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        canvasContext.fillStyle = '#FFFFFF';
-        canvasContext.fillStyle = color;
-        canvasContext.fillRect(0, 0, 1, 1);
-        const rgba = canvasContext.getImageData(0, 0, 1, 1).data;
-        const r = rgba[0];
-        const g = rgba[1];
-        const b = rgba[2];
-        const a = rgba[3];
-        return fromRgba(rgbaColour(r, g, b, a));
+            const canvas = document.createElement('canvas');
+            canvas.height = 1;
+            canvas.width = 1;
+            const canvasContext = canvas.getContext('2d');
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvasContext.fillStyle = '#FFFFFF';
+            canvasContext.fillStyle = color;
+            canvasContext.fillRect(0, 0, 1, 1);
+            const rgba = canvasContext.getImageData(0, 0, 1, 1).data;
+            const r = rgba[0];
+            const g = rgba[1];
+            const b = rgba[2];
+            const a = rgba[3];
+            return fromRgba(rgbaColour(r, g, b, a));
         }
     );
     const rgbaToHexString = color => fromString(color).map(fromRgba).map(h => '#' + h.value).getOr(color);
@@ -1772,37 +1772,37 @@
     const isListGroup = item => hasNonNullableKey(item, 'menu');
     const buildListItems = items => map(
         items, item => {
-        const text = item.text || item.title || '';
-        if (isListGroup(item)) {
-            return {
-                text,
-                items: buildListItems(item.menu)
-            };
-        } else {
+            const text = item.text || item.title || '';
+            if (isListGroup(item)) {
                 return {
                     text,
-                    value: item.value
+                    items: buildListItems(item.menu)
                 };
-        }
+            } else {
+        return {
+                    text,
+                    value: item.value
+                    };
+            }
         }
     );
     const buildMenuItems = (editor, items, format, onAction) => map(
         items, item => {
-        const text = item.text || item.title;
-        if (isListGroup(item)) {
-            return {
-                type: 'nestedmenuitem',
-                text,
-                getSubmenuItems: () => buildMenuItems(editor, item.menu, format, onAction)
-            };
-        } else {
+            const text = item.text || item.title;
+            if (isListGroup(item)) {
                 return {
+                    type: 'nestedmenuitem',
+                    text,
+                    getSubmenuItems: () => buildMenuItems(editor, item.menu, format, onAction)
+                };
+            } else {
+        return {
                     text,
                     type: 'togglemenuitem',
                     onAction: () => onAction(item.value),
                     onSetup: onSetupToggle(editor, format, item.value)
-                };
-        }
+                    };
+            }
         }
     );
     const applyTableCellStyle = (editor, style) => value => {
@@ -1810,23 +1810,23 @@
     };
     const filterNoneItem = list => bind(
         list, item => {
-        if (isListGroup(item)) {
-            return [{
-                ...item,
-                menu: filterNoneItem(item.menu)
-            }];
-        } else {
-                return isNotEmpty(item.value) ? [item] : [];
-        }
+            if (isListGroup(item)) {
+                return [{
+                    ...item,
+                    menu: filterNoneItem(item.menu)
+                }];
+            } else {
+        return isNotEmpty(item.value) ? [item] : [];
+            }
         }
     );
     const generateMenuItemsCallback = (editor, items, format, onAction) => callback => callback(buildMenuItems(editor, items, format, onAction));
     const buildColorMenu = (editor, colorList, style) => {
         const colorMap = map(
             colorList, entry => ({
-            text: entry.title,
-            value: '#' + anyToHex(entry.value).value,
-            type: 'choiceitem'
+                text: entry.title,
+                value: '#' + anyToHex(entry.value).value,
+                type: 'choiceitem'
             })
         );
       return [{
@@ -2079,7 +2079,7 @@
     const extractCells = (warehouse, target, predicate) => {
         const details = map(
             target.selection, cell$1 => {
-            return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
+                return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
             }
         );
       const cells = cat(details);
@@ -2104,48 +2104,48 @@
         const adt = {};
         each(
             cases, (acase, count) => {
-            const keys$1 = keys(acase);
-            if (keys$1.length !== 1) {
-                throw new Error('one and only one name per case');
-            }
-            const key = keys$1[0];
-            const value = acase[key];
-            if (adt[key] !== undefined) {
-                throw new Error('duplicate key detected:' + key);
-            } else if (key === 'cata') {
-                    throw new Error('cannot have a case named cata (sorry)');
-            } else if (!isArray(value)) {
+                const keys$1 = keys(acase);
+                if (keys$1.length !== 1) {
+                    throw new Error('one and only one name per case');
+                }
+                const key = keys$1[0];
+                const value = acase[key];
+                if (adt[key] !== undefined) {
+                    throw new Error('duplicate key detected:' + key);
+                } else if (key === 'cata') {
+            throw new Error('cannot have a case named cata (sorry)');
+                } else if (!isArray(value)) {
                     throw new Error('case arguments must be an array');
                 }
                 constructors.push(key);
-            adt[key] = (...args) => {
-                    const argLength = args.length;
+                adt[key] = (...args) => {
+            const argLength = args.length;
                     if (argLength !== value.length) {
                         throw new Error('Wrong number of arguments to case ' + key + '. Expected ' + value.length + ' (' + value + '), got ' + argLength);
-                    }
-                    const match = branches => {
-            const branchKeys = keys(branches);
+                        }
+            const match = branches => {
+                        const branchKeys = keys(branches);
                         if (constructors.length !== branchKeys.length) {
                             throw new Error('Wrong number of arguments to match. Expected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
-                                }
-            const allReqd = forall(
-                        constructors, reqKey => {
-                        return contains(branchKeys, reqKey);
                         }
-                    );
-                    if (!allReqd) {
-                        throw new Error('Not all branches were specified when using match. Specified: ' + branchKeys.join(', ') + '\nRequired: ' + constructors.join(', '));
-                    }
-                    return branches[key].apply(null, args);
-                    };
-                    return {
+                        const allReqd = forall(
+                constructors, reqKey => {
+                            return contains(branchKeys, reqKey);
+                }
+            );
+            if (!allReqd) {
+                throw new Error('Not all branches were specified when using match. Specified: ' + branchKeys.join(', ') + '\nRequired: ' + constructors.join(', '));
+            }
+            return branches[key].apply(null, args);
+            };
+            return {
                         fold: (...foldArgs) => {
                             if (foldArgs.length !== cases.length) {
                                 throw new Error('Wrong number of arguments to fold. Expected ' + cases.length + ', got ' + foldArgs.length);
                             }
                             const target = foldArgs[count];
                             return target.apply(null, args);
-                                },
+                        },
                         match,
                         log: label => {
                             console.log(
@@ -2156,8 +2156,8 @@
                                 }
                             );
                         }
-                    };
-            };
+                        };
+                };
             }
         );
       return adt;
@@ -2196,11 +2196,11 @@
         const details = onCells(house, target);
         return details.bind(
             selectedCells => {
-            const lastSelectedCell = selectedCells[selectedCells.length - 1];
-            const minRowRange = selectedCells[0].row;
-            const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
-            const selectedRows = house.all.slice(minRowRange, maxRowRange);
-            return findCommonRowType(selectedRows);
+                const lastSelectedCell = selectedCells[selectedCells.length - 1];
+                const minRowRange = selectedCells[0].row;
+                const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
+                const selectedRows = house.all.slice(minRowRange, maxRowRange);
+                return findCommonRowType(selectedRows);
             }
         ).getOr('');
     };
@@ -2221,20 +2221,20 @@
         const comparisonData = data.slice(1);
         each(
             comparisonData, items => {
-            each(
-                    keys(baseData), key => {
-                    each$1(
-                            items, (itemValue, itemKey) => {
-                            const comparisonValue = baseData[key];
-                            if (comparisonValue !== '' && key === itemKey) {
-                                if (comparisonValue !== itemValue) {
-                                      baseData[key] = '';
+                each(
+                keys(baseData), key => {
+                        each$1(
+                        items, (itemValue, itemKey) => {
+                                const comparisonValue = baseData[key];
+                                if (comparisonValue !== '' && key === itemKey) {
+                                    if (comparisonValue !== itemValue) {
+                                          baseData[key] = '';
+                                    }
                                 }
-                            }
-                            }
-                        );
-                    }
-                );
+                        }
+                    );
+                }
+            );
             }
         );
       return baseData;
@@ -2300,8 +2300,8 @@
     };
     const getRowType = elm => table(SugarElement.fromDom(elm)).map(
         table => {
-        const target = { selection: fromDom(elm.cells) };
-        return getRowsType(table, target);
+            const target = { selection: fromDom(elm.cells) };
+            return getRowsType(table, target);
         }
     ).getOr('');
     const extractDataFromTableElement = (editor, elm, hasAdvTableTab) => {
@@ -2359,8 +2359,8 @@
         const filtered = filter(allCells, cellA => exists(cells, cellB => eq(cellA.element, cellB)));
         return map(
             filtered, cell => ({
-            element: cell.element.dom,
-            column: Warehouse.getColumnAt(warehouse, cell.column).map(col => col.element.dom)
+                element: cell.element.dom,
+                column: Warehouse.getColumnAt(warehouse, cell.column).map(col => col.element.dom)
             })
         );
     };
@@ -2396,20 +2396,20 @@
         const isSingleCell = cells.length === 1;
         each(
             cells, item => {
-            const cellElm = item.element;
-            const shouldOverrideCurrentValue = isSingleCell ? always : wasChanged;
-            const modifier = DomModifier.normal(editor, cellElm);
-            const colModifier = item.column.map(col => DomModifier.normal(editor, col)).getOr(modifier);
-            updateSimpleProps$1(modifier, colModifier, data, shouldOverrideCurrentValue);
-            if (hasAdvancedCellTab(editor)) {
-                updateAdvancedProps$1(modifier, data, shouldOverrideCurrentValue);
-            }
-            if (wasChanged('halign')) {
-                setAlign(editor, cellElm, data.halign);
-            }
-            if (wasChanged('valign')) {
-                setVAlign(editor, cellElm, data.valign);
-            }
+                const cellElm = item.element;
+                const shouldOverrideCurrentValue = isSingleCell ? always : wasChanged;
+                const modifier = DomModifier.normal(editor, cellElm);
+                const colModifier = item.column.map(col => DomModifier.normal(editor, col)).getOr(modifier);
+                updateSimpleProps$1(modifier, colModifier, data, shouldOverrideCurrentValue);
+                if (hasAdvancedCellTab(editor)) {
+                    updateAdvancedProps$1(modifier, data, shouldOverrideCurrentValue);
+                }
+                if (wasChanged('halign')) {
+                    setAlign(editor, cellElm, data.halign);
+                }
+                if (wasChanged('valign')) {
+                    setVAlign(editor, cellElm, data.valign);
+                }
             }
         );
     };
@@ -2426,21 +2426,21 @@
         if (size(modifiedData) > 0 && cells.length >= 1) {
             table(cells[0]).each(
                 table => {
-                const selectedCells = getSelectedCells(table, cells);
-                const styleModified = size(filter$1(modifiedData, (_value, key) => key !== 'scope' && key !== 'celltype')) > 0;
-                const structureModified = has(modifiedData, 'celltype');
-                if (styleModified || has(modifiedData, 'scope')) {
-                    applyStyleData$1(editor, selectedCells, data, curry(has, modifiedData));
-                }
-                if (structureModified) {
-                    applyStructureData$1(editor, data);
-                }
-                fireTableModified(
-                        editor, table.dom, {
-                        structure: structureModified,
-                        style: styleModified
+                    const selectedCells = getSelectedCells(table, cells);
+                    const styleModified = size(filter$1(modifiedData, (_value, key) => key !== 'scope' && key !== 'celltype')) > 0;
+                    const structureModified = has(modifiedData, 'celltype');
+                    if (styleModified || has(modifiedData, 'scope')) {
+                        applyStyleData$1(editor, selectedCells, data, curry(has, modifiedData));
+                    }
+                    if (structureModified) {
+                        applyStructureData$1(editor, data);
+                    }
+                    fireTableModified(
+                    editor, table.dom, {
+                            structure: structureModified,
+                            style: styleModified
                         }
-                    );
+                );
                 }
             );
         }
@@ -2450,8 +2450,8 @@
         api.close();
         editor.undoManager.transact(
             () => {
-            applyCellData(editor, cells, oldData, data);
-            editor.focus();
+                applyCellData(editor, cells, oldData, data);
+                editor.focus();
             }
         );
     };
@@ -2597,14 +2597,14 @@
         const shouldOverrideCurrentValue = isSingleRow ? always : wasChanged;
         each(
             rows, rowElm => {
-            const modifier = DomModifier.normal(editor, rowElm);
-            updateSimpleProps(modifier, data, shouldOverrideCurrentValue);
-            if (hasAdvancedRowTab(editor)) {
-                updateAdvancedProps(modifier, data, shouldOverrideCurrentValue);
-            }
-            if (wasChanged('align')) {
-                setAlign(editor, rowElm, data.align);
-            }
+                const modifier = DomModifier.normal(editor, rowElm);
+                updateSimpleProps(modifier, data, shouldOverrideCurrentValue);
+                if (hasAdvancedRowTab(editor)) {
+                    updateAdvancedProps(modifier, data, shouldOverrideCurrentValue);
+                }
+                if (wasChanged('align')) {
+                    setAlign(editor, rowElm, data.align);
+                }
             }
         );
     };
@@ -2629,9 +2629,9 @@
             }
             table(SugarElement.fromDom(rows[0])).each(
                 table => fireTableModified(
-                    editor, table.dom, {
-                    structure: typeModified,
-                    style: styleModified
+                editor, table.dom, {
+                        structure: typeModified,
+                        style: styleModified
                     }
                 )
             );
@@ -2642,8 +2642,8 @@
         api.close();
         editor.undoManager.transact(
             () => {
-            applyRowData(editor, rows, oldData, data);
-            editor.focus();
+                applyRowData(editor, rows, oldData, data);
+                editor.focus();
             }
         );
     };
@@ -2868,42 +2868,42 @@
         }
         editor.undoManager.transact(
             () => {
-            if (!tableElm) {
-                const cols = toInt(data.cols).getOr(1);
-                const rows = toInt(data.rows).getOr(1);
-                editor.execCommand(
-                'mceInsertTable', false, {
-                    rows,
-                    columns: cols
+                if (!tableElm) {
+                    const cols = toInt(data.cols).getOr(1);
+                    const rows = toInt(data.rows).getOr(1);
+                    editor.execCommand(
+                    'mceInsertTable', false, {
+                        rows,
+                        columns: cols
+                    }
+                    );
+                    tableElm = getSelectionCell(getSelectionStart(editor), getIsRoot(editor)).bind(cell => table(cell, getIsRoot(editor))).map(table => table.dom).getOrDie();
                 }
-                );
-                tableElm = getSelectionCell(getSelectionStart(editor), getIsRoot(editor)).bind(cell => table(cell, getIsRoot(editor))).map(table => table.dom).getOrDie();
-            }
-            if (size(modifiedData) > 0) {
-                const applicableCellProperties = {
-                    border: has(modifiedData, 'border'),
-                    bordercolor: has(modifiedData, 'bordercolor'),
-                    cellpadding: has(modifiedData, 'cellpadding')
-                };
-                applyDataToElement(editor, tableElm, data, applicableCellProperties);
-                const captionElm = dom.select('caption', tableElm)[0];
-                if (captionElm && !data.caption || !captionElm && data.caption) {
-                    editor.execCommand('mceTableToggleCaption');
+                if (size(modifiedData) > 0) {
+                    const applicableCellProperties = {
+                        border: has(modifiedData, 'border'),
+                        bordercolor: has(modifiedData, 'bordercolor'),
+                        cellpadding: has(modifiedData, 'cellpadding')
+                    };
+                    applyDataToElement(editor, tableElm, data, applicableCellProperties);
+                    const captionElm = dom.select('caption', tableElm)[0];
+                    if (captionElm && !data.caption || !captionElm && data.caption) {
+                        editor.execCommand('mceTableToggleCaption');
+                    }
+                    setAlign(editor, tableElm, data.align);
                 }
-                setAlign(editor, tableElm, data.align);
-            }
-            editor.focus();
-            editor.addVisual();
-            if (size(modifiedData) > 0) {
-                const captionModified = has(modifiedData, 'caption');
-                const styleModified = captionModified ? size(modifiedData) > 1 : true;
-                fireTableModified(
-                editor, tableElm, {
-                    structure: captionModified,
-                    style: styleModified
+                editor.focus();
+                editor.addVisual();
+                if (size(modifiedData) > 0) {
+                    const captionModified = has(modifiedData, 'caption');
+                    const styleModified = captionModified ? size(modifiedData) > 1 : true;
+                    fireTableModified(
+                    editor, tableElm, {
+                        structure: captionModified,
+                        style: styleModified
+                    }
+                    );
                 }
-                );
-            }
             }
         );
     };
@@ -3012,8 +3012,8 @@
         } else {
             return retrieveBox(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(
                 bounds => ({
-                bounds,
-                cells: selectedCells
+                    bounds,
+                    cells: selectedCells
                 })
             );
         }
@@ -3042,43 +3042,43 @@
         const getEnd = () => getSelectionCellOrCaption(getSelectionEnd(editor), getIsRoot(editor));
         const findTargets = () => getStart().bind(
             startCellOrCaption => flatten(
-            lift2(
-                    table(startCellOrCaption), getEnd().bind(table), (startTable, endTable) => {
-                    if (eq(startTable, endTable)) {
-                        if (isCaption(startCellOrCaption)) {
-                            return Optional.some(noMenu(startCellOrCaption));
-                        } else {
-                            return Optional.some(forMenu(getCellsFromSelection(editor), startTable, startCellOrCaption));
+                lift2(
+                table(startCellOrCaption), getEnd().bind(table), (startTable, endTable) => {
+                        if (eq(startTable, endTable)) {
+                            if (isCaption(startCellOrCaption)) {
+                                return Optional.some(noMenu(startCellOrCaption));
+                            } else {
+                                return Optional.some(forMenu(getCellsFromSelection(editor), startTable, startCellOrCaption));
+                            }
                         }
-                    }
-                    return Optional.none();
-                    }
-                )
+                        return Optional.none();
+                }
+            )
             )
         );
       const getExtractedDetails = targets => {
             const tableOpt = table(targets.element);
             return tableOpt.map(
                 table => {
-                const warehouse = Warehouse.fromTable(table);
-                const selectedCells = onCells(warehouse, targets).getOr([]);
-                const locked = foldl(
-                        selectedCells, (acc, cell) => {
-                        if (cell.isLocked) {
-                            acc.onAny = true;
-                            if (cell.column === 0) {
-                                acc.onFirst = true;
-                            } else if (cell.column + cell.colspan >= warehouse.grid.columns) {
-                                acc.onLast = true;
+                    const warehouse = Warehouse.fromTable(table);
+                    const selectedCells = onCells(warehouse, targets).getOr([]);
+                    const locked = foldl(
+                    selectedCells, (acc, cell) => {
+                            if (cell.isLocked) {
+                                acc.onAny = true;
+                                if (cell.column === 0) {
+                                    acc.onFirst = true;
+                                } else if (cell.column + cell.colspan >= warehouse.grid.columns) {
+                                    acc.onLast = true;
+                                }
                             }
+                            return acc;
+                    }, {
+                            onAny: false,
+                            onFirst: false,
+                            onLast: false
                         }
-                        return acc;
-                        }, {
-                        onAny: false,
-                        onFirst: false,
-                        onLast: false
-                        }
-                    );
+                );
                 return {
                     mergeable: onUnlockedMergable(warehouse, targets).isSome(),
                     unmergeable: onUnlockedUnmergable(warehouse, targets).isSome(),
@@ -3101,22 +3101,22 @@
         };
         const onSetup = (api, isDisabled) => setupHandler(
             () => targets.get().fold(
-            () => {
-                    api.setEnabled(false);
-            }, targets => {
-                    api.setEnabled(!isDisabled(targets) && editor.selection.isEditable());
-            }
+                () => {
+            api.setEnabled(false);
+                }, targets => {
+            api.setEnabled(!isDisabled(targets) && editor.selection.isEditable());
+                }
             )
         );
     const onSetupWithToggle = (api, isDisabled, isActive) => setupHandler(
         () => targets.get().fold(
-        () => {
-                api.setEnabled(false);
-                api.setActive(false);
-            }, targets => {
-        api.setEnabled(!isDisabled(targets) && editor.selection.isEditable());
-        api.setActive(isActive(targets));
-            }
+            () => {
+        api.setEnabled(false);
+        api.setActive(false);
+        }, targets => {
+                api.setEnabled(!isDisabled(targets) && editor.selection.isEditable());
+                api.setActive(isActive(targets));
+        }
         )
     );
       const isDisabledFromLocked = lockedDisable => selectionDetails.exists(details => details.locked[lockedDisable]);
@@ -3130,8 +3130,8 @@
       const onSetupTableWithCaption = api => {
             return onSetupWithToggle(
                 api, never, targets => {
-                const tableOpt = table(targets.element, getIsRoot(editor));
-                return tableOpt.exists(table => child(table, 'caption'));
+                    const tableOpt = table(targets.element, getIsRoot(editor));
+                    return tableOpt.exists(table => child(table, 'caption'));
                 }
             );
         };
@@ -3756,11 +3756,11 @@
                 selectionTargets.resetTargets();
                 return selectionTargets.targets().fold(
                     constant(''), targets => {
-                    if (name(targets.element) === 'caption') {
-                          return 'tableprops deletetable';
-                    } else {
-                            return 'cell row column | advtablesort | tableprops deletetable';
-                    }
+                        if (name(targets.element) === 'caption') {
+                              return 'tableprops deletetable';
+                        } else {
+                    return 'cell row column | advtablesort | tableprops deletetable';
+                        }
                     }
                 );
             }

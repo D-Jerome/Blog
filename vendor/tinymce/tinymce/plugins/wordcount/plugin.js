@@ -344,8 +344,8 @@
             if (isNull(timer)) {
                 timer = setTimeout(
                     () => {
-                        timer = null;
-                        fn.apply(null, args);
+                    timer = null;
+                    fn.apply(null, args);
                     }, rate
                 );
             }
@@ -377,12 +377,12 @@
         const debouncedUpdate = first(() => updateCount(editor, api), delay);
         editor.on(
             'init', () => {
-            updateCount(editor, api);
-            global.setEditorTimeout(
-                    editor, () => {
-                    editor.on('SetContent BeforeAddUndo Undo Redo ViewUpdate keyup', debouncedUpdate.throttle);
-                    }, 0
-                );
+                updateCount(editor, api);
+                global.setEditorTimeout(
+                editor, () => {
+                        editor.on('SetContent BeforeAddUndo Undo Redo ViewUpdate keyup', debouncedUpdate.throttle);
+                }, 0
+            );
             editor.on('remove', debouncedUpdate.cancel);
             }
         );
@@ -409,11 +409,11 @@
     var Plugin = (delay = 300) => {
         global$2.add(
             'wordcount', editor => {
-            const api = get(editor);
-            register$1(editor, api);
-            register(editor);
-            setup(editor, api, delay);
-            return api;
+                const api = get(editor);
+                register$1(editor, api);
+                register(editor);
+                setup(editor, api, delay);
+                return api;
             }
         );
     };

@@ -4,23 +4,21 @@ namespace Framework;
 
 use Framework\Request;
 
-
 class Route
 {
-
     protected string $path;
-    
-    protected string $method;
-    
-    protected string $controller;
-    
-    protected string $action;
-    
-    protected array $authRoles;
-    
-    protected array $params=[];
 
-    
+    protected string $method;
+
+    protected string $controller;
+
+    protected string $action;
+
+    protected array $authRoles;
+
+    protected array $params = [];
+
+
     /**
      * __construct : Construct Route
      *
@@ -38,10 +36,10 @@ class Route
         $this->controller = $controller;
         $this->action = $action;
         $this->authRoles = $authRoles;
-    
+
     } //end __construct
 
-    
+
     /**
      * getPath
      *
@@ -52,7 +50,7 @@ class Route
         return $this->path;
     }
 
-    
+
     /**
      * getMethod
      *
@@ -63,7 +61,7 @@ class Route
         return $this->method;
     }
 
-    
+
     /**
      * getController
      *
@@ -74,7 +72,7 @@ class Route
         return $this->controller;
     }
 
-    
+
     /**
      * getAction
      *
@@ -85,7 +83,7 @@ class Route
         return $this->action;
     }
 
-    
+
     /**
      * getAuthRoles
      *
@@ -93,10 +91,10 @@ class Route
      */
     public function getAuthRoles(): array
     {
-        return $this->authRoles;   
+        return $this->authRoles;
     }
 
-    
+
     /**
      * getParams
      *
@@ -106,7 +104,7 @@ class Route
     {
         return $this->params;
     }
-    
+
 
     /**
      * setParams : Insert params of  $_GET or $_POST in Route

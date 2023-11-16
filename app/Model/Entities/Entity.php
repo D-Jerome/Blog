@@ -4,7 +4,6 @@ namespace App\Model\Entities;
 
 abstract class Entity
 {
-
     /**
      * __get
      *
@@ -32,7 +31,7 @@ abstract class Entity
         if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */
             $this->$name = $value;
-        } else if (false !== strpos($name, '_')) {
+        } elseif (false !== strpos($name, '_')) {
             /* et traduire le snake_case en camelCase */
 
             $this->__set($this->snakeCaseToCamelCase($name), $value);

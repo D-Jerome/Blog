@@ -6,7 +6,6 @@ use App\Model\Entities\User;
 
 class Session
 {
-    
     /**
      * __construct : Start session if not already strated
      *
@@ -18,8 +17,8 @@ class Session
             session_start();
         }
     }//end __construct
-    
-    
+
+
     /**
      * getUser : get User connected
      *
@@ -29,7 +28,7 @@ class Session
     {
         return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username']) : null;
     }
-    
+
 
     /**
      * connect : keep information of user un session

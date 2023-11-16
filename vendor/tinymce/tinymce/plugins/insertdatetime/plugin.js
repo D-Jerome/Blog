@@ -15,13 +15,13 @@
                 processor: 'string',
                 default: editor.translate('%Y-%m-%d')
                     }
-        );
+                    );
                     registerOption(
                         'insertdatetime_timeformat', {
                             processor: 'string',
                             default: editor.translate('%H:%M:%S')
                                 }
-                    );
+                                );
                                 registerOption(
                                     'insertdatetime_formats', {
                                         processor: 'string[]',
@@ -32,13 +32,13 @@
                                             '%D'
                                             ]
                                             }
-                                );
+                                            );
                                             registerOption(
                                                 'insertdatetime_element', {
                                                     processor: 'boolean',
                                                     default: false
                                                         }
-                                            );
+                                                        );
                                                         };
                                                         const getDateFormat = option('insertdatetime_dateformat');
                                                         const getTimeFormat = option('insertdatetime_timeformat');
@@ -110,12 +110,12 @@
     const register$1 = editor => {
         editor.addCommand(
             'mceInsertDate', (_ui, value) => {
-                insertDateTime(editor, value !== null && value !== void 0 ? value : getDateFormat(editor));
+            insertDateTime(editor, value !== null && value !== void 0 ? value : getDateFormat(editor));
             }
         );
     editor.addCommand(
         'mceInsertTime', (_ui, value) => {
-            insertDateTime(editor, value !== null && value !== void 0 ? value : getTimeFormat(editor));
+        insertDateTime(editor, value !== null && value !== void 0 ? value : getTimeFormat(editor));
         }
     );
     };
@@ -159,9 +159,9 @@
                     done(
                         global.map(
                             formats, format => ({
-                                type: 'choiceitem',
-                                text: getDateTime(editor, format),
-                                value: format
+                            type: 'choiceitem',
+                            text: getDateTime(editor, format),
+                            value: format
                             })
                         )
                     );
@@ -186,9 +186,9 @@
                 text: 'Date/time',
                 getSubmenuItems: () => global.map(
                     formats, format => ({
-                        type: 'menuitem',
-                        text: getDateTime(editor, format),
-                        onAction: makeMenuItemHandler(format)
+                    type: 'menuitem',
+                    text: getDateTime(editor, format),
+                    onAction: makeMenuItemHandler(format)
                     })
                 ),
             onSetup: onSetupEditable(editor)
@@ -199,9 +199,9 @@
     var Plugin = () => {
         global$1.add(
             'insertdatetime', editor => {
-                register$2(editor);
-                register$1(editor);
-                register(editor);
+            register$2(editor);
+            register$1(editor);
+            register(editor);
             }
         );
     };

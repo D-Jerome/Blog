@@ -17,13 +17,13 @@
                 processor: 'string',
                 default: '<!-- pagebreak -->'
                     }
-        );
+                    );
                     registerOption(
                         'pagebreak_split_block', {
                             processor: 'boolean',
                             default: false
                                 }
-                    );
+                                );
                                 };
                                 const getSeparatorHtml = option('pagebreak_separator');
                                 const shouldSplitBlock = option('pagebreak_split_block');
@@ -39,39 +39,39 @@
         const pageBreakSeparatorRegExp = new RegExp(
             separatorHtml.replace(
                 /[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, a => {
-                return '\\' + a;
+                    return '\\' + a;
                 }
             ), 'gi'
         );
     editor.on(
         'BeforeSetContent', e => {
-        e.content = e.content.replace(pageBreakSeparatorRegExp, getPlaceholderHtml(shouldSplitBlock$1()));
+            e.content = e.content.replace(pageBreakSeparatorRegExp, getPlaceholderHtml(shouldSplitBlock$1()));
         }
     );
     editor.on(
         'PreInit', () => {
-        editor.serializer.addNodeFilter(
-                'img', nodes => {
-                let i = nodes.length, node, className;
-                while (i--) {
-                    node = nodes[i];
-                    className = node.attr('class');
-                    if (className && className.indexOf(pageBreakClass) !== -1) {
-                        const parentNode = node.parent;
-                        if (parentNode && editor.schema.getBlockElements()[parentNode.name] && shouldSplitBlock$1()) {
-                            parentNode.type = 3;
-                            parentNode.value = separatorHtml;
-                            parentNode.raw = true;
-                            node.remove();
-                            continue;
+            editor.serializer.addNodeFilter(
+            'img', nodes => {
+                    let i = nodes.length, node, className;
+                    while (i--) {
+                        node = nodes[i];
+                        className = node.attr('class');
+                        if (className && className.indexOf(pageBreakClass) !== -1) {
+                            const parentNode = node.parent;
+                            if (parentNode && editor.schema.getBlockElements()[parentNode.name] && shouldSplitBlock$1()) {
+                                parentNode.type = 3;
+                                parentNode.value = separatorHtml;
+                                parentNode.raw = true;
+                                node.remove();
+                                continue;
+                            }
+                            node.type = 3;
+                            node.value = separatorHtml;
+                            node.raw = true;
                         }
-                        node.type = 3;
-                        node.value = separatorHtml;
-                        node.raw = true;
                     }
-                }
-                }
-            );
+            }
+        );
         }
     );
     };
@@ -79,7 +79,7 @@
     const register$1 = editor => {
         editor.addCommand(
             'mcePageBreak', () => {
-            editor.insertContent(getPlaceholderHtml(shouldSplitBlock(editor)));
+                editor.insertContent(getPlaceholderHtml(shouldSplitBlock(editor)));
             }
         );
     };
@@ -87,9 +87,9 @@
     const setup = editor => {
         editor.on(
             'ResolveName', e => {
-            if (e.target.nodeName === 'IMG' && editor.dom.hasClass(e.target, pageBreakClass)) {
-                e.name = 'pagebreak';
-            }
+                if (e.target.nodeName === 'IMG' && editor.dom.hasClass(e.target, pageBreakClass)) {
+                    e.name = 'pagebreak';
+                }
             }
         );
     };
@@ -127,11 +127,11 @@
     var Plugin = () => {
         global$1.add(
             'pagebreak', editor => {
-            register$2(editor);
-            register$1(editor);
-            register(editor);
-            setup$1(editor);
-            setup(editor);
+                register$2(editor);
+                register$1(editor);
+                register(editor);
+                setup$1(editor);
+                setup(editor);
             }
         );
     };

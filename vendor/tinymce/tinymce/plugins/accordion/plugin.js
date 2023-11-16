@@ -202,7 +202,7 @@
     const foldl = (xs, f, acc) => {
         each$1(
             xs, (x, i) => {
-                acc = f(acc, x, i);
+            acc = f(acc, x, i);
             }
         );
       return acc;
@@ -253,7 +253,7 @@
         const dom = element.dom;
         each(
             attrs, (v, k) => {
-                rawSet(dom, k, v);
+            rawSet(dom, k, v);
             }
         );
     };
@@ -267,8 +267,8 @@
     };
     const clone = element => foldl(
         element.dom.attributes, (acc, attr) => {
-            acc[attr.name] = attr.value;
-            return acc;
+        acc[attr.name] = attr.value;
+        return acc;
         }, {}
     );
 
@@ -435,7 +435,7 @@
         const parent$1 = parent(marker);
         parent$1.each(
             v => {
-                v.dom.insertBefore(element.dom, marker.dom);
+            v.dom.insertBefore(element.dom, marker.dom);
             }
         );
     };
@@ -443,14 +443,14 @@
         const sibling = nextSibling(marker);
         sibling.fold(
             () => {
-                const parent$1 = parent(marker);
-                parent$1.each(
-                v => {
-                        append$1(v, element);
-                }
-            );
+            const parent$1 = parent(marker);
+            parent$1.each(
+                    v => {
+                    append$1(v, element);
+                    }
+                );
             }, v => {
-                before(v, element);
+            before(v, element);
             }
         );
     };
@@ -458,9 +458,9 @@
         const firstChild$1 = firstChild(parent);
         firstChild$1.fold(
             () => {
-                append$1(parent, element);
+            append$1(parent, element);
             }, v => {
-                parent.dom.insertBefore(element.dom, v.dom);
+            parent.dom.insertBefore(element.dom, v.dom);
             }
         );
     };
@@ -475,15 +475,15 @@
     const after = (marker, elements) => {
         each$1(
             elements, (x, i) => {
-                const e = i === 0 ? marker : elements[i - 1];
-                after$1(e, x);
+            const e = i === 0 ? marker : elements[i - 1];
+            after$1(e, x);
             }
         );
     };
     const append = (parent, elements) => {
         each$1(
             elements, x => {
-                append$1(parent, x);
+            append$1(parent, x);
             }
         );
     };
@@ -492,10 +492,10 @@
         let result = [];
         each$1(
             children(scope), x => {
-            if (predicate(x)) {
-                result = result.concat([x]);
-            }
-            result = result.concat(descendants$1(x, predicate));
+                if (predicate(x)) {
+                    result = result.concat([x]);
+                }
+                result = result.concat(descendants$1(x, predicate));
             }
         );
       return result;
@@ -754,11 +754,11 @@
         if (universe.property().isText(element) && universe.property().getText(element).trim().length === 0 || universe.property().isComment(element)) {
             return direction(element).bind(
                 elem => {
-                return scan(universe, elem, direction).orThunk(
-                        () => {
-                        return Optional.some(elem);
-                        }
-                    );
+                    return scan(universe, elem, direction).orThunk(
+                    () => {
+                            return Optional.some(elem);
+                    }
+                );
                 }
             );
         } else {
@@ -864,26 +864,26 @@
         const accordionBodyHtml = `<${ accordionBodyWrapperTag } class="${ accordionBodyWrapperClass }"><p>${ bodyText }</p></${ accordionBodyWrapperTag }>`;
         editor.undoManager.transact(
             () => {
-            editor.insertContent(
-                    [
+                editor.insertContent(
+                [
                     `<details data-mce-id="${ uid }" class="${ accordionDetailsClass }" open="open">`,
                     accordionSummaryHtml,
                     accordionBodyHtml,
                     `</details>`
                     ].join('')
-                );
+            );
             descendant(editorBody, `[data-mce-id="${ uid }"]`).each(
                 detailsElm => {
-                remove$2(detailsElm, 'data-mce-id');
-                descendant(detailsElm, `summary`).each(
-                        summaryElm => {
-                        const rng = editor.dom.createRng();
-                        const des = freefallRtl(summaryElm);
-                        rng.setStart(des.element.dom, des.offset);
-                        rng.setEnd(des.element.dom, des.offset);
-                        editor.selection.setRng(rng);
-                        }
-                    );
+                    remove$2(detailsElm, 'data-mce-id');
+                    descendant(detailsElm, `summary`).each(
+                    summaryElm => {
+                            const rng = editor.dom.createRng();
+                            const des = freefallRtl(summaryElm);
+                            rng.setStart(des.element.dom, des.offset);
+                            rng.setEnd(des.element.dom, des.offset);
+                            editor.selection.setRng(rng);
+                    }
+                );
                 }
             );
             }
@@ -901,20 +901,20 @@
     const toggleAccordion = (editor, state) => {
         getSelectedDetails(editor).each(
             details => {
-            fireToggleAccordionEvent(editor, details, toggleDetailsElement(details, state));
+                fireToggleAccordionEvent(editor, details, toggleDetailsElement(details, state));
             }
         );
     };
     const removeAccordion = editor => {
         getSelectedDetails(editor).each(
             details => {
-            const {nextSibling} = details;
-            if (nextSibling) {
-                editor.selection.select(nextSibling, true);
-                editor.selection.collapse(true);
-            } else {
-                    insertAndSelectParagraphAfter(editor, details);
-            }
+                const {nextSibling} = details;
+                if (nextSibling) {
+                    editor.selection.select(nextSibling, true);
+                    editor.selection.collapse(true);
+                } else {
+            insertAndSelectParagraphAfter(editor, details);
+                }
                 details.remove();
             }
         );
@@ -989,64 +989,64 @@
     const setup$1 = editor => {
         editor.on(
             'PreInit', () => {
-            const {serializer, parser} = editor;
-            parser.addNodeFilter(
-                    accordionTag, nodes => {
+                const {serializer, parser} = editor;
+                parser.addNodeFilter(
+                accordionTag, nodes => {
+                        for (let i = 0; i < nodes.length; i++) {
+                            const node = nodes[i];
+                            if (isAccordionDetailsNode(node)) {
+                                const accordionNode = node;
+                                const {summaryNode, wrapperNode, otherNodes} = getAccordionChildren(accordionNode);
+                                const hasSummaryNode = isNonNullable(summaryNode);
+                                const newSummaryNode = hasSummaryNode ? summaryNode : new global$1('summary', 1);
+                                if (isNullable(newSummaryNode.firstChild)) {
+                                    padInputNode(newSummaryNode);
+                                }
+                                addClasses(newSummaryNode, [accordionSummaryClass]);
+                                if (!hasSummaryNode) {
+                                  if (isNonNullable(accordionNode.firstChild)) {
+                                        accordionNode.insert(newSummaryNode, accordionNode.firstChild, true);
+                                        } else {
+                                accordionNode.append(newSummaryNode);
+                            }
+                                }
+                                const hasWrapperNode = isNonNullable(wrapperNode);
+                                const newWrapperNode = hasWrapperNode ? wrapperNode : new global$1(accordionBodyWrapperTag, 1);
+                                addClasses(newWrapperNode, [accordionBodyWrapperClass]);
+                                if (otherNodes.length > 0) {
+                                    for (let j = 0; j < otherNodes.length; j++) {
+                                        const otherNode = otherNodes[j];
+                                        newWrapperNode.append(otherNode);
+                                    }
+                                }
+                                if (isNullable(newWrapperNode.firstChild)) {
+                                    const pNode = new global$1('p', 1);
+                                    padInputNode(pNode);
+                                    newWrapperNode.append(pNode);
+                                }
+                                if (!hasWrapperNode) {
+                                    accordionNode.append(newWrapperNode);
+                                }
+                            }
+                        }
+                }
+            );
+            serializer.addNodeFilter(
+                accordionTag, nodes => {
+                    const summaryClassRemoveSet = new Set([accordionSummaryClass]);
                     for (let i = 0; i < nodes.length; i++) {
                         const node = nodes[i];
                         if (isAccordionDetailsNode(node)) {
                             const accordionNode = node;
-                            const {summaryNode, wrapperNode, otherNodes} = getAccordionChildren(accordionNode);
-                            const hasSummaryNode = isNonNullable(summaryNode);
-                            const newSummaryNode = hasSummaryNode ? summaryNode : new global$1('summary', 1);
-                            if (isNullable(newSummaryNode.firstChild)) {
-                                padInputNode(newSummaryNode);
+                            const {summaryNode, wrapperNode} = getAccordionChildren(accordionNode);
+                            if (isNonNullable(summaryNode)) {
+                                  removeClasses(summaryNode, summaryClassRemoveSet);
                             }
-                            addClasses(newSummaryNode, [accordionSummaryClass]);
-                            if (!hasSummaryNode) {
-                              if (isNonNullable(accordionNode.firstChild)) {
-                                        accordionNode.insert(newSummaryNode, accordionNode.firstChild, true);
-                                    } else {
-                                        accordionNode.append(newSummaryNode);
-                                    }
-                            }
-                            const hasWrapperNode = isNonNullable(wrapperNode);
-                            const newWrapperNode = hasWrapperNode ? wrapperNode : new global$1(accordionBodyWrapperTag, 1);
-                            addClasses(newWrapperNode, [accordionBodyWrapperClass]);
-                            if (otherNodes.length > 0) {
-                                for (let j = 0; j < otherNodes.length; j++) {
-                                    const otherNode = otherNodes[j];
-                                    newWrapperNode.append(otherNode);
-                                }
-                            }
-                            if (isNullable(newWrapperNode.firstChild)) {
-                                const pNode = new global$1('p', 1);
-                                padInputNode(pNode);
-                                newWrapperNode.append(pNode);
-                            }
-                            if (!hasWrapperNode) {
-                                accordionNode.append(newWrapperNode);
+                            if (isNonNullable(wrapperNode)) {
+                                wrapperNode.unwrap();
                             }
                         }
                     }
-                    }
-                );
-            serializer.addNodeFilter(
-                accordionTag, nodes => {
-                const summaryClassRemoveSet = new Set([accordionSummaryClass]);
-                for (let i = 0; i < nodes.length; i++) {
-                    const node = nodes[i];
-                    if (isAccordionDetailsNode(node)) {
-                        const accordionNode = node;
-                        const {summaryNode, wrapperNode} = getAccordionChildren(accordionNode);
-                        if (isNonNullable(summaryNode)) {
-                              removeClasses(summaryNode, summaryClassRemoveSet);
-                        }
-                        if (isNonNullable(wrapperNode)) {
-                            wrapperNode.unwrap();
-                        }
-                    }
-                }
                 }
             );
             }
@@ -1058,11 +1058,11 @@
     const setupEnterKeyInSummary = editor => {
         editor.on(
             'keydown', event => {
-            if (event.shiftKey || event.keyCode !== global.ENTER || !isInSummary(editor)) {
-                return;
-            }
-            event.preventDefault();
-            editor.execCommand('ToggleAccordion');
+                if (event.shiftKey || event.keyCode !== global.ENTER || !isInSummary(editor)) {
+                    return;
+                }
+                event.preventDefault();
+                editor.execCommand('ToggleAccordion');
             }
         );
     };
@@ -1070,10 +1070,10 @@
         setupEnterKeyInSummary(editor);
         editor.on(
             'ExecCommand', e => {
-            const cmd = e.command.toLowerCase();
-            if ((cmd === 'delete' || cmd === 'forwarddelete') && isDetailsSelected(editor)) {
-                normalizeDetails(editor);
-            }
+                const cmd = e.command.toLowerCase();
+                if ((cmd === 'delete' || cmd === 'forwarddelete') && isDetailsSelected(editor)) {
+                    normalizeDetails(editor);
+                }
             }
         );
     };
@@ -1128,10 +1128,10 @@
     var Plugin = () => {
         global$3.add(
             'accordion', editor => {
-            register(editor);
-            register$1(editor);
-            setup(editor);
-            setup$1(editor);
+                register(editor);
+                register$1(editor);
+                setup(editor);
+                setup$1(editor);
             }
         );
     };

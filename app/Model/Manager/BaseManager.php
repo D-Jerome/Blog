@@ -67,8 +67,8 @@ abstract class BaseManager
         if (!empty($params)) {
             $sql .= ' WHERE ';
             $i = 0;
-            foreach ($params as $k => $value){
-                if ($i !== 0 ) {
+            foreach ($params as $k => $value) {
+                if ($i !== 0) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;

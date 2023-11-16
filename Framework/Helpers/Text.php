@@ -4,8 +4,6 @@ namespace Framework\Helpers;
 
 class Text
 {
-    
-
     /**
      * toSlug: create a slug text of the @param
      *
@@ -17,7 +15,7 @@ class Text
         return preg_replace('/[^A-Za-z0-9-]+/', '-', $text);
     }
 
-        
+
     /**
      * camelCaseToSnakeCase : change type of style of text
      *
@@ -28,8 +26,8 @@ class Text
     {
 
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
-        
+
     }
 
-    
+
 }

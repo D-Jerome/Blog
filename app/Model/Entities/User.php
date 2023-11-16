@@ -6,7 +6,6 @@ use DateTime;
 
 class User extends Entity
 {
-
     protected int $id;
 
     protected string $firstname;

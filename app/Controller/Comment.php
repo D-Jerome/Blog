@@ -9,7 +9,6 @@ use Framework\BaseController;
 
 class Comment extends BaseController
 {
-
     // public function postOfComment($id)
     // {
     //     $user = $this->session->getUser();

@@ -85,13 +85,13 @@ class CommentManager extends BaseManager
 
         $query->bindParam(':content', $params['content']);
         $query->bindParam(':created_at', $created_at);
-        $query->bindParam(':modified_at', $created_at);        
+        $query->bindParam(':modified_at', $created_at);
         $query->bindParam(':post_id', $params['postId']);
         $query->bindParam(':user_id', $params['userId']);
         $query->execute();
     }
 
-    public function verifyCouple(int $postId,  int $commentId): int
+    public function verifyCouple(int $postId, int $commentId): int
     {
         $query = $this->dbConnect->prepare(
             '
@@ -108,7 +108,7 @@ class CommentManager extends BaseManager
 
     public function unpublish(int $id): void
     {
-       
+
         $query = $this->dbConnect->prepare(
             '
             UPDATE ' . $this->table . ' 

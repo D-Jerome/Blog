@@ -15,12 +15,12 @@
     const register$2 = editor => {
         editor.addCommand(
             'ApplyUnorderedListStyle', (ui, value) => {
-                applyListFormat(editor, 'UL', value['list-style-type']);
+            applyListFormat(editor, 'UL', value['list-style-type']);
             }
         );
     editor.addCommand(
         'ApplyOrderedListStyle', (ui, value) => {
-            applyListFormat(editor, 'OL', value['list-style-type']);
+        applyListFormat(editor, 'OL', value['list-style-type']);
         }
     );
     };
@@ -33,13 +33,13 @@
                 processor: 'string[]',
                 default: 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman'.split(',')
                     }
-        );
+                    );
                     registerOption(
                         'advlist_bullet_styles', {
                             processor: 'string[]',
                             default: 'default,circle,square'.split(',')
                                 }
-                    );
+                                );
                                 };
                                 const getNumberStyles = option('advlist_number_styles');
                                 const getBulletStyles = option('advlist_bullet_styles');
@@ -209,7 +209,7 @@
     const styleValueToText = styleValue => {
         return styleValue.replace(/\-/g, ' ').replace(
             /\b\w/g, chr => {
-                return chr.toUpperCase();
+            return chr.toUpperCase();
             }
         );
     };
@@ -233,11 +233,11 @@
                 fetch: callback => {
                     const items = global.map(
                         styles, styleValue => {
-                        const iconStyle = nodeName === 'OL' ? 'num' : 'bull';
-                        const iconName = styleValue === 'disc' || styleValue === 'decimal' ? 'default' : styleValue;
-                        const itemValue = normalizeStyleValue(styleValue);
-                        const displayText = styleValueToText(styleValue);
-                        return {
+                            const iconStyle = nodeName === 'OL' ? 'num' : 'bull';
+                            const iconName = styleValue === 'disc' || styleValue === 'decimal' ? 'default' : styleValue;
+                            const itemValue = normalizeStyleValue(styleValue);
+                            const displayText = styleValueToText(styleValue);
+                            return {
                                 type: 'choiceitem',
                                 value: itemValue,
                                 icon: 'list-' + iconStyle + '-' + iconName,
@@ -285,13 +285,13 @@
     var Plugin = () => {
         global$1.add(
             'advlist', editor => {
-            if (editor.hasPlugin('lists')) {
-                register$1(editor);
-                register(editor);
-                register$2(editor);
-            } else {
-                    console.error('Please use the Lists plugin together with the Advanced List plugin.');
-                }
+                if (editor.hasPlugin('lists')) {
+                    register$1(editor);
+                    register(editor);
+                    register$2(editor);
+                } else {
+            console.error('Please use the Lists plugin together with the Advanced List plugin.');
+            }
             }
         );
     };

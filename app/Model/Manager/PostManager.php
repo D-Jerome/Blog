@@ -22,10 +22,10 @@ class PostManager extends BaseManager
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT c.* FROM category c 
-            INNER JOIN post_category pc ON pc.category_id = c.id 
-            INNER JOIN post p ON pc.post_id = p.id 
-            WHERE p.id = ? 
+            SELECT c.* FROM category c
+            INNER JOIN post_category pc ON pc.category_id = c.id
+            INNER JOIN post p ON pc.post_id = p.id
+            WHERE p.id = ?
             '
         );
         $statement->setFetchMode(PDO::FETCH_CLASS, Category::class);
@@ -39,8 +39,8 @@ class PostManager extends BaseManager
 
         $query = $this->dbConnect->prepare(
             '
-            SELECT p.* FROM post p 
-            INNER JOIN post_category pc ON pc.post_id = p.id 
+            SELECT p.* FROM post p
+            INNER JOIN post_category pc ON pc.post_id = p.id
             WHERE pc.category_id = ? and p.publish_state = true
             ORDER BY p.created_at DESC
             LIMIT 3
@@ -65,9 +65,9 @@ class PostManager extends BaseManager
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT (com.id) FROM comment com 
-            INNER JOIN post p ON com.post_id = p.id 
-            WHERE com.publish_state = true and p.id = ? 
+            SELECT (com.id) FROM comment com
+            INNER JOIN post p ON com.post_id = p.id
+            WHERE com.publish_state = true and p.id = ?
             '
         );
         $statement->execute([$id]);
@@ -107,7 +107,7 @@ class PostManager extends BaseManager
     {
         $query = $this->dbConnect->prepare(
             '
-            INSERT INTO ' . $this->table . '(name , slug, content, created_at, user_id) 
+            INSERT INTO ' . $this->table . '(name , slug, content, created_at, user_id)
             VALUES (:name , :slug , :content, :created_at, :user_id)
         '
         );
@@ -128,7 +128,7 @@ class PostManager extends BaseManager
             foreach ($categories as $category) {
                 $query = $this->dbConnect->prepare(
                     '
-                    INSERT INTO post_category (post_id, category_id) 
+                    INSERT INTO post_category (post_id, category_id)
                     VALUES (:post_id , :category_id)
                     '
                 );
@@ -182,10 +182,10 @@ class PostManager extends BaseManager
     {
         $query = $this->dbConnect->prepare(
             '
-            UPDATE ' . $this->table . ' 
-            SET 
+            UPDATE ' . $this->table . '
+            SET
                 publish_state = false
-            WHERE id = :id 
+            WHERE id = :id
         '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);
@@ -197,11 +197,11 @@ class PostManager extends BaseManager
     {
         $query = $this->dbConnect->prepare(
             '
-            UPDATE ' . $this->table . ' 
-            SET 
+            UPDATE ' . $this->table . '
+            SET
                 publish_state = true
                 publish_at = :publish_at
-            WHERE id = :id 
+            WHERE id = :id
         '
         );
         $query->setFetchMode(PDO::FETCH_DEFAULT);

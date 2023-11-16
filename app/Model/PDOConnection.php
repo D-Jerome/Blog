@@ -6,15 +6,13 @@ use Exception;
 use PDO;
 use PhpParser\json_decode;
 
-
 class PDOConnection
 {
-    
     private $dbConnect;
-    
+
     private static $pdoInstance;
 
-    
+
     /**
      * getInstance : create instance pdo if no set
      *
@@ -31,7 +29,7 @@ class PDOConnection
         return self::$pdoInstance->dbConnect;
     }
 
-    
+
     /**
      * __construct
      *
@@ -52,7 +50,10 @@ class PDOConnection
         }
 
         $this->dbConnect = new PDO(
-            $dsn, $datasource['username'], $datasource['password'], [
+            $dsn,
+            $datasource['username'],
+            $datasource['password'],
+            [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
             ]

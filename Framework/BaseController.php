@@ -3,22 +3,21 @@
 namespace Framework;
 
 use Framework\Security\Session;
-use \Twig\Environment;
-use \Twig\Loader\FilesystemLoader;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Intl\IntlExtension;
 
 class BaseController
 {
-    
     protected Environment $twig;
-    
+
     protected Session $session;
-    
+
     protected Route $route;
-    
+
 
     /**
-     * __construct : 
+     * __construct :
      *
      * @param  Route $route
      * @return void
@@ -29,16 +28,17 @@ class BaseController
         $this->session = new Session();
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
         $this->twig = new Environment(
-            $loader, [
+            $loader,
+            [
             // 'cache' => __DIR__ . '/../app/var/cache',
             ]
         );
         $this->twig->addExtension(new IntlExtension());
-        $this->route= $route;
-   
+        $this->route = $route;
+
     }//end __construct
 
-        
+
     /**
      * getRoute
      *
@@ -49,7 +49,7 @@ class BaseController
         return $this->route;
     }
 
-        
+
     /**
      * view : Twig Template view construct
      *
@@ -59,10 +59,10 @@ class BaseController
      */
     protected function view(string $template, array $params)
     {
-         echo $this->twig->render($template, $params);
+        echo $this->twig->render($template, $params);
     }
-    
-    
+
+
     /**
      * isAuthorize: verify if user has the right to access to the page
      *
@@ -71,11 +71,11 @@ class BaseController
      */
     public function isAuthorize(array $authRoles): bool
     {
-        
+
         if (in_array('all', $authRoles, true)) {
             return true;
         }
-        
+
         $user = $this->session->getUser();
 
         if ($user === null) {

@@ -4,6 +4,4 @@ namespace App\Controller;
 
 class Filter
 {
-
-    
 }

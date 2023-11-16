@@ -4,7 +4,6 @@ namespace App\Model\Entities;
 
 class Role extends Entity
 {
-
     protected ?int $id;
 
     protected ?string $role;
