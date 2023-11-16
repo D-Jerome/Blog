@@ -7,16 +7,46 @@ use Framework\Request;
 class Route
 {
 
+    /**
+     * pattern of address
+     *
+     * @var string
+     */
     protected string $path;
 
+    /**
+     * type of method (post,get)
+     *
+     * @var string
+     */
     protected string $method;
 
+    /**
+     * controller address
+     *
+     * @var string
+     */
     protected string $controller;
 
+    /**
+     * method(function) to use
+     *
+     * @var string
+     */
     protected string $action;
 
+    /**
+     * authorized roles for route
+     *
+     * @var array<int, string>
+     */
     protected array $authRoles;
 
+    /**
+     * [Description for $params]
+     *
+     * @var array<string, string>
+     */
     protected array $params = [];
 
 
@@ -27,7 +57,7 @@ class Route
      * @param  string $method : type of method (post,get)
      * @param  string $controller : address of the controller to use
      * @param  string $action: name of function to use
-     * @param  array  $authRoles : List of authorized Roles
+     * @param  array<int, string>  $authRoles : List of authorized Roles
      * @return void
      */
     public function __construct(string $path, string $method, string $controller, string $action, array $authRoles)
@@ -88,7 +118,7 @@ class Route
     /**
      * getAuthRoles
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getAuthRoles(): array
     {
@@ -99,7 +129,7 @@ class Route
     /**
      * getParams
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getParams(): array
     {
@@ -110,7 +140,7 @@ class Route
     /**
      * setParams : Insert params of  $_GET or $_POST in Route
      *
-     * @param  array $params : params of $_POST or $_GET
+     * @param  array<string, string> $params : params of $_POST or $_GET
      * @return void
      */
     public function setParams(array $params): void

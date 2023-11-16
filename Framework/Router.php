@@ -10,6 +10,11 @@ use Framework\Helpers\Text;
 class Router
 {
 
+    /**
+     * Routes of config file
+     *
+     * @var array<int, Route>
+     */
     protected array $routes;
 
 
@@ -30,8 +35,8 @@ class Router
     /**
      * findRoute: compare and match route and request
      *
-     * @param  Request $request : request object of page
-     * @return Route
+     * @param   Request     $request    request object of page
+     * @return  Route
      */
     public function findRoute(Request $request): ?Route
     {
@@ -67,7 +72,7 @@ class Router
      * validateRoute: verify the Existance of page and return True or False
      *
      * @param  string $typeObj : Object used
-     * @param  array  $matches : result of preg_match route
+     * @param  array<string, string>  $matches : result of preg_match route
      * @return bool
      */
     private function validateRoute(string $typeObj, array $matches): bool
