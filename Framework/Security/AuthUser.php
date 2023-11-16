@@ -6,21 +6,21 @@ class AuthUser
 {
 
     /**
-     * [Description for $id]
+     * user id of connected user
      *
      * @var int
      */
     protected int $id;
 
     /**
-     * [Description for $roleName]
+     * role name of connected user
      *
      * @var string
      */
     protected string $roleName;
 
     /**
-     * [Description for $username]
+     * username of connected user
      *
      * @var string
      */
@@ -29,9 +29,9 @@ class AuthUser
     /**
      * __construct keep auth user information
      *
-     * @param  int    $id
-     * @param  string $roleName
-     * @param  string $username
+     * @param int $id
+     * @param string $roleName
+     * @param string $username
      * @return void
      */
     public function __construct(int $id, string $roleName, string $username)

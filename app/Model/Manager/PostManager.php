@@ -17,7 +17,7 @@ class PostManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array $datasource database connection informations from config file
+     * @param array<string, string> $datasource Database connection informations from config file
      * @return void
      */
     public function __construct(array $datasource)
@@ -29,10 +29,10 @@ class PostManager extends BaseManager
     /**
      * getCategoriesById : all Categories of post
      *
-     * @param  int $id : id of post
-     * @return void
+     * @param int $id Id of post
+     * @return array<string, string>
      */
-    public function getCategoriesById(int $id)
+    public function getCategoriesById(int $id): array
     {
         $statement = $this->dbConnect->prepare(
             '
@@ -51,10 +51,10 @@ class PostManager extends BaseManager
     /**
      * getPostsbyCategory : get all posts linked to Category selected
      *
-     * @param  Category $category : category object
-     * @return Post
+     * @param Category $category Category object
+     * @return array<string, string>
      */
-    public function getPostsbyCategory(Category $category)
+    public function getPostsbyCategory(Category $category): array
     {
         $query = $this->dbConnect->prepare(
             '
@@ -84,7 +84,7 @@ class PostManager extends BaseManager
     /**
      * getCountCommentsByPostId : count comments of post
      *
-     * @param  int $id
+     * @param int $id Post id
      * @return int
      */
     public function getCountCommentsByPostId(int $id): int
@@ -104,7 +104,7 @@ class PostManager extends BaseManager
     /**
      * getPostUsername : get username from user_id
      *
-     * @param  int $id
+     * @param int $id User id
      * @return string
      */
     public function getPostUsername(int $id): string
@@ -124,8 +124,8 @@ class PostManager extends BaseManager
     /**
      * verifyCouple : verify the existance of a post with id and slug pass in address
      *
-     * @param  int $id
-     * @param  string $slug
+     * @param int $id id of post
+     * @param string $slug Slug of post
      * @return int
      */
     public function verifyCouple(int $id, string $slug): int
@@ -148,7 +148,7 @@ class PostManager extends BaseManager
     /**
      * insertNewPost : Create a new post (unpublished post)
      *
-     * @param  array $params : information to create a new post
+     * @param array<string, string|array<int, string>> $params Information to create a new post
      * @return void
      */
     public function insertNewPost(array $params): void
@@ -157,7 +157,7 @@ class PostManager extends BaseManager
             '
             INSERT INTO ' . $this->table . '(name , slug, content, created_at, user_id)
             VALUES (:name , :slug , :content, :created_at, :user_id)
-        '
+            '
         );
 
         $slug = Text::toSlug($params['name']);
@@ -193,24 +193,24 @@ class PostManager extends BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  string $field : name of field to order
-     * @param  string $dir : direction of order
-     * @param  int $limit : number of posts by page
-     * @param  int $page : current page
-     * @param  array $params : differents parameters for WHERE clause
-     * @param  int $catId : id of category to filter
-     * @return Post
+     * @param  null|string $field Name of field to order
+     * @param  null|string $dir Direction of order
+     * @param  null|int $limit Number of posts by page
+     * @param  null|int $page Current page
+     * @param  array<string, string> $params Differents parameters for WHERE clause
+     * @param  int $catId Id of category to filter
+     * @return array<string,string>
      */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId) : Post
+    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId) : array
     {
         $sql = 'SELECT post.* FROM ' . $this->table;
         $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
 
         if (!empty($params)) {
             $sql .= ' WHERE ';
-            $i = 0;
+            $i = FALSE;
             foreach ($params as $k => $value) {
-                if ($i !== 0) {
+                if ($i === FALSE) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
@@ -242,7 +242,7 @@ class PostManager extends BaseManager
     /**
      * unpublish : unpublish post
      *
-     * @param  int $id: post id
+     * @param  int $id Post id
      * @return void
      */
     public function unpublish(int $id): void
@@ -264,7 +264,7 @@ class PostManager extends BaseManager
     /**
      * publish : publish post
      *
-     * @param  int $id : post id
+     * @param  int $id Post id
      * @return void
      */
     public function publish(int $id): void
@@ -278,9 +278,10 @@ class PostManager extends BaseManager
             WHERE id = :id
         '
         );
+        $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
-        $query->bindParam(':publish_at', (new \DateTime('now'))->format('Y-m-d H:i:s'));
+        $query->bindParam(':publish_at', $now);
         $query->execute();
     }
 

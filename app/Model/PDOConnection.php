@@ -8,16 +8,26 @@ use PhpParser\json_decode;
 class PDOConnection
 {
 
-    private $dbConnect;
+    /**
+     * database connector
+     *
+     * @var PDO
+     */
+    private PDO $dbConnect;
 
-    private static $pdoInstance;
+    /**
+     * Instance of connection
+     *
+     * @var PDOConnection
+     */
+    private static ?PDOConnection $pdoInstance;
 
 
     /**
      * getInstance : create instance pdo if no set
      *
-     * @param  array $datasource: database connection informations from config file
-     * @return void
+     * @param array<string, string> $datasource Database connection informations from config file
+     * @return PDO
      */
     public static function getInstance(array $datasource)
     {
@@ -33,7 +43,7 @@ class PDOConnection
     /**
      * __construct
      *
-     * @param  array $datasource : database connection informations from config file
+     * @param  array<string, string> $datasource : database connection informations from config file
      * @return void
      */
     private function __construct(array $datasource)

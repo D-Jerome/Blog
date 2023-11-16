@@ -13,7 +13,7 @@ class UserManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array $datasource : database connection informations from config file
+     * @param array<string, string> $datasource Database connection informations from config file
      * @return void
      */
     public function __construct(array $datasource)
@@ -25,7 +25,7 @@ class UserManager extends BaseManager
     /**
      * getByUsername : get User Object of the user
      *
-     * @param  string $login : username passed in login form
+     * @param string $login Username passed in login form
      * @return User
      */
     public function getByUsername(string $login): ?User
@@ -40,7 +40,7 @@ class UserManager extends BaseManager
     /**
      * getRoleById : get Role object of the user-role-id
      *
-     * @param  int $id : id of the Role of the user
+     * @param int $id Id of the Role of the user
      * @return Role
      */
     public function getRoleById(int $id): Role
@@ -60,10 +60,10 @@ class UserManager extends BaseManager
     /**
      * insertNewUser : add new user in database
      *
-     * @param  array $params : user information 
-     * @return void
+     * @param array<string, string> $params User information
+     * @return int
      */
-    public function insertNewUser(array $params)
+    public function insertNewUser(array $params): int
     {
 
         if (isset($params['roleId'])) {
@@ -108,19 +108,19 @@ class UserManager extends BaseManager
 
 
     /**
-     * updateUser ; Update user information
+     * updateUser : Update user information
      *
-     * @param  array $params : new data user
-     * @return void
+     * @param array<string, string|int> $params New data user
+     * @return int
      */
-    public function updateUser(array $params)
+    public function updateUser(array $params):int
     {
 
         $actualUser = $this->getById($params['id']);
 
         foreach ($params as $k => $param) {
             $getUser = 'get' . ucfirst($k);
-            //dd($actualUser->$getUser(), $param, $k);
+
             if ($param != $actualUser->$getUser()) {
                 $field = $k;
                 if (preg_match('~[A-Z]~', $k, $matches)) {
@@ -142,8 +142,8 @@ class UserManager extends BaseManager
     /**
      * verifyCouple : verify the existance of a user with id and username pass in address
      *
-     * @param  int $id : user id pass in the address
-     * @param  string $username : username in the address
+     * @param int $id User id pass in the address
+     * @param string $username Username in the address
      * @return int
      */
     public function verifyCouple(int $id, string $username): int
@@ -166,7 +166,7 @@ class UserManager extends BaseManager
     /**
      * disable : disable an user
      *
-     * @param  int $id : id of user to disable
+     * @param int $id Id of user to disable
      * @return void
      */
     public function disable(int $id): void
@@ -186,7 +186,7 @@ class UserManager extends BaseManager
     /**
      * enable : enable an user
      *
-     * @param  int $id : id of user to enable
+     * @param int $id Id of user to enable
      * @return void
      */
     public function enable(int $id): void

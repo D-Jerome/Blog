@@ -10,12 +10,12 @@ class DataBaseConnectionException extends Exception
     /**
      * __construct
      *
-     * @param  mixed $message
+     * @param  string $message
      * @return void
      */
-    public function __construct($message = "database connection doesn't work")
+    public function __construct(string $message = "database connection doesn't work")
     {
-        parent::__construct($message, "0000");
+        parent::__construct($message, 0000);
     }//end __construct
 
 }

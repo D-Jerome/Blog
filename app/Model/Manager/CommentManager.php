@@ -14,7 +14,7 @@ class CommentManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array $datasource : connection database informations
+     * @param  array<string, string> $datasource Connection database informations
      * @return void
      */
     public function __construct(array $datasource)
@@ -26,10 +26,10 @@ class CommentManager extends BaseManager
     /**
      * getCommentsByPostId: get all comments od a post
      *
-     * @param  int $id
-     * @return Comment
+     * @param  int $id Post Id
+     * @return array<string, string>
      */
-    public function getCommentsByPostId(int $id): Comment
+    public function getCommentsByPostId(int $id): array
     {
         $statement = $this->dbConnect->prepare(
             '
@@ -47,7 +47,7 @@ class CommentManager extends BaseManager
     /**
      * getCountCommentsByPostId : Number of comments of a post
      *
-     * @param  int $id ; post id
+     * @param  int $id Post id
      * @return int
      */
     public function getCountCommentsByPostId(int $id): int
@@ -67,7 +67,7 @@ class CommentManager extends BaseManager
     /**
      * getCommentUsername: get username of post
      *
-     * @param  int $id
+     * @param  int $id Post id
      * @return string
      */
     public function getCommentUsername(int $id): string
@@ -87,10 +87,10 @@ class CommentManager extends BaseManager
     /**
      * getCommentsByUserId : get comment by user
      *
-     * @param  int $id: user id
-     * @return Comment
+     * @param  int $id User id
+     * @return array<string, string>
      */
-    public function getCommentsByUserId(int $id): Comment
+    public function getCommentsByUserId(int $id): array
     {
         $query = $this->dbConnect->prepare(
             "
@@ -110,7 +110,7 @@ class CommentManager extends BaseManager
     /**
      * insertNewComment ; inser new comment in database
      *
-     * @param  array $params : data to insert
+     * @param  array<string, string> $params Data to insert
      * @return void
      */
     public function insertNewComment(array $params)
@@ -136,8 +136,8 @@ class CommentManager extends BaseManager
     /**
      * verifyCouple : verify the existance of a couple post and comment pass in address
      *
-     * @param  int $postId
-     * @param  int $commentId
+     * @param  int $postId Post id
+     * @param  int $commentId Comment id
      * @return int
      */
     public function verifyCouple(int $postId, int $commentId): int
@@ -159,7 +159,7 @@ class CommentManager extends BaseManager
     /**
      * unpublish : Unpublish comment
      *
-     * @param  int $id : id of comment to unpublish
+     * @param  int $id Id of comment to unpublish
      * @return void
      */
     public function unpublish(int $id): void
@@ -182,7 +182,7 @@ class CommentManager extends BaseManager
     /**
      * publish: Publish comment
      *
-     * @param  int $id : id of comment to publish
+     * @param  int $id Id of comment to publish
      * @return void
      */
     public function publish(int $id): void

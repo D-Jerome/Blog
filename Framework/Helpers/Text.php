@@ -5,12 +5,11 @@ namespace Framework\Helpers;
 class Text
 {
 
-    
     /**
      * toSlug: create a slug text of the @param
      *
-     * @param  string $text
-     * @return void
+     * @param string $text text to transform
+     * @return string
      */
     public static function toSlug(string $text)
     {
@@ -21,7 +20,7 @@ class Text
     /**
      * camelCaseToSnakeCase : change type of style of text
      *
-     * @param  string $string
+     * @param  string $string text to transform
      * @return string
      */
     public static function camelCaseToSnakeCase(string $string): string

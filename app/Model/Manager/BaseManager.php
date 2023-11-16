@@ -5,20 +5,39 @@ namespace App\Model\Manager;
 use Framework\Helpers\Text;
 use App\Model\PDOConnection;
 use Framework\Exception\PropertyNotFoundException;
+use PDO;
 
 abstract class BaseManager
 {
-    public object $dbConnect;
+
+    /**
+     * Database connector
+     *
+     * @var PDO
+     */
+    public PDO $dbConnect;
+
+    /**
+     * table name
+     *
+     * @var string
+     */
     protected string $table;
-    public $object;
+
+    /**
+     * name of object
+     *
+     * @var string
+     */
+    public string $object;
 
 
     /**
      * __construct
      *
-     * @param  string $table : name of the table to query database
-     * @param  string $objectName : name of object to return information
-     * @param  array $datasource : database connection informations
+     * @param string $table Name of the table to query database
+     * @param string $objectName Name of object to return information
+     * @param array<string, string> $datasource Database connection informations
      * @return void
      */
     public function __construct(string $table, string $objectName, array $datasource)
@@ -32,7 +51,7 @@ abstract class BaseManager
     /**
      * getById : get all datas of specified id of object
      *
-     * @param  int $id : id of object to search
+     * @param  int $id Id of object to search
      * @return object
      */
     public function getById($id): object
@@ -48,9 +67,9 @@ abstract class BaseManager
     /**
      * getAll : get all data from called object
      *
-     * @return void
+     * @return array<string, string>
      */
-    public function getAll()
+    public function getAll(): array
     {
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table);
         $query->execute();
@@ -61,8 +80,8 @@ abstract class BaseManager
     /**
      * getAllOneField : collect all information on the field
      *
-     * @param  string $field : name of field to list
-     * @return array
+     * @param  string $field Name of field to list
+     * @return array<string, string>
      */
     public function getAllToList(string $field): array
     {
@@ -75,9 +94,9 @@ abstract class BaseManager
     /**
      * getAllPublish: get all published object
      *
-     * @return object
+     * @return array<string,string>
      */
-    public function getAllPublish(): object
+    public function getAllPublish(): array
     {
         $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table ." WHERE publish_state = true");
         $query->execute();
@@ -88,22 +107,22 @@ abstract class BaseManager
     /**
      * getAllOrderLimit : get paged Posts
      *
-     * @param  string $field : name of field to order
-     * @param  string $dir : direction of order
-     * @param  int $limit : number of posts by page
-     * @param  int $page : current page
-     * @param  array $params : differents parameters for WHERE clause
+     * @param  null|string $field Name of field to order
+     * @param  null|string $dir Direction of order
+     * @param  null|int $limit Number of posts by page
+     * @param  null|int $page Current page
+     * @param  null|array<string, string> $params Differents parameters for WHERE clause
      *
-     * @return Post
+     * @return array<string, string>
      */
-    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params)
+    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
         $sql = 'SELECT * FROM ' . $this->table;
         if (!empty($params)) {
             $sql .= ' WHERE ';
-            $i = 0;
+            $i = FALSE;
             foreach ($params as $k => $value) {
-                if ($i !== 0) {
+                if ($i === FALSE) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
@@ -136,8 +155,9 @@ abstract class BaseManager
      * insert : insert data in database
      *
      * @param  object $obj
-     * @param  array $param
+     * @param  array<string, string> $param
      * @return void
+     * @throws PropertyNotFoundException
      */
     public function insert(object $obj, array $param): void
     {
@@ -151,7 +171,7 @@ abstract class BaseManager
             if (property_exists($obj, $paramName)) {
                 $boundParam[$paramName] = $obj->$paramName;
             } else {
-                throw new PropertyNotFoundException($this->object, $paramName);
+                throw new PropertyNotFoundException($this->object);
             }
         }
         $req->execute($boundParam);
@@ -161,9 +181,10 @@ abstract class BaseManager
     /**
      * update : update data of an object
      *
-     * @param  object $obj
-     * @param  array $param
+     * @param object $obj
+     * @param array<string,string> $param
      * @return void
+     * @throws PropertyNotFoundException
      */
     public function update(object $obj, array $param): void
     {
@@ -191,7 +212,7 @@ abstract class BaseManager
             if (property_exists($obj, $paramName)) {
                 $boundParam[Text::camelCaseToSnakeCase($paramName)] = $paramValue;
             } else {
-                throw new PropertyNotFoundException($this->object, $paramName);
+                throw new PropertyNotFoundException($this->object);
             }
 
         }//end foreach
@@ -203,7 +224,7 @@ abstract class BaseManager
     /**
      * delete : delete data of id
      *
-     * @param  int $id : id of item to delete
+     * @param  int $id Id of item to delete
      * @return bool
      */
     public function delete(int $id): bool
@@ -211,10 +232,9 @@ abstract class BaseManager
         try {
             $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= ?");
             $query->execute([$id]);
-            return true;
+            return TRUE;
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            return false;
+            return FALSE;
         }
     }
 
