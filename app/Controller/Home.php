@@ -47,14 +47,14 @@ class Home extends BaseController
      */
     public function homeContact(): void
     {
-        $error = false;
+        $error = FALSE;
         $postdatas = (new Request('blog-project'))->getParams();
         foreach ($postdatas as $k => $data) {
-            if (null === $data) {
+            if (empty($data)) {
+                $error = TRUE;
                 throw new UnauthorizeValueException();
-                die("valeurs non authorisées");
-                $error = true;
-                //throw Exception;
+                //die("valeurs non authorisées");
+
             }
         }
         $mail = new Mail(Application::getEmailSource());

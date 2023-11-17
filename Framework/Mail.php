@@ -112,10 +112,10 @@ class Mail
     /**
      * sendMailToUser : send Email to User
      *
-     * @param User $user Receiver of email
+     * @param null|User $user Receiver of email
      * @return void
      */
-    public function sendMailToUser(User $user)
+    public function sendMailToUser(?User $user)
     {
         $mail = new PHPMailer(true);
         //Server settings

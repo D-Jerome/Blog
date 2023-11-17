@@ -93,36 +93,37 @@ class User extends BaseController
      */
     public function validationSignUp()
     {
-        $error = false;
+        $error = FALSE;
         $postdatas = (new Request('blog-project'))->getParams();
         foreach ($postdatas as $k => $data) {
-            if (null === $data) {
+            if (empty($data)) {
+                $error = TRUE;
                 throw new UnauthorizeValueException();
-                die("valeurs non authorisées");
-                $error = true;
+                // die("valeurs non authorisées");
                 //throw Exception;
             }
 
             if (str_contains($k, "password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
                 // erreur
+                $error = TRUE;
                 throw new PasswordPolicyException();
-                die("le mot de passe ne correspond pas à la politique de mot de passe ");
-                $error = true;
+                // die("le mot de passe ne correspond pas à la politique de mot de passe ");
             }
+
         }
         $users = new UserManager(Application::getDatasource());
 
         if ($users->getByUsername($postdatas['username'])) {
-            die("l'identifiant est indisponible");
-            $error = true;
+            $error = TRUE;
+            // die("l'identifiant est indisponible");
         }
 
         if ($postdatas['password'] !== $postdatas['confirmPassword']) {
-            die("les mots de passe sont différents ");
-            $error = true;
+            $error = TRUE;
+            // die("les mots de passe sont différents ");
         }
 
-        if ($error) {
+        if ($error == TRUE) {
             unset($postdatas['password']);
             unset($postdatas['confirmPassword']);
             $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);

@@ -80,7 +80,7 @@ class Post extends Entity
     /**
      * list of categories
      *
-     * @var array<int, string>
+     * @var array<int, Category>
      */
     protected array $categories = [];
 
@@ -129,6 +129,18 @@ class Post extends Entity
 
 
     /**
+     * set name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+
+    /**
      * getSlug
      *
      * @return string
@@ -140,6 +152,18 @@ class Post extends Entity
 
 
     /**
+     * set slug
+     *
+     * @param string $text
+     * @return void
+     */
+    public function setSlug(string $text): void
+    {
+        $this->slug = $text;
+    }
+
+
+    /**
      * getContent
      *
      * @return string
@@ -147,6 +171,18 @@ class Post extends Entity
     public function getContent(): string
     {
         return $this->content;
+    }
+
+
+    /**
+     * set content
+     *
+     * @param string $text
+     * @return void
+     */
+    public function setContent(string $text): void
+    {
+        $this->content = $text;
     }
 
 
@@ -169,6 +205,18 @@ class Post extends Entity
     public function getModifiedAt(): string
     {
         return $this->modifiedAt;
+    }
+
+
+    /**
+     * set ModifiedAt
+     *
+     * @param string $date
+     * @return void
+     */
+    public function setModifiedAt(string $date): void
+    {
+        $this->modifiedAt = $date;
     }
 
 
@@ -201,11 +249,23 @@ class Post extends Entity
     /**
      * getCategories
      *
-     * @return null|array<int, string>
+     * @return null|array<int, Category>
      */
     public function getCategories(): ?array
     {
         return $this->categories;
+    }
+
+
+    /**
+     * set ModifiedAt
+     *
+     * @param array<int,Category> $categories
+     * @return void
+     */
+    public function setCategories(array $categories): void
+    {
+        $this->categories = $categories;
     }
 
 
@@ -221,6 +281,18 @@ class Post extends Entity
 
 
     /**
+     * set CountComments
+     *
+     * @param int $count
+     * @return void
+     */
+    public function setCountComments(int $count): void
+    {
+        $this->countComments = $count;
+    }
+
+
+    /**
      * getUsername
      *
      * @return string
@@ -228,6 +300,18 @@ class Post extends Entity
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+
+    /**
+     * set username
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setUsername(string $name): void
+    {
+        $this->username = $name;
     }
 
 
@@ -243,6 +327,18 @@ class Post extends Entity
 
 
     /**
+     * set Publish State
+     *
+     * @param bool $state
+     * @return void
+     */
+    public function setPublishState(bool $state): void
+    {
+        $this->publishState = $state;
+    }
+
+
+    /**
      * getPublishAt
      *
      * @return string
@@ -250,6 +346,18 @@ class Post extends Entity
     public function getPublishAt(): string
     {
         return $this->publishAt;
+    }
+
+
+     /**
+     * set publishAt
+     *
+     * @param string $date
+     * @return void
+     */
+    public function setPublishAt(string $date): void
+    {
+        $this->publishAt = $date;
     }
 
 

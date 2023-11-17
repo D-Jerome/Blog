@@ -16,7 +16,7 @@ class Post extends BaseController
     /**
      * postsByCategory : 3 most recent Posts by category
      *
-     * @return void
+     * @return string
      */
     public function postsByCategory()
     {
@@ -28,9 +28,9 @@ class Post extends BaseController
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
             foreach ($statementPostsByCategory as $statementPost) {
-                $statementPost->categories =  [$statementCategory];
-                $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
-                $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
+                $statementPost->setCategories([$statementCategory]);
+                $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
+                $statementPost->setUsername($posts->getPostUsername($statementPost->getUserId()));
             }
             $postsByCategories =  array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
         }
@@ -81,13 +81,13 @@ class Post extends BaseController
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
 
-        $sqlParams = [ "publish_state" => true];
+        $sqlParams = [ "publish_state" => TRUE];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
 
 
-        if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
+        if ($sqlParams["publish_state"] == FALSE) {
             $count = count($posts->getAllPublish());
         } else {
             $count = count($posts->getAll());
@@ -144,7 +144,7 @@ class Post extends BaseController
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         foreach ($statementComments as $statementComment) {
-            $statementComment->username = ($comment->getCommentUsername($statementComment->getUserId()));
+            $statementComment->setUsername($comment->getCommentUsername($statementComment->getUserId()));
         }
         $user = $this->session->getUser();
         if (null !== $user) {
