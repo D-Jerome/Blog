@@ -8,22 +8,48 @@ use Framework\Application;
 class FilterBuilder
 {
 
+    /**
+     * List of Sortable Item
+     *
+     * @var array<string, string> $sort
+     */
     private array $sort;
 
+    /**
+     * direction of sort
+     *
+     * @var array<string, string> $dir
+     */
     private array $dir;
 
+    /**
+     * table and field to filter the list
+     *
+     * @var array<string,string>|null $list
+     */
     private ?array $list = null ;
 
+    /**
+     * name of the list
+     *
+     * @var array<string,string>|null $listSelect
+     */
     private ?array $listSelect = null;
 
-    private ?array $listNames = null ;
+    /**
+     * Items of the list
+     *
+     * @var array<int,string>|null $listNames
+     */
+    private ?array $listNames = null;
 
 
     /**
      * __construct : Construct filter data
      *
-     * @param  string $typeObj : Name of the object to list
-     * @param  array  $config
+     * @param string $typeObj : Name of the object to list
+     * @param string|array<string, bool|int|string|array<string, string|array<string, string>|null>> $config
+     *
      * @return void
      */
     public function __construct(array $config, string $typeObj)
@@ -37,13 +63,14 @@ class FilterBuilder
             $listNames = new  $objectManagerName(Application::getDatasource());
             $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
         }
+
     }//end __construct
 
 
     /**
      * getSort: Type and FR translate
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getSort(): array
     {
@@ -54,7 +81,7 @@ class FilterBuilder
     /**
      * getDir: Type and FR translate
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getDir(): array
     {
@@ -65,7 +92,7 @@ class FilterBuilder
     /**
      * getCategories : Type and FR translate
      *
-     * @return array|null
+     * @return array<string, string>|null
      */
     public function getList(): ?array
     {
@@ -73,6 +100,12 @@ class FilterBuilder
     }
 
 
+    /**
+     * [Description for getListSelect]
+     *
+     * @return array<string,string>|null
+     *
+     */
     public function getListSelect(): ?array
     {
         return $this->listSelect;
@@ -81,7 +114,7 @@ class FilterBuilder
     /**
      * getListNames: names of each option case
      *
-     * @return array|null
+     * @return array<int, string>|null
      */
     public function getListNames(): ?array
     {

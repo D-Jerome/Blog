@@ -26,7 +26,7 @@ final class Application
     /**
      * datas from config file
      *
-     * @var array<string, string|array<string, string>>
+     * @var array<string, string|array<string, bool|int|string|array<string, string|array<string, string>|array<null>>>>
      */
     private static array $config;
 
@@ -104,7 +104,7 @@ final class Application
     /**
      * getDatasource : get the config information of database in array
      *
-     * @return array<string, string>
+     * @return array<string, string|array<string>>
      */
     public static function getDatasource(): array
     {
@@ -115,7 +115,7 @@ final class Application
     /**
      * getEmailSource: get the config information of email in array
      *
-     * @return array<string,string>
+     * @return array<string, bool|int|string>
      */
     public static function getEmailSource(): array
     {
@@ -137,7 +137,7 @@ final class Application
     /**
      * getFilter
      *
-     * @return array<string, string>
+     * @return array<array<array<string,string>>>
      */
     public static function getFilter(): array
     {

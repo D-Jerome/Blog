@@ -111,7 +111,7 @@ abstract class BaseManager
      * @param  null|string $dir Direction of order
      * @param  null|int $limit Number of posts by page
      * @param  null|int $page Current page
-     * @param  null|array<string, string|bool > $params Differents parameters for WHERE clause
+     * @param  null|array<string, int|string|bool > $params Differents parameters for WHERE clause
      *
      * @return array<object>
      */

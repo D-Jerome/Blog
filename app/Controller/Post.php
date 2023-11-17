@@ -66,11 +66,14 @@ class Post extends BaseController
          }
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $listSort = !empty(($this->getRoute()->getParams())['list']) ? ($this->getRoute()->getParams())['list'] : null;
+        $listSortSelect = (($this->getRoute()->getParams())['listSelect']) !== '---'? ($this->getRoute()->getParams())['listSelect'] : null;
+        if (($listSortSelect) === null){
+            $listSort = null;
+        }
 
-        $listSortSelect = isset(($this->getRoute()->getParams())['listSelect']) ? ($this->getRoute()->getParams())['listSelect'] : null;
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
         $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
-
         $sqlParams = [ "publish_state" => TRUE];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
@@ -107,7 +110,9 @@ class Post extends BaseController
                 'dir' => $filter->getDir(),
                 'sortDir' => $sortDir,
                 'sortBy' => $sortBy,
+                'listSort' => $listSort,
                 'list' => $filter->getList() ,
+                'idListSelect' => $listSortSelect,
                 'listSelect' => $filter->getListSelect(),
                 'listNames' => $filter->getListNames(),
                 'pages' => $pages,

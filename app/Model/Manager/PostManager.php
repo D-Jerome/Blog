@@ -199,10 +199,10 @@ class PostManager extends BaseManager
      * @param  null|int $limit Number of posts by page
      * @param  null|int $page Current page
      * @param  array<string, string|bool > $params Differents parameters for WHERE clause
-     * @param  int $catId Id of category to filter
+     * @param  null|int $catId Id of category to filter
      * @return array<Post>
      */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId) : array
+    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $catId) : array
     {
         $sql = 'SELECT post.* FROM ' . $this->table;
         $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
@@ -218,7 +218,9 @@ class PostManager extends BaseManager
                 $i = TRUE;
             }
         }
-        $sql .= ' AND pc.category_id = ' . $catId;
+        if ($catId === null) {
+            $sql .= ' AND pc.category_id = ' . $catId;
+        }
         if (isset($field)) {
             $sql .= ' ORDER BY ' . $field;
         }

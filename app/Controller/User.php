@@ -93,46 +93,53 @@ class User extends BaseController
      */
     public function validationSignUp()
     {
-        $error = FALSE;
-        $postdatas = (new Request('blog-project'))->getParams();
-        foreach ($postdatas as $k => $data) {
-            if (empty($data)) {
+
+        try
+        {
+            $error = FALSE;
+            $postdatas = (new Request('blog-project'))->getParams();
+            foreach ($postdatas as $k => $data) {
+                if (empty($data)) {
+                    $error = TRUE;
+                    throw new UnauthorizeValueException();
+                    // die("valeurs non authorisées");
+                    //throw Exception;
+                }
+
+                if (str_contains($k, "password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
+                    // erreur
+                    $error = TRUE;
+                    throw new PasswordPolicyException();
+                    // die("le mot de passe ne correspond pas à la politique de mot de passe ");
+                }
+
+            }
+            $users = new UserManager(Application::getDatasource());
+
+            if ($users->getByUsername($postdatas['username'])) {
                 $error = TRUE;
-                throw new UnauthorizeValueException();
-                // die("valeurs non authorisées");
-                //throw Exception;
+                // die("l'identifiant est indisponible");
             }
 
-            if (str_contains($k, "password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
-                // erreur
+            if ($postdatas['password'] !== $postdatas['confirmPassword']) {
                 $error = TRUE;
-                throw new PasswordPolicyException();
-                // die("le mot de passe ne correspond pas à la politique de mot de passe ");
+                // die("les mots de passe sont différents ");
             }
 
-        }
-        $users = new UserManager(Application::getDatasource());
+            if ($error == TRUE) {
+                unset($postdatas['password']);
+                unset($postdatas['confirmPassword']);
+                $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);
+            } else {
+                $users->insertNewUser($postdatas);
+                $mail = new Mail(Application::getEmailSource());
+                $mail->sendMailToUser($users->getByUsername($postdatas['username']));
+                header('Location: /blog-project/');
+            }//end if
 
-        if ($users->getByUsername($postdatas['username'])) {
-            $error = TRUE;
-            // die("l'identifiant est indisponible");
-        }
+        }catch (UnauthorizeValueException $e){
 
-        if ($postdatas['password'] !== $postdatas['confirmPassword']) {
-            $error = TRUE;
-            // die("les mots de passe sont différents ");
         }
-
-        if ($error == TRUE) {
-            unset($postdatas['password']);
-            unset($postdatas['confirmPassword']);
-            $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);
-        } else {
-            $users->insertNewUser($postdatas);
-            $mail = new Mail(Application::getEmailSource());
-            $mail->sendMailToUser($users->getByUsername($postdatas['username']));
-            header('Location: /blog-project/');
-        }//end if
 
     }
 

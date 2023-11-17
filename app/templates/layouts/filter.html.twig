@@ -21,7 +21,7 @@
                         <div class="btn-group-vettical border border-light gap-1" role="button" aria-label="basic radio toggle button group">
                         {% if listSelect %}
                             {% for key, value in listSelect %}
-                                <input class="btn-check" type="checkbox" value="{{ key }}" name="list" id="listSelectCheck" {% if sortBy == key %} checked {% endif %}>
+                                <input class="btn-check" type="checkbox" value="{{ key }}" name="list" id="listSelectCheck" {% if listSort == key %} checked {% endif %}>
                                 <label class="btn btn-outline-primary" for="listSelectCheck">{{ value }}</label>
                             {% endfor %}
                             {# {% if node.field_mycheckbox.value == '1' %}
@@ -30,9 +30,9 @@
                                 <div class="d-none">
                             {% endif %}  #}
                                 <select class="form-select m-1" id="listSelect" name="listSelect" aria-label="itemsSelect">
-                                <option selected>---</option>
+                                <option value="">---</option>
                                 {% for item in listNames %}
-                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                    <option value="{{ item.id }}" {% if idListSelect == item.id %} {% if listSort %} selected {% endif %}{% endif %}>{{ item.name }}</option>
                                 {% endfor %}
                                 </select>
                             {# </div> #}
