@@ -4,10 +4,25 @@ namespace App\Model\Entities;
 
 class Category extends Entity
 {
+    /**
+     * id of category
+     *
+     * @var int|null
+     */
     protected ?int $id;
 
+    /**
+     * name of category
+     *
+     * @var string|null
+     */
     protected ?string $name;
 
+    /**
+     * slug of category
+     *
+     * @var string|null
+     */
     protected ?string $slug;
 
 

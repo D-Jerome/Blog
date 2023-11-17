@@ -73,9 +73,9 @@ class BaseController
      * @param array<string, string> $params Params to show in template
      * @return void
      */
-    protected function view(string $template, array $params)
+    protected function view(string $template, array $params): void
     {
-        echo $this->twig->render($template, $params);
+        $this->twig->render($template, $params);
     }
 
 

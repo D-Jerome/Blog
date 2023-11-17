@@ -8,19 +8,58 @@ use Framework\Route;
 
 class Pagination extends BaseController
 {
+    /**
+     * route found of router
+     *
+     * @var Route
+     */
     protected Route $route;
 
+    /**
+     * actual page
+     *
+     * @var int
+     */
     protected int $currentPage = 1;
 
+    /**
+     * number of previous page
+     *
+     * @var int
+     */
     protected int $previousPage;
 
+    /**
+     * number of next page
+     *
+     * @var int
+     */
     protected int $nextPage;
 
+    /**
+     * total pages for pagination
+     *
+     * @var int
+     */
     protected int $totalPages;
 
+    /**
+     * number of item by page
+     *
+     * @var int
+     */
     protected int $perPage = 8;
 
 
+    /**
+     * __construct
+     *
+     * @param Route $route
+     * @param int $totalPages
+     * @param int|null $currentPage
+     * @param int|null $perPage
+     *
+     */
     public function __construct(Route $route, int $totalPages, ?int $currentPage, ?int $perPage)
     {
         $this->route = $route;
@@ -36,6 +75,11 @@ class Pagination extends BaseController
     }
 
 
+    /**
+     * get the actual page
+     *
+     * @return int
+     */
     public function getCurrentPage(): int
     {
         return $this->currentPage;
@@ -45,7 +89,7 @@ class Pagination extends BaseController
     /**
      * setCurrentPage
      *
-     * @param  int $currentPage
+     * @param int $currentPage
      * @return void
      */
     public function setCurrentPage(int $currentPage): void
@@ -68,7 +112,7 @@ class Pagination extends BaseController
     /**
      * setPerPage : set number of articles per page
      *
-     * @param  int $perPage
+     * @param int $perPage
      * @return void
      */
     public function setPerPage(int $perPage): void
@@ -80,7 +124,7 @@ class Pagination extends BaseController
     /**
      * isActivePaging : Return information of pagination buttons
      *
-     * @return array
+     * @return array<string, string|bool|int>
      */
     public function pagesInformations(): array
     {

@@ -7,24 +7,74 @@ use PDO;
 
 class Comment extends Entity
 {
+    /**
+     * id of comment
+     *
+     * @var int
+     */
     protected int $id;
 
+    /**
+     * content of comment
+     *
+     * @var string
+     */
     protected string $content;
 
+    /**
+     * date of creation
+     *
+     * @var string
+     */
     protected string $createdAt;
 
+    /**
+     * date of last modification
+     *
+     * @var string|null
+     */
     protected ?string $modifiedAt;
 
+    /**
+     * publish or unpublish
+     *
+     * @var bool
+     */
     protected bool $publishState;
 
+    /**
+     * date of publication
+     *
+     * @var string|null
+     */
     protected ?string $publishAt;
 
+    /**
+     * id of publisher
+     *
+     * @var int|null
+     */
     protected ?int $publishUserId;
 
+    /**
+     * post id linked with comment
+     *
+     * @var int
+     */
     protected int $postId;
 
+    /**
+     * User id
+     *
+     * @var int
+     */
     protected int $userId;
 
+    /**
+     * name of the user
+     *
+     * @var string
+     */
     protected string $username;
 
     /**
@@ -52,7 +102,7 @@ class Comment extends Entity
     /**
      * getCreatedAt
      *
-     * @return DateTime
+     * @return string
      */
     public function getCreatedAt(): string
     {
@@ -63,11 +113,11 @@ class Comment extends Entity
     /**
      * getModifiedAt
      *
-     * @return DateTime
+     * @return string
      */
     public function getModifiedAt(): string
     {
-        return $this->ModifiedAt;
+        return $this->modifiedAt;
     }
 
 

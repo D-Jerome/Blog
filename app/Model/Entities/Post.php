@@ -7,32 +7,102 @@ use PDO;
 
 class Post extends Entity
 {
+    /**
+     * id of Post
+     *
+     * @var int
+     */
     protected int $id;
 
+    /**
+     * title of post
+     *
+     * @var string
+     */
     protected string $name;
 
+    /**
+     * slug of post
+     *
+     * @var string
+     */
     protected string $slug;
 
+    /**
+     * content of post
+     *
+     * @var string
+     */
     protected string $content;
 
+    /**
+     * date of creation
+     *
+     * @var string
+     */
     protected string $createdAt;
 
+    /**
+     * date of modification
+     *
+     * @var string|null
+     */
     protected ?string $modifiedAt;
 
+    /**
+     * publish or not publish
+     *
+     * @var bool
+     */
     protected bool $publishState;
 
+    /**
+     * date of publication
+     *
+     * @var string|null
+     */
     protected ?string $publishAt;
 
+    /**
+     * publisher id
+     *
+     * @var int|null
+     */
     protected ?int $publishUserId;
 
+    /**
+     * excerpt of the content
+     *
+     * @var string
+     */
     protected string $excerptContent;
 
+    /**
+     * list of categories
+     *
+     * @var array<int, string>
+     */
     protected array $categories = [];
 
+    /**
+     * number of comments by post
+     *
+     * @var int
+     */
     protected int $countComments;
 
+    /**
+     * id of user
+     *
+     * @var int
+     */
     protected int $userId;
 
+    /**
+     * name of user
+     *
+     * @var string
+     */
     protected string $username;
 
 
@@ -98,7 +168,7 @@ class Post extends Entity
      */
     public function getModifiedAt(): string
     {
-        return $this->ModifiedAt;
+        return $this->modifiedAt;
     }
 
 
@@ -116,9 +186,9 @@ class Post extends Entity
     /**
      * getExcerptContent
      *
-     * @return void
+     * @return string
      */
-    public function getExcerptContent()
+    public function getExcerptContent(): string
     {
         $excerpt = substr($this->content, 0, 60) . '...';
         if (str_contains($excerpt, "<img ")) {
@@ -131,7 +201,7 @@ class Post extends Entity
     /**
      * getCategories
      *
-     * @return array
+     * @return null|array<int, string>
      */
     public function getCategories(): ?array
     {

@@ -52,9 +52,9 @@ class PostManager extends BaseManager
      * getPostsbyCategory : get all posts linked to Category selected
      *
      * @param Category $category Category object
-     * @return array<string, string>
+     * @return array<string, string>|string
      */
-    public function getPostsbyCategory(Category $category): array
+    public function getPostsbyCategory(Category $category): array|string
     {
         $query = $this->dbConnect->prepare(
             '

@@ -14,7 +14,7 @@ class User extends BaseController
     /**
      * loginAuth : Verifiy password match
      *
-     * @return void
+     * @return 
      */
     public function loginAuth()
     {
