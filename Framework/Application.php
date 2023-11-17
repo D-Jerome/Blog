@@ -52,6 +52,7 @@ final class Application
      */
     public function run()
     {
+
         $msgErr = false;
         try {
             $foundRoute = $this->router->findRoute($this->request);

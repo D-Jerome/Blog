@@ -14,7 +14,7 @@ class User extends BaseController
     /**
      * loginAuth : Verifiy password match
      *
-     * @return 
+     * @return
      */
     public function loginAuth()
     {
@@ -31,9 +31,9 @@ class User extends BaseController
             return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => true, 'authUser' => $user]);
         }
 
-        if (password_verify($this->getRoute()->getParams()['password'], $user->password)) {
+        if (password_verify($this->getRoute()->getParams()['password'], $user->getPassword())) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
-            $user->roleName = ($users->getRoleById($user->getRoleId()))->getRole();
+            $user->setRoleName(($users->getRoleById($user->getRoleId()))->getRole());
             $this->session->connect($user);
             header('Location: /blog-project/admin/logged');
 

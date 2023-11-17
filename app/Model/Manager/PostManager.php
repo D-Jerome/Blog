@@ -30,7 +30,7 @@ class PostManager extends BaseManager
      * getCategoriesById : all Categories of post
      *
      * @param int $id Id of post
-     * @return array<string, string>
+     * @return array<Category>
      */
     public function getCategoriesById(int $id): array
     {
@@ -52,10 +52,11 @@ class PostManager extends BaseManager
      * getPostsbyCategory : get all posts linked to Category selected
      *
      * @param Category $category Category object
-     * @return array<string, string>|string
+     * @return array<Post>|string
      */
     public function getPostsbyCategory(Category $category): array|string
     {
+
         $query = $this->dbConnect->prepare(
             '
             SELECT p.* FROM post p
@@ -115,9 +116,9 @@ class PostManager extends BaseManager
             WHERE user.id = ?
         '
         );
-        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        // $query->setFetchMode(PDO::FETCH_ASSOC);
         $query->execute([$id]);
-        return $query->fetch();
+        return $query->fetchColumn();
     }
 
 
@@ -197,9 +198,9 @@ class PostManager extends BaseManager
      * @param  null|string $dir Direction of order
      * @param  null|int $limit Number of posts by page
      * @param  null|int $page Current page
-     * @param  array<string, string> $params Differents parameters for WHERE clause
+     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
      * @param  int $catId Id of category to filter
-     * @return array<string,string>
+     * @return array<Post>
      */
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, int $catId) : array
     {
@@ -210,10 +211,11 @@ class PostManager extends BaseManager
             $sql .= ' WHERE ';
             $i = FALSE;
             foreach ($params as $k => $value) {
-                if ($i === FALSE) {
+                if ($i === TRUE) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
+                $i = TRUE;
             }
         }
         $sql .= ' AND pc.category_id = ' . $catId;

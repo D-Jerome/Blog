@@ -129,7 +129,7 @@ class Route
     /**
      * getParams
      *
-     * @return array<string, string>
+     * @return array<string, int|string>
      */
     public function getParams(): array
     {

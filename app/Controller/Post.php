@@ -8,6 +8,7 @@ use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager
 use Framework\Application;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
+use App\Controller\Pagination;
 use PDO;
 
 class Post extends BaseController
@@ -29,7 +30,7 @@ class Post extends BaseController
             foreach ($statementPostsByCategory as $statementPost) {
                 $statementPost->categories =  [$statementCategory];
                 $statementPost->countComments = (int)$posts->getCountCommentsByPostId($statementPost->id);
-                $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
+                $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
             }
             $postsByCategories =  array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
         }
@@ -56,21 +57,22 @@ class Post extends BaseController
     public function posts()
     {
         $user = $this->session->getUser();
-        $user = [
+        if (null !== $user) {
+            $user = [
                  'name' => $user->getUsername(),
                  'id' => $user->getId(),
                  'roleName' => $user->getRoleName()
                 ];
-
+         }
         $currentPage = null;
         $perPage = null;
 
         if (isset(($this->getRoute()->getParams())['page'])) {
-            $currentPage = ($this->getRoute()->getParams())['page'];
+            $currentPage = (int)($this->getRoute()->getParams())['page'];
         }
 
         if (isset(($this->getRoute()->getParams())['perPage'])) {
-            $perPage = ($this->getRoute()->getParams())['perPage'];
+            $perPage = (int)($this->getRoute()->getParams())['perPage'];
         }
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
@@ -104,7 +106,7 @@ class Post extends BaseController
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username =  current($posts->getPostUsername($statementPost->getUserId()));
+            $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
 
         return $this->view(
@@ -139,10 +141,10 @@ class Post extends BaseController
         $comment = new CommentManager(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
-        $statementPost->username =  current($post->getPostUsername($statementPost->getUserId()));
+        $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         foreach ($statementComments as $statementComment) {
-            $statementComment->username = current($comment->getCommentUsername($statementComment->getUserId()));
+            $statementComment->username = ($comment->getCommentUsername($statementComment->getUserId()));
         }
         $user = $this->session->getUser();
         if (null !== $user) {

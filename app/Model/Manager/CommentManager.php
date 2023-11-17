@@ -27,7 +27,7 @@ class CommentManager extends BaseManager
      * getCommentsByPostId: get all comments od a post
      *
      * @param  int $id Post Id
-     * @return array<string, string>
+     * @return array<Comment>
      */
     public function getCommentsByPostId(int $id): array
     {
@@ -78,9 +78,9 @@ class CommentManager extends BaseManager
             WHERE user.id = ?
         '
         );
-        $query->setFetchMode(PDO::FETCH_DEFAULT);
+     
         $query->execute([$id]);
-        return $query->fetch();
+        return $query->fetchColumn();
     }
 
 
@@ -88,7 +88,7 @@ class CommentManager extends BaseManager
      * getCommentsByUserId : get comment by user
      *
      * @param  int $id User id
-     * @return array<string, string>
+     * @return array<Comment>
      */
     public function getCommentsByUserId(int $id): array
     {

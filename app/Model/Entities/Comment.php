@@ -202,4 +202,17 @@ class Comment extends Entity
     }
 
 
+    /**
+     * set  the username
+     *
+     * @param string $name Name to set
+     *
+     * @return void
+     *
+     */
+    public function setUsername(string $name): void
+    {
+        $this->username = $name;
+    }
+
 }

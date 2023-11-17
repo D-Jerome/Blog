@@ -53,7 +53,7 @@ class User extends BaseController
         $pagination = new Pagination($this->getRoute(), $count, $currentPage, $perPage);
         $pages = $pagination->pagesInformations();
 
-        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getperPage(), $pagination->getcurrentPage(), $sqlParams);
+        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
 
         $this->view(
             'backoffice/admin.users.html.twig',

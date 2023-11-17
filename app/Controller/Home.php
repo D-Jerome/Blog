@@ -17,7 +17,7 @@ class Home extends BaseController
     /**
      * home
      *
-     * @return view
+     * @return void
      */
     public function home()
     {
@@ -30,18 +30,13 @@ class Home extends BaseController
                         'name' => $user->getUsername(),
                         'id' => $user->getId()
                     ];
+            return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
         }
 
-        $user = $this->session->getUser();
         if (null === $user) {
-            return $this->view('frontoffice/home.html.twig', ['error' => false]);
+             return $this->view('frontoffice/home.html.twig', ['error' => false]);
         }
 
-        $user = [
-                    'name' => $user->getUsername(),
-                    'id' => $user->getId()
-                ];
-        $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
     }
 
 

@@ -67,7 +67,7 @@ abstract class BaseManager
     /**
      * getAll : get all data from called object
      *
-     * @return array<string, string>
+     * @return array<object>
      */
     public function getAll(): array
     {
@@ -94,7 +94,7 @@ abstract class BaseManager
     /**
      * getAllPublish: get all published object
      *
-     * @return array<string,string>
+     * @return array<object>
      */
     public function getAllPublish(): array
     {
@@ -111,9 +111,9 @@ abstract class BaseManager
      * @param  null|string $dir Direction of order
      * @param  null|int $limit Number of posts by page
      * @param  null|int $page Current page
-     * @param  null|array<string, string> $params Differents parameters for WHERE clause
+     * @param  null|array<string, string|bool > $params Differents parameters for WHERE clause
      *
-     * @return array<string, string>
+     * @return array<object>
      */
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
@@ -122,10 +122,11 @@ abstract class BaseManager
             $sql .= ' WHERE ';
             $i = FALSE;
             foreach ($params as $k => $value) {
-                if ($i === FALSE) {
+                if ($i === TRUE) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
+                $i = TRUE;
             }
         }//end if
 

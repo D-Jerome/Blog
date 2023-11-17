@@ -61,9 +61,9 @@ class UserManager extends BaseManager
      * insertNewUser : add new user in database
      *
      * @param array<string, string> $params User information
-     * @return int
+     * @return string|null
      */
-    public function insertNewUser(array $params): int
+    public function insertNewUser(array $params): ?string
     {
 
         if (isset($params['roleId'])) {
@@ -102,7 +102,7 @@ class UserManager extends BaseManager
         }
 
         $query->execute();
-
+// dd($this->dbConnect->lastInsertId());
         return $this->dbConnect->lastInsertId();
     }
 

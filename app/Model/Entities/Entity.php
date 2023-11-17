@@ -10,7 +10,7 @@ abstract class Entity
      * @param  string $name
      * @return string
      */
-    public function __get(string $name): string
+    public function __get($name): string
     {
         if (isset($this->$name)) {
             /* et puis là on peut bricoler les données */
@@ -22,11 +22,11 @@ abstract class Entity
     /**
      * __set
      *
-     * @param  string|null $name
-     * @param  string $value Multiple types of values
+     * @param  $name
+     * @param  $value Multiple types of values
      * @return void
      */
-    public function __set(?string $name, string $value): void
+    public function __set(string $name,  $value)
     {
         if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */
