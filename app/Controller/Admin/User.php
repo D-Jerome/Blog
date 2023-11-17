@@ -27,17 +27,6 @@ class User extends BaseController
                  'roleName' => $user->getRoleName()
                 ];
 
-        $currentPage = null;
-        $perPage = null;
-
-        if (isset(($this->getRoute()->getParams())['page'])) {
-            $currentPage = (int) ($this->getRoute()->getParams())['page'];
-        }
-
-        if (isset(($this->getRoute()->getParams())['perPage'])) {
-            $perPage = (int) ($this->getRoute()->getParams())['perPage'];
-        }
-
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
@@ -50,7 +39,7 @@ class User extends BaseController
 
         $count = count($users->getAll());
 
-        $pagination = new Pagination($this->getRoute(), $count, $currentPage, $perPage);
+        $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
         $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);

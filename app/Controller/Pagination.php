@@ -56,21 +56,20 @@ class Pagination extends BaseController
      *
      * @param Route $route
      * @param int $totalPages
-     * @param int|null $currentPage
-     * @param int|null $perPage
      *
      */
-    public function __construct(Route $route, int $totalPages, ?int $currentPage, ?int $perPage)
+    public function __construct(Route $route, int $totalPages)
     {
         $this->route = $route;
         $this->totalPages = $totalPages;
-        if (isset($currentPage)) {
-            $this->currentPage = $currentPage;
-        }
-        if (isset($perPage)) {
-            $this->perPage = $perPage;
+
+        if (isset(($this->getRoute()->getParams())['page'])) {
+            $this->currentPage = (int) ($this->getRoute()->getParams())['page'];
         }
 
+        if (isset(($this->getRoute()->getParams())['perPage'])) {
+            $this->perPage = (int) ($this->getRoute()->getParams())['perPage'];
+        }
 
     }
 
