@@ -68,11 +68,11 @@ class Post extends BaseController
         $perPage = null;
 
         if (isset(($this->getRoute()->getParams())['page'])) {
-            $currentPage = (int)($this->getRoute()->getParams())['page'];
+            $currentPage = (int) ($this->getRoute()->getParams())['page'];
         }
 
         if (isset(($this->getRoute()->getParams())['perPage'])) {
-            $perPage = (int)($this->getRoute()->getParams())['perPage'];
+            $perPage = (int) ($this->getRoute()->getParams())['perPage'];
         }
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
