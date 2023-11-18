@@ -36,7 +36,7 @@ CREATE TABLE user (
         REFERENCES  role (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
-) ;   
+);
 
 CREATE TABLE post (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -75,8 +75,8 @@ CREATE TABLE post_category (
         FOREIGN KEY (category_id)
         REFERENCES  category (id)
         ON DELETE CASCADE
-        ON UPDATE RESTRICT    
-) ;   
+        ON UPDATE RESTRICT
+) ;
 
 
 CREATE TABLE comment (

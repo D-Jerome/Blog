@@ -43,4 +43,4 @@ class Session
         $_SESSION['username'] = $user->getUsername();
     }
 
-}
+ }

@@ -20,21 +20,17 @@ class User extends BaseController
      */
     public function userList(): void
     {
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
+        $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
         $users = (new UserManager(Application::getDatasource()));
 
         $count = count($users->getAll());
@@ -42,7 +38,11 @@ class User extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $statementUsers = $users->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        // if ($httpParams['listSortSelect'] === null) {
+            $statementUsers = $users->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        // } else {
+            // $statementUsers = $users->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+        // }
 
         $this->view(
             'backoffice/admin.users.html.twig',
@@ -50,9 +50,11 @@ class User extends BaseController
                 'registredUsers' => $statementUsers,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
-                'sortDir' => $sortDir,
-                'sortBy' => $sortBy,
+                'sortDir' => $httpParams['sortDir'],
+                'sortBy' => $httpParams['sortBy'],
+                'listSort' => $httpParams['listSort'],
                 'list' => $filter->getList() ,
+                'idListSelect' => $httpParams['listSortSelect'],
                 'listSelect' => $filter->getListSelect(),
                 'listNames' => $filter->getListNames(),
                 'pages' => $pages,
@@ -173,12 +175,9 @@ class User extends BaseController
 
         $return = $user->insertNewUser($request->getParams());
         //verif si pas erreur
-        $user = $this->session->getUser();
-        $user = [
-                    'name' => $user->getUsername(),
-                    'id' => $user->getId(),
-                    'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
+
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 

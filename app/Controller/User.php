@@ -56,8 +56,10 @@ class User extends BaseController
      */
     public function login()
     {
-        $user = $this->session->getUser();
-        if (null !== $user) {
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        if ($user !== null){
             header('Location: /blog-project/admin/logged');
         }
         //afficher page de connection
@@ -73,14 +75,9 @@ class User extends BaseController
      */
     public function signUp()
     {
-        $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-
-                'username' => $user->getUsername(),
-                'id' => $user->getId(),
-                'role' => $user->getRoleName()
-            ];
+        $userSession = $this->session->getUser();
+        if (null !== $userSession) {
+            $user = $userSession->getAllUserInfo();
         }
         $this->view('frontoffice/signup.html.twig', ['error' => false, 'authUser' => $user]);
     }

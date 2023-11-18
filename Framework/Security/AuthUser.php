@@ -74,4 +74,18 @@ class AuthUser
         return  $this->username;
     }
 
+    /**
+     * get id, name, role of connected user
+     *
+     * @return array<string, string>
+     *
+     */
+    public function getAllUserInfo(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->username,
+            'role' => $this->roleName
+        ];
+    }
 }

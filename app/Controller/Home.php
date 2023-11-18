@@ -24,18 +24,13 @@ class Home extends BaseController
         //recherche des 3 derniers articles par catégories
 
 
-        $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-                        'name' => $user->getUsername(),
-                        'id' => $user->getId()
-                    ];
-            return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
-        }
-
+        $userSession = $this->session->getUser();
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
         if (null === $user) {
              return $this->view('frontoffice/home.html.twig', ['error' => false]);
         }
+
+        return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
 
     }
 

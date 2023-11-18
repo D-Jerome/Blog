@@ -56,28 +56,16 @@ class Post extends BaseController
      */
     public function posts()
     {
-        $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
-         }
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-        $listSort = !empty(($this->getRoute()->getParams())['list']) ? ($this->getRoute()->getParams())['list'] : null;
-        $listSortSelect = (($this->getRoute()->getParams())['listSelect']) !== '---'? ($this->getRoute()->getParams())['listSelect'] : null;
-        if (($listSortSelect) === null){
-            $listSort = null;
-        }
-
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
+        $httpParams = $this->groupFilterDataUser();
         $sqlParams = [ "publish_state" => TRUE];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
 
         if ($sqlParams["publish_state"] == FALSE) {
@@ -89,10 +77,10 @@ class Post extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if (!$listSortSelect) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSortSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $listSortSelect);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
         }
 
 
@@ -108,11 +96,11 @@ class Post extends BaseController
                 'posts' => $statementPosts,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
-                'sortDir' => $sortDir,
-                'sortBy' => $sortBy,
-                'listSort' => $listSort,
+                'sortDir' => $httpParams['sortDir'],
+                'sortBy' => $httpParams['sortBy'],
+                'listSort' => $httpParams['listSort'],
                 'list' => $filter->getList() ,
-                'idListSelect' => $listSortSelect,
+                'idListSelect' => $httpParams['listSortSelect'],
                 'listSelect' => $filter->getListSelect(),
                 'listNames' => $filter->getListNames(),
                 'pages' => $pages,
@@ -141,13 +129,9 @@ class Post extends BaseController
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername($comment->getCommentUsername($statementComment->getUserId()));
         }
-        $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId()
-            ];
-        }
+        $userSession = $this->session->getUser();
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+
         return $this->view('frontoffice/post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
@@ -159,14 +143,9 @@ class Post extends BaseController
      */
     public function admin()
     {
-        $user = $this->session->getUser();
-        if (null !== $user) {
-            $user = [
-                        'name' => $user->getUsername(),
-                        'id' => $user->getId(),
-                        'roleName' => $user->getRoleName()
-                    ];
-        }
+        $userSession = $this->session->getUser();
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+
         return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
     }
 

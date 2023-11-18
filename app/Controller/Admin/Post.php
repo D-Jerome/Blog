@@ -20,22 +20,18 @@ class Post extends BaseController
      */
     public function posts(): void
     {
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = in_array(($this->getRoute()->getParams())['dir'],['ASC','DESC']) ? ($this->getRoute()->getParams())['dir'] :'DESC';
+        $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
         if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
@@ -46,8 +42,11 @@ class Post extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        foreach ($statementPosts as $statementPost) {
+        if ($httpParams['listSortSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        } else {
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+        }        foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
@@ -59,9 +58,11 @@ class Post extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $sortDir,
-            'sortBy' => $sortBy,
+            'sortDir' => $httpParams['sortDir'],
+            'sortBy' => $httpParams['sortBy'],
+            'listSort' => $httpParams['listSort'],
             'list' => $filter->getList() ,
+            'idListSelect' => $httpParams['listSortSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,
@@ -93,12 +94,8 @@ class Post extends BaseController
     {
         $category = new CategoryManager(Application::getDatasource());
         $statementCategories = $category->getAll();
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
     }
@@ -115,13 +112,8 @@ class Post extends BaseController
         $request = new Request("/blog-project/");
 
         $post->insertNewPost($request->getParams());
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
-
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $statement = '';
         $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
@@ -140,12 +132,8 @@ class Post extends BaseController
         $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
 
         $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
@@ -178,12 +166,8 @@ class Post extends BaseController
             $post->update($statement, $params);
         }
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
@@ -215,12 +199,8 @@ class Post extends BaseController
         $statementPost->countComments = $post->getCountCommentsByPostId($statementPost->id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $this->view('backoffice/add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
@@ -241,12 +221,8 @@ class Post extends BaseController
         $comment->insertNewComment($request->getParams());
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
@@ -263,22 +239,18 @@ class Post extends BaseController
     public function moderationPosts(): void
     {
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
+        $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
         if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
@@ -293,7 +265,11 @@ class Post extends BaseController
             $sqlParams = ['user_id' => $user['id']];
         }//end if
 
-        $statementPosts = $posts->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSortSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        } else {
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+        }
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -307,9 +283,11 @@ class Post extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $sortDir,
-            'sortBy' => $sortBy,
+            'sortDir' => $httpParams['sortDir'],
+            'sortBy' => $httpParams['sortBy'],
+            'listSort' => $httpParams['listSort'],
             'list' => $filter->getList() ,
+            'idListSelect' => $httpParams['listSortSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,

@@ -105,4 +105,32 @@ class BaseController
         return true;
     }
 
+
+    /**
+     * ckeck and group filter information pass by user
+     *
+     * @return array<string, null|string|int>
+     *
+     */
+    public function groupFilterDataUser(): array
+    {
+        $filterReturn['sortBy'] = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
+        $filterReturn['sortDir'] = isset(($this->getRoute()->getParams())['dir']) ? ($this->getRoute()->getParams())['dir'] : 'DESC';
+        $filterReturn['listSort'] = !empty(($this->getRoute()->getParams())['list']) ? ($this->getRoute()->getParams())['list'] : null;
+        if (isset(($this->getRoute()->getParams())['listSelect']) === true) {
+            $filterReturn['listSortSelect'] = (($this->getRoute()->getParams())['listSelect']) !== '---' ? ($this->getRoute()->getParams())['listSelect'] : null;
+        } else {
+            $filterReturn['listSortSelect'] = null;
+        }
+
+        if ($filterReturn['listSortSelect'] === null && $filterReturn['listSort'] !== null) {
+            $listSort = null;
+        }
+
+        if ($filterReturn['listSort'] === null && $filterReturn['listSortSelect'] !== null) {
+            $filterReturn['listSortSelect'] = null;
+        }
+
+        return $filterReturn;
+    }
 }

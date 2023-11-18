@@ -204,10 +204,11 @@ class PostManager extends BaseManager
      */
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $catId) : array
     {
+
         $sql = 'SELECT post.* FROM ' . $this->table;
         $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
 
-        if (!empty($params)) {
+        if (!empty($params) === TRUE) {
             $sql .= ' WHERE ';
             $i = FALSE;
             foreach ($params as $k => $value) {
@@ -218,23 +219,28 @@ class PostManager extends BaseManager
                 $i = TRUE;
             }
         }
-        if ($catId === null) {
+
+        if ($catId !== null) {
             $sql .= ' AND pc.category_id = ' . $catId;
         }
+
         if (isset($field)) {
             $sql .= ' ORDER BY ' . $field;
         }
+
         if (in_array($dir, ['ASC', 'DESC'])) {
             $sql .= ' ' . $dir;
         } else {
             $sql .= ' DESC';
         }
+
         if (isset($limit)) {
             $sql .= ' LIMIT ' . $limit;
             if (isset($page) && $page !== 1) {
                 $offset = ($page - 1) * $limit;
                 $sql .= ' OFFSET ' .  $offset;
             }
+
         }
 
         $query = $this->dbConnect->prepare($sql);

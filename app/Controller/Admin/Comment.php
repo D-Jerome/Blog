@@ -32,12 +32,8 @@ class Comment extends BaseController
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
 
@@ -99,12 +95,8 @@ class Comment extends BaseController
         $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
     }
@@ -157,24 +149,23 @@ class Comment extends BaseController
      */
     public function moderationComments()
     {
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+
         $filter = new FilterBuilder(Application::getFilter(), 'admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
+        $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
 
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
 
-        $user = $this->session->getUser();
-        $user = [
-                    'name' => $user->getUsername(),
-                    'id' => $user->getId(),
-                    'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
         if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
@@ -187,7 +178,11 @@ class Comment extends BaseController
 
         $comments = (new CommentManager(Application::getDatasource()));
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getperPage(), $pagination->getcurrentPage(), $sqlParams);
+        if ($httpParams['listSortSelect'] === null) {
+            $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        } else {
+            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+        }
         foreach ($statementComments as $statementComment) {
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
         }
@@ -207,9 +202,11 @@ class Comment extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $sortDir,
-            'sortBy' => $sortBy,
+            'sortDir' => $httpParams['sortDir'],
+            'sortBy' => $httpParams['sortBy'],
+            'listSort' => $httpParams['listSort'],
             'list' => $filter->getList() ,
+            'idListSelect' => $httpParams['listSortSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,

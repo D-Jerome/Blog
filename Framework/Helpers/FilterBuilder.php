@@ -120,4 +120,5 @@ class FilterBuilder
     {
         return $this->listNames;
     }
+
 }
