@@ -1,34 +1,30 @@
 {% extends './layouts/default.html.twig' %}
 
 {% block message %}
-    {% if error.active %}
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Message System</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                         ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Understood</button>
-                    </div>
+{% if message %}
+<div class="container ">
+<div class="row justify-content-center">
+    <div class="col-10 text-center"  >
+        {% if error %}
+            {% if login %}
+                <div class="alert alert-danger" role="alert">
+                    <h5 class="alert-heading">Compte inactif</h5>
+                    <p class="mb-0">Votre compte est désactivé <br> Merci de vous rapprocher de votre administrateur.</p>
                 </div>
+            {% else %}
+                <div class="alert alert-danger " role="alert">
+                    <h5 class="alert-heading">Connexion impossible</h5>
+                    <p class="mb-0">L'identifiant et/ou mot de passe incorrect.</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                <h5 class="alert-heading">Suppression réussie</h5>
+                <p class="mb-0">La supression du post a été éffectuée</p>
             </div>
-        </div>   
-
-
-        <div class="alert alert-danger">
-        <br>
-        Error : {{ error.message }}<br>
-        <br>
-        Error Code : {{ error.code }}<br>
-        
-        </div>
-    {% else %}
-        <div class="container mt-5"></div>
-    {% endif %}    
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endif %}
 {% endblock %}

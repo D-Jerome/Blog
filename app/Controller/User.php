@@ -23,12 +23,12 @@ class User extends BaseController
 
         if (null === ($user)) {
             $user = [];
-            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
         }
 
         if (false === ($user->getActive())) {
             $user = [];
-            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => true, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['message' => true, 'error' => true, 'login' => true, 'authUser' => $user]);
         }
 
         if (password_verify($this->getRoute()->getParams()['password'], $user->getPassword())) {
@@ -38,12 +38,7 @@ class User extends BaseController
             header('Location: /blog-project/admin/logged');
 
         } else {
-            $user = [
-                'name' => $user->getUsername(),
-                'id' => $user->getId(),
-                'role' => $user->getRoleName()
-            ];
-            return $this->view('frontoffice/login.html.twig', ['error' => true, 'login' => false, 'authUser' => $user]);
+            return $this->view('frontoffice/login.html.twig', ['message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
         }//end if
 
     }
@@ -64,7 +59,7 @@ class User extends BaseController
         }
         //afficher page de connection
 
-        $this->view('frontoffice/login.html.twig', ['error' => false, 'authUser' => $user]);
+        $this->view('frontoffice/login.html.twig', ['message' => false, 'error' => false, 'authUser' => $user]);
     }
 
 
@@ -75,6 +70,7 @@ class User extends BaseController
      */
     public function signUp()
     {
+        $user = null;
         $userSession = $this->session->getUser();
         if (null !== $userSession) {
             $user = $userSession->getAllUserInfo();

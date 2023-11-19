@@ -24,7 +24,6 @@ class Post extends BaseController
 
         $user = $userSession ? $userSession->getAllUserInfo() : null;
 
-
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
 
@@ -52,10 +51,7 @@ class Post extends BaseController
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
-
-        $this->view(
-            'backoffice/admin.posts.html.twig',
-            [
+        $dataView= [
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
@@ -68,8 +64,16 @@ class Post extends BaseController
             'listNames' => $filter->getListNames(),
             'pages' => $pages,
             'authUser' => $user
-            ]
-        );
+        ];
+
+        if (isset(($this->getRoute()->getParams())['delete'])) {
+            if (($this->getRoute()->getParams())['delete'] == 'ok') {
+                $dataView['message'] = TRUE;
+                $dataView['error'] = FALSE;
+            }
+        }
+
+            $this->view('backoffice/admin.posts.html.twig', $dataView);
     }
 
 
@@ -82,7 +86,7 @@ class Post extends BaseController
     public function deletePost(int $id): void
     {
         (new PostManager(Application::getDatasource()))->delete($id);
-        header('Location: /blog-project/admin');
+        header('Location: /blog-project/admin/posts?delete=ok');
     }
 
 
@@ -249,6 +253,7 @@ class Post extends BaseController
         $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
+
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);

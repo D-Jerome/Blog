@@ -15,28 +15,31 @@
     </header>
     <h2 class="col-12">Bonjour {{ authUser.name }} </h2>
     <main role="main" class="site-content">
-    <a href="/blog-project/admin/user/new" class="btn btn-primary d-block">Ajouter</a>
-        <div class="col-12 my-3 d-flex flex-wrap gap-1" >
+        <a href="/blog-project/admin/user/new" class="btn btn-primary d-block">Ajouter</a>
+        <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
             {% for registredUser in registredUsers %}
-                <div class="card col-3 
+                <div class="card col-12
                     {% if registredUser.active == false %}
-                    bg-danger-subtle
+                        bg-danger-subtle
                     {% endif %}
                 " id="{{ registredUser.id }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ registredUser.username }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ registredUser.email }}</h6>
-                        <p class="card-text">{{ registredUser.createdAt | format_datetime(locale='fr') }}</p>
-                        <p class="card-text">{{ registredUser.roleId }}</p>
-
-                        <a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a> 
-                        {% if registredUser.active %}
-                            <a href="/blog-project/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
-                        {% else %}
-                            <a href="/blog-project/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
-                        {% endif %}
+                    <div class="row g-0 align-items-center">
+                        <div class="card-body col-8">
+                            <h5 class="card-title text-primary">{{ registredUser.username }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ registredUser.email }}</h6>
+                            <p class="card-text">{{ registredUser.createdAt | format_datetime(locale='fr') }}</p>
+                            <p class="card-text">{{ registredUser.roleId }}</p>
+                        </div>
+                        <div class="col-4 ">
+                            <a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a> 
+                            {% if registredUser.active %}
+                                <a href="/blog-project/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                            {% else %}
+                                <a href="/blog-project/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="btn" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div> 
+                </div>
             {% endfor %}
         </div>
     </main>

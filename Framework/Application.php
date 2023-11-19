@@ -95,7 +95,7 @@ final class Application
             }//end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
-            return $this->view('frontoffice/404.html.twig',[]);
+            header('Location: /blog-project/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
         }

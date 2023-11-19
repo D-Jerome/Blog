@@ -23,7 +23,6 @@ class Home extends BaseController
     {
         //recherche des 3 derniers articles par catégories
 
-
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         if (null === $user) {

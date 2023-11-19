@@ -148,6 +148,7 @@ class Comment extends BaseController
      */
     public function moderationComments()
     {
+
         $userSession = $this->session->getUser();
 
         $user = $userSession ? $userSession->getAllUserInfo() : null;

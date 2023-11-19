@@ -381,6 +381,19 @@
             "visitor",
             "all"
         ]
+    },
+    {
+        "path" : "/404",
+        "controller" : "App\\Controller\\Error",
+        "action" : "error404",
+        "method" : "GET",
+        "authorize": [
+            "admin",
+            "editor",
+            "visitor",
+            "all"
+        ]
     }
+
 
 ]

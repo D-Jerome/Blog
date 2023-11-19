@@ -2,37 +2,59 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}    
-<h1>Administration des articles</h1>         
-            <a href="/blog-project/admin/post/new" class="btn btn-primary">Ajouter un article</a>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Titre</th>
-                        <th scope="col">Extrait</th>
-                        <th scope="col">Publié le </th>
-                        <th scope="col">Par</th>
-                        <th scope="col"> </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for post in posts %}
-                {% if comment.publishState != false %}
-                    <tr id="{{ post.id }}">
-                {% else %}
-                    <tr id="{{ post.id }}" class="table-danger" >
-                {% endif %}
-                        <th scope="row">{{ post.id }}</th>
-                        <td>{{ post.name }}</td>
-                        <td>{{ post.excerptContent | raw }}</td>
-                        <td>{{ post.createdAt | format_datetime(locale='fr') }}</td>
-                        <td>{{ post.username }}</td>
-                        <td>
-                            <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning">Modifier</a> 
-                            <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" class="btn btn-danger">Supprimer</a> 
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                </table>
+    <header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="post-heading">
+                        <h1>Administration des articles</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <h2 class="col-12">Bonjour {{ authUser.name }} </h2>
+    <main role="main" class="site-content">
+        <a href="/blog-project/admin/post/new" class="btn btn-primary d-block">Ajouter</a>
+        <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
+            {% for post in posts %}
+                <div class="card col-12
+                    {% if post.publishState == false %}
+                        bg-danger-subtle
+                    {% endif %}
+                    " id="{{ post.id }}">
+                    <div class="row g-0 align-items-center">
+                        <div class="card-body col-md-10">
+                            <div class="text-bg-primary d-block rounded p-2">
+                                <h5 class="card-title">{{ post.name }}</h5>
+                                <p class="card-subtitle mt-2">Créé le {{ post.createdAt | format_datetime('short','none',locale='fr') }} par {{ post.username }}</p>
+                                {% if post.createdAt != post.ModifiedAt %} 
+                                    <p class="card-subtitle mb-2 ">Dernière modification {{ post.modifiedAt | format_datetime('short','none',locale='fr') }}</p>
+                                {% endif %}
+                                {% if post.publishAt != null %} 
+                                    <p class="card-subtitle mb-2 ">Publié le {{ post.publishdAt | format_datetime('short','none',locale='fr') }}</p>
+                                {% endif %}
+                            </div>    
+                            <p class="card-text">{{ post.excerptContent | raw }}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                            <div class="dropstart">
+                                <a class="btn btn-danger dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-trash-can fa-xl"></i>
+                                </a>
+                                <div class="dropdown-menu p-4">
+                                    <div class="mb-3">
+                                        Confirmation de suppression?
+                                    </div>
+                                    <a href="#" class="btn btn-primary d-block" role="button">Annuler</a>
+                                    <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4">Confirmer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>                
 {% endblock %}

@@ -341,9 +341,9 @@ class Post extends Entity
     /**
      * getPublishAt
      *
-     * @return string
+     * @return null|string
      */
-    public function getPublishAt(): string
+    public function getPublishAt(): ?string
     {
         return $this->publishAt;
     }

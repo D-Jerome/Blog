@@ -228,7 +228,7 @@ class PostManager extends BaseManager
             '
             UPDATE ' . $this->table . '
             SET
-                publish_state = true
+                publish_state = true,
                 publish_at = :publish_at
             WHERE id = :id
         '
