@@ -43,7 +43,7 @@
                 <div class="form-group my-3">
                     <label id="name">identifiant:</label>
                     <input class="form-control" type="text" id="name"  name="username" value="{{ user.username }}">
-                </div>    
+                </div>
                 <div class="form-group my-3">
                     <label id="email">email:</label>
                     <input class="form-control" id="email" name="email" value="{{ user.email }}">
@@ -56,11 +56,11 @@
                             <input class="form-check-input" type="radio" value="{{ role.id }}" name="roleId" id="rol-{{ role.role }}-{{ role.id }}" {% if user.roleId == role.id %} checked {% endif %}>
                             <label class="form-check-label" for="rol-{{ role.role }}-{{ role.id }}">{{ role.role }}</label>
                         </div>
-                        {% endfor %}    
-                    </div>  
-                {% endif %}   
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <button type="submit" class="btn btn-primary my-3">Modifier</button>
-                </form> 
-            </div>    
+                </form>
+            </div>
     </main>
 {% endblock %}

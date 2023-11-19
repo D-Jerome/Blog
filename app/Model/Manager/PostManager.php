@@ -191,62 +191,7 @@ class PostManager extends BaseManager
     }
 
 
-    /**
-     * getAllOrderLimitCat : get paged Posts about specifical category
-     *
-     * @param  null|string $field Name of field to order
-     * @param  null|string $dir Direction of order
-     * @param  null|int $limit Number of posts by page
-     * @param  null|int $page Current page
-     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
-     * @param  null|int $catId Id of category to filter
-     * @return array<Post>
-     */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $catId) : array
-    {
 
-        $sql = 'SELECT post.* FROM ' . $this->table;
-        $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
-
-        if (!empty($params) === TRUE) {
-            $sql .= ' WHERE ';
-            $i = FALSE;
-            foreach ($params as $k => $value) {
-                if ($i === TRUE) {
-                    $sql .= ' AND ';
-                }
-                $sql .= $k .' = '. $value;
-                $i = TRUE;
-            }
-        }
-
-        if ($catId !== null) {
-            $sql .= ' AND pc.category_id = ' . $catId;
-        }
-
-        if (isset($field)) {
-            $sql .= ' ORDER BY ' . $field;
-        }
-
-        if (in_array($dir, ['ASC', 'DESC'])) {
-            $sql .= ' ' . $dir;
-        } else {
-            $sql .= ' DESC';
-        }
-
-        if (isset($limit)) {
-            $sql .= ' LIMIT ' . $limit;
-            if (isset($page) && $page !== 1) {
-                $offset = ($page - 1) * $limit;
-                $sql .= ' OFFSET ' .  $offset;
-            }
-
-        }
-
-        $query = $this->dbConnect->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
-    }
 
 
     /**

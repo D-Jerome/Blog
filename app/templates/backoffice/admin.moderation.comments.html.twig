@@ -28,20 +28,20 @@
                 <tbody>
                     {% for comment in comments %}
                         {% if comment.publishState != false %}
-                            <tr>
+                            <tr id="{{ comment.id }}">
                         {% else %}
-                            <tr class="table-danger" >
+                            <tr id="{{ comment.id }} class="table-danger" >
                         {% endif %}
                         <th scope="row">{{ comment.id }}</th>
                         <td>{{ comment.excerptContent | raw }}</td>
                         <td>{{ comment.createdAt | format_datetime(locale='fr') }}</td>
                         <td>{{ comment.username }}</td>
-                        <td><a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn btn-warning" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <td><a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
                         {% if comment.publishState != false %}
-                            <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-danger" title="Désactiver"><i class="fa-regular fa-rectangle-xmark"></i></a>
+                            <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
                             </td>
                         {% else %}
-                            <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn btn-success" title="Activer"><i class="fa-solid fa-check"></i></a>
+                            <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
                         </td>
                         {% endif %}
                     </tr>

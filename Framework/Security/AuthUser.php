@@ -85,7 +85,7 @@ class AuthUser
         return [
             'id' => $this->id,
             'name' => $this->username,
-            'role' => $this->roleName
+            'roleName' => $this->roleName
         ];
     }
 }

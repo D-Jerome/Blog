@@ -38,11 +38,8 @@ class User extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        // if ($httpParams['listSortSelect'] === null) {
+
             $statementUsers = $users->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        // } else {
-            // $statementUsers = $users->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
-        // }
 
         $this->view(
             'backoffice/admin.users.html.twig',
@@ -126,7 +123,7 @@ class User extends BaseController
     {
 
         (new UserManager(Application::getDatasource()))->disable($id);
-        header('Location: /blog-project/admin/users');
+        header('Location: /blog-project/admin/users#'.$id);
     }
 
 
@@ -139,7 +136,7 @@ class User extends BaseController
     public function enableUser(int $id): void
     {
         (new UserManager(Application::getDatasource()))->enable($id);
-        header('Location: /blog-project/admin/users');
+        header('Location: /blog-project/admin/users#'.$id);
     }
 
 

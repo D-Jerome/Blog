@@ -61,7 +61,7 @@
                 "active" : "Actif"
             },
             "listSelect" : {
-                "role"  : "Role"
+                "roleName"  : "Role"
             },
             "list" : {
                 "Role" : "role"

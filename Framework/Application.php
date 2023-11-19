@@ -95,6 +95,7 @@ final class Application
             }//end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
+            return $this->view('frontoffice/404.html.twig',[]);
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
         }

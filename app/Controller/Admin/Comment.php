@@ -22,20 +22,18 @@ class Comment extends BaseController
     public function comments()
     {
 
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
-        $sortBy = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $sortDir = ($this->getRoute()->getParams())['dir'] ?? 'DESC';
-
+        $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
 
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
-
-        $sortBySQL = Text::camelCaseToSnakeCase($sortBy);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
         if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
             $count = count($posts->getAllPublish());
@@ -50,7 +48,7 @@ class Comment extends BaseController
             $sqlParams = ['user_id' => $user['id']];
         }//end if
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, $sortDir, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
         }
@@ -66,11 +64,12 @@ class Comment extends BaseController
             [
             'comments' => $statementComments,
             'posts' => $statementPosts,
-            'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $sortDir,
-            'sortBy' => $sortBy,
+            'sortDir' => $httpParams['sortDir'],
+            'sortBy' => $httpParams['sortBy'],
+            'listSort' => $httpParams['listSort'],
             'list' => $filter->getList() ,
+            'idListSelect' => $httpParams['listSortSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,
@@ -226,7 +225,7 @@ class Comment extends BaseController
     public function unpublishComment(int $id): void
     {
         (new CommentManager(Application::getDatasource()))->unpublish($id);
-        header('Location: /blog-project/admin/moderation/comments');
+        header('Location: /blog-project/admin/moderation/comments#'.$id);
     }
 
 
@@ -239,7 +238,7 @@ class Comment extends BaseController
     public function publishComment(int $id): void
     {
         (new CommentManager(Application::getDatasource()))->publish($id);
-        header('Location: /blog-project/admin/moderation/comments');
+        header('Location: /blog-project/admin/moderation/comments#'.$id);
     }
 
 

@@ -46,7 +46,8 @@ class Post extends BaseController
             $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
             $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
-        }        foreach ($statementPosts as $statementPost) {
+        }
+        foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
@@ -308,7 +309,7 @@ class Post extends BaseController
     {
 
         (new PostManager(Application::getDatasource()))->unpublish($id);
-        header('Location: /blog-project/admin/moderation/posts');
+        header('Location: /blog-project/admin/moderation/posts#'.$id);
     }
 
 
@@ -322,7 +323,7 @@ class Post extends BaseController
     {
 
         (new PostManager(Application::getDatasource()))->publish($id);
-        header('Location: /blog-project/admin/moderation/posts');
+        header('Location: /blog-project/admin/moderation/posts#'.$id);
     }
 
 

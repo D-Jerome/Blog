@@ -29,20 +29,20 @@
                 <tbody>
                     {% for post in posts %}
                     {% if post.publishState != false %}
-                    <tr>
+                    <tr id="{{ post.id }}">
                     {% else %}
-                    <tr class="table-danger" >
+                    <tr id="{{ post.id }}" class="table-danger" >
                     {% endif %}
                         <th scope="row">{{ post.id }}</th>
                         <td>{{ post.name | raw}}</td>
-                        <td><div class="clearfix">{{ post.content | raw }}</div></td>
+                        <td><div class="clearfix">{{ post.excerptContent | raw }}</div></td>
                         <td>{{ post.createdAt | format_datetime(locale='fr') }}</td>
                         <td>{{ post.username }}</td>
-                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn btn-warning" title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <td><a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn " title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
                         {% if post.publishState != false %}
-                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn btn-danger" title="Désactiver"><i class="fa-regular fa-rectangle-xmark"></i></a>
+                            <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn " title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
                         {% else %}
-                            <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn btn-success" title="Activer"><i class="fa-solid fa-check"></i></a>
+                            <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
                         {% endif %}
                     </tr>
                     {% endfor %}

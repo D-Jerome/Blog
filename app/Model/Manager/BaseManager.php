@@ -153,6 +153,85 @@ abstract class BaseManager
 
 
     /**
+     * getAllOrderLimitCat : get paged Posts about specifical category
+     *
+     * @param  null|string $field Name of field to order
+     * @param  null|string $dir Direction of order
+     * @param  null|int $limit Number of posts by page
+     * @param  null|int $page Current page
+     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
+     * @param  null|int $listId Id of List item to filter
+     * @return array<object>
+     */
+    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId) : array
+    {
+
+        $sql = 'SELECT '. $this->table.'.* FROM ' . $this->table;
+        switch ($this->table){
+            case 'post':
+                $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
+                break;
+            case 'user':
+                $sql .= ' INNER JOIN role ON role.id = user.id ';
+                break;
+            case 'comment':
+                break;
+        }
+
+
+        if (!empty($params) === TRUE) {
+            $sql .= ' WHERE ';
+            $i = FALSE;
+            foreach ($params as $k => $value) {
+                if ($i === TRUE) {
+                    $sql .= ' AND ';
+                }
+                $sql .= $k .' = '. $value;
+                $i = TRUE;
+            }
+        }
+        switch ($this->table) {
+            case 'post':
+                if ($listId !== null) {
+                    $sql .= ' AND pc.category_id = ' . $listId;
+                }
+                break;
+            case 'user':
+                if ($listId !== null) {
+                    $sql .= ' AND role.id = ' . $listId;
+                }
+                break;
+            case 'comment':
+                break;
+        }
+
+
+        if (isset($field)) {
+            $sql .= ' ORDER BY ' . $field;
+        }
+
+        if (in_array($dir, ['ASC', 'DESC'])) {
+            $sql .= ' ' . $dir;
+        } else {
+            $sql .= ' DESC';
+        }
+
+        if (isset($limit)) {
+            $sql .= ' LIMIT ' . $limit;
+            if (isset($page) && $page !== 1) {
+                $offset = ($page - 1) * $limit;
+                $sql .= ' OFFSET ' .  $offset;
+            }
+
+        }
+
+        $query = $this->dbConnect->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    }
+
+
+    /**
      * insert : insert data in database
      *
      * @param  object $obj
