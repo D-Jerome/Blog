@@ -70,6 +70,7 @@ class PDOConnection
         );
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
     }//end __construct
 
 }

@@ -29,6 +29,7 @@ class Router
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
+
     } //end _construct
 
 

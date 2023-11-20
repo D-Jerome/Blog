@@ -29,7 +29,8 @@ class PostManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('post', Post::class, $datasource);
-    }
+
+    }//end _construct
 
 
     /**

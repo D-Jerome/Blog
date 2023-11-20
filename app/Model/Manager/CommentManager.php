@@ -20,6 +20,7 @@ class CommentManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('comment', Comment::class, $datasource);
+
     }//end _construct
 
 

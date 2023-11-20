@@ -44,6 +44,7 @@ abstract class BaseManager
         $this->table = $table;
         $this->object = $objectName;
         $this->dbConnect = PDOConnection::getInstance($datasource);
+
     }//end __construct
 
 
@@ -56,7 +57,7 @@ abstract class BaseManager
     public function getById($id): object
     {
 
-        $query = $this->dbConnect->prepare('SELECT * FROM ' . $this->table . ' WHERE id = ?');
+        $query = $this->dbConnect->prepare('SELECT * FROM '. $this->table .' WHERE id = ?');
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute([$id]);
         return $query->fetch();
@@ -70,7 +71,7 @@ abstract class BaseManager
      */
     public function getAll(): array
     {
-        $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table);
+        $query = $this->dbConnect->prepare("SELECT * FROM ". $this->table);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
@@ -84,7 +85,7 @@ abstract class BaseManager
      */
     public function getAllToList(string $field): array
     {
-        $query = $this->dbConnect->prepare("SELECT id, $field FROM " . $this->table);
+        $query = $this->dbConnect->prepare("SELECT id, $field FROM ". $this->table);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -97,7 +98,7 @@ abstract class BaseManager
      */
     public function getAllPublish(): array
     {
-        $query = $this->dbConnect->prepare("SELECT * FROM " . $this->table ." WHERE publish_state = true");
+        $query = $this->dbConnect->prepare("SELECT * FROM ". $this->table ." WHERE publish_state = true");
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
@@ -165,7 +166,7 @@ abstract class BaseManager
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
 
-        $sql = 'SELECT '. $this->table.'.* FROM ' . $this->table;
+        $sql = 'SELECT '. $this->table .'.* FROM '. $this->table;
         switch ($this->table) {
         case 'post':
             $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
@@ -192,12 +193,12 @@ abstract class BaseManager
         switch ($this->table) {
         case 'post':
             if ($listId !== null) {
-                $sql .= ' AND pc.category_id = ' . $listId;
+                $sql .= ' AND pc.category_id = '. $listId;
             }
             break;
         case 'user':
             if ($listId !== null) {
-                $sql .= ' AND role.id = ' . $listId;
+                $sql .= ' AND role.id = '. $listId;
             }
             break;
         case 'comment':
@@ -206,20 +207,20 @@ abstract class BaseManager
 
 
         if (isset($field)) {
-            $sql .= ' ORDER BY ' . $field;
+            $sql .= ' ORDER BY '. $field;
         }
 
         if (in_array($dir, ['ASC', 'DESC'])) {
-            $sql .= ' ' . $dir;
+            $sql .= ' '. $dir;
         } else {
             $sql .= ' DESC';
         }
 
         if (isset($limit)) {
-            $sql .= ' LIMIT ' . $limit;
+            $sql .= ' LIMIT '. $limit;
             if (isset($page) && $page !== 1) {
                 $offset = ($page - 1) * $limit;
-                $sql .= ' OFFSET ' .  $offset;
+                $sql .= ' OFFSET '.  $offset;
             }
 
         }
@@ -243,7 +244,7 @@ abstract class BaseManager
         $paramNumber = count($param);
         $valueArray = array_fill(1, $paramNumber, "?");
         $valueString = implode(", ", $valueArray);
-        $sql = "INSERT INTO " . $this->table . "(" . implode(", ", $param) . ") VALUES(" . $valueString . ")";
+        $sql = "INSERT INTO " . $this->table . "(" . implode(", ", $param) .") VALUES(". $valueString . ")";
         $req = $this->dbConnect->prepare($sql);
         $boundParam = array();
         foreach ($param as $paramName) {
@@ -274,11 +275,11 @@ abstract class BaseManager
         foreach ($param as $paramName => $paramValue) {
             $i++;
             if ($paramName !== 'id') {
-                $sql = $sql . Text::camelCaseToSnakeCase($paramName) . " = :" . Text::camelCaseToSnakeCase($paramName);
+                $sql = $sql . Text::camelCaseToSnakeCase($paramName) ." = :". Text::camelCaseToSnakeCase($paramName);
             }
 
             if ($i !== $countParam) {
-                $sql = $sql . ", ";
+                $sql = $sql .", ";
             }
 
         }//end foreach
@@ -309,7 +310,7 @@ abstract class BaseManager
     public function delete(int $id): bool
     {
         try {
-            $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= ?");
+            $query = $this->dbConnect->prepare("DELETE FROM ". $this->table ." WHERE id= ?");
             $query->execute([$id]);
             return true;
         } catch (\Exception $e) {

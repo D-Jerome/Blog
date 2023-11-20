@@ -18,6 +18,7 @@ class RoleManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('role', Role::class, $datasource);
+
     }//end __construct
 
 }

@@ -19,6 +19,7 @@ class UserManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('user', User::class, $datasource);
+
     }//end __construct
 
 

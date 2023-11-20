@@ -18,6 +18,7 @@ class CategoryManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('category', Category::class, $datasource);
+
     }//end __construct
 
 }

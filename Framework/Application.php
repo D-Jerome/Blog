@@ -56,11 +56,11 @@ final class Application
         $msgErr = false;
         try {
             $foundRoute = $this->router->findRoute($this->request);
-            if (null === $foundRoute) {
+            if ($foundRoute === null) {
                 throw new NoRouteFoundException();
             }
             $controller = $foundRoute->getController();
-            $action =  $foundRoute->getaction();
+            $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
             $route = new $controller($foundRoute);
             if (!$route->isAuthorize($authRoles)) {
