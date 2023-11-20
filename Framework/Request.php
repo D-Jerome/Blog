@@ -4,7 +4,6 @@ namespace Framework;
 
 class Request
 {
-
     /**
      * URI of page
      *
@@ -31,14 +30,19 @@ class Request
      * __construct
      *
      * @param string $baseUrl Base of url directory
+     *
      * @return void
      */
     public function __construct(string $baseUrl)
     {
-
-        $this->params = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $this->uri = str_replace($baseUrl, '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        $this->method = $_SERVER['REQUEST_METHOD'];
+        /**
+         * @var null|false|array<string,mixed> $input 
+         */
+        $input = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $input = ($input == null) ? [] : $input;
+        $this->params = $input;
+        $this->uri = str_replace($baseUrl, '', parse_url(filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_URI'], PHP_URL_PATH));
+        $this->method = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_METHOD'];
 
     }//end __construct
 

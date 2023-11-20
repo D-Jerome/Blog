@@ -140,7 +140,7 @@ class Route
     /**
      * setParams : Insert params of  $_GET or $_POST in Route
      *
-     * @param  array<string, string> $params : params of $_POST or $_GET
+     * @param array<string, string> $params : params of $_POST or $_GET
      * @return void
      */
     public function setParams(array $params): void

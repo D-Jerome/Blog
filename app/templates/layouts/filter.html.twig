@@ -2,7 +2,7 @@
 
 {% block filterBlock %}     
 {% if sort %} 
-    <a class="btn btn-primary border border-dark" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button" aria-controls="offcanvasfilter">Filtrer</a>
+    <a class="btn btn-primary border border-dark mt-4 mb-2" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button" aria-controls="offcanvasfilter">Filtrer</a>
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasFilterLabel">Filtrer</h5>
@@ -24,11 +24,7 @@
                                 <input class="btn-check" type="checkbox" value="{{ key }}" name="list" id="listSelectCheck" {% if listSort == key %} checked {% endif %}>
                                 <label class="btn btn-outline-primary" for="listSelectCheck">{{ value }}</label>
                             {% endfor %}
-                            {# {% if node.field_mycheckbox.value == '1' %}
-                                <div class="">
-                            {% else %}
-                                <div class="d-none">
-                            {% endif %}  #}
+
                                 <select class="form-select m-1" id="listSelect" name="listSelect" aria-label="itemsSelect">
                                 <option value="">---</option>
                                 {% for item in listNames %}

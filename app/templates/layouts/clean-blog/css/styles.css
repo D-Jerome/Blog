@@ -10616,16 +10616,16 @@ blockquote {
     background: transparent;
   }
   #mainNav .navbar-brand {
-    color: #fff;
+    color: #111;
   }
   #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--bs-primary-rgb), 0.8);
   }
   #mainNav .navbar-nav > li.nav-item > a.nav-link {
-    color: #fff;
+    color: #111;
   }
   #mainNav .navbar-nav > li.nav-item > a.nav-link:focus, #mainNav .navbar-nav > li.nav-item > a.nav-link:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--bs-primary-rgb), 0.8);
   }
 }
 @media (min-width: 992px) {
