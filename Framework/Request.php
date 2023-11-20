@@ -35,7 +35,8 @@ class Request
      */
     public function __construct(string $baseUrl)
     {
-        $this->params = $_GET ?: $_POST;
+
+        $this->params = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $this->uri = str_replace($baseUrl, '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         $this->method = $_SERVER['REQUEST_METHOD'];
 
