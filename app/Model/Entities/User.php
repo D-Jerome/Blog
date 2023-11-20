@@ -192,7 +192,6 @@ class User extends Entity
      * @param string $name
      *
      * @return void
-     *
      */
     public function setRoleName(string $name):void
     {

@@ -26,7 +26,7 @@ class PDOConnection
     /**
      * getInstance : create instance pdo if no set
      *
-     * @param array<string, string> $datasource Database connection informations from config file
+     * @param  array<string, string> $datasource Database connection informations from config file
      * @return PDO
      */
     public static function getInstance(array $datasource)

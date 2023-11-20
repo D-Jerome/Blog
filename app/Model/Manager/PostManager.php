@@ -11,13 +11,19 @@ use Framework\PDOConnection;
 use Framework\Request;
 use PDO;
 
+/**
+ * Post Model
+ *
+ * @package App\Model\Manager
+ * @author  Jdubus <dubus.jerome@gmail.com>
+ */
 class PostManager extends BaseManager
 {
 
     /**
-     * __construct
+     * [ __construct]
      *
-     * @param array<string, string> $datasource Database connection informations from config file
+     * @param  array<string, string> $datasource Database connection informations from config file
      * @return void
      */
     public function __construct(array $datasource)
@@ -27,9 +33,9 @@ class PostManager extends BaseManager
 
 
     /**
-     * getCategoriesById : all Categories of post
+     * GetCategoriesById : all Categories of post
      *
-     * @param int $id Id of post
+     * @param  int $id Id of post
      * @return array<Category>
      */
     public function getCategoriesById(int $id): array
@@ -49,9 +55,9 @@ class PostManager extends BaseManager
 
 
     /**
-     * getPostsbyCategory : get all posts linked to Category selected
+     * [getPostsbyCategory] : get all posts linked to Category selected
      *
-     * @param Category $category Category object
+     * @param  Category $category Category object
      * @return array<Post>|string
      */
     public function getPostsbyCategory(Category $category): array|string
@@ -71,9 +77,16 @@ class PostManager extends BaseManager
         $statementByCategories = $query->fetchAll();
         foreach ($statementByCategories as $statementByCategory) {
 
-            $statementByCategory->categories =  $this->getCategoriesById($statementByCategory->id);
-            $statementByCategory->countComments = (int)$this->getCountCommentsByPostId($statementByCategory->id);
-            $statementByCategory->username =  ($this->getPostUsername($statementByCategory->getUserId()));
+            $statementByCategory->categories =  $this->getCategoriesById(
+                $statementByCategory->getId()
+            );
+            $statementByCategory->countComments = (int)$this->getCountCommentsByPostId(
+                $statementByCategory->getId()
+            );
+            $statementByCategory->username =  ($this->getPostUsername(
+                $statementByCategory->getUserId()
+            )
+            );
 
         }//end foreach
 
@@ -83,9 +96,9 @@ class PostManager extends BaseManager
 
 
     /**
-     * getCountCommentsByPostId : count comments of post
+     * [getCountCommentsByPostId] : count comments of post
      *
-     * @param int $id Post id
+     * @param  int $id Post id
      * @return int
      */
     public function getCountCommentsByPostId(int $id): int
@@ -103,9 +116,9 @@ class PostManager extends BaseManager
 
 
     /**
-     * getPostUsername : get username from user_id
+     * [getPostUsername] : get username from user_id
      *
-     * @param int $id User id
+     * @param  int $id User id
      * @return string
      */
     public function getPostUsername(int $id): string
@@ -123,10 +136,10 @@ class PostManager extends BaseManager
 
 
     /**
-     * verifyCouple : verify the existance of a post with id and slug pass in address
+     * [verifyCouple] : verify the existance of a post with id and slug pass in address
      *
-     * @param int $id id of post
-     * @param string $slug Slug of post
+     * @param  int    $id   id of post
+     * @param  string $slug Slug of post
      * @return int
      */
     public function verifyCouple(int $id, string $slug): int
@@ -147,16 +160,22 @@ class PostManager extends BaseManager
 
 
     /**
-     * insertNewPost : Create a new post (unpublished post)
+     * [insertNewPost] : Create a new post (unpublished post)
      *
-     * @param array<string, string|array<int, string>> $params Information to create a new post
+     * @param  array<string, string|array<int, string>> $params Information to create a new post
      * @return void
      */
     public function insertNewPost(array $params): void
     {
         $query = $this->dbConnect->prepare(
             '
-            INSERT INTO ' . $this->table . '(name , slug, content, created_at, user_id)
+            INSERT INTO ' . $this->table . '(
+                name , 
+                slug, 
+                content, 
+                created_at, 
+                user_id
+                )
             VALUES (:name , :slug , :content, :created_at, :user_id)
             '
         );
@@ -195,7 +214,7 @@ class PostManager extends BaseManager
 
 
     /**
-     * unpublish : unpublish post
+     * [unpublish] : unpublish post
      *
      * @param  int $id Post id
      * @return void
@@ -217,7 +236,7 @@ class PostManager extends BaseManager
 
 
     /**
-     * publish : publish post
+     * [publish] : publish post
      *
      * @param  int $id Post id
      * @return void

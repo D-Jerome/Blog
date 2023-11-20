@@ -208,7 +208,6 @@ class Comment extends Entity
      * @param string $name Name to set
      *
      * @return void
-     *
      */
     public function setUsername(string $name): void
     {

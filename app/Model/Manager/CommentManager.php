@@ -136,7 +136,7 @@ class CommentManager extends BaseManager
     /**
      * verifyCouple : verify the existance of a couple post and comment pass in address
      *
-     * @param  int $postId Post id
+     * @param  int $postId    Post id
      * @param  int $commentId Comment id
      * @return int
      */

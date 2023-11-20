@@ -9,7 +9,6 @@ use PDO;
 
 abstract class BaseManager
 {
-
     /**
      * Database connector
      *
@@ -35,9 +34,9 @@ abstract class BaseManager
     /**
      * __construct
      *
-     * @param string $table Name of the table to query database
-     * @param string $objectName Name of object to return information
-     * @param array<string, string> $datasource Database connection informations
+     * @param  string                $table      Name of the table to query database
+     * @param  string                $objectName Name of object to return information
+     * @param  array<string, string> $datasource Database connection informations
      * @return void
      */
     public function __construct(string $table, string $objectName, array $datasource)
@@ -107,11 +106,11 @@ abstract class BaseManager
     /**
      * getAllOrderLimit : get paged Posts
      *
-     * @param  null|string $field Name of field to order
-     * @param  null|string $dir Direction of order
-     * @param  null|int $limit Number of posts by page
-     * @param  null|int $page Current page
-     * @param  null|array<string, int|string|bool > $params Differents parameters for WHERE clause
+     * @param null|string                          $field  Name of field to order
+     * @param null|string                          $dir    Direction of order
+     * @param null|int                             $limit  Number of posts by page
+     * @param null|int                             $page   Current page
+     * @param null|array<string, int|string|bool > $params Differents parameters for WHERE clause
      *
      * @return array<object>
      */
@@ -120,13 +119,13 @@ abstract class BaseManager
         $sql = 'SELECT * FROM ' . $this->table;
         if (!empty($params)) {
             $sql .= ' WHERE ';
-            $i = FALSE;
+            $i = false;
             foreach ($params as $k => $value) {
-                if ($i === TRUE) {
+                if ($i === true) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
-                $i = TRUE;
+                $i = true;
             }
         }//end if
 
@@ -155,54 +154,54 @@ abstract class BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  null|string $field Name of field to order
-     * @param  null|string $dir Direction of order
-     * @param  null|int $limit Number of posts by page
-     * @param  null|int $page Current page
+     * @param  null|string                 $field  Name of field to order
+     * @param  null|string                 $dir    Direction of order
+     * @param  null|int                    $limit  Number of posts by page
+     * @param  null|int                    $page   Current page
      * @param  array<string, string|bool > $params Differents parameters for WHERE clause
-     * @param  null|int $listId Id of List item to filter
+     * @param  null|int                    $listId Id of List item to filter
      * @return array<object>
      */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId) : array
+    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
 
         $sql = 'SELECT '. $this->table.'.* FROM ' . $this->table;
-        switch ($this->table){
-            case 'post':
-                $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
-                break;
-            case 'user':
-                $sql .= ' INNER JOIN role ON role.id = user.id ';
-                break;
-            case 'comment':
-                break;
+        switch ($this->table) {
+        case 'post':
+            $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
+            break;
+        case 'user':
+            $sql .= ' INNER JOIN role ON role.id = user.id ';
+            break;
+        case 'comment':
+            break;
         }
 
 
-        if (!empty($params) === TRUE) {
+        if (!empty($params) === true) {
             $sql .= ' WHERE ';
-            $i = FALSE;
+            $i = false;
             foreach ($params as $k => $value) {
-                if ($i === TRUE) {
+                if ($i === true) {
                     $sql .= ' AND ';
                 }
                 $sql .= $k .' = '. $value;
-                $i = TRUE;
+                $i = true;
             }
         }
         switch ($this->table) {
-            case 'post':
-                if ($listId !== null) {
-                    $sql .= ' AND pc.category_id = ' . $listId;
-                }
-                break;
-            case 'user':
-                if ($listId !== null) {
-                    $sql .= ' AND role.id = ' . $listId;
-                }
-                break;
-            case 'comment':
-                break;
+        case 'post':
+            if ($listId !== null) {
+                $sql .= ' AND pc.category_id = ' . $listId;
+            }
+            break;
+        case 'user':
+            if ($listId !== null) {
+                $sql .= ' AND role.id = ' . $listId;
+            }
+            break;
+        case 'comment':
+            break;
         }
 
 
@@ -234,7 +233,7 @@ abstract class BaseManager
     /**
      * insert : insert data in database
      *
-     * @param  object $obj
+     * @param  object                $obj
      * @param  array<string, string> $param
      * @return void
      * @throws PropertyNotFoundException
@@ -261,8 +260,8 @@ abstract class BaseManager
     /**
      * update : update data of an object
      *
-     * @param object $obj
-     * @param array<string,string> $param
+     * @param  object               $obj
+     * @param  array<string,string> $param
      * @return void
      * @throws PropertyNotFoundException
      */
@@ -312,9 +311,9 @@ abstract class BaseManager
         try {
             $query = $this->dbConnect->prepare("DELETE FROM " . $this->table . " WHERE id= ?");
             $query->execute([$id]);
-            return TRUE;
+            return true;
         } catch (\Exception $e) {
-            return FALSE;
+            return false;
         }
     }
 
