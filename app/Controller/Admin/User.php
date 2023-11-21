@@ -27,7 +27,6 @@ class User extends BaseController
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();
-
         $sqlParams = [];
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
@@ -38,8 +37,15 @@ class User extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-
+        if ($httpParams['listSortSelect'] === null) {
             $statementUsers = $users->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        } else {
+            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+        }
+
+        foreach ($statementUsers as $statementUser){
+            $statementUser->setRoleName($users->getRoleById($statementUser->getRoleId()));
+        }
 
         $this->view(
             'backoffice/admin.users.html.twig',

@@ -24,7 +24,7 @@
                     {% endif %}
                     " id="{{ post.id }}">
                     <div class="row g-0 align-items-center">
-                        <div class="card-body col-md-10">
+                        <div class="card-body col-10">
                             <div class="text-bg-primary d-block rounded p-2">
                                 <h5 class="card-title">{{ post.name }}</h5>
                                 <p class="card-subtitle mt-2">Créé le {{ post.createdAt | format_datetime('short','none',locale='fr') }} par {{ post.username }}</p>
@@ -37,24 +37,26 @@
                             </div>    
                             <p class="card-text">{{ post.excerptContent | raw }}</p>
                         </div>
-                        <div class="col-md-2">
-                            <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
-                            <div class="dropstart">
-                                <a class="btn btn-danger dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-trash-can fa-xl"></i>
+                        <div class="col-2">
+                            <div class ="d-inline">
+                                <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                            </div>
+                            <div class="dropstart mt-3 d-inline-block">
+                                <a class="col dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-trash-can fa-xl" style="color: var(--bs-danger);"></i>
                                 </a>
-                                <div class="dropdown-menu p-4">
+                                <div class="dropdown-menu dropdown-menu-dark p-4">
                                     <div class="mb-3">
                                         Confirmation de suppression?
                                     </div>
                                     <a href="#" class="btn btn-primary d-block" role="button">Annuler</a>
-                                    <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4">Confirmer</a>
+                                    <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4 d-block">Confirmer</a>
                                 </div>
                             </div>
-                        </div>
+                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
-    </main>                
+    </main>               
 {% endblock %}

@@ -26,7 +26,6 @@ class Post extends BaseController
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
-
         $sqlParams = [];
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
@@ -308,6 +307,7 @@ class Post extends BaseController
      * unpublishPost
      *
      * @param  int $id
+     * @params array<string,int|string> page filter option
      * @return void
      */
     public function unpublishPost(int $id): void

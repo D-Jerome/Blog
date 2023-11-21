@@ -26,7 +26,6 @@ class Comment extends BaseController
 
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
-
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
 
@@ -64,6 +63,7 @@ class Comment extends BaseController
             [
             'comments' => $statementComments,
             'posts' => $statementPosts,
+            'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
             'sortDir' => $httpParams['sortDir'],
             'sortBy' => $httpParams['sortBy'],

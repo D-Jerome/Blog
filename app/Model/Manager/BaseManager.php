@@ -145,7 +145,7 @@ abstract class BaseManager
                 $sql .= ' OFFSET ' .  $offset;
             }
         }//end if
-
+       
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
@@ -172,7 +172,7 @@ abstract class BaseManager
             $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
             break;
         case 'user':
-            $sql .= ' INNER JOIN role ON role.id = user.id ';
+            $sql .= ' INNER JOIN role ON role.id = user.role_id ';
             break;
         case 'comment':
             break;
@@ -316,6 +316,53 @@ abstract class BaseManager
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+
+    /**
+     * [unpublish] : unpublish post
+     *
+     * @param  int $id Post id
+     * @return void
+     */
+    public function unpublish(int $id): void
+    {
+        $query = $this->dbConnect->prepare(
+            '
+            UPDATE ' . $this->table . '
+            SET
+                publish_state = false
+            WHERE id = :id
+        '
+        );
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->execute();
+    }
+
+
+    /**
+     * [publish] : publish post
+     *
+     * @param  int $id Post id
+     * @return void
+     */
+    public function publish(int $id): void
+    {
+        $query = $this->dbConnect->prepare(
+            '
+            UPDATE ' . $this->table . '
+            SET
+                publish_state = true,
+                publish_at = :publish_at
+            WHERE id = :id
+        '
+        );
+        $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $query->setFetchMode(PDO::FETCH_DEFAULT);
+        $query->bindParam(':id', $id);
+        $query->bindParam(':publish_at', $now);
+        $query->execute();
     }
 
 }

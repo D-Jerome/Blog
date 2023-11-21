@@ -12,12 +12,14 @@
             <form action="" method="get">
                 <div class="container-fluid btn-group ">
                     <div >
+                        <p>Trier par:</p>
                         <div class="btn-group-vertical border border-light gap-1" role="group" aria-label="Vertical radio toggle button group">
                         {% for key, value in sort %}
                                 <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}"{% if sortBy == key %} checked {% endif %}>
                                 <label class="btn btn-outline-primary" for="sort-{{ key }}">{{ value }}</label>
                         {% endfor %}
                         </div>
+                        <p>Filtrer par:  </p>
                         <div class="btn-group-vettical border border-light gap-1" role="button" aria-label="basic radio toggle button group">
                         {% if listSelect %}
                             {% for key, value in listSelect %}
@@ -34,6 +36,7 @@
                             {# </div> #}
                         {% endif %}
                         </div>
+                        <p>Sens:</p>
                         <div class="btn-group m-1">
                         {% if dir %}
                             <div class="btn-group gap-1" role="group" aria-label="Basic radio toggle button group">
@@ -45,7 +48,7 @@
                         {% endif %}
                         </div>
 
-                        <div class=" mt-2 text-center" >
+                        <div class=" mt-5 text-center" >
                             <button type="submit" class="btn btn-outline-success w-100">Valider</button>
                         </div> 
                     </div>

@@ -16,7 +16,7 @@ class Role extends Entity
      *
      * @var string|null
      */
-    protected ?string $role;
+    protected ?string $name;
 
 
     /**
@@ -35,9 +35,9 @@ class Role extends Entity
      *
      * @return string
      */
-    public function getRole(): string
+    public function getName(): string
     {
-        return $this->role;
+        return $this->name;
     }
 
 

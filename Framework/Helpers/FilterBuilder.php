@@ -23,14 +23,16 @@ class FilterBuilder
     private array $dir;
 
     /**
-     * table and field to filter the list
+     * Table and field to filter the list
+     *  Object => field
      *
      * @var array<string,string>|null $list
      */
     private ?array $list = null ;
 
     /**
-     * name of the list
+     * Name of the list
+     * param Item of object => Name display
      *
      * @var array<string,string>|null $listSelect
      */

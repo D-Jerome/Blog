@@ -42,19 +42,19 @@ class UserManager extends BaseManager
      * getRoleById : get Role object of the user-role-id
      *
      * @param  int $id Id of the Role of the user
-     * @return Role
+     * @return string
      */
-    public function getRoleById(int $id): Role
+    public function getRoleById(int $id): string
     {
         $statement = $this->dbConnect->prepare(
             '
-            SELECT r.* FROM role r
+            SELECT r.name FROM role r
             WHERE r.id = ?
             '
         );
-        $statement->setFetchMode(PDO::FETCH_CLASS, Role::class);
+        // $statement->setFetchMode(PDO::FETCH_CLASS, Role::class);
         $statement->execute([$id]);
-        return $statement->fetch();
+        return $statement->fetchColumn();
     }
 
 

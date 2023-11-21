@@ -13,41 +13,43 @@
             </div>
         </div>
     </div>
-</header> 
- 
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Titre</th>
-                        <th scope="col">Contenu</th>
-                        <th scope="col">Créé le </th>
-                        <th scope="col">Par</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for post in posts %}
-                    {% if post.publishState != false %}
-                        <tr id="{{ post.id }}">
-                    {% else %}
-                        <tr id="{{ post.id }}" class="table-danger" >
+</header>
+    <main role="main" class="site-content">
+        <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
+            {% for post in posts %}
+                <div class="card m-2 col-12
+                    {% if post.publishState == false %}
+                        bg-danger-subtle
                     {% endif %}
-                        <th scope="row">{{ post.id }}</th>
-                        <td>{{ post.name | raw}}</td>
-                        <td><div class="clearfix">{{ post.excerptContent | raw }}</div></td>
-                        <td>{{ post.createdAt | format_datetime(locale='fr') }}</td>
-                        <td>{{ post.username }}</td>
-                        <td>
-                            <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="btn " title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
-                            {% if post.publishState != false %}
-                                <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="btn " title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
-                            {% else %}
-                                <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="btn" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+                    " id="{{ post.id }}">
+                     <div class="row g-0 align-items-center">
+                        <div class="card-body col-10">
+                            <h5 class="card-title text-primary">{{ post.name | raw}}</h5>
+                            <h6 class="card-subtitle mb-2">Créé le {{ post.createdAt | format_datetime('short','none',locale='fr') }} par {{ post.username }} </h6>
+                                {% if post.createdAt != post.ModifiedAt %} 
+                                    <h6 class="card-subtitle mb-2 ">Dernière modification {{ post.modifiedAt | format_datetime('short','none',locale='fr') }}</h6>
+                                {% endif %}
+                                {% if post.publishAt != null %}
+                                    <h6 class="card-subtitle mb-2 ">Publié le {{ post.publishdAt | format_datetime('short','none',locale='fr') }}</h6>
+                                {% endif %}
+                            <p class="card-text">{{ post.excerptContent | raw }}</p>
+                        </div>
+                        <div class="col-2">
+                            <div class ="d-inline">
+                                <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                            </div>
+                            <div class="dropstart mt-3 d-inline-block">
+                                {% if post.publishState != false %}
+                                    <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                {% else %}
+                                    <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main> 
+           
 {% endblock %}

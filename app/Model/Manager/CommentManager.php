@@ -79,7 +79,7 @@ class CommentManager extends BaseManager
             WHERE user.id = ?
         '
         );
-     
+
         $query->execute([$id]);
         return $query->fetchColumn();
     }
@@ -156,48 +156,4 @@ class CommentManager extends BaseManager
         return $query->rowCount();
     }
 
-
-    /**
-     * unpublish : Unpublish comment
-     *
-     * @param  int $id Id of comment to unpublish
-     * @return void
-     */
-    public function unpublish(int $id): void
-    {
-
-        $query = $this->dbConnect->prepare(
-            '
-            UPDATE ' . $this->table . '
-            SET
-                publish_state = false
-            WHERE id = :id
-            '
-        );
-        $query->setFetchMode(PDO::FETCH_DEFAULT);
-        $query->bindParam(':id', $id);
-        $query->execute();
-    }
-
-
-    /**
-     * publish: Publish comment
-     *
-     * @param  int $id Id of comment to publish
-     * @return void
-     */
-    public function publish(int $id): void
-    {
-        $query = $this->dbConnect->prepare(
-            '
-            UPDATE ' . $this->table . '
-            SET
-                publish_state = true
-            WHERE id = :id
-            '
-        );
-        $query->setFetchMode(PDO::FETCH_DEFAULT);
-        $query->bindParam(':id', $id);
-        $query->execute();
-    }
 }

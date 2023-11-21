@@ -61,17 +61,17 @@
                 "active" : "Actif"
             },
             "listSelect" : {
-                "roleName"  : "Role"
+                "role"  : "Role"
             },
             "list" : {
-                "Role" : "role"
+                "Role" : "name"
             }
         },
         "admin.comment" : {
             "sort" : {
                 "user" : "utilisateur",
                 "PublishAt" : "Publié le",
-                "PublihState": "Publié",
+                "PublishState": "Publié",
                 "ModifiedAt": "Dernière modification"
             },
             "listSelect" : {},

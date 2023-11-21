@@ -51,8 +51,8 @@
                         Role:
                         {% for role in roles %}
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" value="{{ role.id }}" name="roleId" id="rol-{{ role.role }}-{{ role.id }}">
-                                <label class="form-check-label" for="rol-{{ role.role }}-{{ role.id }}">{{ role.role }}</label>
+                                <input class="form-check-input" type="radio" value="{{ role.id }}" name="roleId" id="rol-{{ role.name }}-{{ role.id }}">
+                                <label class="form-check-label" for="rol-{{ role.name }}-{{ role.id }}">{{ role.name }}</label>
                             </div>
                             {% endfor %}    
                         </div>  

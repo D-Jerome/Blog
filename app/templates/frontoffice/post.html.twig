@@ -3,7 +3,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}             
-            <header class="masthead" style="background-image: url('/blog-project/public/img/home-bg.jpg')">
+        <header class="masthead" style="background-image: url('/blog-project/public/img/home-bg.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -22,22 +22,21 @@
                 </div>
             </div>
         </header>
-            
-            
+        <main role="main" class="site-content">
             <article class="mb-4">            
                 <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="col-md-12 col-lg-11 col-xl-10">
                         {{ post.content|raw}}
                     </div>
                 </div>
             </article>
             {% if comments %}
-            <h2> Commentaires </h2>
+            <h2 class="text-center"> Commentaires </h2>
             {% endif %}
             {% for comment in comments %}
                 {% if comment.publishState == true %}
-                    <div class="col">            
-                        <div class="card mb-3 bg-white bg-gradient ">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">            
+                        <div class="card col-10 mb-3 bg-white bg-gradient ">
                             <div class="card-body">
                                 <p class="car-title badge text-bg-primary">par {{ comment.username }} le {{ comment.createdAt | format_datetime(locale='fr')}}</p>
                                 <p class="card-text img-fluid">{{ comment.content | raw }} </p>
@@ -59,10 +58,15 @@
                 {% endif %}    
 
             {% endfor %}
-            <a href="/blog-project/admin/comment/add/{{ post.slug }}/{{ post.id }}" class="btn btn-primary mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-10 mb-3 ">
+                    <a href="/blog-project/admin/comment/add/{{ post.slug }}/{{ post.id }}" class="btn btn-primary d-block mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
+                </div>
+            </div>
             <div class="container col-4 bg-danger-subtle {% if authUser.id != false %} invisible {% endif %} rounded border border-dark">
                 <a href="/blog-project/signup" class="btn btn-warning  btn-outline-primary mx-auto p-2 mt-3 w-100" >Inscrivez-vous</a>      
                 <div class="col-1 mx-auto p-2">ou</div>
                 <a href="/blog-project/login" class="btn btn-warning btn-outline-primary mx-auto p-2 mb-3 w-100">Identifiez-vous</a>
             </div>
+        </main>   
 {% endblock %}

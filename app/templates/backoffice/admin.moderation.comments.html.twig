@@ -14,39 +14,44 @@
         </div>
     </div>
 </header> 
-
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Extrait</th>
-                        <th scope="col">Créé le </th>
-                        <th scope="col">Par</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for comment in comments %}
-                        {% if comment.publishState != false %}
-                            <tr id="{{ comment.id }}">
-                        {% else %}
-                            <tr id="{{ comment.id }}" class="table-danger" >
-                        {% endif %}
-                        <th scope="row">{{ comment.id }}</th>
-                        <td>{{ comment.excerptContent | raw }}</td>
-                        <td>{{ comment.createdAt | format_datetime(locale='fr') }}</td>
-                        <td>{{ comment.username }}</td>
-                        <td>
-                            <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Modifier"><i class="fa-solid fa-pen-to-square"></i></a>
-                            {% if comment.publishState != false %}
-                                <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
-                                </td>
-                            {% else %}
-                                <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="btn " title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+<main role="main" class="site-content">
+        <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
+            {% for comment in comments %}
+                <div class="card m-2 col-12
+                    {% if comment.publishState == false %}
+                        bg-danger-subtle
+                    {% endif %}
+                    " id="{{ comment.id }}">
+                     <div class="row g-0 align-items-center">
+                        <div class="card-body col-10">
+                            <h6 class="card-subtitle mb-2">Créé le {{ comment.createdAt | format_datetime('short','none',locale='fr') }} par {{ comment.username }} </h6>
+                                {% if comment.createdAt != comment.ModifiedAt %} 
+                                    <h6 class="card-subtitle mb-2 ">Dernière modification {{ comment.modifiedAt | format_datetime('short','none',locale='fr') }}</h6>
+                                {% endif %}
+                                {% if comment.publishAt != null %}
+                                    <h6 class="card-subtitle mb-2 ">Publié le {{ post.publishdAt | format_datetime('short','none',locale='fr') }}</h6>
+                                {% endif %}
+                            <p class="card-text">{{ comment.excerptContent | raw }}</p>
+                        </div>
+                        <div class="col-2">
+                            <div class ="d-inline">
+                                 {% for post in posts %}
+                                    {% if comment.postId == post.id %}
+                                        <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="dropstart mt-3 d-inline-block">
+                                {% if comment.publishState != false %}
+                                    <a href="/blog-project/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                {% else %}
+                                    <a href="/blog-project/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
 {% endblock %}

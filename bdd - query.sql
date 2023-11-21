@@ -16,7 +16,7 @@ CREATE TABLE category (
 
 CREATE TABLE role (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    role VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -48,7 +48,6 @@ CREATE TABLE post (
     user_id INT UNSIGNED NOT NULL,
     publish_state BOOL NOT NULL DEFAULT FALSE,
     publish_at DATETIME,
-    publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_post
         FOREIGN KEY (user_id)
@@ -88,7 +87,6 @@ CREATE TABLE comment (
     modified_at DATETIME,
     publish_state BOOL NOT NULL DEFAULT FALSE,
     publish_at DATETIME,
-    publish_user_id INT UNSIGNED,
     PRIMARY KEY (id),
     CONSTRAINT fk_user_comment
         FOREIGN KEY (user_id)

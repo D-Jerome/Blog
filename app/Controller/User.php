@@ -33,7 +33,7 @@ class User extends BaseController
 
         if (password_verify($this->getRoute()->getParams()['password'], $user->getPassword())) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
-            $user->setRoleName(($users->getRoleById($user->getRoleId()))->getRole());
+            $user->setRoleName($users->getRoleById($user->getRoleId()));
             $this->session->connect($user);
             header('Location: /blog-project/admin/logged');
 
