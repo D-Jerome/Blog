@@ -8,23 +8,26 @@ Créez votre premier blog en PHP
 Descriptif du besoin
 Voici la liste des pages qui devront être accessibles depuis votre site web :
 
-Installer le projet
-Mettre en place la Base de données
-Cloner le projet
-Télécharger les différentes librairies et installer dans le dossier public/dist (possibilité d'installer par composer, mais doit être déplacé)
-Bootstrap
-AON (animate on scroll)
-Jquery
-Chart.Js
-Progressbar.js
-Installer les différentes dependances
-JWT/firebase
-Twig
-Inscrivez-vous, passer vos droits d'administration à 1. And enjoy it !
-Modéle MVC
-Utilisation du modéle MVC d'un de mes projets personnels :
+    -Installer le projet
+    -Mettre en place la Base de données
+    -Cloner le projet
+    Projet basé sur Bootstrap (pas d'installation referencé par cdn)
+    le fichier composer contient les differentes dépendances:
+        -Twig + 
+    
+    -Télécharger les différentes librairies et installer par composer
+        - tinyMce
+        - twig + Extra-bundle + intl-extra
+        - phpmailer
+    
+    
 
-Damien Valade - Eitri - Projet
 
-Auteur
-Damien Valade - OC-P5-Blog - DamienValade
+    Marche à suivre pour tester le fonctionnement:
+        - Inscrivez-vous ( Role visiteur à l'inscription)
+        - Dans la base de données , exécutez la requete suivante:
+            " UPDATE TABLE user set role_id = 1 WHERE username = " Puis mettre votre identifiant
+
+
+
+
