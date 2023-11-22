@@ -98,7 +98,7 @@ final class Application
             header('Location: '. self::getBaseUrl() .'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
-        } 
+        }
     }
 
 

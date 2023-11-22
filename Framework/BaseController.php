@@ -75,7 +75,9 @@ class BaseController
      */
     protected function view(string $template, array $params): void
     {
-        echo $this->twig->render($template, $params);
+        ob_start();
+           echo $this->twig->render($template, $params);
+        ob_end_flush();
     }
 
 

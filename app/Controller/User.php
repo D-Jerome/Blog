@@ -14,21 +14,23 @@ class User extends BaseController
     /**
      * loginAuth : Verifiy password match
      *
-     * @return
+     * @return void
      */
-    public function loginAuth()
+    public function loginAuth(): void
     {
         $users = (new UserManager(Application::getDatasource()));
         $user = $users->getByUsername($this->getRoute()->getParams()['login']);
 
         if (null === ($user)) {
             $user = [];
-            return $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
+            $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
+            exit;
         }
 
         if (false === ($user->getActive())) {
             $user = [];
-            return $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => true, 'authUser' => $user]);
+            $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => true, 'authUser' => $user]);
+            exit;
         }
 
         if (password_verify($this->getRoute()->getParams()['password'], $user->getPassword())) {
@@ -38,7 +40,7 @@ class User extends BaseController
             header('Location: '. Application::getBaseUrl() .'/admin/logged');
 
         } else {
-            return $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
+            $this->view('frontoffice/login.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'login' => false, 'authUser' => $user]);
         }//end if
 
     }

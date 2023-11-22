@@ -41,14 +41,13 @@ class PostManager extends BaseManager
      */
     public function getCategoriesById(int $id): array
     {
-        $statement = $this->dbConnect->prepare(
-            '
+        $sql = <<<SQL
             SELECT c.* FROM category c
             INNER JOIN post_category pc ON pc.category_id = c.id
             INNER JOIN post p ON pc.post_id = p.id
             WHERE p.id = ?
-            '
-        );
+        SQL;
+        $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_CLASS, Category::class);
         $statement->execute([$id]);
         return $statement->fetchAll();
@@ -63,16 +62,14 @@ class PostManager extends BaseManager
      */
     public function getPostsbyCategory(Category $category): array|string
     {
-
-        $query = $this->dbConnect->prepare(
-            '
+        $sql = <<<SQL
             SELECT p.* FROM post p
             INNER JOIN post_category pc ON pc.post_id = p.id
             WHERE pc.category_id = ? and p.publish_state = true
             ORDER BY p.created_at DESC
             LIMIT 3
-            '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $query->execute([$category->getId()]);
         $statementByCategories = $query->fetchAll();
@@ -104,13 +101,12 @@ class PostManager extends BaseManager
      */
     public function getCountCommentsByPostId(int $id): int
     {
-        $statement = $this->dbConnect->prepare(
-            '
+        $sql = <<<SQL
             SELECT (com.id) FROM comment com
             INNER JOIN post p ON com.post_id = p.id
             WHERE com.publish_state = true and p.id = ?
-            '
-        );
+        SQL;
+        $statement = $this->dbConnect->prepare($sql);
         $statement->execute([$id]);
         return $statement->rowcount();
     }
@@ -124,12 +120,11 @@ class PostManager extends BaseManager
      */
     public function getPostUsername(int $id): string
     {
-        $query = $this->dbConnect->prepare(
-            '
+        $sql = <<<SQL
             SELECT username FROM user
             WHERE user.id = ?
-        '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->execute([$id]);
         return $query->fetchColumn();
     }
@@ -144,13 +139,11 @@ class PostManager extends BaseManager
      */
     public function verifyCouple(int $id, string $slug): int
     {
-
-        $query = $this->dbConnect->prepare(
-            '
-            SELECT id FROM ' . $this->table . '
+        $sql = <<<SQL
+            SELECT id FROM $this->table
             WHERE id = :id AND slug = :slug
-        '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->bindParam(':slug', $slug);
@@ -167,18 +160,17 @@ class PostManager extends BaseManager
      */
     public function insertNewPost(array $params): void
     {
-        $query = $this->dbConnect->prepare(
-            '
-            INSERT INTO ' . $this->table . '(
-                name , 
-                slug, 
-                content, 
-                created_at, 
+        $sql = <<<SQL
+            INSERT INTO $this->table (
+                name,
+                slug,
+                content,
+                created_at,
                 user_id
                 )
             VALUES (:name , :slug , :content, :created_at, :user_id)
-            '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
 
         $slug = Text::toSlug($params['name']);
         $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
@@ -194,12 +186,11 @@ class PostManager extends BaseManager
         if (isset($params['categoryId'])) {
             $categories = $params['categoryId'];
             foreach ($categories as $category) {
-                $query = $this->dbConnect->prepare(
-                    '
+                $sql = <<<SQL
                     INSERT INTO post_category (post_id, category_id)
                     VALUES (:post_id , :category_id)
-                    '
-                );
+                SQL;
+                $query = $this->dbConnect->prepare($sql);
                 $query->bindParam(':post_id', $postId);
                 $query->bindParam(':category_id', $category);
                 $query->execute();

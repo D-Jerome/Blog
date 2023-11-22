@@ -50,7 +50,7 @@ class FilterBuilder
      * __construct : Construct filter data
      *
      * @param string $typeObj : Name of the object to list
-     * @param string|array<string, bool|int|string|array<string, string|array<string, string>|null>> $config
+     * @param array<string, bool|int|string|array<string, string|array<string, string>|null>> $config
      *
      * @return void
      */

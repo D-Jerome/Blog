@@ -12,11 +12,11 @@ class Error extends BaseController
     /**
      * __construct
      *
-     * @return 
+     * @return void
      */
-    public function error404()
+    public function error404(): void
     {
-        return $this->view('frontoffice/404.html.twig',[]);
+        $this->view('frontoffice/404.html.twig',[]);
 
     }
 

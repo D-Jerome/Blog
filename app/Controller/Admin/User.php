@@ -144,6 +144,7 @@ class User extends BaseController
     {
         (new UserManager(Application::getDatasource()))->enable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users#'.$id);
+        exit;
     }
 
 
@@ -175,7 +176,7 @@ class User extends BaseController
     public function addedUser(): void
     {
         $user = new UserManager(Application::getDatasource());
-        $request = new Request(Application::$baseUrl .'/');
+        $request = new Request(Application::getBaseUrl() .'/');
 
         $return = $user->insertNewUser($request->getParams());
         //verif si pas erreur

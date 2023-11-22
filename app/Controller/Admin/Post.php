@@ -31,11 +31,7 @@ class Post extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
-        if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
-            $count = count($posts->getAllPublish());
-        } else {
-            $count = count($posts->getAll());
-        }//enf id
+        $count = count($posts->getAll());
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
@@ -255,11 +251,7 @@ class Post extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
-        if (array_search('publish_state', $sqlParams) && $sqlParams['publish_state']) {
-            $count = count($posts->getAllPublish());
-        } else {
-            $count = count($posts->getAll());
-        }//enf id
+        $count = count($posts->getAll());
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();

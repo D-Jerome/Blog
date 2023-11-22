@@ -56,8 +56,12 @@ abstract class BaseManager
      */
     public function getById($id): object
     {
-
-        $query = $this->dbConnect->prepare('SELECT * FROM '. $this->table .' WHERE id = ?');
+        $sql = <<<SQL
+                SELECT *
+                FROM $this->table
+                WHERE id = ?
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute([$id]);
         return $query->fetch();
@@ -71,7 +75,10 @@ abstract class BaseManager
      */
     public function getAll(): array
     {
-        $query = $this->dbConnect->prepare("SELECT * FROM ". $this->table);
+        $sql = <<<SQL
+                SELECT * FROM $this->table
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
@@ -85,7 +92,10 @@ abstract class BaseManager
      */
     public function getAllToList(string $field): array
     {
-        $query = $this->dbConnect->prepare('SELECT id, '.($field).' FROM '. ($this->table));
+        $sql = <<<SQL
+                SELECT id, $field FROM $this->table
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -98,7 +108,11 @@ abstract class BaseManager
      */
     public function getAllPublish(): array
     {
-        $query = $this->dbConnect->prepare("SELECT * FROM ". $this->table ." WHERE publish_state = true");
+        $sql = <<<SQL
+                SELECT * FROM $this->table
+                WHERE publish_state = true
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
@@ -117,7 +131,7 @@ abstract class BaseManager
      */
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
-        $sql = 'SELECT * FROM ' . $this->table;
+        $sql = 'SELECT * FROM ' . $this->table ;
         if (!empty($params)) {
             $sql .= ' WHERE ';
             $i = false;
@@ -327,14 +341,12 @@ abstract class BaseManager
      */
     public function unpublish(int $id): void
     {
-        $query = $this->dbConnect->prepare(
-            '
-            UPDATE ' . $this->table . '
-            SET
-                publish_state = false
+        $sql = <<<SQL
+             UPDATE $this->table
+            SET publish_state = false
             WHERE id = :id
-        '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
@@ -349,15 +361,13 @@ abstract class BaseManager
      */
     public function publish(int $id): void
     {
-        $query = $this->dbConnect->prepare(
-            '
-            UPDATE ' . $this->table . '
-            SET
-                publish_state = true,
+        $sql = <<<SQL
+            UPDATE $this->table
+            SET publish_state = true,
                 publish_at = :publish_at
             WHERE id = :id
-        '
-        );
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
         $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);

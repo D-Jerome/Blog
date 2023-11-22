@@ -17,18 +17,19 @@ class Home extends BaseController
     /**
      * home
      *
-     * @return
+     * @return void
      */
-    public function home()
+    public function home(): void
     {
         //recherche des 3 derniers articles par catégories
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         if (null === $user) {
-             return $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
+            $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
+            exit;
         }
 
-        return $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
+        $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
 
     }
 

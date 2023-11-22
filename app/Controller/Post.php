@@ -16,9 +16,9 @@ class Post extends BaseController
     /**
      * postsByCategory : 3 most recent Posts by category
      *
-     * @return string
+     * @return void
      */
-    public function postsByCategory()
+    public function postsByCategory(): void
     {
         //recherche des 3 derniers articles par catégories
         $categories = new CategoryManager(Application::getDatasource());
@@ -37,7 +37,8 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         if (null === $user) {
-            return $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
+            $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
+            exit;
         }
 
         $user = [
@@ -45,7 +46,7 @@ class Post extends BaseController
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
-        return $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
+        $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
 
 
@@ -54,7 +55,7 @@ class Post extends BaseController
      *
      * @return void
      */
-    public function posts()
+    public function posts(): void
     {
         $userSession = $this->session->getUser();
 
@@ -67,12 +68,7 @@ class Post extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
-
-        if ($sqlParams["publish_state"] == FALSE) {
-            $count = count($posts->getAllPublish());
-        } else {
-            $count = count($posts->getAll());
-        }//enf id
+        $count = count($posts->getAllPublish());
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
@@ -90,7 +86,7 @@ class Post extends BaseController
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
 
-        return $this->view(
+        $this->view(
             'frontoffice/posts.html.twig',
             [
                 'baseUrl' => Application::getBaseUrl(),
@@ -118,7 +114,7 @@ class Post extends BaseController
      * @param  int $id
      * @return void
      */
-    public function post(int $id)
+    public function post(int $id): void
     {
         // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
@@ -133,7 +129,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
 
-        return $this->view('frontoffice/post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        $this->view('frontoffice/post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 
@@ -142,12 +138,12 @@ class Post extends BaseController
      *
      * @return void
      */
-    public function admin()
+    public function admin(): void
     {
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
 
-        return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+        $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
 
