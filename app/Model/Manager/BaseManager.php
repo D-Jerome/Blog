@@ -377,7 +377,10 @@ abstract class BaseManager
     public function delete(int $id): bool
     {
         try {
-            $query = $this->dbConnect->prepare("DELETE FROM ". $this->table ." WHERE id= ?");
+            $sql = <<<SQL
+                DELETE FROM $this->table WHERE id= ?
+            SQL;
+            $query = $this->dbConnect->prepare($sql);
             $query->execute([$id]);
             return true;
         } catch (\Exception $e) {

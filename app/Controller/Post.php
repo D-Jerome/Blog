@@ -116,7 +116,6 @@ class Post extends BaseController
      */
     public function post(int $id): void
     {
-        // $username=Session::getUsername();
         $post = new PostManager(Application::getDatasource());
         $comment = new CommentManager(Application::getDatasource());
         $statementPost = $post->getById($id);

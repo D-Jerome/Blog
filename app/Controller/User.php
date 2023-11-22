@@ -97,15 +97,12 @@ class User extends BaseController
                 if (empty($data)) {
                     $error = true;
                     throw new UnauthorizeValueException();
-                    // die("valeurs non authorisées");
-                    //throw Exception;
                 }
 
                 if (str_contains($k, "password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
                     // erreur
                     $error = true;
                     throw new PasswordPolicyException();
-                    // die("le mot de passe ne correspond pas à la politique de mot de passe ");
                 }
 
             }
@@ -113,12 +110,10 @@ class User extends BaseController
 
             if ($users->getByUsername($postdatas['username'])) {
                 $error = true;
-                // die("l'identifiant est indisponible");
             }
 
             if ($postdatas['password'] !== $postdatas['confirmPassword']) {
                 $error = true;
-                // die("les mots de passe sont différents ");
             }
 
             if ($error == true) {
