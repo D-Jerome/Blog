@@ -18,7 +18,6 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
-        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -67,11 +66,6 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
             'Symfony\\Bundle\\FrameworkBundle\\' => 31,
             'Symfony\\Bridge\\Twig\\' => 20,
         ),
-        'R' => 
-        array (
-            'Ramsey\\Uuid\\' => 12,
-            'Ramsey\\Collection\\' => 18,
-        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -91,10 +85,6 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Semver\\' => 16,
             'Composer\\Pcre\\' => 14,
-        ),
-        'B' => 
-        array (
-            'Brick\\Math\\' => 11,
         ),
         'A' => 
         array (
@@ -247,14 +237,6 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
         array (
             0 => __DIR__ . '/..' . '/symfony/twig-bridge',
         ),
-        'Ramsey\\Uuid\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
-        ),
-        'Ramsey\\Collection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ramsey/collection/src',
-        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
@@ -298,10 +280,6 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
         'Composer\\Pcre\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/pcre/src',
-        ),
-        'Brick\\Math\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/brick/math/src',
         ),
         'App\\' => 
         array (
@@ -350,13 +328,11 @@ class ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb
 
     public static function getInitializer(ClassLoader $loader)
     {
-        return \Closure::bind(
-            function () use ($loader) {
-                $loader->prefixLengthsPsr4 = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$prefixLengthsPsr4;
-                $loader->prefixDirsPsr4 = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$prefixDirsPsr4;
-                $loader->classMap = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$classMap;
+        return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd86594814f8c035b5c06bfb64e8fa1eb::$classMap;
 
-            }, null, ClassLoader::class
-        );
+        }, null, ClassLoader::class);
     }
 }

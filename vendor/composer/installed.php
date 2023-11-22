@@ -3,22 +3,13 @@
         'name' => 'jdubus/framework',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'a0d49127cd4b92c2a900791282f3337ad63ac59b',
+        'reference' => '174c79fabc93f92496764116fe4be3586af2f214',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'brick/math' => array(
-            'pretty_version' => '0.11.0',
-            'version' => '0.11.0.0',
-            'reference' => '0ad82ce168c82ba30d1c01ec86116ab52f589478',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../brick/math',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'composer/pcre' => array(
             'pretty_version' => '3.1.1',
             'version' => '3.1.1.0',
@@ -53,7 +44,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../fakerphp/faker',
             'aliases' => array(),
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'filp/whoops' => array(
             'pretty_version' => '2.15.3',
@@ -62,7 +53,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../filp/whoops',
             'aliases' => array(),
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'friendsofphp/php-cs-fixer' => array(
             'pretty_version' => 'v3.38.0',
@@ -76,7 +67,7 @@
         'jdubus/framework' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'a0d49127cd4b92c2a900791282f3337ad63ac59b',
+            'reference' => '174c79fabc93f92496764116fe4be3586af2f214',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -164,30 +155,6 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0|2.0|3.0',
-            ),
-        ),
-        'ramsey/collection' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => 'a4b48764bfbb8f3a6a4d1aeb1a35bb5e9ecac4a5',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../ramsey/collection',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'ramsey/uuid' => array(
-            'pretty_version' => '4.7.4',
-            'version' => '4.7.4.0',
-            'reference' => '60a4c63ab724854332900504274f6150ff26d286',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../ramsey/uuid',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'rhumsaa/uuid' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '4.7.4',
             ),
         ),
         'sebastian/diff' => array(
