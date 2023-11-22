@@ -50,6 +50,7 @@ class User extends BaseController
         $this->view(
             'backoffice/admin.users.html.twig',
             [
+                'baseUrl' => Application::getBaseUrl(),
                 'registredUsers' => $statementUsers,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
@@ -88,7 +89,7 @@ class User extends BaseController
             'roleName' => $user->getRoleName()
         ];
 
-        $this->view('backoffice/modify.user.html.twig', ['user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
 
@@ -101,7 +102,7 @@ class User extends BaseController
     public function modifiedUser(int $id): void
     {
         $users = new UserManager(Application::getDatasource());
-        $request = new Request("/blog-project/");
+        $request = new Request(Application::getBaseUrl() .'/');
 
         $roles = new RoleManager(Application::getDatasource());
         $statementRoles = $roles->getAll();
@@ -115,7 +116,7 @@ class User extends BaseController
                     'roleName' => $user->getRoleName()
                 ];
 
-        header('Location: /blog-project/admin');
+        header('Location: '. Application::getBaseUrl() .'/admin');
     }
 
 
@@ -129,7 +130,7 @@ class User extends BaseController
     {
 
         (new UserManager(Application::getDatasource()))->disable($id);
-        header('Location: /blog-project/admin/users#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$id);
     }
 
 
@@ -142,7 +143,7 @@ class User extends BaseController
     public function enableUser(int $id): void
     {
         (new UserManager(Application::getDatasource()))->enable($id);
-        header('Location: /blog-project/admin/users#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$id);
     }
 
 
@@ -162,7 +163,7 @@ class User extends BaseController
                  'roleName' => $user->getRoleName()
                 ];
 
-        $this->view('backoffice/add.user.html.twig', ['roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/add.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
 
@@ -174,7 +175,7 @@ class User extends BaseController
     public function addedUser(): void
     {
         $user = new UserManager(Application::getDatasource());
-        $request = new Request("/blog-project/");
+        $request = new Request(Application::$baseUrl .'/');
 
         $return = $user->insertNewUser($request->getParams());
         //verif si pas erreur
@@ -184,7 +185,7 @@ class User extends BaseController
         $users = new UserManager(Application::getDatasource());
         $statementUser = $users->getById($return);
 
-        $this->view('backoffice/modify.user.html.twig', ['users' => $statementUser, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }
 
 

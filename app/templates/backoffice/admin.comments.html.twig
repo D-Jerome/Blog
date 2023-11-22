@@ -3,7 +3,7 @@
 
 {% block content %}    
 
-<header class="masthead" style="background-image: url('/blog-project/public/img/blogwcloud.jpg')">
+<header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/blogwcloud.jpg')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -42,11 +42,11 @@
                             <div class ="d-inline">
                                 {% for post in posts %}
                                     {% if comment.postId == post.id %}
-                                    <a href="/blog-project/post/{{ post.slug }}/{{ comment.postId }}" class="col mx-3" title="Voir le post"><i class="fa-regular fa-newspaper fa-xl" style="color: var(--bs-primary);"></i></a> 
+                                    <a href="{{ baseUrl }}/post/{{ post.slug }}/{{ comment.postId }}" class="col mx-3" title="Voir le post"><i class="fa-regular fa-newspaper fa-xl" style="color: var(--bs-primary);"></i></a> 
                                     {% endif %}
 
                                 {% endfor %}
-                                <a href="/blog-project/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
+                                <a href="{{ baseUrl }}/admin/comment/modify/{{ comment.id }}/{{ comment.postId }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
                             </div>
                         </div>
                     </div>

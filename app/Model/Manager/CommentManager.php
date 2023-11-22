@@ -118,8 +118,20 @@ class CommentManager extends BaseManager
     {
         $query = $this->dbConnect->prepare(
             '
-            INSERT INTO ' . $this->table . '(content, created_at, modified_at, post_id, user_id)
-            VALUES (:content, :created_at, :modified_at, :post_id, :user_id)
+            INSERT INTO ' . $this->table . '(
+                                            content,
+                                            created_at,
+                                            modified_at,
+                                            post_id,
+                                            user_id
+                                            )
+            VALUES (
+                    :content,
+                    :created_at,
+                    :modified_at,
+                    :post_id,
+                    :user_id
+                    )
         '
         );
 

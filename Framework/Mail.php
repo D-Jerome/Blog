@@ -176,7 +176,7 @@ class Mail
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
         $mail->addAddress("server@server.com", "Admin Server");
-        $mail->addReplyTo("no-reply@servewr.com", "No-Reply");
+        $mail->addReplyTo("no-reply@server.com", "No-Reply");
 
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
@@ -186,19 +186,19 @@ class Mail
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Message de contact';
         $mail->Body    = '
-                        Bonjour Jérôme, <br>
+                        Bonjour Admin, <br>
                         Voici un nouveau message d\'un utilisateur. <br>
                         <br>
                         Message de : '.$contact['name'].'<br>
                         Email : '.$contact['email'].'<br>
-                        Message : '.$contact['message'].'<br>
+                        Message : '.$contact['content'].'<br>
                         ';
         $mail->AltBody = '
-                        Bonjour Jérôme,
+                        Bonjour Admin,
                         Voici un nouveau message d\'un utilisateur.
                         Message de : '.$contact['name'].'
                         Email : '.$contact['email'].'
-                        Message : '.$contact['message'].'
+                        Message : '.$contact['content'].'
                         ';
 
         if (!$mail->send()) {

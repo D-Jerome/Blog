@@ -2,7 +2,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %} 
-    <header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+    <header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/groupe.png')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
@@ -15,7 +15,7 @@
     </header>
     <h2 class="col-12">Bonjour {{ authUser.name }} </h2>
     <main role="main" class="site-content">
-        <a href="/blog-project/admin/user/new" class="btn btn-primary d-block">Ajouter</a>
+        <a href="{{ baseUrl }}/admin/user/new" class="btn btn-primary d-block">Ajouter</a>
         <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
             {% for registredUser in registredUsers %}
                 <div class="card col-12
@@ -35,11 +35,11 @@
                                  rounded-pill">{{ registredUser.roleName }}</p>
                         </div>
                         <div class="col-2 ">
-                            <a href="/blog-project/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                            <a href="{{ baseUrl }}/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
                             {% if registredUser.active %}
-                                <a href="/blog-project/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                <a href="{{ baseUrl }}/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
                             {% else %}
-                                <a href="/blog-project/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                <a href="{{ baseUrl }}/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
                             {% endif %}
                         </div>
                     </div>

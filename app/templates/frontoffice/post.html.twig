@@ -3,7 +3,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}             
-        <header class="masthead" style="background-image: url('/blog-project/public/img/home-bg.jpg')">
+        <header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/home-bg.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -60,13 +60,13 @@
             {% endfor %}
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-10 mb-3 ">
-                    <a href="/blog-project/admin/comment/add/{{ post.slug }}/{{ post.id }}" class="btn btn-primary d-block mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
+                    <a href="{{ baseUrl }}/admin/comment/add/{{ post.slug }}/{{ post.id }}" class="btn btn-primary d-block mb-4 {% if authUser.id == false %} disabled {% endif %}">Ajouter un commentaire</a>
                 </div>
             </div>
             <div class="container col-4 bg-danger-subtle {% if authUser.id != false %} invisible {% endif %} rounded border border-dark">
-                <a href="/blog-project/signup" class="btn btn-warning  btn-outline-primary mx-auto p-2 mt-3 w-100" >Inscrivez-vous</a>      
+                <a href="{{ baseUrl }}/signup" class="btn btn-warning  btn-outline-primary mx-auto p-2 mt-3 w-100" >Inscrivez-vous</a>      
                 <div class="col-1 mx-auto p-2">ou</div>
-                <a href="/blog-project/login" class="btn btn-warning btn-outline-primary mx-auto p-2 mb-3 w-100">Identifiez-vous</a>
+                <a href="{{ baseUrl }}/login" class="btn btn-warning btn-outline-primary mx-auto p-2 mb-3 w-100">Identifiez-vous</a>
             </div>
         </main>   
 {% endblock %}

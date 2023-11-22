@@ -51,6 +51,7 @@ class Post extends BaseController
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
         $dataView= [
+            'baseUrl' => Application::getBaseUrl(),
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
@@ -85,7 +86,7 @@ class Post extends BaseController
     public function deletePost(int $id): void
     {
         (new PostManager(Application::getDatasource()))->delete($id);
-        header('Location: /blog-project/admin/posts?delete=ok');
+        header('Location: '. Application::getBaseUrl() .'/admin/posts?delete=ok');
     }
 
 
@@ -100,8 +101,7 @@ class Post extends BaseController
         $statementCategories = $category->getAll();
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
-        $this->view('backoffice/add.post.html.twig', ['categories' => $statementCategories, 'authUser' => $user]);
+        $this->view('backoffice/add.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'authUser' => $user]);
     }
 
 
@@ -113,14 +113,13 @@ class Post extends BaseController
     public function addedPost()
     {
         $post = new PostManager(Application::getDatasource());
-        $request = new Request("/blog-project/");
+        $request = new Request( Application::getBaseUrl() .'/');
 
         $post->insertNewPost($request->getParams());
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
         $statement = '';
-        $this->view('backoffice/modify.post.html.twig', ['post' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(),'post' => $statement, 'authUser' => $user]);
     }
 
 
@@ -139,8 +138,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-
-        $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost , 'authUser' => $user]);
+        $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost , 'authUser' => $user]);
     }
 
     /**
@@ -177,7 +175,8 @@ class Post extends BaseController
         $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
-        $this->view('backoffice/modify.post.html.twig', ['post' => $statementPost, 'authUser' => $user]);
+
+        $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user]);
     }
 
 
@@ -206,7 +205,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $this->view('backoffice/add.comment.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        $this->view('backoffice/add.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 
@@ -220,7 +219,7 @@ class Post extends BaseController
     {
 
         $comment = new CommentManager(Application::getDatasource());
-        $request = new Request("/blog-project/");
+        $request = new Request(Application::getBaseUrl() .'/');
 
         $comment->insertNewComment($request->getParams());
         //Message de prise en compte et de validation du commentaire par l'administrateur
@@ -231,7 +230,7 @@ class Post extends BaseController
         $post = new PostManager(Application::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
-        Header("Location: /blog-project/post/$slug/$id");
+        Header('Location: '. Application::getBaseUrl() .'/post/'. $slug .'/'. $id);
     }
 
 
@@ -285,6 +284,7 @@ class Post extends BaseController
         $this->view(
             'backoffice/admin.moderation.posts.html.twig',
             [
+            'baseUrl' => Application::getBaseUrl(),
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
@@ -314,7 +314,7 @@ class Post extends BaseController
     {
 
         (new PostManager(Application::getDatasource()))->unpublish($id);
-        header('Location: /blog-project/admin/moderation/posts#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts#'.$id);
     }
 
 
@@ -328,7 +328,7 @@ class Post extends BaseController
     {
 
         (new PostManager(Application::getDatasource()))->publish($id);
-        header('Location: /blog-project/admin/moderation/posts#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts#'.$id);
     }
 
 

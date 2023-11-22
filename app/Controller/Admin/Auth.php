@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Framework\Application;
 use Framework\BaseController;
 use Framework\Session;
 
@@ -20,7 +21,7 @@ class Auth extends BaseController
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
-        $this->view('backoffice/'.$user['roleName'].'.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        $this->view('backoffice/'.$user['roleName'].'.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
 
@@ -33,7 +34,7 @@ class Auth extends BaseController
     {
         session_destroy();
 
-        header('Location: /blog-project/');
+        header('Location: '. Application::getBaseUrl() .'/');
     }
 
 

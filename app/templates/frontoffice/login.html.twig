@@ -2,7 +2,7 @@
 
 
 {% block content %}
- <header class="masthead" style="background-image: url('/blog-project/public/img/connexion.jpg')">
+ <header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/connexion.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
@@ -21,7 +21,7 @@
                 <div class="col-md-10 col-lg-8 col-xl-7 border border-dark">     
 
     
-        <form action="/blog-project/login" method="post">
+        <form action="{{ baseUrl }}/login" method="post">
             <div class="form-group mt-4">
                 <input class="form-control" type="text" name="login" placeholder="Identifiant">
             </div>
@@ -32,7 +32,7 @@
                 <button class="btn btn-primary" type="submit">Connexion</button>
             </div>
         </form>
-        <a href="/blog-project/login/forget" class="row m-4 ">Mot de passe oublié</a>
+        <a href="{{ baseUrl }}/login/forget" class="row m-4 ">Mot de passe oublié</a>
     </div>
     </div>
 {% endblock %}

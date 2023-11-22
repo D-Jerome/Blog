@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<header class="masthead" style="background-image: url('/blog-project/public/img/blogwcloud.jpg')">
+<header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/editor.jpg')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -19,10 +19,10 @@
 <main role="main" class="site-content">
     <div class="row gx-4 gx-lg-5 justify-content-center " >
         <div class="col-lg-3 text-center mx-auto my-3">
-            <a href="/blog-project/admin/posts" class="btn btn-primary d-block">Vos Posts</a>
+            <a href="{{ baseUrl }}/admin/posts" class="btn btn-primary d-block">Vos Posts</a>
         </div>    
         <div class="col-lg-3 text-center mx-auto my-3">
-            <a href="/blog-project/admin/comments" class="btn btn-primary d-block">Vos Commentaires</a>             
+            <a href="{{ baseUrl }}/admin/comments" class="btn btn-primary d-block">Vos Commentaires</a>             
         </div>
     </div>
 </main>

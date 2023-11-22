@@ -70,15 +70,45 @@ class UserManager extends BaseManager
         if (isset($params['roleId'])) {
             $query = $this->dbConnect->prepare(
                 '
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , file, created_at, role_id )
-                VALUES (:firstname, :lastname, :username, :email , :password, :created_at, :role_id)
+                INSERT INTO ' . $this->table . '(
+                                                firstname,
+                                                lastname,
+                                                username,
+                                                email,
+                                                file,
+                                                created_at,
+                                                role_id
+                                                )
+                VALUES (
+                        :firstname,
+                        :lastname,
+                        :username,
+                        :email ,
+                        :password,
+                        :created_at,
+                        :role_id
+                        )
             '
             );
         } else {
             $query = $this->dbConnect->prepare(
                 '
-                INSERT INTO ' . $this->table . '(firstname,lastname,username, email , password, created_at )
-                VALUES (:firstname, :lastname, :username, :email , :password, :created_at)
+                INSERT INTO ' . $this->table . '(
+                                                firstname,
+                                                lastname,
+                                                username,
+                                                email,
+                                                password,
+                                                created_at
+                                                )
+                VALUES (
+                        :firstname,
+                        :lastname,
+                        :username,
+                        :email,
+                        :password,
+                        :created_at
+                        )
             '
             );
         }//endif
@@ -129,7 +159,11 @@ class UserManager extends BaseManager
                         $field = str_replace($match, '_' . strtolower($match), $field);
                     }
                 }
-                $query = $this->dbConnect->prepare("UPDATE $this->table SET  $field = :value WHERE id = :id");
+                $query = $this->dbConnect->prepare("
+                                                UPDATE $this->table
+                                                SET $field = :value
+                                                WHERE id = :id
+                                                ");
                 $query->bindParam(':value', $param);
                 $query->bindParam(':id', $params['id']);
                 $query->execute();
@@ -141,7 +175,8 @@ class UserManager extends BaseManager
 
 
     /**
-     * verifyCouple : verify the existance of a user with id and username pass in address
+     * verifyCouple : Valid link of items
+     * verify the existance of a user with id and username pass in address
      *
      * @param  int    $id       User id pass in the address
      * @param  string $username Username in the address

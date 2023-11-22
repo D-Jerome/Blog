@@ -17,19 +17,18 @@ class Home extends BaseController
     /**
      * home
      *
-     * @return void
+     * @return
      */
     public function home()
     {
         //recherche des 3 derniers articles par catégories
-
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         if (null === $user) {
-             return $this->view('frontoffice/home.html.twig', ['error' => false]);
+             return $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
         }
 
-        return $this->view('frontoffice/home.html.twig', [  'authUser' => $user]);
+        return $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
 
     }
 
@@ -42,7 +41,7 @@ class Home extends BaseController
     public function homeContact(): void
     {
         $error = FALSE;
-        $postdatas = (new Request('blog-project'))->getParams();
+        $postdatas = (new Request(Application::getBaseUrl() .'/'))->getParams();
         foreach ($postdatas as $k => $data) {
             if (empty($data)) {
                 $error = TRUE;
@@ -53,7 +52,7 @@ class Home extends BaseController
         }
         $mail = new Mail(Application::getEmailSource());
         $mail->sendMailToAdmin($postdatas);
-        header('Location: /blog-project/');
+        header('Location: '. Application::getBaseUrl() .'/');
     }
 
 

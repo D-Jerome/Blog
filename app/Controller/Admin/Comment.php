@@ -61,6 +61,7 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.comments.html.twig',
             [
+            'baseUrl' => Application::getBaseUrl(),
             'comments' => $statementComments,
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
@@ -97,7 +98,7 @@ class Comment extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
 
@@ -137,7 +138,7 @@ class Comment extends BaseController
         $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
-        $this->view('backoffice/modify.comment.html.twig', ['comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
 
@@ -198,6 +199,7 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.moderation.comments.html.twig',
             [
+            'baseUrl' => Application::getBaseUrl(),
             'comments' => $statementComments,
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
@@ -226,7 +228,7 @@ class Comment extends BaseController
     public function unpublishComment(int $id): void
     {
         (new CommentManager(Application::getDatasource()))->unpublish($id);
-        header('Location: /blog-project/admin/moderation/comments#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments#'.$id);
     }
 
 
@@ -239,7 +241,7 @@ class Comment extends BaseController
     public function publishComment(int $id): void
     {
         (new CommentManager(Application::getDatasource()))->publish($id);
-        header('Location: /blog-project/admin/moderation/comments#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments#'.$id);
     }
 
 

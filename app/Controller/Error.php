@@ -12,9 +12,7 @@ class Error extends BaseController
     /**
      * __construct
      *
-     * @param Route $route
-     * @param int $totalPages
-     *
+     * @return 
      */
     public function error404()
     {

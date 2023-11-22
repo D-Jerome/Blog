@@ -41,7 +41,7 @@ final class Application
         self::$config = json_decode(file_get_contents(__DIR__ . "/../config/config.json"), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
-
+        
     }//end __construct
 
 
@@ -64,7 +64,7 @@ final class Application
             $authRoles = $foundRoute->getAuthRoles();
             $route = new $controller($foundRoute);
             if (!$route->isAuthorize($authRoles)) {
-                header('Location: /blog-project/?auth=0');
+                header('Location: '. Application::$baseUrl .'/?auth=0');
             }
 
             if ($route->isAuthorize($authRoles)) {
@@ -95,10 +95,10 @@ final class Application
             }//end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
-            header('Location: /blog-project/404');
+            header('Location: '. Application::$baseUrl .'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
-        }
+        } 
     }
 
 

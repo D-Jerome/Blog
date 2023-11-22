@@ -2,7 +2,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}    
-    <header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+    <header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/groupe.png')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
@@ -15,7 +15,7 @@
     </header>
     <h2 class="col-12">Bonjour {{ authUser.name }} </h2>
     <main role="main" class="site-content">
-        <a href="/blog-project/admin/post/new" class="btn btn-primary d-block">Ajouter</a>
+        <a href="{{ baseUrl }}/admin/post/new" class="btn btn-primary d-block">Ajouter</a>
         <div class="container col-12 my-3 d-flex flex-wrap gap-1 justify-content-center" >
             {% for post in posts %}
                 <div class="card col-12
@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-2">
                             <div class ="d-inline">
-                                <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                                <a href="{{ baseUrl }}/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
                             </div>
                             <div class="dropstart mt-3 d-inline-block">
                                 <a class="col dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,7 +50,7 @@
                                         Confirmation de suppression?
                                     </div>
                                     <a href="#" class="btn btn-primary d-block" role="button">Annuler</a>
-                                    <a href="/blog-project/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4 d-block">Confirmer</a>
+                                    <a href="{{ baseUrl }}/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4 d-block">Confirmer</a>
                                 </div>
                             </div>
                          </div>

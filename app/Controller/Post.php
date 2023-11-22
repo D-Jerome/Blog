@@ -37,7 +37,7 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         if (null === $user) {
-            return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
+            return $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
         }
 
         $user = [
@@ -45,7 +45,7 @@ class Post extends BaseController
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
-        return $this->view('frontoffice/posts.category.html.twig', ['categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
+        return $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
 
 
@@ -93,6 +93,7 @@ class Post extends BaseController
         return $this->view(
             'frontoffice/posts.html.twig',
             [
+                'baseUrl' => Application::getBaseUrl(),
                 'posts' => $statementPosts,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
@@ -132,7 +133,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
 
-        return $this->view('frontoffice/post.html.twig', ['post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        return $this->view('frontoffice/post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 
@@ -146,7 +147,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
 
-        return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['login' => true, 'authUser' => $user]);
+        return $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
 

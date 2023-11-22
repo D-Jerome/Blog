@@ -3,7 +3,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}
-    <header class="masthead" style="background-image: url('/blog-project/public/img/home-bg.jpg')">
+    <header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/home-bg.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -30,7 +30,7 @@
                         <p class="text-muted text-white ">Par <span class="text-primary">{{ post.username }}</span> le {{ post.createdAt | format_datetime(locale='fr') }}</p>
                         <p class="card-text ">{{ post.excerptContent | raw }} </p>
                         <hr>
-                        <a href="/blog-project/post/{{ post.slug }}/{{ post.id }}"  class="d-grid btn btn-primary position-relative">
+                        <a href="{{ baseUrl }}/post/{{ post.slug }}/{{ post.id }}"  class="d-grid btn btn-primary position-relative">
                             Voir plus
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> 
                                 {% if post.countComments > 99 %}

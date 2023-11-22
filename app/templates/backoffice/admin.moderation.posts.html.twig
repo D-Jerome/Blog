@@ -2,7 +2,7 @@
 {% extends './layouts/pagination.html.twig' %}
 
 {% block content %}
-<header class="masthead" style="background-image: url('/blog-project/public/img/groupe.png')">
+<header class="masthead" style="background-image: url('{{ baseUrl }}/public/img/groupe.png')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7 text-center">
@@ -36,13 +36,13 @@
                         </div>
                         <div class="col-2">
                             <div class ="d-inline">
-                                <a href="/blog-project/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                                <a href="{{ baseUrl }}/admin/post/modify/{{ post.slug }}/{{ post.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
                             </div>
                             <div class="dropstart mt-3 d-inline-block">
                                 {% if post.publishState != false %}
-                                    <a href="/blog-project/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                    <a href="{{ baseUrl }}/admin/post/unpublish/{{ post.slug }}/{{ post.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
                                 {% else %}
-                                    <a href="/blog-project/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                    <a href="{{ baseUrl }}/admin/post/publish/{{ post.slug }}/{{ post.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
                                 {% endif %}
                             </div>
                         </div>
