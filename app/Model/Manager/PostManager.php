@@ -130,7 +130,6 @@ class PostManager extends BaseManager
             WHERE user.id = ?
         '
         );
-        // $query->setFetchMode(PDO::FETCH_ASSOC);
         $query->execute([$id]);
         return $query->fetchColumn();
     }

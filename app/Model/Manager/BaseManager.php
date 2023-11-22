@@ -85,7 +85,7 @@ abstract class BaseManager
      */
     public function getAllToList(string $field): array
     {
-        $query = $this->dbConnect->prepare("SELECT id, $field FROM ". $this->table);
+        $query = $this->dbConnect->prepare('SELECT id, '.($field).' FROM '. ($this->table));
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }

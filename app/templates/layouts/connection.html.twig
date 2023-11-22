@@ -7,19 +7,19 @@
         {{ authUser.name }}
         </a>    
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/blog-project/admin/user/modify/{{ authUser.name }}/{{ authUser.id }}">Profil</a></li>
+            <li><a class="dropdown-item" href="{{ baseUrl }}/admin/user/modify/{{ authUser.name }}/{{ authUser.id }}">Profil</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/blog-project/admin/logged">Administration</a></li>
+            <li><a class="dropdown-item" href="{{ baseUrl }}/admin/logged">Administration</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-bg-danger bg-gradient rounded" href="/blog-project/logout">Déconnexion</a></li>
+            <li><a class="dropdown-item text-bg-danger bg-gradient rounded" href="{{ baseUrl }}/logout">Déconnexion</a></li>
         </ul>
     </li>
 {% else %}
     <li class="nav-item">
-        <a class="btn btn-info nav-link px-lg-3 py-3 py-lg-4 " href="/blog-project/signup" class="nav-link">Inscrivez-vous</a>
+        <a class="btn btn-info nav-link px-lg-3 py-3 py-lg-4 " href="{{ baseUrl }}/signup" class="nav-link">Inscrivez-vous</a>
     </li>
     <li class="nav-item">
-        <a class="btn btn-warning nav-link px-lg-3 py-3 py-lg-4 " href="/blog-project/login" class="nav-link">Identifiez-vous</a>
+        <a class="btn btn-warning nav-link px-lg-3 py-3 py-lg-4 " href="{{ baseUrl }}/login" class="nav-link">Identifiez-vous</a>
     </li>    
     
 {% endif %}

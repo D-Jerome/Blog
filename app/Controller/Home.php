@@ -46,7 +46,6 @@ class Home extends BaseController
             if (empty($data)) {
                 $error = TRUE;
                 throw new UnauthorizeValueException();
-                //die("valeurs non authorisées");
 
             }
         }

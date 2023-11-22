@@ -52,7 +52,6 @@ class UserManager extends BaseManager
             WHERE r.id = ?
             '
         );
-        // $statement->setFetchMode(PDO::FETCH_CLASS, Role::class);
         $statement->execute([$id]);
         return $statement->fetchColumn();
     }
@@ -133,7 +132,6 @@ class UserManager extends BaseManager
         }
 
         $query->execute();
-        // dd($this->dbConnect->lastInsertId());
         return (int)$this->dbConnect->lastInsertId();
     }
 

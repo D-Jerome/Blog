@@ -153,11 +153,11 @@ class Post extends BaseController
         $params = [];
         $statement = $post->getById($id);
 
-        // dd($_POST, $statement);
+
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
             $params['content'] = $this->getRoute()->getParams()['content'];
         }
-        // dd($_POST['name'], $statement->getName());
+
         if ($this->getRoute()->getParams()['name'] !== $statement->getName()) {
             $params['name'] = $this->getRoute()->getParams()['name'];
         }
@@ -188,14 +188,13 @@ class Post extends BaseController
      */
     public function addComment(int $id): void
     {
-        // $username=Session::getUsername();
+
         $post = new PostManager(Application::getDatasource());
         $comment = new CommentManager(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         foreach ($statementComments as $statementComment) {
-            //dd($statementComment->getUserId());
             $statementComment->setUsername($comment->getCommentUsername($statementComment->getUserId()));
         }
         $statementPost->categories = $post->getCategoriesById($statementPost->id);

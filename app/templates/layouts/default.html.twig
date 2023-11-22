@@ -7,7 +7,7 @@
         <meta name="description" content="Blog de dev" />
         <meta name="author" content="Jerome D" />
         <title>{% block title %}Blog Project{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="/blog-project/public/img/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{ baseUrl }}/public/favicon.ico" />
         
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -19,9 +19,9 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
         <!-- TinyMce -->
         <script src="https://cdn.tiny.cloud/1/7dg3ij9tw4r3l4gf520zre11sn2zadxpboliz0661a7bxwt1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-        <link href="/blog-project/app/templates/layouts/clean-blog/css/styles.css" rel="stylesheet" />
+        <link href="{{ baseUrl }}/app/templates/layouts/clean-blog/css/styles.css" rel="stylesheet" />
         <!-- Core theme JS-->
-        <script src="/blog-project/app/templates/layouts/clean-blog/js/scripts.js"></script>
+        <script src="{{ baseUrl }}/app/templates/layouts/clean-blog/js/scripts.js"></script>
         
      <script>
       tinymce.init({
@@ -82,15 +82,15 @@
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light " id="mainNav">
         <div class="container px-4 px-lg-5">   
-                <a href="/blog-project/" class="navbar-brand">Mon Projet 5</a>
+                <a href="{{ baseUrl }}/" class="navbar-brand">Mon Projet 5</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto py-4 py-lg-0">  
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/post" >Articles</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/blog-project/posts-category">Par Catégorie</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ baseUrl }}/">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ baseUrl }}/post" >Articles</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ baseUrl }}/posts-category">Par Catégorie</a></li>
                     {% block login %}{% endblock %}
                 </ul>
             </div>

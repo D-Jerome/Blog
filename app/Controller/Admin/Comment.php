@@ -114,7 +114,6 @@ class Comment extends BaseController
         $params = [];
         $statement = $comments->getById($id);
 
-        // dd($_POST, $statement);
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
 
             $params['content'] = $this->getRoute()->getParams()['content'];
