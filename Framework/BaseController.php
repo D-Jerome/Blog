@@ -35,7 +35,7 @@ class BaseController
     /**
      * __construct :
      *
-     * @param Route $route Route found
+     * @param  Route $route Route found
      * @return void
      */
     public function __construct(Route $route)
@@ -69,8 +69,8 @@ class BaseController
     /**
      * view : Twig Template view construct
      *
-     * @param string $template Name of the template
-     * @param array<string, int|bool|string|array<string, int|string|bool>> $params   Params to show in template
+     * @param  string                                                        $template Name of the template
+     * @param  array<string, int|bool|string|array<string, int|string|bool>> $params   Params to show in template
      * @return void
      */
     protected function view(string $template, array $params): void
@@ -84,7 +84,7 @@ class BaseController
     /**
      * isAuthorize: verify if user has the right to access to the page
      *
-     * @param  array<string> $authRoles   roles authorized in page
+     * @param  array<string> $authRoles roles authorized in page
      * @return bool
      */
     public function isAuthorize(array $authRoles): bool
@@ -112,7 +112,6 @@ class BaseController
      * ckeck and group filter information pass by user
      *
      * @return array<string, null|string|int>
-     *
      */
     public function groupFilterDataUser(): array
     {

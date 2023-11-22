@@ -66,7 +66,7 @@ class UserManager extends BaseManager
     {
 
         if (isset($params['roleId'])) {
-           $sql = <<<SQL
+            $sql = <<<SQL
                 INSERT INTO $this->table (
                                         firstname,
                                         lastname,

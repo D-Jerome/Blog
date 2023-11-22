@@ -8,7 +8,7 @@ class Text
     /**
      * toSlug: create a slug text of the @param
      *
-     * @param string $text text to transform
+     * @param  string $text text to transform
      * @return string
      */
     public static function toSlug(string $text)

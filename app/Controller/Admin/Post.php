@@ -64,8 +64,8 @@ class Post extends BaseController
 
         if (isset(($this->getRoute()->getParams())['delete'])) {
             if (($this->getRoute()->getParams())['delete'] == 'ok') {
-                $dataView['message'] = TRUE;
-                $dataView['error'] = FALSE;
+                $dataView['message'] = true;
+                $dataView['error'] = false;
             }
         }
 
@@ -109,7 +109,7 @@ class Post extends BaseController
     public function addedPost()
     {
         $post = new PostManager(Application::getDatasource());
-        $request = new Request( Application::getBaseUrl() .'/');
+        $request = new Request(Application::getBaseUrl() .'/');
 
         $post->insertNewPost($request->getParams());
         $userSession = $this->session->getUser();

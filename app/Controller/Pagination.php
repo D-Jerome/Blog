@@ -55,8 +55,7 @@ class Pagination extends BaseController
      * __construct
      *
      * @param Route $route
-     * @param int $totalPages
-     *
+     * @param int   $totalPages
      */
     public function __construct(Route $route, int $totalPages)
     {
@@ -88,7 +87,7 @@ class Pagination extends BaseController
     /**
      * setCurrentPage
      *
-     * @param int $currentPage
+     * @param  int $currentPage
      * @return void
      */
     public function setCurrentPage(int $currentPage): void
@@ -111,7 +110,7 @@ class Pagination extends BaseController
     /**
      * setPerPage : set number of articles per page
      *
-     * @param int $perPage
+     * @param  int $perPage
      * @return void
      */
     public function setPerPage(int $perPage): void

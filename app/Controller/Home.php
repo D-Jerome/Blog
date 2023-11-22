@@ -41,11 +41,11 @@ class Home extends BaseController
      */
     public function homeContact(): void
     {
-        $error = FALSE;
+        $error = false;
         $postdatas = (new Request(Application::getBaseUrl() .'/'))->getParams();
         foreach ($postdatas as $k => $data) {
             if (empty($data)) {
-                $error = TRUE;
+                $error = true;
                 throw new UnauthorizeValueException();
 
             }

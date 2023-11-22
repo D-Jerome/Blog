@@ -131,32 +131,50 @@ abstract class BaseManager
      */
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
-        $sql = 'SELECT * FROM ' . $this->table ;
+        $sql = <<<SQL
+            SELECT * FROM  $this->table
+        SQL;
         if (!empty($params)) {
-            $sql .= ' WHERE ';
+            $sql .= <<<SQL
+                WHERE
+            SQL;
             $i = false;
             foreach ($params as $k => $value) {
                 if ($i === true) {
-                    $sql .= ' AND ';
+                    $sql .= <<<SQL
+                        AND
+                    SQL;
                 }
-                $sql .= $k .' = '. $value;
+                $sql .= <<<SQL
+                    $k = $value
+                SQL;
                 $i = true;
             }
         }//end if
 
         if (isset($field)) {
-            $sql .= ' ORDER BY ' . $field;
+            $sql .= <<<SQL
+                ORDER BY $field
+            SQL;
         }
         if (in_array($dir, ['ASC', 'DESC'])) {
-            $sql .= ' ' . $dir;
+            $sql .= <<<SQL
+                $dir
+            SQL;
         } else {
-            $sql .= ' DESC';
+            $sql .= <<<SQL
+                DESC
+            SQL;
         }
         if (isset($limit)) {
-            $sql .= ' LIMIT ' . $limit;
+            $sql .= <<<SQL
+                LIMIT $limit
+            SQL;
             if (isset($page) && $page !== 1) {
                 $offset = ($page - 1) * $limit;
-                $sql .= ' OFFSET ' .  $offset;
+                $sql .= <<<SQL
+                    OFFSET $offset
+                SQL;
             }
         }//end if
        
@@ -180,13 +198,19 @@ abstract class BaseManager
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
 
-        $sql = 'SELECT '. $this->table .'.* FROM '. $this->table;
+        $sql = <<<SQL
+            SELECT $this->table.* FROM $this->table
+        SQL;
         switch ($this->table) {
         case 'post':
-            $sql .= ' INNER JOIN post_category pc ON pc.post_id = post.id ';
+            $sql .= <<<SQL
+                INNER JOIN post_category pc ON pc.post_id = post.id
+            SQL;
             break;
         case 'user':
-            $sql .= ' INNER JOIN role ON role.id = user.role_id ';
+            $sql .= <<<SQL
+                INNER JOIN role ON role.id = user.role_id
+            SQL;
             break;
         case 'comment':
             break;
@@ -194,25 +218,35 @@ abstract class BaseManager
 
 
         if (!empty($params) === true) {
-            $sql .= ' WHERE ';
+            $sql .= <<<SQL
+                WHERE
+            SQL;
             $i = false;
             foreach ($params as $k => $value) {
                 if ($i === true) {
-                    $sql .= ' AND ';
+                    $sql .= <<<SQL
+                        AND
+                    SQL;
                 }
-                $sql .= $k .' = '. $value;
+                $sql .= <<<SQL
+                    $k = $value
+                SQL;
                 $i = true;
             }
         }
         switch ($this->table) {
         case 'post':
             if ($listId !== null) {
-                $sql .= ' AND pc.category_id = '. $listId;
+                $sql .= <<<SQL
+                    AND pc.category_id = $listId
+                SQL;
             }
             break;
         case 'user':
             if ($listId !== null) {
-                $sql .= ' AND role.id = '. $listId;
+                $sql .= <<<SQL
+                    AND role.id = $listId
+                SQL;
             }
             break;
         case 'comment':
@@ -221,20 +255,30 @@ abstract class BaseManager
 
 
         if (isset($field)) {
-            $sql .= ' ORDER BY '. $field;
+            $sql .= <<<SQL
+                ORDER BY $field
+            SQL;
         }
 
         if (in_array($dir, ['ASC', 'DESC'])) {
-            $sql .= ' '. $dir;
+            $sql .= <<<SQL
+                $dir
+            SQL;
         } else {
-            $sql .= ' DESC';
+            $sql .= <<<SQL
+                DESC
+            SQL;
         }
 
         if (isset($limit)) {
-            $sql .= ' LIMIT '. $limit;
+            $sql .= <<<SQL
+                LIMIT $limit
+            SQL;
             if (isset($page) && $page !== 1) {
                 $offset = ($page - 1) * $limit;
-                $sql .= ' OFFSET '.  $offset;
+                $sql .= <<<SQL
+                    OFFSET $offset
+                SQL;
             }
 
         }
@@ -257,8 +301,11 @@ abstract class BaseManager
     {
         $paramNumber = count($param);
         $valueArray = array_fill(1, $paramNumber, "?");
+        $paramValue = implode(", ", $param);
         $valueString = implode(", ", $valueArray);
-        $sql = "INSERT INTO " . $this->table . "(" . implode(", ", $param) .") VALUES(". $valueString . ")";
+        $sql = <<<SQL
+            INSERT INTO $this->table ($paramValue) VALUES($valueString)
+        SQL;
         $req = $this->dbConnect->prepare($sql);
         $boundParam = array();
         foreach ($param as $paramName) {
@@ -283,13 +330,17 @@ abstract class BaseManager
     public function update(object $obj, array $param): void
     {
 
-        $sql = "UPDATE " . $this->table . " SET ";
+        $sql = <<<SQL
+            UPDATE $this->table SET
+        SQL;
         $countParam = count($param);
         $i = 0;
         foreach ($param as $paramName => $paramValue) {
             $i++;
             if ($paramName !== 'id') {
-                $sql = $sql . Text::camelCaseToSnakeCase($paramName) ." = :". Text::camelCaseToSnakeCase($paramName);
+                $sql .= <<<SQL
+                    Text::camelCaseToSnakeCase($paramName) = :Text::camelCaseToSnakeCase($paramName)
+                SQL;
             }
 
             if ($i !== $countParam) {
@@ -298,7 +349,9 @@ abstract class BaseManager
 
         }//end foreach
 
-        $sql = $sql . " WHERE id = :id ";
+        $sql .= <<<SQL
+            WHERE id = :id
+        SQL;
         $req = $this->dbConnect->prepare($sql);
         $param['id'] = $obj->getId();
         $boundParam = [];

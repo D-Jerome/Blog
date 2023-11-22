@@ -97,7 +97,7 @@ class Mail
     /**
      * __construct : each data of email config
      *
-     * @param array<string, string> $config From the config file
+     * @param  array<string, string> $config From the config file
      * @return void
      */
     public function __construct(array $config)
@@ -112,7 +112,7 @@ class Mail
     /**
      * sendMailToUser : send Email to User
      *
-     * @param null|User $user Receiver of email
+     * @param  null|User $user Receiver of email
      * @return void
      */
     public function sendMailToUser(?User $user)
@@ -157,7 +157,7 @@ class Mail
     /**
      * sendMailToAdmin : send email to admin
      *
-     * @param array<string, string> $contact Informations of the contact
+     * @param  array<string, string> $contact Informations of the contact
      * @return void
      */
     public function sendMailToAdmin(array $contact)

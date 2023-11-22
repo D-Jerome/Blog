@@ -29,9 +29,9 @@ class AuthUser
     /**
      * __construct keep auth user information
      *
-     * @param int $id
-     * @param string $roleName
-     * @param string $username
+     * @param  int    $id
+     * @param  string $roleName
+     * @param  string $username
      * @return void
      */
     public function __construct(int $id, string $roleName, string $username)
@@ -78,7 +78,6 @@ class AuthUser
      * get id, name, role of connected user
      *
      * @return array<string, string>
-     *
      */
     public function getAllUserInfo(): array
     {
