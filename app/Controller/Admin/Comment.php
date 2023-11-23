@@ -38,7 +38,7 @@ class Comment extends BaseController
         if ($httpParams['listSort'] === null) {
             $count = count($comments->getAll());
         }else{
-            $count = count($comments->getAllFilteredByParam($httpParams['listSort'],$httpParams['listSortSelect']));
+            $count = count($comments->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect']));
         }
 
 

@@ -70,7 +70,7 @@ class BaseController
     /**
      * view : Twig Template view construct
      *
-     * @param  string                                                        $template Name of the template
+     * @param  string                                                       $template Name of the template
      * @param  array<string, array<bool|int|object|string>|int|string|null> $params   Params to show in template
      * @return void
      */

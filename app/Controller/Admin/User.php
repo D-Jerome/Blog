@@ -35,7 +35,7 @@ class User extends BaseController
         if ($httpParams['listSort'] === null) {
             $count = count($users->getAll());
         }else{
-            $count = count($users->getAllFilteredByParam($httpParams['listSort'],$httpParams['listSortSelect']));
+            $count = count($users->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect']));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);

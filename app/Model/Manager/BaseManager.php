@@ -72,8 +72,8 @@ abstract class BaseManager
     /**
      * getAllFilteredByParam : get all datas of filtered of objects
      *
-     * @param string $paramItem Name of field to filter
-     * @param int|string $paramValue Value of field to filter
+     * @param  string     $paramItem  Name of field to filter
+     * @param  int|string $paramValue Value of field to filter
      * @return array<object>
      */
     public function getAllFilteredByParam(string $paramItem, string|int $paramValue ): array

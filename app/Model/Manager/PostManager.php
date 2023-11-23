@@ -57,11 +57,11 @@ class PostManager extends BaseManager
     /**
      * getAllFilteredByParam : get all datas of filtered of objects
      *
-     * @param string $paramItem Name of field to filter
-     * @param int|string $paramValue Value of field to filter
+     * @param  string     $paramItem  Name of field to filter
+     * @param  int|string $paramValue Value of field to filter
      * @return array<object>
      */
-    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = FALSE ): array
+    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = false ): array
     {
         $sql = <<<SQL
                 SELECT *
@@ -69,7 +69,7 @@ class PostManager extends BaseManager
                 INNER JOIN post_category pc ON pc.post_id = $this->table.id
                 WHERE pc.category_id = $paramValue
         SQL;
-        if ($publish === TRUE) {
+        if ($publish === true) {
             $sql .= <<<SQL
                     AND publish_state = TRUE
             SQL;
