@@ -29,17 +29,22 @@ class Comment extends BaseController
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
-
+        $comments = (new CommentManager(Application::getDatasource()));
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
-        $count = count($posts->getAll());
+        if ($httpParams['listSort'] === null) {
+            $count = count($comments->getAll());
+        }else{
+            $count = count($comments->getAllFilteredByParam($httpParams['listSort'],$httpParams['listSortSelect']));
+        }
+
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
-        $comments = (new CommentManager(Application::getDatasource()));
+
         if ($user['roleName'] !== "admin") {
             $sqlParams = ['user_id' => $user['id']];
         }//end if

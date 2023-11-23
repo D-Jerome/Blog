@@ -55,6 +55,33 @@ class PostManager extends BaseManager
 
 
     /**
+     * getAllFilteredByParam : get all datas of filtered of objects
+     *
+     * @param string $paramItem Name of field to filter
+     * @param int|string $paramValue Value of field to filter
+     * @return array<object>
+     */
+    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = FALSE ): array
+    {
+        $sql = <<<SQL
+                SELECT *
+                FROM $this->table
+                INNER JOIN post_category pc ON pc.post_id = $this->table.id
+                WHERE pc.category_id = $paramValue
+        SQL;
+        if ($publish === TRUE) {
+            $sql .= <<<SQL
+                    AND publish_state = TRUE
+            SQL;
+        }
+        
+        $query = $this->dbConnect->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    }
+
+
+    /**
      * [getPostsbyCategory] : get all posts linked to Category selected
      *
      * @param  Category $category Category object

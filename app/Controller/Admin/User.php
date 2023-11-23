@@ -32,7 +32,11 @@ class User extends BaseController
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
         $users = (new UserManager(Application::getDatasource()));
 
-        $count = count($users->getAll());
+        if ($httpParams['listSort'] === null) {
+            $count = count($users->getAll());
+        }else{
+            $count = count($users->getAllFilteredByParam($httpParams['listSort'],$httpParams['listSortSelect']));
+        }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();

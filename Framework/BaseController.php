@@ -125,13 +125,13 @@ class BaseController
         }
 
         if ($filterReturn['listSortSelect'] === null && $filterReturn['listSort'] !== null) {
-            $listSort = null;
+            $filterReturn['listSort'] = null;
         }
 
         if ($filterReturn['listSort'] === null && $filterReturn['listSortSelect'] !== null) {
             $filterReturn['listSortSelect'] = null;
         }
-
+        
         return $filterReturn;
     }
 }

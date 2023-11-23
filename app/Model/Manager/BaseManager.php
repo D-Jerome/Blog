@@ -70,6 +70,26 @@ abstract class BaseManager
 
 
     /**
+     * getAllFilteredByParam : get all datas of filtered of objects
+     *
+     * @param string $paramItem Name of field to filter
+     * @param int|string $paramValue Value of field to filter
+     * @return array<object>
+     */
+    public function getAllFilteredByParam(string $paramItem, string|int $paramValue ): array
+    {
+        $sql = <<<SQL
+                SELECT *
+                FROM $this->table
+                WHERE $paramItem = $paramValue
+        SQL;
+        $query = $this->dbConnect->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    }
+
+
+    /**
      * getAll : get all data from called object
      *
      * @return array<object>

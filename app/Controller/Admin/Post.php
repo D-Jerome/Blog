@@ -31,8 +31,11 @@ class Post extends BaseController
         $posts = new PostManager(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
-
-        $count = count($posts->getAll());
+        if ($httpParams['listSort'] === null) {
+            $count = count($posts->getAll());
+        }else{
+            $count = count($posts->getAllFilteredByParam($httpParams['listSort'],$httpParams['listSortSelect']));
+        }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
