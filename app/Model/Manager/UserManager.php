@@ -149,7 +149,7 @@ class UserManager extends BaseManager
 
             if ($param != $actualUser->$getUser()) {
                 $field = $k;
-                if (preg_match('~[A-Z]~', $k, $matches)) {
+                if (\Safe\preg_match('~[A-Z]~', $k, $matches)) {
                     foreach ($matches as $match) {
                         $field = str_replace($match, '_' . strtolower($match), $field);
                     }

@@ -13,7 +13,7 @@ class Text
      */
     public static function toSlug(string $text)
     {
-        return preg_replace('/[^A-Za-z0-9-]+/', '-', $text);
+        return \Safe\preg_replace('/[^A-Za-z0-9-]+/', '-', $text);
     }
 
 
@@ -26,7 +26,7 @@ class Text
     public static function camelCaseToSnakeCase(string $string): string
     {
 
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
+        return strtolower(\Safe\preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
 
     }
 

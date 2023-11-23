@@ -99,7 +99,7 @@ class User extends BaseController
                     throw new UnauthorizeValueException();
                 }
 
-                if (str_contains($k, "password") && !preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
+                if (str_contains($k, "password") && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
                     // erreur
                     $error = true;
                     throw new PasswordPolicyException();
@@ -141,7 +141,7 @@ class User extends BaseController
      */
     public function logout()
     {
-        session_destroy();
+        \Safe\session_destroy();
         header('Location: '. Application::getBaseUrl() .'/');
     }
 

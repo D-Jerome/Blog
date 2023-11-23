@@ -38,7 +38,7 @@ final class Application
      */
     public function __construct()
     {
-        self::$config = json_decode(file_get_contents(__DIR__ . "/../config/config.json"), true);
+        self::$config = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/config.json"), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
 
@@ -70,10 +70,10 @@ final class Application
             if ($route->isAuthorize($authRoles)) {
 
                 $id = null;
-                if (preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
-                    $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
+                if (\Safe\preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
+                    $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
-                    preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
+                    \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];

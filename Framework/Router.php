@@ -25,7 +25,7 @@ class Router
      */
     public function __construct()
     {
-        $routes = json_decode(file_get_contents(__DIR__ . "/../config/routes.json"), true);
+        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/routes.json"), true);
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
@@ -43,15 +43,15 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($route->getMethod() === $request->getMethod()) {
-                preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
-                $routeMatcher = preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());
+                \Safe\preg_match_all('/\{(\w*)\}/', $route->getPath(), $paramNames);
+                $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
                     return $route;
                 }
 
-                if (preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
+                if (\Safe\preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];

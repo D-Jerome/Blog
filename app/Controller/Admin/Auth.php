@@ -32,7 +32,7 @@ class Auth extends BaseController
      */
     public function logout(): void
     {
-        session_destroy();
+        \Safe\session_destroy();
 
         header('Location: '. Application::getBaseUrl() .'/');
     }
