@@ -10,6 +10,7 @@ use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\Session;
+use Safe\DateTime;
 
 class Comment extends BaseController
 {
@@ -116,7 +117,7 @@ class Comment extends BaseController
         }
         if (null !== $params) {
 
-            $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
+            $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
 
             $comments->update($statement, $params);

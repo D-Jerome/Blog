@@ -4,7 +4,7 @@ namespace App\Model\Manager;
 
 use App\Model\Entities\Category;
 use App\Model\Entities\Post;
-use DateTime;
+use Safe\DateTime;
 use Framework\Application;
 use Framework\Helpers\Text;
 use Framework\PDOConnection;
@@ -173,7 +173,7 @@ class PostManager extends BaseManager
         $query = $this->dbConnect->prepare($sql);
 
         $slug = Text::toSlug($params['name']);
-        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
 
         $query->bindParam(':name', $params['name']);
         $query->bindParam(':slug', $slug);

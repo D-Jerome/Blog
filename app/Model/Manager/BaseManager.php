@@ -6,6 +6,7 @@ use Framework\Helpers\Text;
 use App\Model\PDOConnection;
 use Framework\Exception\PropertyNotFoundException;
 use PDO;
+use Safe\DateTime;
 
 abstract class BaseManager
 {
@@ -424,7 +425,7 @@ abstract class BaseManager
             WHERE id = :id
         SQL;
         $query = $this->dbConnect->prepare($sql);
-        $now = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->bindParam(':publish_at', $now);

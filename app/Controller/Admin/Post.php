@@ -10,6 +10,7 @@ use Framework\BaseController;
 use Framework\Helpers\{Text, FilterBuilder};
 use Framework\Request;
 use Framework\Session;
+use Safe\DateTime;
 
 class Post extends BaseController
 {
@@ -158,7 +159,7 @@ class Post extends BaseController
             $params['name'] = $this->getRoute()->getParams()['name'];
         }
         if (null !== $params) {
-            $params['modifiedAt'] = (new \DateTime('now'))->format('Y-m-d H:i:s');
+            $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
 
             $post->update($statement, $params);

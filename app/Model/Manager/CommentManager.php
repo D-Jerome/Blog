@@ -7,6 +7,7 @@ use App\Model\Entities\Comment;
 use Framework\Application;
 use Framework\PDOConnection;
 use PDO;
+use Safe\DateTime;
 
 class CommentManager extends BaseManager
 {
@@ -128,7 +129,7 @@ class CommentManager extends BaseManager
         SQL;
         $query = $this->dbConnect->prepare($sql);
 
-        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
 
         $query->bindParam(':content', $params['content']);
         $query->bindParam(':created_at', $created_at);

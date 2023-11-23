@@ -5,6 +5,7 @@ namespace App\Model\Manager;
 use App\Model\Entities\Role;
 use App\Model\Entities\User;
 use PDO;
+use Safe\DateTime;
 use PhpParser\Node\Stmt\Else_;
 
 class UserManager extends BaseManager
@@ -115,7 +116,7 @@ class UserManager extends BaseManager
             $password = password_hash('default', PASSWORD_BCRYPT);
         }
 
-        $created_at = (new \DateTime('now'))->format('Y-m-d H:i:s');
+        $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
 
 
         $query->bindParam(':firstname', $params['firstname']);

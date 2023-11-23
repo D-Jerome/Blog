@@ -70,7 +70,7 @@ class BaseController
      * view : Twig Template view construct
      *
      * @param  string                                                        $template Name of the template
-     * @param  array<string, int|bool|string|array<string, int|string|bool>> $params   Params to show in template
+     * @param  array<string, array<bool|int|object|string>|int|string|null> $params   Params to show in template
      * @return void
      */
     protected function view(string $template, array $params): void
