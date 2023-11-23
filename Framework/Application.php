@@ -2,7 +2,7 @@
 
 namespace Framework;
 
-use ArrayObject;
+
 use Framework\Exception\MultipleRouteFoundException;
 use Framework\Exception\NoRouteFoundException;
 

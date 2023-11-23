@@ -7,15 +7,16 @@ abstract class Entity
     /**
      * __get
      *
-     * @param  string $name
-     * @return string
+     * @param  string|int $name
+     * @return string|int|null
      */
-    public function __get(string $name): string
+    public function __get(string|int $name): null|string|int
     {
         if (isset($this->$name)) {
             /* et puis là on peut bricoler les données */
             return $this->$name;
         }
+        return null;
     }
 
 

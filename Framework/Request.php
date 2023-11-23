@@ -21,7 +21,7 @@ class Request
     /**
      * params of page(post or get)
      *
-     * @var array<string, string>
+     * @var array<string,mixed>
      */
     protected array $params = [];
 
@@ -36,7 +36,7 @@ class Request
     public function __construct(string $baseUrl)
     {
         /**
-         * @var null|false|array<string,mixed> $input 
+         * @var null|false|array<string,mixed> $input
          */
         $input = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: \Safe\filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $input = ($input === null) ? [] : $input;

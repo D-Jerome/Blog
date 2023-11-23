@@ -7,6 +7,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Intl\IntlExtension;
 
+
 class BaseController
 {
 
@@ -87,7 +88,7 @@ class BaseController
      * @param  array<string> $authRoles roles authorized in page
      * @return bool
      */
-    public function isAuthorize(array $authRoles): bool
+    public function isAuthorize(array $authRoles)
     {
 
         if (in_array('all', $authRoles, true)) {
@@ -115,9 +116,9 @@ class BaseController
      */
     public function groupFilterDataUser(): array
     {
-        $filterReturn['sortBy'] = isset(($this->getRoute()->getParams())['sort']) ? ($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $filterReturn['sortDir'] = isset(($this->getRoute()->getParams())['dir']) ? ($this->getRoute()->getParams())['dir'] : 'DESC';
-        $filterReturn['listSort'] = !empty(($this->getRoute()->getParams())['list']) ? ($this->getRoute()->getParams())['list'] : null;
+        $filterReturn['sortBy'] = isset(($this->getRoute()->getParams())['sort']) ? (string)($this->getRoute()->getParams())['sort'] : 'createdAt';
+        $filterReturn['sortDir'] = isset(($this->getRoute()->getParams())['dir']) ? (string)($this->getRoute()->getParams())['dir'] : 'DESC';
+        $filterReturn['listSort'] = !empty(($this->getRoute()->getParams())['list']) ? (string)($this->getRoute()->getParams())['list'] : null;
         if (isset(($this->getRoute()->getParams())['listSelect']) === true) {
             $filterReturn['listSortSelect'] = (($this->getRoute()->getParams())['listSelect']) !== '---' ? ($this->getRoute()->getParams())['listSelect'] : null;
         } else {
@@ -131,7 +132,7 @@ class BaseController
         if ($filterReturn['listSort'] === null && $filterReturn['listSortSelect'] !== null) {
             $filterReturn['listSortSelect'] = null;
         }
-        
+
         return $filterReturn;
     }
 }
