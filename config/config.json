@@ -1,6 +1,6 @@
 {
     "baseUrl" : "/blog-project",
-    "database" : { 
+    "database" : {
         "dbtype" : "mysql: ",
         "dbname" : "dbname=blog",
         "host" : "host=localhost",
@@ -12,19 +12,21 @@
             "PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ"
         ]
     },
-    "email" : {                      
-        "host" : "smtp.example.com",                     
-        "smtpAuth" : true,                                 
-        "userName" : "user@example.com",                    
-        "password" : "secret",                              
-        "smtpSecure" : "PHPMailer::ENCRYPTION_SMTPS",           
-        "port" : 465,                                    
+    "email" : {
+        "host" : "smtp.example.com",
+        "smtpAuth" : true,
+        "userName" : "user@example.com",
+        "password" : "secret",
+        "smtpSecure" : "PHPMailer::ENCRYPTION_SMTPS",
+        "port" : 465,
         "fromAddress" : "from@example.com",
-        "fromName" : "ffr",
+        "fromName" : "fromName",
         "replyToAddress" : "info@example.com",
         "replyToName" : "info",
         "ccAddress" : "cc@example.com",
-        "bccAddress" : "bcc@example.com"
+        "bccAddress" : "bcc@example.com",
+        "adminAddress" : "admin@exemple.com",
+        "adminName" : "Admin"
     },
     "filter" : {
         "dir" : {

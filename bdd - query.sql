@@ -25,7 +25,7 @@ CREATE TABLE user (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
-    email VARCHAR(60) NOT NULL,
+    email VARCHAR(60) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL,
     role_id INT UNSIGNED DEFAULT '3',

@@ -373,7 +373,7 @@
     {
         "path" : "/login/forget",
         "controller" : "App\\Controller\\User",
-        "action" : "sendUserConnectioMail",
+        "action" : "sendUserConnectionMail",
         "method" : "POST",
         "authorize": [
             "admin",

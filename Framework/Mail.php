@@ -93,6 +93,20 @@ class Mail
      */
     private ?string $bccAddress;
 
+    /**
+     * administrator address
+     *
+     * @var string
+     */
+    private string $adminAddress;
+
+    /**
+     * admin user name
+     *
+     * @var string|null
+     */
+    private ?string $adminName;
+
 
     /**
      * __construct : each data of email config
@@ -175,8 +189,8 @@ class Mail
 
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress("server@server.com", "Admin Server");
-        $mail->addReplyTo("no-reply@server.com", "No-Reply");
+        $mail->addAddress($this->adminAddress, $this->adminName);
+        $mail->addReplyTo($this->replyToAddress, $this->replyToName);
 
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments

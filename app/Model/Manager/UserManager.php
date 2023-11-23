@@ -39,6 +39,21 @@ class UserManager extends BaseManager
     }
 
 
+     /**
+     * getByUseremail : get User Object of the user
+     *
+     * @param  string $email email of forget password form
+     * @return User|bool
+     */
+    public function getByUserEmail(string $email): User|bool
+    {
+        $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
+        $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
+        $statement->execute([$email]);
+        return $statement->fetch();
+    }
+
+
     /**
      * getRoleById : get Role object of the user-role-id
      *

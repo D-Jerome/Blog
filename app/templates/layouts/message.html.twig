@@ -2,26 +2,47 @@
 
 {% block message %}
 {% if message %}
-<div class="container ">
+<div class="container mt-5">
 <div class="row justify-content-center">
-    <div class="col-10 text-center"  >
+    <div class="col-10 mt-5 text-center"  >
         {% if error %}
+            {% if delete %}
+                <div class="alert alert-danger" role="alert">
+                    <h5 class="alert-heading">Suppression impossible</h5>
+                    <p class="mb-0">La supression n'a pas été éffectuée.</p>
+                </div>
+            {% endif %}
             {% if login %}
                 <div class="alert alert-danger" role="alert">
                     <h5 class="alert-heading">Compte inactif</h5>
                     <p class="mb-0">Votre compte est désactivé <br> Merci de vous rapprocher de votre administrateur.</p>
                 </div>
-            {% else %}
+            {% endif %}
+            {% if login == FALSE %}
                 <div class="alert alert-danger " role="alert">
                     <h5 class="alert-heading">Connexion impossible</h5>
                     <p class="mb-0">L'identifiant et/ou mot de passe incorrect.</p>
                 </div>
             {% endif %}
+            {% if forget %}
+                <div class="alert alert-danger" role="alert">
+                    <h5 class="alert-heading">Email inconnu</h5>
+                    <p class="mb-0">Votre email nous est inconnu <br> Merci de vous rapprocher de votre administrateur.</p>
+                </div>
+            {% endif %}
         {% else %}
-            <div class="alert alert-success" role="alert">
-                <h5 class="alert-heading">Suppression réussie</h5>
-                <p class="mb-0">La supression du post a été éffectuée</p>
-            </div>
+            {% if delete %}
+                <div class="alert alert-success" role="alert">
+                    <h5 class="alert-heading">Suppression réussie</h5>
+                    <p class="mb-0">La supression du post a été éffectuée.</p>
+                </div>
+            {% endif %}
+            {% if forget %}
+                <div class="alert alert-success" role="alert">
+                    <h5 class="alert-heading">Email envoyé</h5>
+                    <p class="mb-0">Un email de connexion vous a été envoyé.</p>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 </div>
