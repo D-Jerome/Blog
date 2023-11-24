@@ -23,24 +23,28 @@ class User extends BaseController
 
         if (null === ($user)) {
             $user = [];
-            $this->view('frontoffice/login.html.twig', [
+            $this->view(
+                'frontoffice/login.html.twig', [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
                 'login' => false,
-                'authUser' => $user]);
+                'authUser' => $user]
+            );
             exit;
         }
 
         if (false === ($user->getActive())) {
             $user = [];
-            $this->view('frontoffice/login.html.twig', [
+            $this->view(
+                'frontoffice/login.html.twig', [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
                 'login' => true,
                 'authUser' => $user
-            ]);
+                ]
+            );
             exit;
         }
 
@@ -51,12 +55,14 @@ class User extends BaseController
             header('Location: '. Application::getBaseUrl() .'/admin/logged');
 
         } else {
-            $this->view('frontoffice/login.html.twig', [
+            $this->view(
+                'frontoffice/login.html.twig', [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
                 'login' => false,
-                'authUser' => $user]);
+                'authUser' => $user]
+            );
         }//end if
 
     }
@@ -77,11 +83,13 @@ class User extends BaseController
         }
         //afficher page de connection
 
-        $this->view('frontoffice/login.html.twig', [
+        $this->view(
+            'frontoffice/login.html.twig', [
             'baseUrl' => Application::getBaseUrl(),
             'message' => false,
             'error' => false,
-            'authUser' => $user]);
+            'authUser' => $user]
+        );
     }
 
 
@@ -97,10 +105,12 @@ class User extends BaseController
         if (null !== $userSession) {
             $user = $userSession->getAllUserInfo();
         }
-        $this->view('frontoffice/signup.html.twig', [
+        $this->view(
+            'frontoffice/signup.html.twig', [
             'baseUrl' => Application::getBaseUrl(),
             'error' => false,
-            'authUser' => $user]);
+            'authUser' => $user]
+        );
     }
 
 
@@ -176,10 +186,12 @@ class User extends BaseController
      */
     public function forgetPwd()
     {
-        $this->view('frontoffice/forget.pwd.html.twig', [
+        $this->view(
+            'frontoffice/forget.pwd.html.twig', [
             'baseUrl' => Application::getBaseUrl(),
             'error' => false
-        ]);
+            ]
+        );
     }
 
 
