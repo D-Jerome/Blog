@@ -161,9 +161,9 @@ class Mail
 
         try{
             $mail->send();
-            return TRUE;
+            return true;
         }catch (\Exception $e){
-            return FALSE;
+            return false;
         }
 
     }
@@ -218,9 +218,9 @@ class Mail
 
         try{
             $mail->send();
-            return TRUE;
+            return true;
         }catch (\Exception $e){
-            return FALSE;
+            return false;
         }
 
     }

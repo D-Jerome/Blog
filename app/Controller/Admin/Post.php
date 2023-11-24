@@ -311,8 +311,8 @@ class Post extends BaseController
      */
     public function unpublishPost(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
-        if ($filterParams !== null){
+        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
         (new PostManager(Application::getDatasource()))->unpublish($id);
@@ -328,8 +328,8 @@ class Post extends BaseController
      */
     public function publishPost(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
-        if ($filterParams !== null){
+        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
         (new PostManager(Application::getDatasource()))->publish($id);

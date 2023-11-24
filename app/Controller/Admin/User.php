@@ -139,8 +139,8 @@ class User extends BaseController
      */
     public function disableUser(int $id): void
     {
-        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
-        if ($filterParams !== null){
+        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
         (new UserManager(Application::getDatasource()))->disable($id);
@@ -156,8 +156,8 @@ class User extends BaseController
      */
     public function enableUser(int $id): void
     {
-        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
-        if ($filterParams !== null){
+        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
         (new UserManager(Application::getDatasource()))->enable($id);
