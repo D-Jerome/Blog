@@ -170,10 +170,30 @@ class User extends BaseController
         $users = new UserManager(Application::getDatasource());
         $userInfo = $users->getByUserEmail($email);
         if ($userInfo === false ) {
-            $this->view('frontoffice/forget.pwd.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true, 'forget' => true]);
+            $this->view('frontoffice/forget.pwd.html.twig', [
+                'baseUrl' => Application::getBaseUrl(),
+                'message' => '<strong>Utilisateur inconnu</strong><br>
+                            Votre email nous est inconnu<br>
+                            Merci de vous rapprocher de votre administrateur.',
+                            'error' => true,
+                        ]);
         }else{
-            $mail->sendMailToUser($userInfo);
-            $this->view('frontoffice/forget.pwd.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => false, 'forget' => true]);
+            if ($mail->sendMailToUser($userInfo) === TRUE) {
+                $this->view('frontoffice/forget.pwd.html.twig', [
+                    'baseUrl' => Application::getBaseUrl(),
+                    'message' => '<h5>Email envoyé</h5><br>
+                                Un email de connexion vous a été envoyé.',
+                    'error' => false,
+                ]);
+            }else{
+                $this->view('frontoffice/forget.pwd.html.twig', [
+                    'baseUrl' => Application::getBaseUrl(),
+                    'message' => '<h5>Email non envoyé</h5><br>
+                                Un problème est survenu. Rééssayez plus tard.',
+                    'error' => TRUE,
+                    'forget' => true
+                ]);
+            }
         }
     }
 

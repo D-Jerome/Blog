@@ -126,10 +126,10 @@ class Mail
     /**
      * sendMailToUser : send Email to User
      *
-     * @param  null|User $user Receiver of email
-     * @return void
+     * @param  User $user Receiver of email
+     * @return bool
      */
-    public function sendMailToUser(?User $user)
+    public function sendMailToUser(User $user): bool
     {
         $mail = new PHPMailer(true);
         //Server settings
@@ -159,10 +159,11 @@ class Mail
         $mail->Body    = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
         $mail->AltBody = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
 
-        if (!$mail->send()) {
-            echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent.';
+        try{
+            $mail->send();
+            return TRUE;
+        }catch (\Exception $e){
+            return FALSE;
         }
 
     }
@@ -172,9 +173,9 @@ class Mail
      * sendMailToAdmin : send email to admin
      *
      * @param  array<string, string> $contact Informations of the contact
-     * @return void
+     * @return bool
      */
-    public function sendMailToAdmin(array $contact)
+    public function sendMailToAdmin(array $contact): bool
     {
         $mail = new PHPMailer(true);
         //Server settings
@@ -215,10 +216,11 @@ class Mail
                         Message : '.$contact['content'].'
                         ';
 
-        if (!$mail->send()) {
-            echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent.';
+        try{
+            $mail->send();
+            return TRUE;
+        }catch (\Exception $e){
+            return FALSE;
         }
 
     }

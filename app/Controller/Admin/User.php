@@ -51,24 +51,31 @@ class User extends BaseController
             $statementUser->setRoleName($users->getRoleById($statementUser->getRoleId()));
         }
 
-        $this->view(
-            'backoffice/admin.users.html.twig',
-            [
-                'baseUrl' => Application::getBaseUrl(),
-                'registredUsers' => $statementUsers,
-                'sort' => $filter->getSort(),
-                'dir' => $filter->getDir(),
-                'sortDir' => $httpParams['sortDir'],
-                'sortBy' => $httpParams['sortBy'],
-                'listSort' => $httpParams['listSort'],
-                'list' => $filter->getList() ,
-                'idListSelect' => $httpParams['listSortSelect'],
-                'listSelect' => $filter->getListSelect(),
-                'listNames' => $filter->getListNames(),
-                'pages' => $pages,
-                'authUser' => $user
-            ]
-        );
+        $dataView = [
+            'baseUrl' => Application::getBaseUrl(),
+            'registredUsers' => $statementUsers,
+            'sort' => $filter->getSort(),
+            'dir' => $filter->getDir(),
+            'sortDir' => $httpParams['sortDir'],
+            'sortBy' => $httpParams['sortBy'],
+            'listSort' => $httpParams['listSort'],
+            'list' => $filter->getList() ,
+            'idListSelect' => $httpParams['listSortSelect'],
+            'listSelect' => $filter->getListSelect(),
+            'listNames' => $filter->getListNames(),
+            'pages' => $pages,
+            'authUser' => $user
+        ];
+
+        if (isset(($this->getRoute()->getParams())['user'])) {
+            if (($this->getRoute()->getParams())['user'] == 'modified') {
+                $dataView['message'] = '<strong>Modification réussie</strong><br>
+                La modification de l\'utilisateur a été éffectué.';
+                $dataView['error'] = false;
+            }
+        }
+
+        $this->view('backoffice/admin.users.html.twig', $dataView);
     }
 
 
@@ -120,7 +127,7 @@ class User extends BaseController
                     'roleName' => $user->getRoleName()
                 ];
 
-        header('Location: '. Application::getBaseUrl() .'/admin');
+        header('Location: '. Application::getBaseUrl() .'/admin?user=modified');
     }
 
 
@@ -132,9 +139,12 @@ class User extends BaseController
      */
     public function disableUser(int $id): void
     {
-
+        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
+        if ($filterParams !== null){
+            $filterParams = '?'.$filterParams;
+        }
         (new UserManager(Application::getDatasource()))->disable($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
     }
 
 
@@ -146,8 +156,12 @@ class User extends BaseController
      */
     public function enableUser(int $id): void
     {
+        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
+        if ($filterParams !== null){
+            $filterParams = '?'.$filterParams;
+        }
         (new UserManager(Application::getDatasource()))->enable($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$filterParams.'#'.$id);
         exit;
     }
 

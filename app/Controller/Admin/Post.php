@@ -12,6 +12,8 @@ use Framework\Request;
 use Framework\Session;
 use Safe\DateTime;
 
+use function Safe\parse_url;
+
 class Post extends BaseController
 {
     /**
@@ -50,6 +52,7 @@ class Post extends BaseController
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
+
         $dataView= [
             'baseUrl' => Application::getBaseUrl(),
             'posts' => $statementPosts,
@@ -68,7 +71,8 @@ class Post extends BaseController
 
         if (isset(($this->getRoute()->getParams())['delete'])) {
             if (($this->getRoute()->getParams())['delete'] == 'ok') {
-                $dataView['message'] = true;
+                $dataView['message'] = '<strong>Suppression réussie</strong><br>
+                l\'article a été supprimé.';
                 $dataView['error'] = false;
             }
         }
@@ -307,9 +311,12 @@ class Post extends BaseController
      */
     public function unpublishPost(int $id): void
     {
-
+        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
+        if ($filterParams !== null){
+            $filterParams = '?'.$filterParams;
+        }
         (new PostManager(Application::getDatasource()))->unpublish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 
 
@@ -321,9 +328,12 @@ class Post extends BaseController
      */
     public function publishPost(int $id): void
     {
-
+        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER,FILTER_SANITIZE_URL)['HTTP_REFERER'],PHP_URL_QUERY);
+        if ($filterParams !== null){
+            $filterParams = '?'.$filterParams;
+        }
         (new PostManager(Application::getDatasource()))->publish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 
 

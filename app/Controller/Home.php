@@ -43,6 +43,9 @@ class Home extends BaseController
     {
         $error = false;
         $postdatas = (new Request(Application::getBaseUrl() .'/'))->getParams();
+        foreach ($postdatas as $data){
+            $data = htmlentities($data);
+        }
         foreach ($postdatas as $k => $data) {
             if (empty($data)) {
                 $error = true;
@@ -50,9 +53,14 @@ class Home extends BaseController
 
             }
         }
+
         $mail = new Mail(Application::getEmailSource());
-        $mail->sendMailToAdmin($postdatas);
-        header('Location: '. Application::getBaseUrl() .'/');
+       if ($mail->sendMailToAdmin($postdatas)){
+            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => TRUE, 'error' => FALSE ]);
+       }else{
+            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => TRUE, 'error' => TRUE ]);
+       }
+
     }
 
 
