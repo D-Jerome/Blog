@@ -17,6 +17,7 @@ class DisableUserException extends Exception
     {
         parent::__construct($message, 0010);
 
-    }//end __construct
+    }//end __construct()
+
 
 }

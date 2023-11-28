@@ -17,6 +17,7 @@ class UnauthorizeValueException extends Exception
     {
         parent::__construct($message, 006);
 
-    }//end __construct
+    }//end __construct()
+
 
 }

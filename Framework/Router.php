@@ -30,7 +30,7 @@ class Router
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
 
-    } //end _construct
+    } //end _construct()
 
 
     /**
@@ -61,10 +61,13 @@ class Router
                         $route->setParams($request->getParams());
                         return $route;
                     }
+
                 } //end if
 
             } //endif
+
         } //end foreach
+
         return null;
     }
 

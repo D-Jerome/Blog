@@ -17,6 +17,7 @@ class DataBaseConnectionException extends Exception
     {
         parent::__construct($message, 0000);
 
-    }//end __construct
+    }//end __construct()
+
 
 }

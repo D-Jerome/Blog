@@ -44,7 +44,7 @@ class Request
         $this->uri = str_replace($baseUrl, '', \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_URI'], PHP_URL_PATH));
         $this->method = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_METHOD'];
 
-    }//end __construct
+    }//end __construct()
 
 
     /**

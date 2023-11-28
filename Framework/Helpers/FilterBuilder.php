@@ -67,7 +67,7 @@ class FilterBuilder
             $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
         }
 
-    }//end __construct
+    }//end __construct()
 
 
     /**
@@ -122,5 +122,6 @@ class FilterBuilder
     {
         return $this->listNames;
     }
+
 
 }

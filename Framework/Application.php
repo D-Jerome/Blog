@@ -40,7 +40,7 @@ final class Application
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
 
-    }//end __construct
+    }//end __construct()
 
 
     /**
@@ -143,5 +143,6 @@ final class Application
     {
         return self::$config['filter'];
     }
+
 
 }

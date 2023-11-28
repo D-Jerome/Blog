@@ -17,6 +17,7 @@ class PropertyNotFoundException extends Exception
     {
         parent::__construct($message, 0003);
 
-    }//end __construct
+    }//end __construct()
+
 
 }
