@@ -35,9 +35,9 @@ abstract class BaseManager
     /**
      * __construct
      *
-     * @param  string                $table      Name of the table to query database
-     * @param  string                $objectName Name of object to return information
-     * @param  array<string, string> $datasource Database connection informations
+     * @param  string                              $table      Name of the table to query database
+     * @param  string                              $objectName Name of object to return information
+     * @param  array<string, array<string>|string> $datasource Database connection informations
      * @return void
      */
     public function __construct(string $table, string $objectName, array $datasource)
@@ -76,7 +76,7 @@ abstract class BaseManager
      * @param  int|string $paramValue Value of field to filter
      * @return array<object>
      */
-    public function getAllFilteredByParam(string $paramItem, string|int $paramValue ): array
+    public function getAllFilteredByParam(string $paramItem, string|int $paramValue): array
     {
         $sql = <<<SQL
                 SELECT *
@@ -198,7 +198,7 @@ abstract class BaseManager
                 SQL;
             }
         }//end if
-       
+
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);

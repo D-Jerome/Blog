@@ -21,9 +21,9 @@ class Post extends BaseController
     public function postsByCategory(): void
     {
         //recherche des 3 derniers articles par catégories
-        $categories = new CategoryManager(Application::getDatasource());
+        $categories = CategoryManager::getCategoryInstance(Application::getDatasource());
         $statementCategories = $categories->getAll();
-        $posts = new PostManager(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $postsByCategories = null;
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
@@ -64,7 +64,7 @@ class Post extends BaseController
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [ "publish_state" => true];
-        $posts = new PostManager(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
@@ -73,7 +73,7 @@ class Post extends BaseController
         }else{
             $count = count($posts->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect'], true));
         }
-        
+
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
@@ -120,8 +120,8 @@ class Post extends BaseController
      */
     public function post(int $id): void
     {
-        $post = new PostManager(Application::getDatasource());
-        $comment = new CommentManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
+        $comment = CommentManager::getCommentInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));

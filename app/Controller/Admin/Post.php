@@ -30,7 +30,7 @@ class Post extends BaseController
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
-        $posts = new PostManager(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
         if ($httpParams['listSort'] === null) {
@@ -89,7 +89,7 @@ class Post extends BaseController
      */
     public function deletePost(int $id): void
     {
-        (new PostManager(Application::getDatasource()))->delete($id);
+        (PostManager::getPostInstance(Application::getDatasource()))->delete($id);
         header('Location: '. Application::getBaseUrl() .'/admin/posts?delete=ok');
     }
 
@@ -101,7 +101,7 @@ class Post extends BaseController
      */
     public function addPost(): void
     {
-        $category = new CategoryManager(Application::getDatasource());
+        $category = CategoryManager::getCategoryInstance(Application::getDatasource());
         $statementCategories = $category->getAll();
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
@@ -116,7 +116,7 @@ class Post extends BaseController
      */
     public function addedPost()
     {
-        $post = new PostManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
         $post->insertNewPost($request->getParams());
@@ -135,7 +135,7 @@ class Post extends BaseController
      */
     public function modifyPost(int $id)
     {
-        $post = new PostManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
@@ -153,7 +153,7 @@ class Post extends BaseController
      */
     public function modifiedPost(int $id)
     {
-        $post = new PostManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $params = [];
         $statement = $post->getById($id);
 
@@ -175,7 +175,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $post = new PostManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
@@ -193,8 +193,8 @@ class Post extends BaseController
     public function addComment(int $id): void
     {
 
-        $post = new PostManager(Application::getDatasource());
-        $comment = new CommentManager(Application::getDatasource());
+        $post =PostManager::getPostInstance(Application::getDatasource());
+        $comment = CommentManager::getCommentInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
@@ -221,7 +221,7 @@ class Post extends BaseController
     public function addedComment(int $id): void
     {
 
-        $comment = new CommentManager(Application::getDatasource());
+        $comment = CommentManager::getCommentInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
         $comment->insertNewComment($request->getParams());
@@ -230,7 +230,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $post = new PostManager(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
         Header('Location: '. Application::getBaseUrl() .'/post/'. $slug .'/'. $id);
@@ -255,7 +255,7 @@ class Post extends BaseController
 
         $sqlParams = [];
 
-        $posts = new PostManager(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
 
@@ -263,7 +263,7 @@ class Post extends BaseController
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
-        $comments = (new CommentManager(Application::getDatasource()));
+        $comments = CommentManager::getCommentInstance(Application::getDatasource());
         if ($user['roleName'] !== "admin") {
             $sqlParams = ['user_id' => $user['id']];
         }//end if
@@ -315,7 +315,7 @@ class Post extends BaseController
         if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
-        (new PostManager(Application::getDatasource()))->unpublish($id);
+        (PostManager::getPostInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 
@@ -332,7 +332,7 @@ class Post extends BaseController
         if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
-        (new PostManager(Application::getDatasource()))->publish($id);
+        (PostManager::getPostInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 

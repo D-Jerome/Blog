@@ -111,7 +111,7 @@ class Mail
     /**
      * __construct : each data of email config
      *
-     * @param  array<string, string> $config From the config file
+     * @param  array<string, bool|int|string> $config From the config file
      * @return void
      */
     public function __construct(array $config)

@@ -29,8 +29,8 @@ class Comment extends BaseController
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
-        $comments = (new CommentManager(Application::getDatasource()));
-        $posts = new PostManager(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
@@ -40,7 +40,7 @@ class Comment extends BaseController
         }else{
             $count = count($comments->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect']));
         }
-
+        
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
@@ -93,7 +93,7 @@ class Comment extends BaseController
     public function modifyComment(int $id): void
     {
 
-        $comments = new CommentManager(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
@@ -112,7 +112,7 @@ class Comment extends BaseController
      */
     public function modifiedComment(int $id): void
     {
-        $comments = new CommentManager(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $params = [];
         $statement = $comments->getById($id);
 
@@ -135,7 +135,7 @@ class Comment extends BaseController
                  'roleName' => $user->getRoleName()
                 ];
 
-        $comments = new CommentManager(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
@@ -161,7 +161,7 @@ class Comment extends BaseController
 
         $sqlParams = [];
 
-        $posts = new PostManager(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
 
         $userSession = $this->session->getUser();
@@ -174,7 +174,7 @@ class Comment extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $comments = (new CommentManager(Application::getDatasource()));
+        $comments = (CommentManager::getCommentInstance(Application::getDatasource()));
 
         if ($httpParams['listSortSelect'] === null) {
             $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
@@ -224,7 +224,7 @@ class Comment extends BaseController
      */
     public function unpublishComment(int $id): void
     {
-        (new CommentManager(Application::getDatasource()))->unpublish($id);
+        (CommentManager::getCommentInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments#'.$id);
     }
 
@@ -237,7 +237,7 @@ class Comment extends BaseController
      */
     public function publishComment(int $id): void
     {
-        (new CommentManager(Application::getDatasource()))->publish($id);
+        (CommentManager::getCommentInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments#'.$id);
     }
 

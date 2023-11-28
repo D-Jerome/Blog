@@ -11,6 +11,9 @@ use Safe\DateTime;
 
 class CommentManager extends BaseManager
 {
+    private static ?BaseManager $commentInstance;
+
+
     /**
      * __construct
      *
@@ -23,6 +26,22 @@ class CommentManager extends BaseManager
 
     }//end _construct
 
+
+    /**
+     * Instance of manager
+     *
+     * @param array<string, array<string>|string> $datasource
+     *
+     * @return object
+     */
+    public static function getCommentInstance(array $datasource): object
+    {
+        if (empty(self::$commentInstance) || (!isset(self::$commentInstance))) {
+            self::$commentInstance = new self($datasource);
+        }
+
+        return self::$commentInstance;
+    }
 
     /**
      * getCommentsByPostId: get all comments od a post
@@ -66,9 +85,9 @@ class CommentManager extends BaseManager
      * getCommentUsername: get username of post
      *
      * @param  int $id Post id
-     * @return string
+     * @return int|string|false|null
      */
-    public function getCommentUsername(int $id): string
+    public function getCommentUsername(int $id): int|string|false|null
     {
         $sql = <<<SQL
             SELECT username FROM user

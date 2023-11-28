@@ -18,13 +18,14 @@ class User extends BaseController
      */
     public function loginAuth(): void
     {
-        $users = (new UserManager(Application::getDatasource()));
+        $users = UserManager::getUserInstance(Application::getDatasource());
         $user = $users->getByUsername($this->getRoute()->getParams()['login']);
 
         if (null === ($user)) {
             $user = [];
             $this->view(
-                'frontoffice/login.html.twig', [
+                'frontoffice/login.html.twig',
+                [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
@@ -37,7 +38,8 @@ class User extends BaseController
         if (false === ($user->getActive())) {
             $user = [];
             $this->view(
-                'frontoffice/login.html.twig', [
+                'frontoffice/login.html.twig',
+                [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
@@ -56,7 +58,8 @@ class User extends BaseController
 
         } else {
             $this->view(
-                'frontoffice/login.html.twig', [
+                'frontoffice/login.html.twig',
+                [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => true,
                 'error' => true,
@@ -84,7 +87,8 @@ class User extends BaseController
         //afficher page de connection
 
         $this->view(
-            'frontoffice/login.html.twig', [
+            'frontoffice/login.html.twig',
+            [
             'baseUrl' => Application::getBaseUrl(),
             'message' => false,
             'error' => false,
@@ -106,7 +110,8 @@ class User extends BaseController
             $user = $userSession->getAllUserInfo();
         }
         $this->view(
-            'frontoffice/signup.html.twig', [
+            'frontoffice/signup.html.twig',
+            [
             'baseUrl' => Application::getBaseUrl(),
             'error' => false,
             'authUser' => $user]
@@ -122,8 +127,7 @@ class User extends BaseController
     public function validationSignUp()
     {
 
-        try
-        {
+        try {
             $error = false;
             $postdatas = (new Request('blog-project'))->getParams();
             foreach ($postdatas as $k => $data) {
@@ -139,7 +143,7 @@ class User extends BaseController
                 }
 
             }
-            $users = new UserManager(Application::getDatasource());
+            $users = UserManager::getUserInstance(Application::getDatasource());
 
             if ($users->getByUsername($postdatas['username'])) {
                 $error = true;
@@ -149,7 +153,7 @@ class User extends BaseController
                 $error = true;
             }
 
-            if ($error == true) {
+            if ($error === true) {
                 unset($postdatas['password']);
                 unset($postdatas['confirmPassword']);
                 $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);
@@ -160,7 +164,7 @@ class User extends BaseController
                 header('Location: '. Application::getBaseUrl() .'/');
             }//end if
 
-        }catch (UnauthorizeValueException $e){
+        } catch (UnauthorizeValueException $e) {
 
         }
 
@@ -187,9 +191,10 @@ class User extends BaseController
     public function forgetPwd()
     {
         $this->view(
-            'frontoffice/forget.pwd.html.twig', [
+            'frontoffice/forget.pwd.html.twig',
+            [
             'baseUrl' => Application::getBaseUrl(),
-            'error' => false
+            'error' => false,
             ]
         );
     }
@@ -205,11 +210,12 @@ class User extends BaseController
         $postDatas = ((new Request(Application::getBaseUrl() .'/'))->getParams());
         $email = filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
         $mail = new Mail(Application::getEmailSource());
-        $users = new UserManager(Application::getDatasource());
+        $users = UserManager::getUserInstance(Application::getDatasource());
         $userInfo = $users->getByUserEmail($email);
-        if ($userInfo === false ) {
+        if ($userInfo === false) {
             $this->view(
-                'frontoffice/forget.pwd.html.twig', [
+                'frontoffice/forget.pwd.html.twig',
+                [
                 'baseUrl' => Application::getBaseUrl(),
                 'message' => '<strong>Utilisateur inconnu</strong><br>
                             Votre email nous est inconnu<br>
@@ -220,7 +226,8 @@ class User extends BaseController
         } else {
             if ($mail->sendMailToUser($userInfo) === true) {
                 $this->view(
-                    'frontoffice/forget.pwd.html.twig', [
+                    'frontoffice/forget.pwd.html.twig',
+                    [
                     'baseUrl' => Application::getBaseUrl(),
                     'message' => '<h5>Email envoyé</h5><br>
                                 Un email de connexion vous a été envoyé.',
@@ -229,7 +236,8 @@ class User extends BaseController
                 );
             } else {
                 $this->view(
-                    'frontoffice/forget.pwd.html.twig', [
+                    'frontoffice/forget.pwd.html.twig',
+                    [
                     'baseUrl' => Application::getBaseUrl(),
                     'message' => '<h5>Email non envoyé</h5><br>
                                 Un problème est survenu. Rééssayez plus tard.',

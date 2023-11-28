@@ -56,9 +56,15 @@ class Home extends BaseController
 
         $mail = new Mail(Application::getEmailSource());
         if ($mail->sendMailToAdmin($postdatas)) {
-            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => false ]);
+            $this->view(
+                'frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
+            L\'envoi du message a été éffectué.', 'error' => false ]
+            );
         }else{
-            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => true, 'error' => true ]);
+            $this->view(
+                'frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
+            L\'envoi du message a échoué.<br>Rééssayez plus tard.', 'error' => true ]
+            );
         }
 
     }

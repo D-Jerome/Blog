@@ -62,7 +62,8 @@ class FilterBuilder
             $this->list = $config[$typeObj]['list'];
             $this->listSelect = $config[$typeObj]['listSelect'];
             $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
-            $listNames = new  $objectManagerName(Application::getDatasource());
+            $getInstance = 'get'.array_key_first($config[$typeObj]['list']).'Instance';
+            $listNames = $objectManagerName::$getInstance(Application::getDatasource());
             $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
         }
 

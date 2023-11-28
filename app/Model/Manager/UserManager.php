@@ -11,17 +11,35 @@ use PhpParser\Node\Stmt\Else_;
 class UserManager extends BaseManager
 {
 
+    private static ?BaseManager $userInstance;
     /**
      * __construct
      *
-     * @param  array<string, string> $datasource Database connection informations from config file
+     * @param  array<string, array<string>|string> $datasource Database connection informations from config file
      * @return void
      */
-    public function __construct(array $datasource)
+    private function __construct(array $datasource)
     {
         parent::__construct('user', User::class, $datasource);
 
     }//end __construct
+
+
+    /**
+     * Instance of manager
+     *
+     * @param array<string, array<string>|string> $datasource
+     *
+     * @return object
+     */
+    public static function getUserInstance(array $datasource): object
+    {
+        if (empty(self::$userInstance) || (!isset(self::$userInstance))) {
+            self::$userInstance = new self($datasource);
+        }
+
+        return self::$userInstance;
+    }
 
 
     /**
@@ -43,9 +61,9 @@ class UserManager extends BaseManager
       * getByUseremail : get User Object of the user
       *
       * @param  string $email email of forget password form
-      * @return User|bool
+      * @return string|bool
       */
-    public function getByUserEmail(string $email): User|bool
+    public function getByUserEmail(string $email):string|bool
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -58,9 +76,9 @@ class UserManager extends BaseManager
      * getRoleById : get Role object of the user-role-id
      *
      * @param  int $id Id of the Role of the user
-     * @return string
+     * @return int|string|false|null
      */
-    public function getRoleById(int $id): string
+    public function getRoleById(int $id): int|string|false|null
     {
         $sql = <<<SQL
             SELECT r.name FROM role r
@@ -153,9 +171,9 @@ class UserManager extends BaseManager
      * updateUser : Update user information
      *
      * @param  array<string, string|int> $params New data user
-     * @return int
+     * @return int|string
      */
-    public function updateUser(array $params):int
+    public function updateUser(array $params): int|string
     {
 
         $actualUser = $this->getById($params['id']);
@@ -182,6 +200,7 @@ class UserManager extends BaseManager
             }//indif
 
         }//endforeach
+
         return $actualUser->getId();
     }
 
@@ -197,7 +216,7 @@ class UserManager extends BaseManager
     public function verifyCouple(int $id, string $username): int
     {
         $sql = <<<SQL
-            SELECT id FROM $this->table 
+            SELECT id FROM $this->table
             WHERE id = :id AND username = :username
         SQL;
         $query = $this->dbConnect->prepare($sql);

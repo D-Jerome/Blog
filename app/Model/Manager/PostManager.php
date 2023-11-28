@@ -20,6 +20,7 @@ use PDO;
 class PostManager extends BaseManager
 {
 
+    private static ?BaseManager $postInstance;
     /**
      * [ __construct]
      *
@@ -31,6 +32,23 @@ class PostManager extends BaseManager
         parent::__construct('post', Post::class, $datasource);
 
     }//end _construct
+
+
+    /**
+     * Instance of manager
+     *
+     * @param array<string, array<string>|string> $datasource
+     *
+     * @return object
+     */
+    public static function getPostInstance(array $datasource): object
+    {
+        if (empty(self::$postInstance) || (!isset(self::$postInstance))) {
+            self::$postInstance = new self($datasource);
+        }
+
+        return self::$postInstance;
+    }
 
 
     /**
@@ -74,7 +92,7 @@ class PostManager extends BaseManager
                     AND publish_state = TRUE
             SQL;
         }
-        
+
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
@@ -143,9 +161,9 @@ class PostManager extends BaseManager
      * [getPostUsername] : get username from user_id
      *
      * @param  int $id User id
-     * @return string
+     * @return int|string|false|null
      */
-    public function getPostUsername(int $id): string
+    public function getPostUsername(int $id): int|string|false|null
     {
         $sql = <<<SQL
             SELECT username FROM user
@@ -226,9 +244,6 @@ class PostManager extends BaseManager
         }//end if
 
     }
-
-
-
 
 
 }

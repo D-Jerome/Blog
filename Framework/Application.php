@@ -2,13 +2,11 @@
 
 namespace Framework;
 
-
 use Framework\Exception\MultipleRouteFoundException;
 use Framework\Exception\NoRouteFoundException;
 
 final class Application
 {
-
     /**
      * http request information
      *
@@ -26,7 +24,7 @@ final class Application
     /**
      * datas from config file
      *
-     * @var array<string, string|array<string, bool|int|string|array<string, string|array<string, string>|array<null>>>>
+     * @var array<string, string|array<string, null|bool|int|string|array<string, string|array<string, string>|array<null>>>>
      */
     private static array $config;
 
@@ -85,7 +83,8 @@ final class Application
                             $id = $paramsValues[$paramsKey];
                         }
 
-                    }//end if
+                    }//end foreach
+
                     $route->$action($id);
                 } else {
                     $route->$action();

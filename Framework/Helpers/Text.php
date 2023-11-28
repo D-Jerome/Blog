@@ -11,7 +11,7 @@ class Text
      * @param  string $text text to transform
      * @return string
      */
-    public static function toSlug(string $text)
+    public static function toSlug(string $text): string
     {
         return \Safe\preg_replace('/[^A-Za-z0-9-]+/', '-', $text);
     }

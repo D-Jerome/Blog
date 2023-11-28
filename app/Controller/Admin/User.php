@@ -30,7 +30,7 @@ class User extends BaseController
         $sqlParams = [];
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
-        $users = (new UserManager(Application::getDatasource()));
+        $users = UserManager::getUserInstance(Application::getDatasource());
 
         if ($httpParams['listSort'] === null) {
             $count = count($users->getAll());
@@ -87,10 +87,10 @@ class User extends BaseController
      */
     public function modifyUser(int $id): void
     {
-        $users = new UserManager(Application::getDatasource());
+        $users = UserManager::getUserInstance(Application::getDatasource());
         $statementUser = $users->getById($id);
 
-        $roles = new RoleManager(Application::getDatasource());
+        $roles = RoleManager::getRoleInstance(Application::getDatasource());
         $statementRoles = $roles->getAll();
 
         $user = $this->session->getUser();
@@ -112,10 +112,10 @@ class User extends BaseController
      */
     public function modifiedUser(int $id): void
     {
-        $users = new UserManager(Application::getDatasource());
+        $users = UserManager::getUserInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
-        $roles = new RoleManager(Application::getDatasource());
+        $roles = RoleManager::getRoleInstance(Application::getDatasource());
         $statementRoles = $roles->getAll();
         $users->updateUser($request->getParams());
 
@@ -143,7 +143,7 @@ class User extends BaseController
         if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
-        (new UserManager(Application::getDatasource()))->disable($id);
+        (UserManager::getUserInstance(Application::getDatasource()))->disable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
     }
 
@@ -160,7 +160,7 @@ class User extends BaseController
         if ($filterParams !== null) {
             $filterParams = '?'.$filterParams;
         }
-        (new UserManager(Application::getDatasource()))->enable($id);
+        (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users#'.$filterParams.'#'.$id);
         exit;
     }
@@ -173,7 +173,7 @@ class User extends BaseController
      */
     public function addUser()
     {
-        $roles = new RoleManager(Application::getDatasource());
+        $roles = RoleManager::getRoleInstance(Application::getDatasource());
         $statementRoles = $roles->getAll();
         $user = $this->session->getUser();
         $user = [
@@ -193,7 +193,7 @@ class User extends BaseController
      */
     public function addedUser(): void
     {
-        $user = new UserManager(Application::getDatasource());
+        $user = UserManager::getUserInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
         $return = $user->insertNewUser($request->getParams());
@@ -201,7 +201,7 @@ class User extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $users = new UserManager(Application::getDatasource());
+        $users = UserManager::getUserInstance(Application::getDatasource());
         $statementUser = $users->getById($return);
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
