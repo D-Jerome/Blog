@@ -34,20 +34,19 @@ class Comment extends BaseController
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
+        if ($user['roleName'] !== "admin") {
+            $sqlParams = ['user_id' => $user['id']];
+        }//end if
 
         if ($httpParams['listSort'] === null) {
-            $count = count($comments->getAll());
+            $count = count($comments->getAllFilteredByParams( $sqlParams));
         }else{
-            $count = count($comments->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect']));
-        }
-        
+            $count = count($comments->getAllFilteredByParams($httpParams['listSort'], $httpParams['listSortSelect']));
+        }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if ($user['roleName'] !== "admin") {
-            $sqlParams = ['user_id' => $user['id']];
-        }//end if
 
         $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
