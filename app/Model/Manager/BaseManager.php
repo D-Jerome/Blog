@@ -90,12 +90,12 @@ abstract class BaseManager
 
 
        /**
-     * getAllFilteredByParams : get all datas of filtered of objects
-     *
-     * @param  array<string,int|string>    $params  fields and values to filter
-     *
-     * @return array<object>
-     */
+        * getAllFilteredByParams : get all datas of filtered of objects
+        *
+        * @param array<string,int|string> $params fields and values to filter
+        *
+        * @return array<object>
+        */
     public function getAllFilteredByParams(?array $params): array
     {
         $sql = <<<SQL
@@ -255,18 +255,18 @@ abstract class BaseManager
         SQL;
         if (isset($listId)) {
             switch ($this->table) {
-                case 'post':
-                    $sql .= <<<SQL
+            case 'post':
+                $sql .= <<<SQL
                                 INNER JOIN post_category pc ON pc.post_id = post.id
                             SQL;
-                    break;
-                case 'user':
-                    $sql .= <<<SQL
+                break;
+            case 'user':
+                $sql .= <<<SQL
                                 INNER JOIN role ON role.id = user.role_id
                             SQL;
-                    break;
-                case 'comment':
-                    break;
+                break;
+            case 'comment':
+                break;
             }//end switch
 
         }//end if
@@ -291,22 +291,22 @@ abstract class BaseManager
 
         if (isset($listId)) {
             switch ($this->table) {
-                case 'post':
-                    if ($listId !== null) {
-                        $sql .= <<<SQL
+            case 'post':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                                     AND pc.category_id = $listId
                                 SQL;
-                    }
-                    break;
-                case 'user':
-                    if ($listId !== null) {
-                        $sql .= <<<SQL
+                }
+                break;
+            case 'user':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                                     AND role.id = $listId
                                 SQL;
-                    }
-                    break;
-                case 'comment':
-                    break;
+                }
+                break;
+            case 'comment':
+                break;
             }//end switch
 
         }//end if

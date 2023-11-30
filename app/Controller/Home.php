@@ -25,7 +25,7 @@ class Home extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         $err = (new Request(Application::getBaseUrl() .'/'))->getParams();
-        if(!isset($err['auth'])){
+        if(!isset($err['auth'])) {
             if (null === $user) {
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
                 exit;
@@ -33,8 +33,10 @@ class Home extends BaseController
 
             $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
         }else{
-            $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
-                Vos droits n\'authorisent pas cette action.' , 'error' => TRUE]);
+            $this->view(
+                'frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
+                Vos droits n\'authorisent pas cette action.' , 'error' => true]
+            );
         }
     }
 
