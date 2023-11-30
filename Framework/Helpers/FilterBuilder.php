@@ -104,7 +104,7 @@ class FilterBuilder
 
 
     /**
-     * [Description for getListSelect]
+     * getListSelect 
      *
      * @return array<string,string>|null
      */

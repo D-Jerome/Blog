@@ -33,22 +33,19 @@ class Comment extends BaseController
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
-        if ($user['roleName'] !== "admin") {
-            $sqlParams = ['user_id' => $user['id']];
-        }//end if
-
-        if ($httpParams['listSort'] === null) {
-            $count = count($comments->getAllFilteredByParams( $sqlParams));
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        if ($user['roleName'] === "admin") {
+            $count = count($comments->getAll());
         }else{
-            $count = count($comments->getAllFilteredByParams($httpParams['listSort'], $httpParams['listSortSelect']));
+            $sqlParams = ['user_id' => $user['id']];
+            $count = count($comments->getAllFilteredByParams($sqlParams));
         }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
         }
@@ -67,11 +64,11 @@ class Comment extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['sortDir'],
-            'sortBy' => $httpParams['sortBy'],
-            'listSort' => $httpParams['listSort'],
+            'sortDir' => $httpParams['dir'],
+            'sortBy' => $httpParams['sort'],
+            'listSort' => $httpParams['list'],
             'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSortSelect'],
+            'idListSelect' => $httpParams['listSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,
@@ -166,7 +163,7 @@ class Comment extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
         $count = count($posts->getAll());
 
@@ -175,10 +172,10 @@ class Comment extends BaseController
 
         $comments = (CommentManager::getCommentInstance(Application::getDatasource()));
 
-        if ($httpParams['listSortSelect'] === null) {
-            $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSelect'] === null) {
+            $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
         }
         foreach ($statementComments as $statementComment) {
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
@@ -200,11 +197,11 @@ class Comment extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['sortDir'],
-            'sortBy' => $httpParams['sortBy'],
-            'listSort' => $httpParams['listSort'],
+            'sortDir' => $httpParams['dir'],
+            'sortBy' => $httpParams['sort'],
+            'listSort' => $httpParams['list'],
             'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSortSelect'],
+            'idListSelect' => $httpParams['listSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,

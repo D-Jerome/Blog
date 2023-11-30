@@ -116,21 +116,21 @@ class BaseController
      */
     public function groupFilterDataUser(): array
     {
-        $filterReturn['sortBy'] = isset(($this->getRoute()->getParams())['sort']) ? (string)($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $filterReturn['sortDir'] = isset(($this->getRoute()->getParams())['dir']) ? (string)($this->getRoute()->getParams())['dir'] : 'DESC';
-        $filterReturn['listSort'] = !empty(($this->getRoute()->getParams())['list']) ? (string)($this->getRoute()->getParams())['list'] : null;
+        $filterReturn['sort'] = isset(($this->getRoute()->getParams())['sort']) ? (string)($this->getRoute()->getParams())['sort'] : 'createdAt';
+        $filterReturn['dir'] = isset(($this->getRoute()->getParams())['dir']) ? (string)($this->getRoute()->getParams())['dir'] : 'DESC';
+        $filterReturn['list'] = !empty(($this->getRoute()->getParams())['list']) ? (string)($this->getRoute()->getParams())['list'] : null;
         if (isset(($this->getRoute()->getParams())['listSelect']) === true) {
-            $filterReturn['listSortSelect'] = (($this->getRoute()->getParams())['listSelect']) !== '---' ? ($this->getRoute()->getParams())['listSelect'] : null;
+            $filterReturn['listSelect'] = (($this->getRoute()->getParams())['listSelect']) !== '---' ? ($this->getRoute()->getParams())['listSelect'] : null;
         } else {
-            $filterReturn['listSortSelect'] = null;
+            $filterReturn['listSelect'] = null;
         }
 
-        if ($filterReturn['listSortSelect'] === null && $filterReturn['listSort'] !== null) {
-            $filterReturn['listSort'] = null;
+        if ($filterReturn['listSelect'] === null && $filterReturn['list'] !== null) {
+            $filterReturn['list'] = null;
         }
 
-        if ($filterReturn['listSort'] === null && $filterReturn['listSortSelect'] !== null) {
-            $filterReturn['listSortSelect'] = null;
+        if ($filterReturn['list'] === null && $filterReturn['listSelect'] !== null) {
+            $filterReturn['listSelect'] = null;
         }
 
         return $filterReturn;

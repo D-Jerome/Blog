@@ -211,9 +211,10 @@ class PostManager extends BaseManager
                 slug,
                 content,
                 created_at,
-                user_id
+                user_id,
+                modified_at
                 )
-            VALUES (:name , :slug , :content, :created_at, :user_id)
+            VALUES (:name , :slug , :content, :created_at, :user_id, :modified_at)
         SQL;
         $query = $this->dbConnect->prepare($sql);
 
@@ -225,6 +226,7 @@ class PostManager extends BaseManager
         $query->bindParam(':content', $params['content']);
         $query->bindParam(':created_at', $created_at);
         $query->bindParam(':user_id', $params['userId']);
+        $query->bindParam(':modified_at', $created_at);
         $query->execute();
 
         $postId = $this->dbConnect->lastInsertId();

@@ -96,18 +96,21 @@ abstract class BaseManager
      *
      * @return array<object>
      */
-    public function getAllFilteredByParams(array $params): array
+    public function getAllFilteredByParams(?array $params): array
     {
         $sql = <<<SQL
                 SELECT *
                 FROM $this->table
-                WHERE
         SQL;
         $i = 0;
         foreach ($params as $key => $value){
             if ($i !== 0) {
                 $sql .= <<<SQL
                     AND
+                SQL;
+            }else{
+                $sql .= <<<SQL
+                    WHERE
                 SQL;
             }
             $sql .= <<<SQL
@@ -229,6 +232,83 @@ abstract class BaseManager
                     OFFSET $offset
                 SQL;
             }
+        }//end if
+
+        $query = $this->dbConnect->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+    }
+
+
+    /**
+     * getAllOrderLimitCat : get paged Posts about specifical category
+     *
+     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
+     * @param  null|int                    $listId Id of List item to filter
+     * @return array<object>
+     */
+    public function getAllFilteredCat(?array $params, ?int $listId): array
+    {
+
+        $sql = <<<SQL
+            SELECT $this->table.* FROM $this->table
+        SQL;
+        if (isset($listId)) {
+            switch ($this->table) {
+                case 'post':
+                    $sql .= <<<SQL
+                                INNER JOIN post_category pc ON pc.post_id = post.id
+                            SQL;
+                    break;
+                case 'user':
+                    $sql .= <<<SQL
+                                INNER JOIN role ON role.id = user.role_id
+                            SQL;
+                    break;
+                case 'comment':
+                    break;
+            }//end switch
+
+        }//end if
+
+        if (!empty($params) === true) {
+            $sql .= <<<SQL
+                WHERE
+            SQL;
+            $i = false;
+            foreach ($params as $k => $value) {
+                if ($i === true) {
+                    $sql .= <<<SQL
+                        AND
+                    SQL;
+                }
+                $sql .= <<<SQL
+                    $k = $value
+                SQL;
+                $i = true;
+            }
+        }//end if
+
+        if (isset($listId)) {
+            switch ($this->table) {
+                case 'post':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
+                                    AND pc.category_id = $listId
+                                SQL;
+                    }
+                    break;
+                case 'user':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
+                                    AND role.id = $listId
+                                SQL;
+                    }
+                    break;
+                case 'comment':
+                    break;
+            }//end switch
+
         }//end if
 
         $query = $this->dbConnect->prepare($sql);

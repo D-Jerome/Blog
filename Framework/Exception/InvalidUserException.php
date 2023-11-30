@@ -13,7 +13,7 @@ class InvalidUserException extends Exception
      * @param  string $message
      * @return void
      */
-    public function __construct(string $message = "invalid user")
+    public function __construct(string $message = "Opération Impossible<br>Vous n'avez pas les droits pour effectuer cette opération. ")
     {
         parent::__construct($message, 0011);
 
