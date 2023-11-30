@@ -10,8 +10,14 @@ use PhpParser\Node\Stmt\Else_;
 
 class UserManager extends BaseManager
 {
-
+    /**
+     * User Instance
+     *
+     * @var BaseManager|null
+     */
     private static ?BaseManager $userInstance;
+
+
     /**
      * __construct
      *
@@ -57,13 +63,13 @@ class UserManager extends BaseManager
     }
 
 
-     /**
-      * getByUseremail : get User Object of the user
-      *
-      * @param  string $email email of forget password form
-      * @return string|bool
-      */
-    public function getByUserEmail(string $email):string|bool
+    /**
+     * getByUseremail : get User Object of the user
+     *
+     * @param  string $email email of forget password form
+     * @return string|bool
+     */
+    public function getByUserEmail(string $email): string|bool
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);

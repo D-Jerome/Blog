@@ -16,7 +16,7 @@ class Error extends BaseController
      */
     public function error404(): void
     {
-        $this->view('frontoffice/404.html.twig', []);
+        $this->view('frontoffice/404.html.twig', ['baseUrl' => Application::getBaseUrl()]);
 
     }
 

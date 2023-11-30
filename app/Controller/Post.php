@@ -66,21 +66,21 @@ class Post extends BaseController
         $sqlParams = [ "publish_state" => true];
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-        if ($httpParams['listSort'] === null) {
+        if ($httpParams['list'] === null) {
             $count = count($posts->getAllPublish());
         }else{
-            $count = count($posts->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect'], true));
+            $count = count($posts->getAllFilteredByParam($httpParams['list'], $httpParams['listSelect'], true));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if ($httpParams['listSortSelect'] === null) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
         }
 
 
@@ -97,11 +97,11 @@ class Post extends BaseController
                 'posts' => $statementPosts,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
-                'sortDir' => $httpParams['sortDir'],
-                'sortBy' => $httpParams['sortBy'],
-                'listSort' => $httpParams['listSort'],
+                'sortDir' => $httpParams['dir'],
+                'sortBy' => $httpParams['sort'],
+                'listSort' => $httpParams['list'],
                 'list' => $filter->getList() ,
-                'idListSelect' => $httpParams['listSortSelect'],
+                'idListSelect' => $httpParams['listSelect'],
                 'listSelect' => $filter->getListSelect(),
                 'listNames' => $filter->getListNames(),
                 'pages' => $pages,

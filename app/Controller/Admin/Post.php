@@ -32,20 +32,27 @@ class Post extends BaseController
         $sqlParams = [];
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
-        if ($httpParams['listSort'] === null) {
+
+
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        if ($user['roleName'] === "admin") {
             $count = count($posts->getAll());
         }else{
-            $count = count($posts->getAllFilteredByParam($httpParams['listSort'], $httpParams['listSortSelect']));
-        }
+            $sqlParams = ['user_id' => $user['id']];
+            $count = count($posts->getAllFilteredByParams($sqlParams));
+        }//end if
+
+        if ($httpParams['list'] !== null) {
+            $count = count($posts->getAllFilteredCat($sqlParams, $httpParams['listSelect']));
+        }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if ($httpParams['listSortSelect'] === null) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
         }
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
@@ -58,11 +65,11 @@ class Post extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['sortDir'],
-            'sortBy' => $httpParams['sortBy'],
-            'listSort' => $httpParams['listSort'],
+            'sortDir' => $httpParams['dir'],
+            'sortBy' => $httpParams['sort'],
+            'listSort' => $httpParams['list'],
             'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSortSelect'],
+            'idListSelect' => $httpParams['listSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,
@@ -193,7 +200,7 @@ class Post extends BaseController
     public function addComment(int $id): void
     {
 
-        $post =PostManager::getPostInstance(Application::getDatasource());
+        $post = PostManager::getPostInstance(Application::getDatasource());
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
@@ -257,22 +264,23 @@ class Post extends BaseController
 
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sortBy']);
+        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-        $count = count($posts->getAll());
+         $count = count($posts->getAll());
+
+        if ($httpParams['list'] !== null) {
+            $count = count($posts->getAllFilteredCat($sqlParams, $httpParams['listSelect']));
+        }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
-        $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        if ($user['roleName'] !== "admin") {
-            $sqlParams = ['user_id' => $user['id']];
-        }//end if
 
-        if ($httpParams['listSortSelect'] === null) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if ($httpParams['listSelect'] === null) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['sortDir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSortSelect']);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
         }
+
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -287,11 +295,11 @@ class Post extends BaseController
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['sortDir'],
-            'sortBy' => $httpParams['sortBy'],
-            'listSort' => $httpParams['listSort'],
+            'sortDir' => $httpParams['dir'],
+            'sortBy' => $httpParams['sort'],
+            'listSort' => $httpParams['list'],
             'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSortSelect'],
+            'idListSelect' => $httpParams['listSelect'],
             'listSelect' => $filter->getListSelect(),
             'listNames' => $filter->getListNames(),
             'pages' => $pages,

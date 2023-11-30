@@ -27,9 +27,9 @@ class User extends BaseController
                 'frontoffice/login.html.twig',
                 [
                 'baseUrl' => Application::getBaseUrl(),
-                'message' => true,
+                'message' =>  '<strong>Erreur</strong><br>
+                    Vérifiez votre Identifiant/Mot de passe.' ,
                 'error' => true,
-                'login' => false,
                 'authUser' => $user]
             );
             exit;
@@ -41,9 +41,9 @@ class User extends BaseController
                 'frontoffice/login.html.twig',
                 [
                 'baseUrl' => Application::getBaseUrl(),
-                'message' => true,
+                'message' => '<strong>Erreur</strong><br>
+                    Vérifiez votre Identifiant/Mot de passe.',
                 'error' => true,
-                'login' => true,
                 'authUser' => $user
                 ]
             );
@@ -61,9 +61,9 @@ class User extends BaseController
                 'frontoffice/login.html.twig',
                 [
                 'baseUrl' => Application::getBaseUrl(),
-                'message' => true,
+                'message' => '<strong>Erreur</strong><br>
+                    Vérifiez votre Identifiant/Mot de passe.',
                 'error' => true,
-                'login' => false,
                 'authUser' => $user]
             );
         }//end if
@@ -90,8 +90,6 @@ class User extends BaseController
             'frontoffice/login.html.twig',
             [
             'baseUrl' => Application::getBaseUrl(),
-            'message' => false,
-            'error' => false,
             'authUser' => $user]
         );
     }
@@ -113,7 +111,6 @@ class User extends BaseController
             'frontoffice/signup.html.twig',
             [
             'baseUrl' => Application::getBaseUrl(),
-            'error' => false,
             'authUser' => $user]
         );
     }
@@ -193,8 +190,7 @@ class User extends BaseController
         $this->view(
             'frontoffice/forget.pwd.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl(),
-            'error' => false,
+            'baseUrl' => Application::getBaseUrl()
             ]
         );
     }

@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Framework\Exception\InvalidUserException;
 use Framework\Exception\MultipleRouteFoundException;
 use Framework\Exception\NoRouteFoundException;
 
@@ -92,6 +93,7 @@ final class Application
                 }//end if
 
             }//end if
+
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
             header('Location: '. self::getBaseUrl() .'/404');
