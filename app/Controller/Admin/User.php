@@ -31,11 +31,10 @@ class User extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         $users = UserManager::getUserInstance(Application::getDatasource());
-
         if ($httpParams['list'] === null) {
             $count = count($users->getAll());
         }else{
-            $count = count($users->getAllFilteredByParam($httpParams['list'], $httpParams['listSelect']));
+            $count = count($users->getAllFilteredByParam('id', $httpParams['listSelect']));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -131,10 +130,7 @@ class User extends BaseController
      */
     public function disableUser(int $id): void
     {
-        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (UserManager::getUserInstance(Application::getDatasource()))->disable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
     }
@@ -148,10 +144,7 @@ class User extends BaseController
      */
     public function enableUser(int $id): void
     {
-        $filterParams = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
         exit;

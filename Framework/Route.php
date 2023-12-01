@@ -50,6 +50,13 @@ class Route
     protected array $params = [];
 
     /**
+     * Params of old request
+     *
+     * @var string|null
+     */
+    protected ?string $oldParams = null;
+
+    /**
      * token of request
      *
      * @var string|null
@@ -153,6 +160,30 @@ class Route
     {
         $this->params = $params;
     }
+
+
+    /**
+     * getoldParams
+     *
+     * @return string|null
+     */
+    public function getOldParams(): ?string
+    {
+        return $this->oldParams;
+    }
+
+
+    /**
+     * setParams : Insert params of  last HTTP request in Route
+     *
+     * @param  string|null $oldParams : params of last HTTP Request
+     * @return void
+     */
+    public function setOldParams(?string $oldParams): void
+    {
+        $this->oldParams = $oldParams;
+    }
+
 
  /**
      * getToken

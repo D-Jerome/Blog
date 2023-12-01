@@ -25,12 +25,12 @@ class Router
      */
     public function __construct()
     {
-        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/routes.json"), true);
+        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__."/../config/routes.json"), true);
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
 
-    } //end _construct()
+    }//end _construct()
 
 
     /**
@@ -49,6 +49,7 @@ class Router
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
                     $route->setToken($request->getToken());
+                    $route->setOldParams($request->getOldParams());
                     return $route;
                 }
 
@@ -61,14 +62,15 @@ class Router
                     if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
                         $route->setParams($request->getParams());
                         $route->setToken($request->getToken());
+                        $route->setOldParams($request->getOldParams());
                         return $route;
                     }
 
-                } //end if
+                }//end if
 
-            } //endif
+            }//endif
 
-        } //end foreach
+        }//end foreach
 
         return null;
     }
@@ -93,7 +95,7 @@ class Router
                 $valid = true;
             }
 
-        } //end if
+        }//end if
 
         return $valid;
     }

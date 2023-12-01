@@ -1,6 +1,7 @@
 <?php
 
 namespace Framework;
+use function Safe\parse_url;
 
 class Request
 {
@@ -26,6 +27,13 @@ class Request
     protected array $params = [];
 
     /**
+     * params of precedent page
+     *
+     * @var string|null
+     */
+    protected ?string $oldParams = null ;
+
+    /**
      * Token from Request
      *
      * @var string|null
@@ -41,10 +49,13 @@ class Request
      */
     public function __construct(string $baseUrl)
     {
-        /**
-         * @var null|false|array<string,mixed> $input
-         */
-        $input = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: \Safe\filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $oldParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
+        if ($oldParams !== null) {
+            $this->oldParams = '?'.$oldParams;
+        }
+        
+        $input = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: \Safe\filter_input_array(INPUT_POST, );
         $input = ($input === null) ? [] : $input;
         if (array_key_exists('token', $input)){
             $this->token = $input['token'];
@@ -102,6 +113,17 @@ class Request
     public function getToken(): ?string
     {
         return $this->token;
+    }
+
+
+    /**
+     * getOldParams
+     *
+     * @return string|null
+     */
+    public function getOldParams(): ?string
+    {
+        return $this->oldParams;
     }
 
 }
