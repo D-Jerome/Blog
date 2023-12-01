@@ -126,11 +126,13 @@ class Post extends BaseController
         $post = PostManager::getPostInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
-        $post->insertNewPost($request->getParams());
+        $newId = $post->insertNewPost($request->getParams());
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-        $statement = '';
-        $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(),'post' => $statement, 'authUser' => $user]);
+        $statementPost = $post->getById($newId);
+        $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
+        $statementPost->categories = $post->getCategoriesById($statementPost->id);
+        $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(),'post' => $statementPost, 'authUser' => $user]);
     }
 
 

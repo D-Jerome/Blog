@@ -26,7 +26,7 @@ class Session
      */
     public function getUser(): ?AuthUser
     {
-        return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username']) : null;
+        return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username'], $_SESSION['token']) : null;
     }
 
 
@@ -41,6 +41,7 @@ class Session
         $_SESSION['id'] = $user->getId();
         $_SESSION['roleName'] = $user->getRoleName();
         $_SESSION['username'] = $user->getUsername();
+        $_SESSION['token'] = md5(bin2hex(openssl_random_pseudo_bytes(6)));
     }
 
 }

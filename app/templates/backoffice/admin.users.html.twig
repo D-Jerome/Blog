@@ -35,12 +35,20 @@
                                  rounded-pill">{{ registredUser.roleName }}</p>
                         </div>
                         <div class="col-2 ">
-                            <a href="{{ baseUrl }}/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> 
+                            <a href="{{ baseUrl }}/admin/user/modify/{{ registredUser.username }}/{{ registredUser.id }}" class="col mx-3" title="Modifier"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
+                            <div class="mt-3 d-inline-block">
                             {% if registredUser.active %}
-                                <a href="{{ baseUrl }}/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                <form action="{{ baseUrl }}/admin/user/disable/{{ registredUser.username }}/{{ registredUser.id }}" method="post">
+                                    <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                                    <button type="submit" class="btn mt-4 d-block" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></button>
+                                </form>
                             {% else %}
-                                <a href="{{ baseUrl }}/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                <form action="{{ baseUrl }}/admin/user/enable/{{ registredUser.username }}/{{ registredUser.id }}" method="post">
+                                    <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                                    <button type="submit" class="btn mt-4 d-block" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></button>
+                                </form>
                             {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

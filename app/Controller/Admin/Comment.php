@@ -125,12 +125,8 @@ class Comment extends BaseController
             $comments->update($statement, $params);
         }
 
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
@@ -160,9 +156,6 @@ class Comment extends BaseController
 
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
-
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 

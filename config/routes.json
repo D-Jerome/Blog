@@ -85,7 +85,7 @@
         "path" : "/admin/post/unpublish/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "unpublishPost",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -94,7 +94,7 @@
         "path" : "/admin/post/publish/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "publishPost",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -123,7 +123,7 @@
         "path" : "/admin/comment/unpublish/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "unpublishComment",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -132,7 +132,7 @@
         "path" : "/admin/comment/publish/{commentId}/{postId}",
         "controller" : "App\\Controller\\Admin\\Comment",
         "action" : "publishComment",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -174,7 +174,7 @@
         "path" : "/admin/post/delete/{slug}/{postId}",
         "controller" : "App\\Controller\\Admin\\Post",
         "action" : "deletePost",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -274,7 +274,7 @@
         "path" : "/admin/user/disable/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "disableUser",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]
@@ -283,7 +283,7 @@
         "path" : "/admin/user/enable/{username}/{userId}",
         "controller" : "App\\Controller\\Admin\\User",
         "action" : "enableUser",
-        "method" : "GET",
+        "method" : "POST",
         "authorize": [
             "admin"
         ]

@@ -462,7 +462,6 @@ abstract class BaseManager
      */
     public function update(object $obj, array $param): void
     {
-
         $sql = <<<SQL
             UPDATE $this->table SET
         SQL;
@@ -471,8 +470,9 @@ abstract class BaseManager
         foreach ($param as $paramName => $paramValue) {
             $i++;
             if ($paramName !== 'id') {
+                $field = Text::camelCaseToSnakeCase($paramName);
                 $sql .= <<<SQL
-                    Text::camelCaseToSnakeCase($paramName) = :Text::camelCaseToSnakeCase($paramName)
+                    $field = :$field
                 SQL;
             }
 
@@ -496,7 +496,7 @@ abstract class BaseManager
             }
 
         }//end foreach
-
+        
         $req->execute($boundParam);
     }
 

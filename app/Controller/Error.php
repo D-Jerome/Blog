@@ -16,7 +16,10 @@ class Error extends BaseController
      */
     public function error404(): void
     {
-        $this->view('frontoffice/404.html.twig', ['baseUrl' => Application::getBaseUrl()]);
+        $userSession = $this->session->getUser();
+
+        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $this->view('frontoffice/404.html.twig', ['baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
 
     }
 

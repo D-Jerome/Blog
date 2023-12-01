@@ -261,6 +261,7 @@ class UserManager extends BaseManager
      */
     public function enable(int $id): void
     {
+
         $sql = <<<SQL
             UPDATE $this->table SET active = true
             WHERE id = :id
@@ -269,6 +270,7 @@ class UserManager extends BaseManager
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
+
     }
 
 }
