@@ -54,7 +54,10 @@
                                         Confirmation de suppression?
                                     </div>
                                     <a href="#" class="btn btn-primary d-block" role="button">Annuler</a>
-                                    <a href="{{ baseUrl }}/admin/post/delete/{{ post.slug }}/{{ post.id }}" role="button" class="btn btn-danger mt-4 d-block">Confirmer</a>
+                                    <form action="{{ baseUrl }}/admin/post/delete/{{ post.slug }}/{{ post.id }}" method="post">
+                                        <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                                        <button type="submit" class="btn btn-danger mt-4 d-block">Confirmer</button>
+                                    </form>
                                 </div>
                             </div>
                          </div>

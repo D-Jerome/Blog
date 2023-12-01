@@ -48,6 +48,7 @@ class Router
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
                     $route->setParams($request->getParams());
+                    $route->setToken($request->getToken());
                     return $route;
                 }
 
@@ -59,6 +60,7 @@ class Router
                     $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
                     if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
                         $route->setParams($request->getParams());
+                        $route->setToken($request->getToken());
                         return $route;
                     }
 

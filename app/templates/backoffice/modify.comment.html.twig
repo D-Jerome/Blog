@@ -32,14 +32,16 @@
         </div>
         <div class="col-md-10 border border-dark mt-3"> 
             <form action="" method="post"> 
-            <div class="form-group pt-3">
-                <label id="content">Contenu de l'article</label>
-                <textarea class="form-control" rows="8" id="content" name="content" >{{ comment.content | raw }}</textarea>
-            </div>
-            <button type="submit" class="btn btn-primary float-end my-3">Modifier</button>
+                <div class="form-group pt-3">
+                    <label id="content">Contenu de l'article</label>
+                    <textarea class="form-control" rows="8" id="content" name="content" >{{ comment.content | raw }}</textarea>
+                </div>
+                <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                <button type="submit" class="btn btn-primary float-end my-3">Modifier</button>
             </form> 
         </div>    
     </div>
 </main>
 
 {% endblock %}
+ 

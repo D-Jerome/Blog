@@ -43,12 +43,18 @@ class Route
     protected array $authRoles;
 
     /**
-     * [Description for $params]
+     * Params of request
      *
      * @var array<string, string>
      */
     protected array $params = [];
 
+    /**
+     * token of request
+     *
+     * @var string|null
+     */
+    protected ?string $token;
 
     /**
      * __construct : Construct Route
@@ -148,5 +154,25 @@ class Route
         $this->params = $params;
     }
 
+ /**
+     * getToken
+     *
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
 
+
+    /**
+     * setToken : Insert Token in Route
+     *
+     * @param  string|null $token : CSRF Token
+     * @return void
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
+    }
 }

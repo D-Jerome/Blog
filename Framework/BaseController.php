@@ -102,10 +102,13 @@ class BaseController
         }
 
         if (!in_array($user->getRoleName(), $authRoles, true)) {
-            return false;
+            return FALSE;
         }
 
-        return true;
+        if ($this->tokenVerify() !== TRUE){
+            return FALSE;
+        }
+        return TRUE;
     }
 
 
@@ -134,5 +137,26 @@ class BaseController
         }
 
         return $filterReturn;
+    }
+
+
+    /**
+     * CSRF token
+     *
+     * @return bool
+     *
+     */
+    protected function tokenVerify(): bool
+    {
+
+        if ($this->getRoute()->getMethod() !== 'POST'){
+            return TRUE;
+        }
+        
+        if ($this->session->getUser()->getToken() === $this->getRoute()->getToken()){
+            return TRUE;
+        }
+
+        return FALSE;
     }
 }

@@ -43,10 +43,17 @@
                             </div>
                             <div class="dropstart mt-3 d-inline-block">
                                 {% if comment.publishState != false %}
-                                    <a href="{{ baseUrl }}/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" class="col" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></a>
+                                    <form action="{{ baseUrl }}/admin/comment/unpublish/{{ comment.id }}/{{ comment.postId }}" method="post">
+                                        <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                                        <button type="submit" class="btn mt-4 d-block" title="Désactiver"><i class="fa-solid fa-toggle-on fa-2xl" style="color: var(--bs-success);"></i></button>
+                                    </form>
                                 {% else %}
-                                    <a href="{{ baseUrl }}/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" class="col" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></a>
+                                    <form action="{{ baseUrl }}/admin/comment/publish/{{ comment.id }}/{{ comment.postId }}" method="post">
+                                        <input type="hidden" name="token" id="hiddentoken" value="{{ authUser.token }}" />
+                                        <button type="submit" class="btn mt-4 d-block" title="Activer"><i class="fa-solid fa-toggle-off fa-2xl" style="color: var(--bs-danger);"></i></button>
+                                    </form>
                                 {% endif %}
+
                             </div>
                         </div>
                     </div>

@@ -25,6 +25,12 @@ class Request
      */
     protected array $params = [];
 
+    /**
+     * Token from Request
+     *
+     * @var string|null
+     */
+    protected ?string $token;
 
     /**
      * __construct
@@ -40,7 +46,15 @@ class Request
          */
         $input = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?: \Safe\filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $input = ($input === null) ? [] : $input;
-        $this->params = $input;
+        if (array_key_exists('token', $input)){
+            $this->token = $input['token'];
+            unset($input['token']);
+            $this->params = $input;
+
+        }else{
+            $this->params = $input;
+            $this->token = null;
+        }
         $this->uri = str_replace($baseUrl, '', \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_URI'], PHP_URL_PATH));
         $this->method = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_METHOD'];
 
@@ -79,5 +93,15 @@ class Request
         return $this->params;
     }
 
+
+    /**
+     * getToken
+     *
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
 
 }

@@ -27,18 +27,30 @@ class AuthUser
     protected string $username;
 
     /**
+     * CSRF Token
+     *
+     * @var string
+     */
+    protected string $token;
+
+
+    /**
      * __construct keep auth user information
      *
      * @param  int    $id
      * @param  string $roleName
      * @param  string $username
+     * @param  string $token
      * @return void
      */
-    public function __construct(int $id, string $roleName, string $username)
+    public function __construct(int $id, string $roleName, string $username, string $token)
     {
         $this->id = $id;
         $this->roleName = $roleName;
         $this->username = $username;
+        $this->token = $token;
+    
+
     }//end __construct
 
 
@@ -74,17 +86,30 @@ class AuthUser
         return  $this->username;
     }
 
+
+    /**
+     * getToken
+     *
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return  $this->token;
+    }
+
+
     /**
      * get id, name, role of connected user
      *
-     * @return array<string, string>
+     * @return array<string, string|null>
      */
     public function getAllUserInfo(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->username,
-            'roleName' => $this->roleName
+            'roleName' => $this->roleName,
+            'token' => $this->token
         ];
     }
 }

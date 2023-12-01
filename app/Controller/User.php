@@ -125,35 +125,44 @@ class User extends BaseController
     {
 
         try {
+            $message = '';
             $error = false;
             $postdatas = (new Request('blog-project'))->getParams();
             foreach ($postdatas as $k => $data) {
                 if (empty($data)) {
+                    $message = "Formulaire Vide";
                     $error = true;
-                    throw new UnauthorizeValueException();
+
+                }
+                if (str_contains($k, "username") && !\Safe\preg_match("|^(\w){8,}$|", $data)) {
+                    $message = "<strong>Identifiant impossible</strong><br>Votre identifiant doit comporter plus de 8 caractères(chiffres, minuscules , majuscules et _ uniquement). ";
+                    $error = true;
+
                 }
 
                 if (str_contains($k, "password") && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
-                    // erreur
+                    $message = "Mot de passe non sécurisé";
                     $error = true;
-                    throw new PasswordPolicyException();
+
                 }
 
             }
             $users = UserManager::getUserInstance(Application::getDatasource());
 
             if ($users->getByUsername($postdatas['username'])) {
+                $message = "Identifiant déjà utilisé";
                 $error = true;
             }
 
             if ($postdatas['password'] !== $postdatas['confirmPassword']) {
+                $message = "Les mots de passes ne sont pas identiques";
                 $error = true;
             }
 
             if ($error === true) {
                 unset($postdatas['password']);
                 unset($postdatas['confirmPassword']);
-                $this->view('frontoffice/signup.html.twig', ['error' => true, 'data' => $postdatas]);
+                $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $postdatas]);
             } else {
                 $users->insertNewUser($postdatas);
                 $mail = new Mail(Application::getEmailSource());

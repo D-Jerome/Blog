@@ -16,12 +16,8 @@ class Auth extends BaseController
      */
     public function loggedIn(): void
     {
-        $user = $this->session->getUser();
-        $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+        $user = $this->session->getUser()->getAllUserInfo();
+
         $this->view('backoffice/'.$user['roleName'].'.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 

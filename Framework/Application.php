@@ -51,17 +51,19 @@ final class Application
      */
     public function run()
     {
-
-        $msgErr = false;
+        
         try {
             $foundRoute = $this->router->findRoute($this->request);
+
             if ($foundRoute === null) {
                 throw new NoRouteFoundException();
             }
+
             $controller = $foundRoute->getController();
             $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
             $route = new $controller($foundRoute);
+
             if (!$route->isAuthorize($authRoles)) {
                 header('Location: '. self::getBaseUrl() .'/?auth=0');
             }
@@ -74,6 +76,7 @@ final class Application
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
                     \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
+
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
@@ -85,7 +88,7 @@ final class Application
                         }
 
                     }//end foreach
-
+                    
                     $route->$action($id);
                 } else {
                     $route->$action();
@@ -99,6 +102,7 @@ final class Application
             header('Location: '. self::getBaseUrl() .'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
+
         }
     }
 

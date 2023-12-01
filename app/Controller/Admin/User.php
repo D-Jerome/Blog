@@ -93,12 +93,8 @@ class User extends BaseController
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
         $statementRoles = $roles->getAll();
 
-        $user = $this->session->getUser();
-        $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
-        ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
@@ -120,12 +116,8 @@ class User extends BaseController
         $users->updateUser($request->getParams());
 
         $users->getById($id);
-        $user = $this->session->getUser();
-        $user = [
-                    'name' => $user->getUsername(),
-                    'id' => $user->getId(),
-                    'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         header('Location: '. Application::getBaseUrl() .'/admin?user=modified');
     }
@@ -161,7 +153,7 @@ class User extends BaseController
             $filterParams = '?'.$filterParams;
         }
         (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/users#'.$filterParams.'#'.$id);
+        header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
         exit;
     }
 
@@ -175,12 +167,8 @@ class User extends BaseController
     {
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
         $statementRoles = $roles->getAll();
-        $user = $this->session->getUser();
-        $user = [
-                 'name' => $user->getUsername(),
-                 'id' => $user->getId(),
-                 'roleName' => $user->getRoleName()
-                ];
+        $userSession = $this->session->getUser();
+        $user = $userSession->getAllUserInfo();
 
         $this->view('backoffice/add.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }

@@ -201,10 +201,11 @@ class PostManager extends BaseManager
      * [insertNewPost] : Create a new post (unpublished post)
      *
      * @param  array<string, string|array<int, string>> $params Information to create a new post
-     * @return void
+     * @return int : Last PostId
      */
-    public function insertNewPost(array $params): void
+    public function insertNewPost(array $params): int
     {
+
         $sql = <<<SQL
             INSERT INTO $this->table (
                 name,
@@ -244,6 +245,8 @@ class PostManager extends BaseManager
             }//end foreach
 
         }//end if
+
+        return $postId;
 
     }
 
