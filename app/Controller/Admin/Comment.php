@@ -11,6 +11,7 @@ use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\Session;
 use Safe\DateTime;
+
 use function Safe\parse_url;
 
 class Comment extends BaseController
@@ -37,7 +38,7 @@ class Comment extends BaseController
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         if ($user['roleName'] === "admin") {
             $count = count($comments->getAll());
-        }else{
+        } else {
             $sqlParams = ['user_id' => $user['id']];
             $count = count($comments->getAllFilteredByParams($sqlParams));
         }//end if
@@ -214,10 +215,7 @@ class Comment extends BaseController
      */
     public function unpublishComment(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (CommentManager::getCommentInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
     }
@@ -231,10 +229,7 @@ class Comment extends BaseController
      */
     public function publishComment(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (CommentManager::getCommentInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
     }

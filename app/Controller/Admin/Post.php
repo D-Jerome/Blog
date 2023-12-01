@@ -321,10 +321,7 @@ class Post extends BaseController
      */
     public function unpublishPost(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (PostManager::getPostInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
@@ -338,10 +335,7 @@ class Post extends BaseController
      */
     public function publishPost(int $id): void
     {
-        $filterParams = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-        if ($filterParams !== null) {
-            $filterParams = '?'.$filterParams;
-        }
+        $filterParams = ($this->getRoute()->getOldParams());
         (PostManager::getPostInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }

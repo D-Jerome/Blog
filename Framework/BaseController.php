@@ -152,11 +152,14 @@ class BaseController
         if ($this->getRoute()->getMethod() !== 'POST'){
             return TRUE;
         }
-        
+
         if ($this->session->getUser()->getToken() === $this->getRoute()->getToken()){
             return TRUE;
         }
 
         return FALSE;
     }
+
+
+
 }
