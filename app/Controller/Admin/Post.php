@@ -36,10 +36,10 @@ class Post extends BaseController
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         if ($user['roleName'] === "admin") {
-            $count = count($posts->getAll());
+            $count = count($posts->getByParams([]));
         }else{
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($posts->getAllFilteredByParams($sqlParams));
+            $count = count($posts->getByParams($sqlParams));
         }//end if
 
         if ($httpParams['list'] !== null) {
@@ -109,7 +109,7 @@ class Post extends BaseController
     public function addPost(): void
     {
         $category = CategoryManager::getCategoryInstance(Application::getDatasource());
-        $statementCategories = $category->getAll();
+        $statementCategories = $category->getByParams([]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
         $this->view('backoffice/add.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'authUser' => $user]);
@@ -129,7 +129,7 @@ class Post extends BaseController
         $newId = $post->insertNewPost($request->getParams());
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-        $statementPost = $post->getById($newId);
+        $statementPost = $post->getByParams(['id'=>$newId]);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(),'post' => $statementPost, 'authUser' => $user]);
@@ -145,7 +145,7 @@ class Post extends BaseController
     public function modifyPost(int $id)
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getById($id);
+        $statementPost = $post->getByParams(['id'=>$id]);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $userSession = $this->session->getUser();
@@ -164,7 +164,7 @@ class Post extends BaseController
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
         $params = [];
-        $statement = $post->getById($id);
+        $statement = $post->getByParams(['id'=>$id]);
 
 
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
@@ -185,7 +185,7 @@ class Post extends BaseController
         $user = $userSession->getAllUserInfo();
 
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getById($id);
+        $statementPost = $post->getByParams(['id'=>$id]);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
 
@@ -204,7 +204,7 @@ class Post extends BaseController
 
         $post = PostManager::getPostInstance(Application::getDatasource());
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
-        $statementPost = $post->getById($id);
+        $statementPost = $post->getByParams(['id'=>$id]);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         foreach ($statementComments as $statementComment) {
@@ -240,7 +240,7 @@ class Post extends BaseController
         $user = $userSession->getAllUserInfo();
 
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getById($id);
+        $statementPost = $post->getByParams(['id'=>$id]);
         $slug = $statementPost->getSlug();
         Header('Location: '. Application::getBaseUrl() .'/post/'. $slug .'/'. $id);
     }
@@ -268,7 +268,7 @@ class Post extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-         $count = count($posts->getAll());
+         $count = count($posts->getByParams([]));
 
         if ($httpParams['list'] !== null) {
             $count = count($posts->getAllFilteredCat($sqlParams, $httpParams['listSelect']));
