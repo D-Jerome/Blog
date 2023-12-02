@@ -185,7 +185,7 @@ class Route
     }
 
 
- /**
+    /**
      * getToken
      *
      * @return string|null

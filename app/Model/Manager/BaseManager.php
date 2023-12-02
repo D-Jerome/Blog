@@ -82,7 +82,7 @@ abstract class BaseManager
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute();
         $statement = $query->fetchAll();
-        if (count($statement) === 1 ){
+        if (count($statement) === 1 ) {
             return $statement[0];
         }
 
