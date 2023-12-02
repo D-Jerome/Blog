@@ -49,58 +49,17 @@ abstract class BaseManager
     }//end __construct
 
 
-    /**
-     * getById : get all datas of specified id of object
-     *
-     * @param  int $id Id of object to search
-     * @return object
-     */
-    public function getById($id): object
-    {
-        $sql = <<<SQL
-                SELECT *
-                FROM $this->table
-                WHERE id = ?
-        SQL;
-        $query = $this->dbConnect->prepare($sql);
-        $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
-        $query->execute([$id]);
-        return $query->fetch();
-    }
-
-
-    /**
-     * getAllFilteredByParam : get all datas of filtered of objects
-     *
-     * @param  string     $paramItem  Name of field to filter
-     * @param  int|string $paramValue Value of field to filter
-     * @return array<object>
-     */
-    public function getAllFilteredByParam(string $paramItem, string|int $paramValue): array
-    {
-        $sql = <<<SQL
-                SELECT *
-                FROM $this->table
-                WHERE $paramItem = $paramValue
-        SQL;
-        $query = $this->dbConnect->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
-    }
-
-
        /**
-        * getAllFilteredByParams : get all datas of filtered of objects
+        * getByParams : get all datas of filtered of objects
         *
         * @param array<string,int|string> $params fields and values to filter
         *
-        * @return array<object>
+        * @return array<object>|object
         */
-    public function getAllFilteredByParams(?array $params): array
+    public function getByParams(?array $params): array|object
     {
         $sql = <<<SQL
-                SELECT *
-                FROM $this->table
+                SELECT * FROM $this->table
         SQL;
         $i = 0;
         foreach ($params as $key => $value){
@@ -120,23 +79,15 @@ abstract class BaseManager
         }//end foreach
 
         $query = $this->dbConnect->prepare($sql);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute();
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
-    }
+        $statement = $query->fetchAll();
+        if (count($statement) === 1 ){
+            return $statement[0];
+        }
 
-    /**
-     * getAll : get all data from called object
-     *
-     * @return array<object>
-     */
-    public function getAll(): array
-    {
-        $sql = <<<SQL
-                SELECT * FROM $this->table
-        SQL;
-        $query = $this->dbConnect->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
+        return $statement;
+
     }
 
 

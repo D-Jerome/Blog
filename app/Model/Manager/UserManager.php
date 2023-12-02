@@ -182,7 +182,7 @@ class UserManager extends BaseManager
     public function updateUser(array $params): int|string
     {
 
-        $actualUser = $this->getById($params['id']);
+        $actualUser = (object) $this->getByParams(['id' => $params['id'] ]);
 
         foreach ($params as $k => $param) {
             $getUser = 'get' . ucfirst($k);
@@ -203,9 +203,9 @@ class UserManager extends BaseManager
                 $query->bindParam(':value', $param);
                 $query->bindParam(':id', $params['id']);
                 $query->execute();
-            }//indif
+            }//end if
 
-        }//endforeach
+        }//end foreach
 
         return $actualUser->getId();
     }

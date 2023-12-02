@@ -22,7 +22,7 @@ class Post extends BaseController
     {
         //recherche des 3 derniers articles par catégories
         $categories = CategoryManager::getCategoryInstance(Application::getDatasource());
-        $statementCategories = $categories->getAll();
+        $statementCategories = $categories->getByParams([]);
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $postsByCategories = null;
         foreach ($statementCategories as $statementCategory) {
@@ -122,7 +122,7 @@ class Post extends BaseController
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
-        $statementPost = $post->getById($id);
+        $statementPost = $post->getByParams(['id'=> $id]);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);

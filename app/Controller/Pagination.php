@@ -127,7 +127,7 @@ class Pagination extends BaseController
     public function pagesInformations(): array
     {
 
-        if ((int) (ceil(($this->totalPages / $this->perPage))) === 1) {
+        if (((int) (ceil(($this->totalPages / $this->perPage))) === 1) || $this->totalPages === 0 ) {
             $pages['nextActive'] = false;
             $pages['previousActive'] = false;
         } elseif ($this->currentPage >= (ceil(($this->totalPages / $this->perPage)))) {

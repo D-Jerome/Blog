@@ -32,9 +32,9 @@ class User extends BaseController
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         $users = UserManager::getUserInstance(Application::getDatasource());
         if ($httpParams['list'] === null) {
-            $count = count($users->getAll());
+            $count = count($users->getByParams([]));
         }else{
-            $count = count($users->getAllFilteredByParam('id', $httpParams['listSelect']));
+            $count = count($users->getByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -87,10 +87,10 @@ class User extends BaseController
     public function modifyUser(int $id): void
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $statementUser = $users->getById($id);
+        $statementUser = $users->getByParams(['id'=>$id]);
 
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getAll();
+        $statementRoles = $roles->getByParams([]);
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
@@ -111,10 +111,10 @@ class User extends BaseController
         $request = new Request(Application::getBaseUrl() .'/');
 
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getAll();
+        $statementRoles = $roles->getByParams([]);
         $users->updateUser($request->getParams());
 
-        $users->getById($id);
+        $users->getByParams(['id'=>$id]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
@@ -159,7 +159,7 @@ class User extends BaseController
     public function addUser()
     {
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getAll();
+        $statementRoles = $roles->getByParams([]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
@@ -183,7 +183,7 @@ class User extends BaseController
         $user = $userSession->getAllUserInfo();
 
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $statementUser = $users->getById($return);
+        $statementUser = $users->getByParams(['id'=>$return]);
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }

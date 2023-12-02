@@ -37,10 +37,10 @@ class Comment extends BaseController
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         if ($user['roleName'] === "admin") {
-            $count = count($comments->getAll());
+            $count = count($comments->getByParams([]));
         } else {
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($comments->getAllFilteredByParams($sqlParams));
+            $count = count($comments->getByParams($sqlParams));
         }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -52,7 +52,7 @@ class Comment extends BaseController
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
         }
 
-        $statementPosts = $posts->getAll();
+        $statementPosts = $posts->getByParams([]);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -92,7 +92,7 @@ class Comment extends BaseController
     {
 
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        $statement = $comments->getById($id);
+        $statement = $comments->getByParams(['id'=>$id]);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
         $userSession = $this->session->getUser();
@@ -112,7 +112,7 @@ class Comment extends BaseController
     {
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $params = [];
-        $statement = $comments->getById($id);
+        $statement = $comments->getByParams(['id'=>$id]);
 
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
 
@@ -130,7 +130,7 @@ class Comment extends BaseController
         $user = $userSession->getAllUserInfo();
 
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        $statement = $comments->getById($id);
+        $statement = $comments->getByParams(['id'=>$id]);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
@@ -160,7 +160,7 @@ class Comment extends BaseController
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-        $count = count($posts->getAll());
+        $count = count($posts->getByParams([]));
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
@@ -177,7 +177,7 @@ class Comment extends BaseController
         }
 
 
-        $statementPosts = $posts->getAll();
+        $statementPosts = $posts->getByParams([]);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
