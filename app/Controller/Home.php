@@ -9,7 +9,7 @@ use Framework\Application;
 use Framework\BaseController;
 use Framework\Exception\{UnauthorizeValueException,InvalidUserException};
 use Framework\Mail;
-use Framework\Request;
+use Framework\{Request,HttpParams};
 use Framework\Session;
 
 class Home extends BaseController
@@ -24,7 +24,8 @@ class Home extends BaseController
         //recherche des 3 derniers articles par catégories
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;
-        $err = (new Request(Application::getBaseUrl() .'/'))->getParams();
+        $err = (new HttpParams())->getParamsGet();
+
         if(!isset($err['auth'])) {
             if (null === $user) {
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
@@ -32,10 +33,11 @@ class Home extends BaseController
             }
 
             $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
-        }else{
+        } else {
             $this->view(
-                'frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
-                Vos droits n\'authorisent pas cette action.' , 'error' => true]
+                'frontoffice/home.html.twig',
+                ['baseUrl' => Application::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
+                Vos droits n\'authorisent pas cette action.' , 'error' => true, 'authUser' => $user]
             );
         }
     }
@@ -49,9 +51,11 @@ class Home extends BaseController
     public function homeContact(): void
     {
         $error = false;
-        $postdatas = (new Request(Application::getBaseUrl() .'/'))->getParams();
-        foreach ($postdatas as $data){
-            $data = htmlentities($data);
+        $postdatas = (new HttpParams())->getParamsPost();
+        foreach ($postdatas as $data) {
+            if (is_string($data)) {
+                $data = htmlentities($data);
+            }
         }
         foreach ($postdatas as $k => $data) {
             if (empty($data)) {
@@ -64,12 +68,14 @@ class Home extends BaseController
         $mail = new Mail(Application::getEmailSource());
         if ($mail->sendMailToAdmin($postdatas)) {
             $this->view(
-                'frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
+                'frontoffice/home.html.twig',
+                [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
             L\'envoi du message a été éffectué.', 'error' => false ]
             );
-        }else{
+        } else {
             $this->view(
-                'frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
+                'frontoffice/home.html.twig',
+                [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
             L\'envoi du message a échoué.<br>Rééssayez plus tard.', 'error' => true ]
             );
         }

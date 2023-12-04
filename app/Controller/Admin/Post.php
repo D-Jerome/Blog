@@ -8,7 +8,7 @@ use App\Model\Manager\{PostManager, CommentManager};
 use Framework\Application;
 use Framework\BaseController;
 use Framework\Helpers\{Text, FilterBuilder};
-use Framework\Request;
+use Framework\{Request, HttpParams};
 use Framework\Session;
 use Safe\DateTime;
 
@@ -36,10 +36,10 @@ class Post extends BaseController
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         if ($user['roleName'] === "admin") {
-            $count = count($posts->getByParams([]));
-        }else{
+            $count = count($posts->getAllByParams([]));
+        } else {
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($posts->getByParams($sqlParams));
+            $count = count($posts->getAllByParams($sqlParams));
         }//end if
 
         if ($httpParams['list'] !== null) {
@@ -60,7 +60,7 @@ class Post extends BaseController
             $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
         }
 
-        $dataView= [
+        $dataView = [
             'baseUrl' => Application::getBaseUrl(),
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
@@ -75,16 +75,16 @@ class Post extends BaseController
             'pages' => $pages,
             'authUser' => $user
         ];
-
-        if (isset(($this->getRoute()->getParams())['delete'])) {
-            if (($this->getRoute()->getParams())['delete'] == 'ok') {
+        $params=(new HttpParams())->getParamsGet();
+        if (isset($params['delete'])) {
+            if ($params['delete'] == 'ok') {
                 $dataView['message'] = '<strong>Suppression réussie</strong><br>
                 l\'article a été supprimé.';
                 $dataView['error'] = false;
             }
         }
 
-            $this->view('backoffice/admin.posts.html.twig', $dataView);
+        $this->view('backoffice/admin.posts.html.twig', $dataView);
     }
 
 
@@ -109,9 +109,11 @@ class Post extends BaseController
     public function addPost(): void
     {
         $category = CategoryManager::getCategoryInstance(Application::getDatasource());
-        $statementCategories = $category->getByParams([]);
+        $statementCategories = $category->getAllByParams([]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $this->view('backoffice/add.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'authUser' => $user]);
     }
 
@@ -126,10 +128,10 @@ class Post extends BaseController
         $post = PostManager::getPostInstance(Application::getDatasource());
         $request = new Request(Application::getBaseUrl() .'/');
 
-        $newId = $post->insertNewPost($request->getParams());
+        $newId = $post->insertNewPost((new HttpParams())->getParamsPost());
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-        $statementPost = $post->getByParams(['id'=>$newId]);
+        $statementPost = $post->getById($newId);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(),'post' => $statementPost, 'authUser' => $user]);
@@ -145,12 +147,13 @@ class Post extends BaseController
     public function modifyPost(int $id)
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getByParams(['id'=>$id]);
+        $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost , 'authUser' => $user]);
     }
 
@@ -164,7 +167,7 @@ class Post extends BaseController
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
         $params = [];
-        $statement = $post->getByParams(['id'=>$id]);
+        $statement = $post->getById($id);
 
 
         if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
@@ -183,9 +186,10 @@ class Post extends BaseController
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getByParams(['id'=>$id]);
+        $statementPost = $post->getById($id);
         $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
 
@@ -204,7 +208,7 @@ class Post extends BaseController
 
         $post = PostManager::getPostInstance(Application::getDatasource());
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
-        $statementPost = $post->getByParams(['id'=>$id]);
+        $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         foreach ($statementComments as $statementComment) {
@@ -216,7 +220,8 @@ class Post extends BaseController
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $this->view('backoffice/add.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
@@ -231,16 +236,16 @@ class Post extends BaseController
     {
 
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
-        $request = new Request(Application::getBaseUrl() .'/');
+        // $request = new Request(Application::getBaseUrl() .'/');
 
-        $comment->insertNewComment($request->getParams());
+        $comment->insertNewComment((new HttpParams())->getParamsPost());
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
         $post = PostManager::getPostInstance(Application::getDatasource());
-        $statementPost = $post->getByParams(['id'=>$id]);
+        $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
         Header('Location: '. Application::getBaseUrl() .'/post/'. $slug .'/'. $id);
     }
@@ -257,7 +262,8 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
 
         $user = $userSession ? $userSession->getAllUserInfo() : null;
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();
@@ -268,7 +274,7 @@ class Post extends BaseController
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-         $count = count($posts->getByParams([]));
+        $count = count($posts->getAllByParams([]));
 
         if ($httpParams['list'] !== null) {
             $count = count($posts->getAllFilteredCat($sqlParams, $httpParams['listSelect']));
@@ -321,7 +327,8 @@ class Post extends BaseController
      */
     public function unpublishPost(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = (new HttpParams())->getParamsReferer();
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (PostManager::getPostInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
@@ -335,7 +342,8 @@ class Post extends BaseController
      */
     public function publishPost(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = (new HttpParams())->getParamsReferer();
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (PostManager::getPostInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
     }

@@ -6,6 +6,7 @@ use App\Model\Entities\User;
 
 class Session
 {
+    
     /**
      * __construct : Start session if not already strated
      *
@@ -26,7 +27,7 @@ class Session
      */
     public function getUser(): ?AuthUser
     {
-        return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username'], $_SESSION['token']) : null;
+        return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username']) : null;
     }
 
 
@@ -41,7 +42,30 @@ class Session
         $_SESSION['id'] = $user->getId();
         $_SESSION['roleName'] = $user->getRoleName();
         $_SESSION['username'] = $user->getUsername();
-        $_SESSION['token'] = md5(bin2hex(openssl_random_pseudo_bytes(6)));
+
+    }
+
+    /**
+     * Generate new token when call
+     *
+     * @return void
+     *
+     */
+    public function generateToken(): void
+    {
+        $_SESSION['token'] =  md5(bin2hex(openssl_random_pseudo_bytes(6)));
+
+    }
+
+
+    /**
+     * getToken
+     *
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $_SESSION['token'];
     }
 
 }

@@ -47,9 +47,9 @@ class Router
                 $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
-                    $route->setParams($request->getParams());
-                    $route->setToken($request->getToken());
-                    $route->setOldParams($request->getOldParams());
+                    // $route->setParams($request->getParams());
+                    // $route->setToken($request->getToken());
+                    // $route->setOldParams($request->getOldParams());
                     return $route;
                 }
 
@@ -60,9 +60,9 @@ class Router
                     }
                     $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
                     if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
-                        $route->setParams($request->getParams());
-                        $route->setToken($request->getToken());
-                        $route->setOldParams($request->getOldParams());
+                        // $route->setParams($request->getParams());
+                        // $route->setToken($request->getToken());
+                        // $route->setOldParams($request->getOldParams());
                         return $route;
                     }
 

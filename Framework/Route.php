@@ -6,7 +6,6 @@ use Framework\Request;
 
 class Route
 {
-
     /**
      * pattern of address
      *
@@ -42,26 +41,6 @@ class Route
      */
     protected array $authRoles;
 
-    /**
-     * Params of request
-     *
-     * @var array<string, string>
-     */
-    protected array $params = [];
-
-    /**
-     * Params of old request
-     *
-     * @var string|null
-     */
-    protected ?string $oldParams = null;
-
-    /**
-     * token of request
-     *
-     * @var string|null
-     */
-    protected ?string $token;
 
     /**
      * __construct : Construct Route
@@ -139,71 +118,5 @@ class Route
     }
 
 
-    /**
-     * getParams
-     *
-     * @return array<string, int|string>
-     */
-    public function getParams(): array
-    {
-        return $this->params;
-    }
 
-
-    /**
-     * setParams : Insert params of  $_GET or $_POST in Route
-     *
-     * @param  array<string, string> $params : params of $_POST or $_GET
-     * @return void
-     */
-    public function setParams(array $params): void
-    {
-        $this->params = $params;
-    }
-
-
-    /**
-     * getoldParams
-     *
-     * @return string|null
-     */
-    public function getOldParams(): ?string
-    {
-        return $this->oldParams;
-    }
-
-
-    /**
-     * setParams : Insert params of  last HTTP request in Route
-     *
-     * @param  string|null $oldParams : params of last HTTP Request
-     * @return void
-     */
-    public function setOldParams(?string $oldParams): void
-    {
-        $this->oldParams = $oldParams;
-    }
-
-
-    /**
-     * getToken
-     *
-     * @return string|null
-     */
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-
-    /**
-     * setToken : Insert Token in Route
-     *
-     * @param  string|null $token : CSRF Token
-     * @return void
-     */
-    public function setToken(?string $token): void
-    {
-        $this->token = $token;
-    }
 }

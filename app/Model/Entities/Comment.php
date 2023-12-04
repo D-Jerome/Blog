@@ -163,7 +163,7 @@ class Comment extends Entity
     {
         $excerpt = substr($this->content, 0, 60) . '...';
         if (str_contains($excerpt, "<img ")) {
-            $excerpt =  substr($this->content, 0, strpos($this->content, "<img ")) . '...';
+            $excerpt =  substr($this->content, 0, (int)strpos($this->content, "<img ")) . '...';
         }
         return $excerpt;
     }

@@ -8,6 +8,9 @@ use Framework\Exception\PropertyNotFoundException;
 use PDO;
 use Safe\DateTime;
 
+/**
+ * @template T
+ */
 abstract class BaseManager
 {
     /**
@@ -49,25 +52,46 @@ abstract class BaseManager
     }//end __construct
 
 
-       /**
-        * getByParams : get all datas of filtered of objects
-        *
-        * @param array<string,int|string> $params fields and values to filter
-        *
-        * @return array<object>|object
-        */
-    public function getByParams(?array $params): array|object
+    /**
+    * getById : get datas from Id
+    *
+    * @param int $id
+    *
+    * @return T
+    */
+    public function getById(int $id)
+    {
+        $sql = <<<SQL
+            SELECT * FROM $this->table
+            WHERE id = ?
+        SQL;
+
+        $query = $this->dbConnect->prepare($sql);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
+        $query->execute([$id]);
+        return $query->fetch();
+    }
+
+
+    /**
+    * getAllByParams : get all datas of filtered of objects
+    *
+    * @param array<string,int|string> $params fields and values to filter
+    *
+    * @return array<T>
+    */
+    public function getAllByParams(?array $params)
     {
         $sql = <<<SQL
                 SELECT * FROM $this->table
         SQL;
         $i = 0;
-        foreach ($params as $key => $value){
+        foreach ($params as $key => $value) {
             if ($i !== 0) {
                 $sql .= <<<SQL
                     AND
                 SQL;
-            }else{
+            } else {
                 $sql .= <<<SQL
                     WHERE
                 SQL;
@@ -81,12 +105,7 @@ abstract class BaseManager
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute();
-        $statement = $query->fetchAll();
-        if (count($statement) === 1 ) {
-            return $statement[0];
-        }
-
-        return $statement;
+        return $query->fetchAll();
 
     }
 
@@ -111,7 +130,7 @@ abstract class BaseManager
     /**
      * getAllPublish: get all published object
      *
-     * @return array<object>
+     * @return array<T>
      */
     public function getAllPublish(): array
     {
@@ -134,7 +153,7 @@ abstract class BaseManager
      * @param null|int                             $page   Current page
      * @param null|array<string, int|string|bool > $params Differents parameters for WHERE clause
      *
-     * @return array<object>
+     * @return array<T>
      */
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
@@ -196,7 +215,7 @@ abstract class BaseManager
      *
      * @param  array<string, string|bool > $params Differents parameters for WHERE clause
      * @param  null|int                    $listId Id of List item to filter
-     * @return array<object>
+     * @return array<T>
      */
     public function getAllFilteredCat(?array $params, ?int $listId): array
     {
@@ -206,18 +225,18 @@ abstract class BaseManager
         SQL;
         if (isset($listId)) {
             switch ($this->table) {
-            case 'post':
-                $sql .= <<<SQL
+                case 'post':
+                    $sql .= <<<SQL
                                 INNER JOIN post_category pc ON pc.post_id = post.id
                             SQL;
-                break;
-            case 'user':
-                $sql .= <<<SQL
+                    break;
+                case 'user':
+                    $sql .= <<<SQL
                                 INNER JOIN role ON role.id = user.role_id
                             SQL;
-                break;
-            case 'comment':
-                break;
+                    break;
+                case 'comment':
+                    break;
             }//end switch
 
         }//end if
@@ -242,22 +261,22 @@ abstract class BaseManager
 
         if (isset($listId)) {
             switch ($this->table) {
-            case 'post':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+                case 'post':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
                                     AND pc.category_id = $listId
                                 SQL;
-                }
-                break;
-            case 'user':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+                    }
+                    break;
+                case 'user':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
                                     AND role.id = $listId
                                 SQL;
-                }
-                break;
-            case 'comment':
-                break;
+                    }
+                    break;
+                case 'comment':
+                    break;
             }//end switch
 
         }//end if
@@ -277,7 +296,7 @@ abstract class BaseManager
      * @param  null|int                    $page   Current page
      * @param  array<string, string|bool > $params Differents parameters for WHERE clause
      * @param  null|int                    $listId Id of List item to filter
-     * @return array<object>
+     * @return array<T>
      */
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
@@ -286,18 +305,18 @@ abstract class BaseManager
             SELECT $this->table.* FROM $this->table
         SQL;
         switch ($this->table) {
-        case 'post':
-            $sql .= <<<SQL
+            case 'post':
+                $sql .= <<<SQL
                 INNER JOIN post_category pc ON pc.post_id = post.id
             SQL;
-            break;
-        case 'user':
-            $sql .= <<<SQL
+                break;
+            case 'user':
+                $sql .= <<<SQL
                 INNER JOIN role ON role.id = user.role_id
             SQL;
-            break;
-        case 'comment':
-            break;
+                break;
+            case 'comment':
+                break;
         }
 
 
@@ -319,22 +338,22 @@ abstract class BaseManager
             }
         }
         switch ($this->table) {
-        case 'post':
-            if ($listId !== null) {
-                $sql .= <<<SQL
+            case 'post':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                     AND pc.category_id = $listId
                 SQL;
-            }
-            break;
-        case 'user':
-            if ($listId !== null) {
-                $sql .= <<<SQL
+                }
+                break;
+            case 'user':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                     AND role.id = $listId
                 SQL;
-            }
-            break;
-        case 'comment':
-            break;
+                }
+                break;
+            case 'comment':
+                break;
         }
 
 
@@ -376,12 +395,12 @@ abstract class BaseManager
     /**
      * insert : insert data in database
      *
-     * @param  object                $obj
+     * @param T $obj
      * @param  array<string, string> $param
      * @return void
      * @throws PropertyNotFoundException
      */
-    public function insert(object $obj, array $param): void
+    public function insert($obj, array $param): void
     {
         $paramNumber = count($param);
         $valueArray = array_fill(1, $paramNumber, "?");
@@ -406,12 +425,12 @@ abstract class BaseManager
     /**
      * update : update data of an object
      *
-     * @param  object               $obj
+     * @param T $obj
      * @param  array<string,string> $param
      * @return void
      * @throws PropertyNotFoundException
      */
-    public function update(object $obj, array $param): void
+    public function update($obj, array $param): void
     {
         $sql = <<<SQL
             UPDATE $this->table SET
@@ -447,7 +466,7 @@ abstract class BaseManager
             }
 
         }//end foreach
-        
+
         $req->execute($boundParam);
     }
 

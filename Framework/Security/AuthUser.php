@@ -31,7 +31,7 @@ class AuthUser
      *
      * @var string
      */
-    protected string $token;
+    protected string $token = '';
 
 
     /**
@@ -40,16 +40,14 @@ class AuthUser
      * @param  int    $id
      * @param  string $roleName
      * @param  string $username
-     * @param  string $token
+     *
      * @return void
      */
-    public function __construct(int $id, string $roleName, string $username, string $token)
+    public function __construct(int $id, string $roleName, string $username)
     {
         $this->id = $id;
         $this->roleName = $roleName;
         $this->username = $username;
-        $this->token = $token;
-    
 
     }//end __construct
 
@@ -87,24 +85,16 @@ class AuthUser
     }
 
 
-    /**
-     * getToken
-     *
-     * @return string|null
-     */
-    public function getToken(): ?string
-    {
-        return  $this->token;
-    }
-
 
     /**
-     * get id, name, role of connected user
+     * generate new token
+     * get id, name, role, token of connected user
      *
-     * @return array<string, string|null>
+     * @return array<string, int|string>
      */
     public function getAllUserInfo(): array
     {
+        // $this->generateToken();
         return [
             'id' => $this->id,
             'name' => $this->username,

@@ -26,7 +26,7 @@ class PDOConnection
     /**
      * getInstance : create instance pdo if no set
      *
-     * @param  array<string, string> $datasource Database connection informations from config file
+     * @param  array<string, array<string>|string> $datasource Database connection informations from config file
      * @return PDO
      */
     public static function getInstance(array $datasource)
@@ -43,7 +43,7 @@ class PDOConnection
     /**
      * __construct
      *
-     * @param  array<string, string> $datasource : database connection informations from config file
+     * @param  array<string, array<string>|string> $datasource : database connection informations from config file
      * @return void
      */
     private function __construct(array $datasource)
@@ -53,7 +53,7 @@ class PDOConnection
             $dsn .= $datasource['host'];
         }
         if (isset($datasource['dbname'])) {
-            $dsn .= "; " . $datasource['dbname'];
+            $dsn .= '; ' . $datasource['dbname'];
         }
         if (isset($datasource['port'])) {
             $dsn .= "; " . $datasource['port'];
@@ -63,10 +63,7 @@ class PDOConnection
             $dsn,
             $datasource['username'],
             $datasource['password'],
-            [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
-            ]
+            $datasource['options']
         );
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);

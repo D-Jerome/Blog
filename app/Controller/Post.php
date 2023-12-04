@@ -11,6 +11,9 @@ use Framework\Helpers\Text;
 use App\Controller\Pagination;
 use PDO;
 
+/**
+ * @extends Basecontroller <Post>
+ */
 class Post extends BaseController
 {
     /**
@@ -22,7 +25,7 @@ class Post extends BaseController
     {
         //recherche des 3 derniers articles par catégories
         $categories = CategoryManager::getCategoryInstance(Application::getDatasource());
-        $statementCategories = $categories->getByParams([]);
+        $statementCategories = $categories->getAllByParams([]);
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $postsByCategories = null;
         foreach ($statementCategories as $statementCategory) {
@@ -70,7 +73,7 @@ class Post extends BaseController
 
         if ($httpParams['list'] === null) {
             $count = count($posts->getAllPublish());
-        }else{
+        } else {
             $count = count($posts->getAllFilteredByParam($httpParams['list'], $httpParams['listSelect'], true));
         }
 
@@ -122,7 +125,7 @@ class Post extends BaseController
     {
         $post = PostManager::getPostInstance(Application::getDatasource());
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
-        $statementPost = $post->getByParams(['id'=> $id]);
+        $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
         $statementPost->categories = $post->getCategoriesById($statementPost->id);
