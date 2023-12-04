@@ -7,10 +7,8 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Intl\IntlExtension;
 
-
-class BaseController
+abstract class BaseController
 {
-
     /**
      * twig environment
      *
@@ -77,7 +75,7 @@ class BaseController
     protected function view(string $template, array $params): void
     {
         \Safe\ob_start();
-           echo $this->twig->render($template, $params);
+        echo $this->twig->render($template, $params);
         \Safe\ob_end_flush();
     }
 
@@ -115,15 +113,16 @@ class BaseController
     /**
      * ckeck and group filter information pass by user
      *
-     * @return array<string, null|string|int>
+     * @return array<string, null|string|int>|null
      */
-    public function groupFilterDataUser(): array
+    public function groupFilterDataUser(): ?array
     {
-        $filterReturn['sort'] = isset(($this->getRoute()->getParams())['sort']) ? (string)($this->getRoute()->getParams())['sort'] : 'createdAt';
-        $filterReturn['dir'] = isset(($this->getRoute()->getParams())['dir']) ? (string)($this->getRoute()->getParams())['dir'] : 'DESC';
-        $filterReturn['list'] = !empty(($this->getRoute()->getParams())['list']) ? (string)($this->getRoute()->getParams())['list'] : null;
-        if (isset(($this->getRoute()->getParams())['listSelect']) === true) {
-            $filterReturn['listSelect'] = (($this->getRoute()->getParams())['listSelect']) !== '---' ? ($this->getRoute()->getParams())['listSelect'] : null;
+        $filterReturn = (new HttpParams())->getParamsGet();
+        $filterReturn['sort'] = isset(($filterReturn)['sort']) ? (string)($filterReturn['sort']) : 'createdAt';
+        $filterReturn['dir'] = isset(($filterReturn)['dir']) ? (string)($filterReturn['dir']) : 'DESC';
+        $filterReturn['list'] = !empty(($filterReturn)['list']) ? (string)($filterReturn)['list'] : null;
+        if (isset(($filterReturn)['listSelect']) === true) {
+            $filterReturn['listSelect'] = ($filterReturn['listSelect']) !== '---' ? $filterReturn['listSelect'] : null;
         } else {
             $filterReturn['listSelect'] = null;
         }
@@ -152,7 +151,7 @@ class BaseController
             return true;
         }
 
-        if ($this->session->getUser()->getToken() === $this->getRoute()->getToken()) {
+        if ($this->session->getToken() === (new HttpParams())->getParamsPost()['token']) {
             return true;
         }
 

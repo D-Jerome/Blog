@@ -8,7 +8,7 @@ use Framework\Application;
 use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
-use Framework\Request;
+use Framework\{Request, HttpParams};
 use Framework\Session;
 
 class User extends BaseController
@@ -21,8 +21,9 @@ class User extends BaseController
     public function userList(): void
     {
         $userSession = $this->session->getUser();
-
         $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
@@ -32,9 +33,9 @@ class User extends BaseController
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
         $users = UserManager::getUserInstance(Application::getDatasource());
         if ($httpParams['list'] === null) {
-            $count = count($users->getByParams([]));
-        }else{
-            $count = count($users->getByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
+            $count = count($users->getAllByParams([]));
+        } else {
+            $count = count($users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -46,7 +47,7 @@ class User extends BaseController
             $statementUsers = $users->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
         }
 
-        foreach ($statementUsers as $statementUser){
+        foreach ($statementUsers as $statementUser) {
             $statementUser->setRoleName($users->getRoleById($statementUser->getRoleId()));
         }
 
@@ -66,8 +67,8 @@ class User extends BaseController
             'authUser' => $user
         ];
 
-        if (isset(($this->getRoute()->getParams())['user'])) {
-            if (($this->getRoute()->getParams())['user'] == 'modified') {
+        if (isset($httpParams['user'])) {
+            if ($httpParams['user'] == 'modified') {
                 $dataView['message'] = '<strong>Modification réussie</strong><br>
                 La modification de l\'utilisateur a été éffectué.';
                 $dataView['error'] = false;
@@ -87,14 +88,15 @@ class User extends BaseController
     public function modifyUser(int $id): void
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $statementUser = $users->getByParams(['id'=>$id]);
+        $statementUser = $users->getById($id);
 
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getByParams([]);
+        $statementRoles = $roles->getAllByParams([]);
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
@@ -108,13 +110,13 @@ class User extends BaseController
     public function modifiedUser(int $id): void
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $request = new Request(Application::getBaseUrl() .'/');
+        // $request = (new HttpParams())->getParamsPost();
 
-        $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getByParams([]);
-        $users->updateUser($request->getParams());
+        // $roles = RoleManager::getRoleInstance(Application::getDatasource());
 
-        $users->getByParams(['id'=>$id]);
+        $users->updateUser((new HttpParams())->getParamsPost());
+
+        $users->getAllByParams(['id' => $id]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
@@ -130,7 +132,8 @@ class User extends BaseController
      */
     public function disableUser(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = ((new HttpParams())->getParamsReferer());
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (UserManager::getUserInstance(Application::getDatasource()))->disable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
     }
@@ -144,7 +147,8 @@ class User extends BaseController
      */
     public function enableUser(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = ((new HttpParams())->getParamsReferer());
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
         exit;
@@ -159,7 +163,7 @@ class User extends BaseController
     public function addUser()
     {
         $roles = RoleManager::getRoleInstance(Application::getDatasource());
-        $statementRoles = $roles->getByParams([]);
+        $statementRoles = $roles->getAllByParams([]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
@@ -175,15 +179,15 @@ class User extends BaseController
     public function addedUser(): void
     {
         $user = UserManager::getUserInstance(Application::getDatasource());
-        $request = new Request(Application::getBaseUrl() .'/');
 
-        $return = $user->insertNewUser($request->getParams());
+
+        $return = $user->insertNewUser((new HttpParams())->getParamsPost());
         //verif si pas erreur
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $statementUser = $users->getByParams(['id'=>$return]);
+        $statementUser = $users->getAllByParams(['id' => $return]);
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }

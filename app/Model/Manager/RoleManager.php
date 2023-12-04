@@ -5,11 +5,13 @@ namespace App\Model\Manager;
 use App\Model\Entities\Role;
 use Framework\PDOConnection;
 use PDO;
-
+/**
+ * @extends BaseManager <Role>
+ */
 class RoleManager extends BaseManager
 {
 
-    private static ?BaseManager $roleInstance;
+    private static ?RoleManager $roleInstance;
 
 
     /**
@@ -28,11 +30,11 @@ class RoleManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, array<string>|string> $datasource
+     * @param array<string, string> $datasource
      *
-     * @return object
+     * @return RoleManager
      */
-    public static function getRoleInstance(array $datasource): object
+    public static function getRoleInstance(array $datasource): RoleManager
     {
         if (empty(self::$roleInstance) || (!isset(self::$roleInstance))) {
             self::$roleInstance = new self($datasource);

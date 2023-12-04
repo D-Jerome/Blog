@@ -5,6 +5,7 @@ namespace App\Controller;
 use Framework\Application;
 use Framework\BaseController;
 use Framework\Route;
+use Framework\HttpParams;
 
 class Pagination extends BaseController
 {
@@ -61,13 +62,13 @@ class Pagination extends BaseController
     {
         $this->route = $route;
         $this->totalPages = $totalPages;
-
-        if (isset(($this->getRoute()->getParams())['page'])) {
-            $this->currentPage = (int) ($this->getRoute()->getParams())['page'];
+        $params = (new HttpParams())->getParamsGet();
+        if (isset($params['page'])) {
+            $this->currentPage = (int) $params['page'];
         }
 
-        if (isset(($this->getRoute()->getParams())['perPage'])) {
-            $this->perPage = (int) ($this->getRoute()->getParams())['perPage'];
+        if (isset($params['perPage'])) {
+            $this->perPage = (int) $params['perPage'];
         }
 
     }
@@ -127,7 +128,7 @@ class Pagination extends BaseController
     public function pagesInformations(): array
     {
 
-        if (((int) (ceil(($this->totalPages / $this->perPage))) === 1) || $this->totalPages === 0 ) {
+        if (((int) (ceil(($this->totalPages / $this->perPage))) === 1) || $this->totalPages === 0) {
             $pages['nextActive'] = false;
             $pages['previousActive'] = false;
         } elseif ($this->currentPage >= (ceil(($this->totalPages / $this->perPage)))) {
@@ -141,10 +142,14 @@ class Pagination extends BaseController
             $pages['previousActive'] = true;
         }//end if
 
-        $temp = ($this->route->getParams());
+        $temp = (new HttpParams())->getParamsGet();
         unset($temp['page']);
-        $this->getRoute()->setParams($temp);
-        $query = http_build_query($this->route->getParams());
+        // $this->getRoute()->setParams($temp);
+        if (isset($temp) !== false) {
+            $query = http_build_query($temp);
+        }else{
+            $query = '';
+        }
         if (!empty($query)) {
             $query = "&$query";
         }

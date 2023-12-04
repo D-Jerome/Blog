@@ -5,11 +5,13 @@ namespace App\Model\Manager;
 use App\Model\Entities\Category;
 use Framework\PDOConnection;
 use PDO;
-
+/**
+ * @extends BaseManager <Category>
+ */
 class CategoryManager extends BaseManager
 {
 
-    private static ?BaseManager $categoryInstance;
+    private static ?CategoryManager $categoryInstance;
 
 
     /**
@@ -29,11 +31,11 @@ class CategoryManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, array<string>|string> $datasource
+     * @param array<string, string> $datasource
      *
-     * @return object
+     * @return CategoryManager
      */
-    public static function getCategoryInstance(array $datasource): object
+    public static function getCategoryInstance(array $datasource): CategoryManager
     {
         if (empty(self::$categoryInstance) || (!isset(self::$categoryInstance))) {
             self::$categoryInstance = new self($datasource);

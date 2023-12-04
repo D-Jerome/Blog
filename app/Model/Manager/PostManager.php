@@ -14,13 +14,12 @@ use PDO;
 /**
  * Post Model
  *
- * @package App\Model\Manager
- * @author  Jdubus <dubus.jerome@gmail.com>
+ * @extends BaseManager <Post>
  */
 class PostManager extends BaseManager
 {
 
-    private static ?BaseManager $postInstance;
+    private static ?PostManager $postInstance;
     /**
      * [ __construct]
      *
@@ -37,11 +36,11 @@ class PostManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, array<string>|string> $datasource
+     * @param array<string, string> $datasource
      *
-     * @return object
+     * @return PostManager
      */
-    public static function getPostInstance(array $datasource): object
+    public static function getPostInstance(array $datasource): PostManager
     {
         if (empty(self::$postInstance) || (!isset(self::$postInstance))) {
             self::$postInstance = new self($datasource);
@@ -77,7 +76,7 @@ class PostManager extends BaseManager
      *
      * @param  string     $paramItem  Name of field to filter
      * @param  int|string $paramValue Value of field to filter
-     * @return array<object>
+     * @return array<Post>
      */
     public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = false ): array
     {

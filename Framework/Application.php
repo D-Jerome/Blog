@@ -25,7 +25,7 @@ final class Application
     /**
      * datas from config file
      *
-     * @var array<string, string|array<string, null|bool|int|string|array<string, string|array<string, string>|array<null>>>>
+     * @var array<string, string|array<string>|array<string, null|bool|int|string|array<string, string|array<string, string>|array<null>>>>
      */
     private static array $config;
 
@@ -51,7 +51,7 @@ final class Application
      */
     public function run()
     {
-        
+
         try {
             $foundRoute = $this->router->findRoute($this->request);
 
@@ -88,7 +88,7 @@ final class Application
                         }
 
                     }//end foreach
-                    
+
                     $route->$action($id);
                 } else {
                     $route->$action();

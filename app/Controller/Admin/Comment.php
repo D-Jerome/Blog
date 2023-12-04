@@ -9,7 +9,7 @@ use Framework\Application;
 use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
-use Framework\Session;
+use Framework\HttpParams;
 use Safe\DateTime;
 
 use function Safe\parse_url;
@@ -26,7 +26,6 @@ class Comment extends BaseController
     {
 
         $userSession = $this->session->getUser();
-
         $user = $userSession ? $userSession->getAllUserInfo() : null;
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
@@ -35,12 +34,12 @@ class Comment extends BaseController
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
         if ($user['roleName'] === "admin") {
-            $count = count($comments->getByParams([]));
+            $count = count($comments->getAllByParams([]));
         } else {
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($comments->getByParams($sqlParams));
+            $count = count($comments->getAllByParams($sqlParams));
         }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -52,7 +51,7 @@ class Comment extends BaseController
             $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
         }
 
-        $statementPosts = $posts->getByParams([]);
+        $statementPosts = $posts->getAllByParams([]);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -92,12 +91,13 @@ class Comment extends BaseController
     {
 
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        $statement = $comments->getByParams(['id'=>$id]);
+        $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
@@ -112,11 +112,11 @@ class Comment extends BaseController
     {
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $params = [];
-        $statement = $comments->getByParams(['id'=>$id]);
+        $statement = $comments->getById($id);
 
-        if ($this->getRoute()->getParams()['content'] !== $statement->getContent()) {
+        if ((new HttpParams())->getParamsPost()['content'] !== $statement->getContent()) {
 
-            $params['content'] = $this->getRoute()->getParams()['content'];
+            $params['content'] = (new HttpParams())->getParamsPost()['content'];
         }
         if (null !== $params) {
 
@@ -128,9 +128,10 @@ class Comment extends BaseController
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
-
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        $statement = $comments->getByParams(['id'=>$id]);
+        $statement = $comments->getById($id);
         $statement->username = $comments->getCommentUsername($statement->getUserId());
 
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
@@ -146,8 +147,9 @@ class Comment extends BaseController
     {
 
         $userSession = $this->session->getUser();
-
         $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $this->session->generateToken();
+        $user['token']= $this->session->getToken();
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
@@ -160,7 +162,7 @@ class Comment extends BaseController
 
         $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
 
-        $count = count($posts->getByParams([]));
+        $count = count($posts->getAllByParams([]));
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
@@ -177,7 +179,7 @@ class Comment extends BaseController
         }
 
 
-        $statementPosts = $posts->getByParams([]);
+        $statementPosts = $posts->getAllByParams([]);
         foreach ($statementPosts as $statementPost) {
             $statementPost->categories = $posts->getCategoriesById($statementPost->id);
             $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
@@ -215,7 +217,8 @@ class Comment extends BaseController
      */
     public function unpublishComment(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = (new HttpParams())->getParamsReferer();
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (CommentManager::getCommentInstance(Application::getDatasource()))->unpublish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
     }
@@ -229,7 +232,8 @@ class Comment extends BaseController
      */
     public function publishComment(int $id): void
     {
-        $filterParams = ($this->getRoute()->getOldParams());
+        $filterParams = (new HttpParams())->getParamsReferer();
+        $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (CommentManager::getCommentInstance(Application::getDatasource()))->publish($id);
         header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
     }

@@ -8,14 +8,17 @@ use PDO;
 use Safe\DateTime;
 use PhpParser\Node\Stmt\Else_;
 
+/**
+ * @extends BaseManager <User>
+ */
 class UserManager extends BaseManager
 {
     /**
      * User Instance
      *
-     * @var BaseManager|null
+     * @var UserManager|null
      */
-    private static ?BaseManager $userInstance;
+    private static ?UserManager $userInstance;
 
 
     /**
@@ -36,9 +39,9 @@ class UserManager extends BaseManager
      *
      * @param array<string, array<string>|string> $datasource
      *
-     * @return object
+     * @return UserManager
      */
-    public static function getUserInstance(array $datasource): object
+    public static function getUserInstance(array $datasource): UserManager
     {
         if (empty(self::$userInstance) || (!isset(self::$userInstance))) {
             self::$userInstance = new self($datasource);
@@ -177,13 +180,13 @@ class UserManager extends BaseManager
      * updateUser : Update user information
      *
      * @param  array<string, string|int> $params New data user
-     * @return int|string
+     * @return int
      */
-    public function updateUser(array $params): int|string
+    public function updateUser(array $params): int
     {
 
-        $actualUser = (object) $this->getByParams(['id' => $params['id'] ]);
-
+        $actualUser = $this->getById((int)$params['id']);
+        unset($params['token']);
         foreach ($params as $k => $param) {
             $getUser = 'get' . ucfirst($k);
 

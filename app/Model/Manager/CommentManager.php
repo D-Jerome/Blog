@@ -9,15 +9,18 @@ use Framework\PDOConnection;
 use PDO;
 use Safe\DateTime;
 
+/**
+ * @extends BaseManager <Comment>
+ */
 class CommentManager extends BaseManager
 {
-    private static ?BaseManager $commentInstance;
+    private static ?CommentManager $commentInstance;
 
 
     /**
      * __construct
      *
-     * @param  array<string, string> $datasource Connection database informations
+     * @param  array<string, array<string>|string> $datasource Connection database informations
      * @return void
      */
     public function __construct(array $datasource)
@@ -32,9 +35,9 @@ class CommentManager extends BaseManager
      *
      * @param array<string, array<string>|string> $datasource
      *
-     * @return object
+     * @return CommentManager
      */
-    public static function getCommentInstance(array $datasource): object
+    public static function getCommentInstance(array $datasource): CommentManager
     {
         if (empty(self::$commentInstance) || (!isset(self::$commentInstance))) {
             self::$commentInstance = new self($datasource);

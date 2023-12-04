@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Model\Manager\UserManager;
 use Exception;
-use Framework\{Application, Mail, Request};
+use Framework\{Application, Mail, Request, HttpParams};
 use Framework\BaseController;
 use Framework\Exception\PasswordPolicyException;
 use Framework\Exception\UnauthorizeValueException;
@@ -19,7 +19,8 @@ class User extends BaseController
     public function loginAuth(): void
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
-        $user = $users->getByUsername($this->getRoute()->getParams()['login']);
+        $paramsPost = (new HttpParams())->getParamsPost();
+        $user = $users->getByUsername($paramsPost['login']);
 
         if (null === ($user)) {
             $user = [];
@@ -50,7 +51,7 @@ class User extends BaseController
             exit;
         }
 
-        if (password_verify($this->getRoute()->getParams()['password'], $user->getPassword())) {
+        if (password_verify($paramsPost['password'], $user->getPassword())) {
             //     si ok : Mise en place de session de connexion pour l'utilisateur
             $user->setRoleName($users->getRoleById($user->getRoleId()));
             $this->session->connect($user);
@@ -127,7 +128,7 @@ class User extends BaseController
         try {
             $message = '';
             $error = false;
-            $postdatas = (new Request('blog-project'))->getParams();
+            $postdatas = (new HttpParams())->getParamsPost();;
             foreach ($postdatas as $k => $data) {
                 if (empty($data)) {
                     $message = "Formulaire Vide";
@@ -212,7 +213,7 @@ class User extends BaseController
      */
     public function sendUserConnectionMail()
     {
-        $postDatas = ((new Request(Application::getBaseUrl() .'/'))->getParams());
+        $postDatas = (new HttpParams())->getParamsPost();
         $email = filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
         $mail = new Mail(Application::getEmailSource());
         $users = UserManager::getUserInstance(Application::getDatasource());
