@@ -1,7 +1,8 @@
 <?php
 
 namespace Framework;
-use function Safe\parse_url;
+
+use Webmozart\Assert\Assert;
 
 class Request
 {
@@ -28,7 +29,11 @@ class Request
      */
     public function __construct(string $baseUrl)
     {
-        $this->uri = str_replace($baseUrl, '', \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_URI'], PHP_URL_PATH));
+
+        $parseURI = \Safe\parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_URI'], PHP_URL_PATH);
+        if (is_string($parseURI)) {
+            $this->uri = (str_replace($baseUrl, '', $parseURI)) ;
+        }
         $this->method = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_METHOD'];
     }//end __construct()
 

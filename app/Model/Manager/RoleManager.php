@@ -5,19 +5,19 @@ namespace App\Model\Manager;
 use App\Model\Entities\Role;
 use Framework\PDOConnection;
 use PDO;
+
 /**
  * @extends BaseManager <Role>
  */
 class RoleManager extends BaseManager
 {
-
     private static ?RoleManager $roleInstance;
 
 
     /**
      * __construct
      *
-     * @param  array<string, string> $datasource Database connection informations from config file
+     * @param  array<string,string> $datasource Database connection informations from config file
      * @return void
      */
     private function __construct(array $datasource)
@@ -30,7 +30,7 @@ class RoleManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, string> $datasource
+     * @param array<string,string> $datasource
      *
      * @return RoleManager
      */

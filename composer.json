@@ -18,7 +18,8 @@
         "phpmailer/phpmailer": "^6.8",
         "twig/intl-extra": "^3.7",
         "twig/extra-bundle": "^3.7",
-        "thecodingmachine/safe": "^2.5"
+        "thecodingmachine/safe": "^2.5",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.38",
@@ -28,6 +29,7 @@
         "phpstan/phpstan": "^1.10",
         "squizlabs/php_codesniffer": "*",
         "thecodingmachine/phpstan-safe-rule": "^1.2",
-        "rector/rector": "^0.18.10"
+        "rector/rector": "^0.18.10",
+        "phpstan/phpstan-webmozart-assert": "^1.2"
     }
 }

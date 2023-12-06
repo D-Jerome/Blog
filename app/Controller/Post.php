@@ -11,9 +11,6 @@ use Framework\Helpers\Text;
 use App\Controller\Pagination;
 use PDO;
 
-/**
- * @extends Basecontroller <Post>
- */
 class Post extends BaseController
 {
     /**
@@ -69,28 +66,28 @@ class Post extends BaseController
         $sqlParams = [ "publish_state" => true];
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
 
         if ($httpParams['list'] === null) {
             $count = count($posts->getAllPublish());
         } else {
-            $count = count($posts->getAllFilteredByParam($httpParams['list'], $httpParams['listSelect'], true));
+            $count = count($posts->getAllFilteredByParam((string)$httpParams['list'], (int)$httpParams['listSelect'], true));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
         if ($httpParams['listSelect'] === null) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
         }
 
 
         foreach ($statementPosts as $statementPost) {
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
-            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username =  ($posts->getPostUsername($statementPost->getUserId()));
+            $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
+            $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
+            $statementPost->setUsername($posts->getPostUsername($statementPost->getUserId()));
         }
 
         $this->view(
@@ -127,10 +124,10 @@ class Post extends BaseController
         $comment = CommentManager::getCommentInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
-        $statementPost->username =  ($post->getPostUsername($statementPost->getUserId()));
-        $statementPost->categories = $post->getCategoriesById($statementPost->id);
+        $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
+        $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
         foreach ($statementComments as $statementComment) {
-            $statementComment->setUsername($comment->getCommentUsername($statementComment->getUserId()));
+            $statementComment->setUsername((string)$comment->getCommentUsername($statementComment->getUserId()));
         }
         $userSession = $this->session->getUser();
         $user = $userSession ? $userSession->getAllUserInfo() : null;

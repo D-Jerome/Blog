@@ -38,9 +38,9 @@ abstract class BaseManager
     /**
      * __construct
      *
-     * @param  string                              $table      Name of the table to query database
-     * @param  string                              $objectName Name of object to return information
-     * @param  array<string, array<string>|string> $datasource Database connection informations
+     * @param  string               $table      Name of the table to query database
+     * @param  string               $objectName Name of object to return information
+     * @param  array<string,string> $datasource Database connection informations
      * @return void
      */
     public function __construct(string $table, string $objectName, array $datasource)
@@ -53,12 +53,12 @@ abstract class BaseManager
 
 
     /**
-    * getById : get datas from Id
-    *
-    * @param int $id
-    *
-    * @return T
-    */
+     * getById : get datas from Id
+     *
+     * @param int $id
+     *
+     * @return T
+     */
     public function getById(int $id)
     {
         $sql = <<<SQL
@@ -74,33 +74,36 @@ abstract class BaseManager
 
 
     /**
-    * getAllByParams : get all datas of filtered of objects
-    *
-    * @param array<string,int|string> $params fields and values to filter
-    *
-    * @return array<T>
-    */
+     * getAllByParams : get all datas of filtered of objects
+     *
+     * @param array<string,int|string> $params fields and values to filter
+     *
+     * @return array<T>|null
+     */
     public function getAllByParams(?array $params)
     {
         $sql = <<<SQL
                 SELECT * FROM $this->table
         SQL;
         $i = 0;
-        foreach ($params as $key => $value) {
-            if ($i !== 0) {
+        if(!empty($params) === true ) {
+            foreach ($params as $key => $value) {
+                if ($i !== 0) {
+                    $sql .= <<<SQL
+                        AND
+                    SQL;
+                } else {
+                    $sql .= <<<SQL
+                        WHERE
+                    SQL;
+                }
                 $sql .= <<<SQL
-                    AND
+                    $key = $value
                 SQL;
-            } else {
-                $sql .= <<<SQL
-                    WHERE
-                SQL;
-            }
-            $sql .= <<<SQL
-                $key = $value
-            SQL;
-            $i++;
-        }//end foreach
+                $i++;
+            }//end foreach
+
+        }// end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
@@ -213,8 +216,8 @@ abstract class BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
-     * @param  null|int                    $listId Id of List item to filter
+     * @param  array<string,string|int>|null $params Differents parameters for WHERE clause
+     * @param  null|int                      $listId Id of List item to filter
      * @return array<T>
      */
     public function getAllFilteredCat(?array $params, ?int $listId): array
@@ -225,18 +228,18 @@ abstract class BaseManager
         SQL;
         if (isset($listId)) {
             switch ($this->table) {
-                case 'post':
-                    $sql .= <<<SQL
+            case 'post':
+                $sql .= <<<SQL
                                 INNER JOIN post_category pc ON pc.post_id = post.id
                             SQL;
-                    break;
-                case 'user':
-                    $sql .= <<<SQL
+                break;
+            case 'user':
+                $sql .= <<<SQL
                                 INNER JOIN role ON role.id = user.role_id
                             SQL;
-                    break;
-                case 'comment':
-                    break;
+                break;
+            case 'comment':
+                break;
             }//end switch
 
         }//end if
@@ -261,22 +264,22 @@ abstract class BaseManager
 
         if (isset($listId)) {
             switch ($this->table) {
-                case 'post':
-                    if ($listId !== null) {
-                        $sql .= <<<SQL
+            case 'post':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                                     AND pc.category_id = $listId
                                 SQL;
-                    }
-                    break;
-                case 'user':
-                    if ($listId !== null) {
-                        $sql .= <<<SQL
+                }
+                break;
+            case 'user':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                                     AND role.id = $listId
                                 SQL;
-                    }
-                    break;
-                case 'comment':
-                    break;
+                }
+                break;
+            case 'comment':
+                break;
             }//end switch
 
         }//end if
@@ -290,12 +293,12 @@ abstract class BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  null|string                 $field  Name of field to order
-     * @param  null|string                 $dir    Direction of order
-     * @param  null|int                    $limit  Number of posts by page
-     * @param  null|int                    $page   Current page
-     * @param  array<string, string|bool > $params Differents parameters for WHERE clause
-     * @param  null|int                    $listId Id of List item to filter
+     * @param  null|string                        $field  Name of field to order
+     * @param  null|string                        $dir    Direction of order
+     * @param  null|int                           $limit  Number of posts by page
+     * @param  null|int                           $page   Current page
+     * @param  array<string,string|bool|int>|null $params Differents parameters for WHERE clause
+     * @param  null|int                           $listId Id of List item to filter
      * @return array<T>
      */
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
@@ -305,18 +308,18 @@ abstract class BaseManager
             SELECT $this->table.* FROM $this->table
         SQL;
         switch ($this->table) {
-            case 'post':
-                $sql .= <<<SQL
+        case 'post':
+            $sql .= <<<SQL
                 INNER JOIN post_category pc ON pc.post_id = post.id
             SQL;
-                break;
-            case 'user':
-                $sql .= <<<SQL
+            break;
+        case 'user':
+            $sql .= <<<SQL
                 INNER JOIN role ON role.id = user.role_id
             SQL;
-                break;
-            case 'comment':
-                break;
+            break;
+        case 'comment':
+            break;
         }
 
 
@@ -338,22 +341,22 @@ abstract class BaseManager
             }
         }
         switch ($this->table) {
-            case 'post':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+        case 'post':
+            if ($listId !== null) {
+                $sql .= <<<SQL
                     AND pc.category_id = $listId
                 SQL;
-                }
-                break;
-            case 'user':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+            }
+            break;
+        case 'user':
+            if ($listId !== null) {
+                $sql .= <<<SQL
                     AND role.id = $listId
                 SQL;
-                }
-                break;
-            case 'comment':
-                break;
+            }
+            break;
+        case 'comment':
+            break;
         }
 
 
@@ -395,7 +398,7 @@ abstract class BaseManager
     /**
      * insert : insert data in database
      *
-     * @param T $obj
+     * @param  T                     $obj
      * @param  array<string, string> $param
      * @return void
      * @throws PropertyNotFoundException
@@ -412,7 +415,7 @@ abstract class BaseManager
         $req = $this->dbConnect->prepare($sql);
         $boundParam = array();
         foreach ($param as $paramName) {
-            if (property_exists($obj, $paramName)) {
+            if (property_exists((object)$obj, $paramName)) {
                 $boundParam[$paramName] = $obj->$paramName;
             } else {
                 throw new PropertyNotFoundException($this->object);
@@ -425,7 +428,7 @@ abstract class BaseManager
     /**
      * update : update data of an object
      *
-     * @param T $obj
+     * @param  T                    $obj
      * @param  array<string,string> $param
      * @return void
      * @throws PropertyNotFoundException
@@ -459,7 +462,7 @@ abstract class BaseManager
         $param['id'] = $obj->getId();
         $boundParam = [];
         foreach ($param as $paramName => $paramValue) {
-            if (property_exists($obj, $paramName)) {
+            if (property_exists((object)$obj, $paramName)) {
                 $boundParam[Text::camelCaseToSnakeCase($paramName)] = $paramValue;
             } else {
                 throw new PropertyNotFoundException($this->object);

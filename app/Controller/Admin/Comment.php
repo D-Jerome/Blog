@@ -46,16 +46,16 @@ class Comment extends BaseController
         $pages = $pagination->pagesInformations();
 
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
-            $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
+            $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
 
         $statementPosts = $posts->getAllByParams([]);
         foreach ($statementPosts as $statementPost) {
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
-            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username = $posts->getPostUsername($statementPost->getUserId());
+            $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
+            $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
+            $statementPost->setUsername($posts->getPostUsername($statementPost->getUserId()));
         }
         $this->view(
             'backoffice/admin.comments.html.twig',
@@ -92,7 +92,7 @@ class Comment extends BaseController
 
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
-        $statement->username = $comments->getCommentUsername($statement->getUserId());
+        $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
@@ -132,7 +132,7 @@ class Comment extends BaseController
         $user['token']= $this->session->getToken();
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
-        $statement->username = $comments->getCommentUsername($statement->getUserId());
+        $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
@@ -160,7 +160,7 @@ class Comment extends BaseController
         $posts = PostManager::getPostInstance(Application::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
 
         $count = count($posts->getAllByParams([]));
 
@@ -170,20 +170,20 @@ class Comment extends BaseController
         $comments = (CommentManager::getCommentInstance(Application::getDatasource()));
 
         if ($httpParams['listSelect'] === null) {
-            $statementComments = $comments->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+            $statementComments = $comments->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
+            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
         }
         foreach ($statementComments as $statementComment) {
-            $statementComment->username = $comments->getCommentUsername($statementComment->getUserId());
+            $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
 
 
         $statementPosts = $posts->getAllByParams([]);
         foreach ($statementPosts as $statementPost) {
-            $statementPost->categories = $posts->getCategoriesById($statementPost->id);
-            $statementPost->countComments = $posts->getCountCommentsByPostId($statementPost->id);
-            $statementPost->username = $posts->getPostUsername($statementPost->getUserId());
+            $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
+            $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
+            $statementPost->setusername($posts->getPostUsername($statementPost->getUserId()));
         }
 
         $this->view(

@@ -6,11 +6,7 @@
         "host" : "host=localhost",
         "port" : "port=33061",
         "username": "blog",
-        "password" : "Blog-Pr0ject",
-        "options" : [
-            "PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION",
-            "PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS"
-        ]
+        "password" : "Blog-Pr0ject"
     },
     "email" : {
         "host" : "smtp.example.com",

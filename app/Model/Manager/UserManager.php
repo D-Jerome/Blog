@@ -24,7 +24,7 @@ class UserManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string, array<string>|string> $datasource Database connection informations from config file
+     * @param  array<string,string> $datasource Database connection informations from config file
      * @return void
      */
     private function __construct(array $datasource)
@@ -37,7 +37,7 @@ class UserManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, array<string>|string> $datasource
+     * @param array<string,string> $datasource
      *
      * @return UserManager
      */
@@ -55,14 +55,14 @@ class UserManager extends BaseManager
      * getByUsername : get User Object of the user
      *
      * @param  string $login Username passed in login form
-     * @return User
+     * @return User|null
      */
     public function getByUsername(string $login): ?User
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$login]);
-        return $statement->fetch() ?: null;
+        return $statement->fetch() ?? null;
     }
 
 
@@ -70,14 +70,14 @@ class UserManager extends BaseManager
      * getByUseremail : get User Object of the user
      *
      * @param  string $email email of forget password form
-     * @return string|bool
+     * @return User|null
      */
-    public function getByUserEmail(string $email): string|bool
+    public function getByUserEmail(string $email): ?User
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$email]);
-        return $statement->fetch();
+        return $statement->fetch() ?? null;
     }
 
 
@@ -85,9 +85,9 @@ class UserManager extends BaseManager
      * getRoleById : get Role object of the user-role-id
      *
      * @param  int $id Id of the Role of the user
-     * @return int|string|false|null
+     * @return string
      */
-    public function getRoleById(int $id): int|string|false|null
+    public function getRoleById(int $id): string
     {
         $sql = <<<SQL
             SELECT r.name FROM role r
@@ -95,14 +95,14 @@ class UserManager extends BaseManager
         SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->execute([$id]);
-        return $statement->fetchColumn();
+        return (string)$statement->fetchColumn();
     }
 
 
     /**
      * insertNewUser : add new user in database
      *
-     * @param  array<string, string> $params User information
+     * @param  array<string,string> $params User information
      * @return int
      */
     public function insertNewUser(array $params): int
@@ -179,7 +179,7 @@ class UserManager extends BaseManager
     /**
      * updateUser : Update user information
      *
-     * @param  array<string, string|int> $params New data user
+     * @param  array<string,string|int> $params New data user
      * @return int
      */
     public function updateUser(array $params): int

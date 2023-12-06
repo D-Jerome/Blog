@@ -26,20 +26,14 @@ class AuthUser
      */
     protected string $username;
 
-    /**
-     * CSRF Token
-     *
-     * @var string
-     */
-    protected string $token = '';
 
 
     /**
      * __construct keep auth user information
      *
-     * @param  int    $id
-     * @param  string $roleName
-     * @param  string $username
+     * @param int    $id
+     * @param string $roleName
+     * @param string $username
      *
      * @return void
      */
@@ -94,12 +88,10 @@ class AuthUser
      */
     public function getAllUserInfo(): array
     {
-        // $this->generateToken();
         return [
             'id' => $this->id,
             'name' => $this->username,
             'roleName' => $this->roleName,
-            'token' => $this->token
         ];
     }
 }

@@ -68,8 +68,8 @@ abstract class BaseController
     /**
      * view : Twig Template view construct
      *
-     * @param  string                                                            $template Name of the template
-     * @param  array<string, array<bool|int|object|string>|int|string|null|bool> $params   Params to show in template
+     * @param  string                                                           $template Name of the template
+     * @param  array<string,array<bool|int|object|string>|int|string|null|bool> $params   Params to show in template
      * @return void
      */
     protected function view(string $template, array $params): void
@@ -113,7 +113,7 @@ abstract class BaseController
     /**
      * ckeck and group filter information pass by user
      *
-     * @return array<string, null|string|int>|null
+     * @return array<string,null|string|int>|null
      */
     public function groupFilterDataUser(): ?array
     {

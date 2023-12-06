@@ -7,18 +7,17 @@ use Framework\Application;
 
 class FilterBuilder
 {
-
     /**
      * List of Sortable Item
      *
-     * @var array<string, string> $sort
+     * @var array<string,string> $sort
      */
     private array $sort;
 
     /**
      * direction of sort
      *
-     * @var array<string, string> $dir
+     * @var array<string,string> $dir
      */
     private array $dir;
 
@@ -49,22 +48,29 @@ class FilterBuilder
     /**
      * __construct : Construct filter data
      *
-     * @param string                                                                          $typeObj : Name of the object to list
-     * @param array<string, bool|int|string|array<string, string|array<string, string>|null>> $config
+     * @param string                                                       $typeObj : Name of the object to list
+     * @param array<string,array<string,null|string|array<string,string>>> $config
      *
      * @return void
      */
     public function __construct(array $config, string $typeObj)
     {
-        $this->sort = $config[$typeObj]['sort'];
-        $this->dir = $config['dir'];
-        if (!empty($config[$typeObj]['list'])) {
+
+        if (is_array($config[$typeObj]['sort'])) {
+            $this->sort =  $config[$typeObj]['sort'] ;
+        }
+        if (is_array($config['dir'])) {
+            $this->dir = $config['dir'];
+        }
+        if (!empty($config[$typeObj]['list']) && is_array($config[$typeObj]['list'])) {
             $this->list = $config[$typeObj]['list'];
-            $this->listSelect = $config[$typeObj]['listSelect'];
-            $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
-            $getInstance = 'get'.array_key_first($config[$typeObj]['list']).'Instance';
-            $listNames = $objectManagerName::$getInstance(Application::getDatasource());
-            $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
+            if (is_array($config[$typeObj]['listSelect'])) {
+                $this->listSelect = $config[$typeObj]['listSelect'];
+                $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
+                $getInstance = 'get'.array_key_first($config[$typeObj]['list']).'Instance';
+                $listNames = $objectManagerName::$getInstance(Application::getDatasource());
+                $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
+            }
         }
 
     }//end __construct()
@@ -73,7 +79,7 @@ class FilterBuilder
     /**
      * getSort: Type and FR translate
      *
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function getSort(): array
     {
@@ -84,7 +90,7 @@ class FilterBuilder
     /**
      * getDir: Type and FR translate
      *
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function getDir(): array
     {
@@ -95,7 +101,7 @@ class FilterBuilder
     /**
      * getCategories : Type and FR translate
      *
-     * @return array<string, string>|null
+     * @return array<string,string>|null
      */
     public function getList(): ?array
     {
@@ -104,7 +110,7 @@ class FilterBuilder
 
 
     /**
-     * getListSelect 
+     * getListSelect
      *
      * @return array<string,string>|null
      */
@@ -116,7 +122,7 @@ class FilterBuilder
     /**
      * getListNames: names of each option case
      *
-     * @return array<int, string>|null
+     * @return array<int,string>|null
      */
     public function getListNames(): ?array
     {
