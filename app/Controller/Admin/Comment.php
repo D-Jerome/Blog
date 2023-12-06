@@ -26,7 +26,7 @@ class Comment extends BaseController
     {
 
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
@@ -84,7 +84,6 @@ class Comment extends BaseController
     /**
      * modifyComment
      *
-     * @param  int $id
      * @return void
      */
     public function modifyComment(int $id): void
@@ -105,7 +104,6 @@ class Comment extends BaseController
     /**
      * modifiedComment: action after modification of comment
      *
-     * @param  int $id
      * @return void
      */
     public function modifiedComment(int $id): void
@@ -147,7 +145,7 @@ class Comment extends BaseController
     {
 
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->session->generateToken();
         $user['token']= $this->session->getToken();
 
@@ -212,7 +210,6 @@ class Comment extends BaseController
     /**
      * unpublishComment: action of unpublish comment
      *
-     * @param  int $id
      * @return void
      */
     public function unpublishComment(int $id): void
@@ -227,7 +224,6 @@ class Comment extends BaseController
     /**
      * publishComment: action of publish comment
      *
-     * @param  int $id
      * @return void
      */
     public function publishComment(int $id): void

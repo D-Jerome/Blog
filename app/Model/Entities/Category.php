@@ -9,21 +9,21 @@ class Category extends Entity
      *
      * @var int|null
      */
-    protected ?int $id;
+    protected ?int $id = null;
 
     /**
      * name of category
      *
      * @var string|null
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
     /**
      * slug of category
      *
      * @var string|null
      */
-    protected ?string $slug;
+    protected ?string $slug = null;
 
 
     /**

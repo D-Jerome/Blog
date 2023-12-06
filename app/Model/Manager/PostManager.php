@@ -18,7 +18,7 @@ use PDO;
  */
 class PostManager extends BaseManager
 {
-    private static ?PostManager $postInstance;
+    private static ?PostManager $postInstance = null;
     /**
      * [ __construct]
      *
@@ -41,7 +41,7 @@ class PostManager extends BaseManager
      */
     public static function getPostInstance(array $datasource): PostManager
     {
-        if (empty(self::$postInstance) || (!isset(self::$postInstance))) {
+        if (!self::$postInstance instanceof \App\Model\Manager\PostManager || (!isset(self::$postInstance))) {
             self::$postInstance = new self($datasource);
         }
 
@@ -231,7 +231,7 @@ class PostManager extends BaseManager
         $query->execute();
 
         $postId = (int)$this->dbConnect->lastInsertId();
-        if (isset($params['categoryId']) === true && (is_array($params['categoryId']) === true)) {
+        if (isset($params['categoryId']) && (is_array($params['categoryId']))) {
             $categories = $params['categoryId'];
             foreach ($categories as $category) {
                 $sql = <<<SQL

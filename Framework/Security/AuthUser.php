@@ -6,43 +6,26 @@ class AuthUser
 {
 
     /**
-     * user id of connected user
-     *
-     * @var int
-     */
-    protected int $id;
-
-    /**
-     * role name of connected user
-     *
-     * @var string
-     */
-    protected string $roleName;
-
-    /**
-     * username of connected user
-     *
-     * @var string
-     */
-    protected string $username;
-
-
-
-    /**
      * __construct keep auth user information
      *
-     * @param int    $id
-     * @param string $roleName
-     * @param string $username
      *
      * @return void
      */
-    public function __construct(int $id, string $roleName, string $username)
+    public function __construct(
+        /**
+         * user id of connected user
+         */
+        protected int $id,
+        /**
+         * role name of connected user
+         */
+        protected string $roleName,
+        /**
+         * username of connected user
+         */
+        protected string $username
+    )
     {
-        $this->id = $id;
-        $this->roleName = $roleName;
-        $this->username = $username;
-
     }//end __construct
 
 

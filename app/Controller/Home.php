@@ -23,7 +23,7 @@ class Home extends BaseController
     {
         //recherche des 3 derniers articles par catégories
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $err = (new HttpParams())->getParamsGet();
 
         if(!isset($err['auth'])) {

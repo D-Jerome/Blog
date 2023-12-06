@@ -7,42 +7,6 @@ use Framework\Request;
 class Route
 {
     /**
-     * pattern of address
-     *
-     * @var string
-     */
-    protected string $path;
-
-    /**
-     * type of method (post,get)
-     *
-     * @var string
-     */
-    protected string $method;
-
-    /**
-     * controller address
-     *
-     * @var string
-     */
-    protected string $controller;
-
-    /**
-     * method(function) to use
-     *
-     * @var string
-     */
-    protected string $action;
-
-    /**
-     * authorized roles for route
-     *
-     * @var array<string>
-     */
-    protected array $authRoles;
-
-
-    /**
      * __construct : Construct Route
      *
      * @param  string             $path       pattern of URI
@@ -52,14 +16,29 @@ class Route
      * @param  array<int, string> $authRoles  : List of authorized Roles
      * @return void
      */
-    public function __construct(string $path, string $method, string $controller, string $action, array $authRoles)
+    public function __construct(
+        /**
+         * pattern of address
+         */
+        protected string $path,
+        /**
+         * type of method (post,get)
+         */
+        protected string $method,
+        /**
+         * controller address
+         */
+        protected string $controller,
+        /**
+         * method(function) to use
+         */
+        protected string $action,
+        /**
+         * authorized roles for route
+         */
+        protected array $authRoles
+    )
     {
-        $this->path = $path;
-        $this->method = $method;
-        $this->controller = $controller;
-        $this->action = $action;
-        $this->authRoles = $authRoles;
-
     } //end __construct
 
 

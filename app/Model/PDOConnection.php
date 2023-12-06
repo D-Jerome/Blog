@@ -13,14 +13,14 @@ class PDOConnection
      *
      * @var PDO
      */
-    private PDO $dbConnect;
+    private readonly PDO $dbConnect;
 
     /**
      * Instance of connection
      *
      * @var PDOConnection
      */
-    private static ?PDOConnection $pdoInstance;
+    private static ?PDOConnection $pdoInstance = null;
 
 
     /**
@@ -32,7 +32,7 @@ class PDOConnection
     public static function getInstance(array $datasource)
     {
 
-        if (empty(self::$pdoInstance) || (!isset(self::$pdoInstance))) {
+        if (!self::$pdoInstance instanceof \App\Model\PDOConnection || (!isset(self::$pdoInstance))) {
             self::$pdoInstance = new PDOConnection($datasource);
         }
 
@@ -62,7 +62,7 @@ class PDOConnection
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
                 ]
             );
-       
+
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
     }//end __construct

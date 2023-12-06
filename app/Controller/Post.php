@@ -36,7 +36,7 @@ class Post extends BaseController
         }
 
         $user = $this->session->getUser();
-        if (null === $user) {
+        if (!$user instanceof \Framework\Security\AuthUser) {
             $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
             exit;
         }
@@ -59,7 +59,7 @@ class Post extends BaseController
     {
         $userSession = $this->session->getUser();
 
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
@@ -115,7 +115,6 @@ class Post extends BaseController
     /**
      * post : recovers article's informations (in @param) for display
      *
-     * @param  int $id
      * @return void
      */
     public function post(int $id): void
@@ -130,7 +129,7 @@ class Post extends BaseController
             $statementComment->setUsername((string)$comment->getCommentUsername($statementComment->getUserId()));
         }
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
         $this->view('frontoffice/post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
@@ -144,7 +143,7 @@ class Post extends BaseController
     public function admin(): void
     {
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
         $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }

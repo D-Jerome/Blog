@@ -10,7 +10,6 @@ class PasswordPolicyException extends Exception
     /**
      * __construct
      *
-     * @param  string $message
      * @return void
      */
     public function __construct(string $message = "Password does not satisfy the current policy requirements")

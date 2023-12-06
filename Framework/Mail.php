@@ -55,56 +55,56 @@ class Mail
      *
      * @var string
      */
-    private string $fromAddress;
+    private readonly string $fromAddress;
 
     /**
      * from user name
      *
      * @var string|null
      */
-    private ?string $fromName;
+    private readonly ?string $fromName;
 
     /**
      * ReplyTo Address
      *
      * @var string
      */
-    private string $replyToAddress;
+    private readonly string $replyToAddress;
 
     /**
      * ReplyTo Name
      *
      * @var string|null
      */
-    private ?string $replyToName;
+    private readonly ?string $replyToName;
 
     /**
      * copy address
      *
      * @var string|null
      */
-    private ?string $ccAddress;
+    private readonly ?string $ccAddress;
 
     /**
      * blind copy address
      *
      * @var string|null
      */
-    private ?string $bccAddress;
+    private readonly ?string $bccAddress;
 
     /**
      * administrator address
      *
      * @var string
      */
-    private string $adminAddress;
+    private readonly string $adminAddress;
 
     /**
      * admin user name
      *
      * @var string|null
      */
-    private ?string $adminName;
+    private readonly ?string $adminName;
 
 
     /**
@@ -161,7 +161,7 @@ class Mail
         try {
             $mail->send();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
 
@@ -218,7 +218,7 @@ class Mail
         try {
             $mail->send();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
 

@@ -189,7 +189,6 @@ class User extends Entity
     /**
      * set Rolename
      *
-     * @param string $name
      *
      * @return void
      */

@@ -20,42 +20,29 @@ abstract class BaseManager
      */
     public PDO $dbConnect;
 
-    /**
-     * table name
-     *
-     * @var string
-     */
-    protected string $table;
-
-    /**
-     * name of object
-     *
-     * @var string
-     */
-    public string $object;
-
 
     /**
      * __construct
      *
      * @param  string               $table      Name of the table to query database
-     * @param  string               $objectName Name of object to return information
+     * @param string $object Name of object to return information
      * @param  array<string,string> $datasource Database connection informations
      * @return void
      */
-    public function __construct(string $table, string $objectName, array $datasource)
+    public function __construct(/**
+     * table name
+     */
+    protected string $table, /**
+     * name of object
+     */
+    public string $object, array $datasource)
     {
-        $this->table = $table;
-        $this->object = $objectName;
         $this->dbConnect = PDOConnection::getInstance($datasource);
 
     }//end __construct
-
-
     /**
      * getById : get datas from Id
      *
-     * @param int $id
      *
      * @return T
      */
@@ -86,7 +73,7 @@ abstract class BaseManager
                 SELECT * FROM $this->table
         SQL;
         $i = 0;
-        if(!empty($params) === true ) {
+        if($params !== null && $params !== [] ) {
             foreach ($params as $key => $value) {
                 if ($i !== 0) {
                     $sql .= <<<SQL
@@ -163,13 +150,13 @@ abstract class BaseManager
         $sql = <<<SQL
             SELECT * FROM  $this->table
         SQL;
-        if (!empty($params)) {
+        if ($params !== null && $params !== []) {
             $sql .= <<<SQL
                 WHERE
             SQL;
             $i = false;
             foreach ($params as $k => $value) {
-                if ($i === true) {
+                if ($i) {
                     $sql .= <<<SQL
                         AND
                     SQL;
@@ -244,13 +231,13 @@ abstract class BaseManager
 
         }//end if
 
-        if (!empty($params) === true) {
+        if ($params !== null && $params !== []) {
             $sql .= <<<SQL
                 WHERE
             SQL;
             $i = false;
             foreach ($params as $k => $value) {
-                if ($i === true) {
+                if ($i) {
                     $sql .= <<<SQL
                         AND
                     SQL;
@@ -323,13 +310,13 @@ abstract class BaseManager
         }
 
 
-        if (!empty($params) === true) {
+        if ($params !== null && $params !== []) {
             $sql .= <<<SQL
                 WHERE
             SQL;
             $i = false;
             foreach ($params as $k => $value) {
-                if ($i === true) {
+                if ($i) {
                     $sql .= <<<SQL
                         AND
                     SQL;
@@ -413,7 +400,7 @@ abstract class BaseManager
             INSERT INTO $this->table ($paramValue) VALUES($valueString)
         SQL;
         $req = $this->dbConnect->prepare($sql);
-        $boundParam = array();
+        $boundParam = [];
         foreach ($param as $paramName) {
             if (property_exists((object)$obj, $paramName)) {
                 $boundParam[$paramName] = $obj->$paramName;
@@ -440,7 +427,7 @@ abstract class BaseManager
         SQL;
         $countParam = count($param);
         $i = 0;
-        foreach ($param as $paramName => $paramValue) {
+        foreach (array_keys($param) as $paramName) {
             $i++;
             if ($paramName !== 'id') {
                 $field = Text::camelCaseToSnakeCase($paramName);
@@ -450,7 +437,7 @@ abstract class BaseManager
             }
 
             if ($i !== $countParam) {
-                $sql = $sql .", ";
+                $sql .= ", ";
             }
 
         }//end foreach
@@ -489,7 +476,7 @@ abstract class BaseManager
             $query = $this->dbConnect->prepare($sql);
             $query->execute([$id]);
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }

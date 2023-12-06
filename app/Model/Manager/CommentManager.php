@@ -14,7 +14,7 @@ use Safe\DateTime;
  */
 class CommentManager extends BaseManager
 {
-    private static ?CommentManager $commentInstance;
+    private static ?CommentManager $commentInstance = null;
 
 
     /**
@@ -39,7 +39,7 @@ class CommentManager extends BaseManager
      */
     public static function getCommentInstance(array $datasource): CommentManager
     {
-        if (empty(self::$commentInstance) || (!isset(self::$commentInstance))) {
+        if (!self::$commentInstance instanceof \App\Model\Manager\CommentManager || (!isset(self::$commentInstance))) {
             self::$commentInstance = new self($datasource);
         }
 

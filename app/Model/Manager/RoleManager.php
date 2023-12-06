@@ -11,7 +11,7 @@ use PDO;
  */
 class RoleManager extends BaseManager
 {
-    private static ?RoleManager $roleInstance;
+    private static ?RoleManager $roleInstance = null;
 
 
     /**
@@ -36,7 +36,7 @@ class RoleManager extends BaseManager
      */
     public static function getRoleInstance(array $datasource): RoleManager
     {
-        if (empty(self::$roleInstance) || (!isset(self::$roleInstance))) {
+        if (!self::$roleInstance instanceof \App\Model\Manager\RoleManager || (!isset(self::$roleInstance))) {
             self::$roleInstance = new self($datasource);
         }
 
