@@ -16,7 +16,7 @@ class HttpParams
     /**
      * Params Post of Request
      *
-     * @var array<string,string|int|null>
+     * @var array<string,array<int,string>|string|int|null>
      */
     protected ?array $paramsPost;
 
@@ -35,6 +35,7 @@ class HttpParams
      */
     public function __construct()
     {
+
 
         $this->paramsGet = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $this->paramsPost = \Safe\filter_input_array(INPUT_POST, );
@@ -63,7 +64,7 @@ class HttpParams
     /**
      * getParamsPost
      *
-     * @return  array<string,string|int|null>|null
+     * @return  array<string,mixed>|null
      */
     public function getParamsPost(): ?array
     {

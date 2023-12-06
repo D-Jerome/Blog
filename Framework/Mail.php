@@ -8,7 +8,6 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Mail
 {
-
     /**
      * smtp address
      *
@@ -159,10 +158,10 @@ class Mail
         $mail->Body    = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
         $mail->AltBody = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
 
-        try{
+        try {
             $mail->send();
             return true;
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -216,10 +215,10 @@ class Mail
                         Message : '.$contact['content'].'
                         ';
 
-        try{
+        try {
             $mail->send();
             return true;
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
 

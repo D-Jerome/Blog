@@ -144,7 +144,6 @@ class Pagination extends BaseController
 
         $temp = (new HttpParams())->getParamsGet();
         unset($temp['page']);
-        // $this->getRoute()->setParams($temp);
         if (isset($temp) !== false) {
             $query = http_build_query($temp);
         }else{

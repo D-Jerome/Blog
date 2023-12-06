@@ -6,6 +6,7 @@ use Framework\Route;
 use PhpParser\Node\Expr\Cast\Bool_;
 use App\Model\Manager\{PostManager, CommentManager, UserManager};
 use Framework\Helpers\Text;
+use Webmozart\Assert\Assert;
 
 class Router
 {
@@ -13,7 +14,7 @@ class Router
     /**
      * Routes of config file
      *
-     * @var array<int, Route>
+     * @var array<Route>
      */
     protected array $routes;
 
@@ -47,22 +48,16 @@ class Router
                 $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $route->getPath());
                 $routeMatcher = str_replace('/', '\/', $routeMatcher);
                 if ($route->getPath() === $request->getUri()) {
-                    // $route->setParams($request->getParams());
-                    // $route->setToken($request->getToken());
-                    // $route->setOldParams($request->getOldParams());
                     return $route;
                 }
 
                 if (\Safe\preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
-                        $paramsValues[$names] = $params[$key + 1][0];
+                        $paramsValues[(string)$names] = $params[$key + 1][0];
                     }
                     $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
                     if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
-                        // $route->setParams($request->getParams());
-                        // $route->setToken($request->getToken());
-                        // $route->setOldParams($request->getOldParams());
                         return $route;
                     }
 
@@ -80,7 +75,7 @@ class Router
      * validateRoute: verify the Existance of page and return True or False
      *
      * @param  string                $typeObj Object used
-     * @param  array<string, string> $matches Result of preg_match route
+     * @param  array<string,string> $matches Result of preg_match route
      * @return bool
      */
     private function validateRoute(string $typeObj, array $matches): bool

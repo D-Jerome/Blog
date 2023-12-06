@@ -200,9 +200,9 @@ class Post extends Entity
     /**
      * getModifiedAt
      *
-     * @return string
+     * @return string|null
      */
-    public function getModifiedAt(): string
+    public function getModifiedAt(): ?string
     {
         return $this->modifiedAt;
     }
@@ -364,9 +364,9 @@ class Post extends Entity
     /**
      * getPublishUserId
      *
-     * @return int
+     * @return int|null
      */
-    public function getPublishUserId(): int
+    public function getPublishUserId(): ?int
     {
         return $this->publishUserId;
     }

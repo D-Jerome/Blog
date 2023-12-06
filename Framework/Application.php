@@ -25,7 +25,7 @@ final class Application
     /**
      * datas from config file
      *
-     * @var array<string, string|array<string>|array<string, null|bool|int|string|array<string, string|array<string, string>|array<null>>>>
+     * @var array<string,mixed>
      */
     private static array $config;
 
@@ -54,11 +54,10 @@ final class Application
 
         try {
             $foundRoute = $this->router->findRoute($this->request);
-
             if ($foundRoute === null) {
                 throw new NoRouteFoundException();
             }
-
+            
             $controller = $foundRoute->getController();
             $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
@@ -67,7 +66,7 @@ final class Application
             if (!$route->isAuthorize($authRoles)) {
                 header('Location: '. self::getBaseUrl() .'/?auth=0');
             }
-
+ 
             if ($route->isAuthorize($authRoles)) {
 
                 $id = null;
@@ -76,23 +75,23 @@ final class Application
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
                     \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
-
+                    
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
                     $typeObj = strtolower(substr($controller, strrpos($controller, "\\") + 1));
                     $paramsKeys = array_keys($paramsValues);
                     foreach ($paramsKeys as $paramsKey) {
-                        if (stripos($paramsKey, $typeObj . 'id') >= 0 && stripos($paramsKey, $typeObj . 'id') !== false) {
+                        if (stripos((string)$paramsKey, $typeObj . 'id') >= 0 && stripos((string)$paramsKey, $typeObj . 'id') !== false) {
                             $id = $paramsValues[$paramsKey];
                         }
-
+                        
                     }//end foreach
 
                     $route->$action($id);
                 } else {
                     $route->$action();
-
+                    
                 }//end if
 
             }//end if
@@ -110,18 +109,18 @@ final class Application
     /**
      * getDatasource : get the config information of database in array
      *
-     * @return array<string, string|array<string>>
+     * @return array<string,string>
      */
     public static function getDatasource(): array
     {
-        return self::$config['database'];
+            return self::$config['database'];
     }
 
 
     /**
      * getEmailSource: get the config information of email in array
      *
-     * @return array<string, bool|int|string>
+     * @return array<string,bool|int|string>
      */
     public static function getEmailSource(): array
     {

@@ -20,7 +20,7 @@ class CommentManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string, array<string>|string> $datasource Connection database informations
+     * @param  array<string,string> $datasource Connection database informations
      * @return void
      */
     public function __construct(array $datasource)
@@ -33,7 +33,7 @@ class CommentManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, array<string>|string> $datasource
+     * @param array<string,string> $datasource
      *
      * @return CommentManager
      */
@@ -88,9 +88,9 @@ class CommentManager extends BaseManager
      * getCommentUsername: get username of post
      *
      * @param  int $id Post id
-     * @return int|string|false|null
+     * @return string
      */
-    public function getCommentUsername(int $id): int|string|false|null
+    public function getCommentUsername(int $id): string
     {
         $sql = <<<SQL
             SELECT username FROM user
@@ -99,7 +99,7 @@ class CommentManager extends BaseManager
         $query = $this->dbConnect->prepare($sql);
 
         $query->execute([$id]);
-        return $query->fetchColumn();
+        return (string)$query->fetchColumn();
     }
 
 

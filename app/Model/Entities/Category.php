@@ -29,9 +29,9 @@ class Category extends Entity
     /**
      * getId
      *
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -40,9 +40,9 @@ class Category extends Entity
     /**
      * getName
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -51,9 +51,9 @@ class Category extends Entity
     /**
      * getSlug
      *
-     * @return string
+     * @return string|null
      */
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }

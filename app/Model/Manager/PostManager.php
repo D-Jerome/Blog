@@ -18,12 +18,11 @@ use PDO;
  */
 class PostManager extends BaseManager
 {
-
     private static ?PostManager $postInstance;
     /**
      * [ __construct]
      *
-     * @param  array<string, string> $datasource Database connection informations from config file
+     * @param  array<string,string> $datasource Database connection informations from config file
      * @return void
      */
     public function __construct(array $datasource)
@@ -36,7 +35,7 @@ class PostManager extends BaseManager
     /**
      * Instance of manager
      *
-     * @param array<string, string> $datasource
+     * @param array<string,string> $datasource
      *
      * @return PostManager
      */
@@ -78,7 +77,7 @@ class PostManager extends BaseManager
      * @param  int|string $paramValue Value of field to filter
      * @return array<Post>
      */
-    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = false ): array
+    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = false): array
     {
         $sql = <<<SQL
                 SELECT *
@@ -102,9 +101,9 @@ class PostManager extends BaseManager
      * [getPostsbyCategory] : get all posts linked to Category selected
      *
      * @param  Category $category Category object
-     * @return array<Post>|string
+     * @return array<Post>
      */
-    public function getPostsbyCategory(Category $category): array|string
+    public function getPostsbyCategory(Category $category): array
     {
         $sql = <<<SQL
             SELECT p.* FROM post p
@@ -125,9 +124,10 @@ class PostManager extends BaseManager
             $statementByCategory->countComments = (int)$this->getCountCommentsByPostId(
                 $statementByCategory->getId()
             );
-            $statementByCategory->username =  ($this->getPostUsername(
-                $statementByCategory->getUserId()
-            )
+            $statementByCategory->username =  (
+                $this->getPostUsername(
+                    $statementByCategory->getUserId()
+                )
             );
 
         }//end foreach
@@ -160,9 +160,9 @@ class PostManager extends BaseManager
      * [getPostUsername] : get username from user_id
      *
      * @param  int $id User id
-     * @return int|string|false|null
+     * @return string
      */
-    public function getPostUsername(int $id): int|string|false|null
+    public function getPostUsername(int $id): string
     {
         $sql = <<<SQL
             SELECT username FROM user
@@ -170,7 +170,7 @@ class PostManager extends BaseManager
         SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute([$id]);
-        return $query->fetchColumn();
+        return (string)$query->fetchColumn();
     }
 
 
@@ -199,7 +199,7 @@ class PostManager extends BaseManager
     /**
      * [insertNewPost] : Create a new post (unpublished post)
      *
-     * @param  array<string, string|array<int, string>> $params Information to create a new post
+     * @param  array<string, array<int,string>|string|int|null> $params Information to create a new post
      * @return int : Last PostId
      */
     public function insertNewPost(array $params): int
@@ -217,8 +217,9 @@ class PostManager extends BaseManager
             VALUES (:name , :slug , :content, :created_at, :user_id, :modified_at)
         SQL;
         $query = $this->dbConnect->prepare($sql);
-
-        $slug = Text::toSlug($params['name']);
+        if (is_string($params['name'])) {
+            $slug = Text::toSlug((string)$params['name']);
+        }
         $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
 
         $query->bindParam(':name', $params['name']);
@@ -229,8 +230,8 @@ class PostManager extends BaseManager
         $query->bindParam(':modified_at', $created_at);
         $query->execute();
 
-        $postId = $this->dbConnect->lastInsertId();
-        if (isset($params['categoryId'])) {
+        $postId = (int)$this->dbConnect->lastInsertId();
+        if (isset($params['categoryId']) === true && (is_array($params['categoryId']) === true)) {
             $categories = $params['categoryId'];
             foreach ($categories as $category) {
                 $sql = <<<SQL

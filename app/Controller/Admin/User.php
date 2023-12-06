@@ -30,7 +30,7 @@ class User extends BaseController
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase($httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
         $users = UserManager::getUserInstance(Application::getDatasource());
         if ($httpParams['list'] === null) {
             $count = count($users->getAllByParams([]));
@@ -42,9 +42,9 @@ class User extends BaseController
         $pages = $pagination->pagesInformations();
 
         if ($httpParams['listSelect'] === null) {
-            $statementUsers = $users->getAllOrderLimit($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+            $statementUsers = $users->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, $httpParams['listSelect']);
+            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
         }
 
         foreach ($statementUsers as $statementUser) {
@@ -110,9 +110,6 @@ class User extends BaseController
     public function modifiedUser(int $id): void
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
-        // $request = (new HttpParams())->getParamsPost();
-
-        // $roles = RoleManager::getRoleInstance(Application::getDatasource());
 
         $users->updateUser((new HttpParams())->getParamsPost());
 

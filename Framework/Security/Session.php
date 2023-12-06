@@ -49,7 +49,6 @@ class Session
      * Generate new token when call
      *
      * @return void
-     *
      */
     public function generateToken(): void
     {

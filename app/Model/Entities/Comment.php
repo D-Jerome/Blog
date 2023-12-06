@@ -194,9 +194,9 @@ class Comment extends Entity
     /**
      * getPublishUserId
      *
-     * @return int
+     * @return ?int
      */
-    public function getPublishUserId(): int
+    public function getPublishUserId(): ?int
     {
         return $this->publishUserId;
     }

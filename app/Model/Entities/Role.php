@@ -22,9 +22,9 @@ class Role extends Entity
     /**
      * getId
      *
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -33,9 +33,9 @@ class Role extends Entity
     /**
      * getRole
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
