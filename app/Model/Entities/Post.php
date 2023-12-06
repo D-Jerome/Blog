@@ -47,7 +47,7 @@ class Post extends Entity
      *
      * @var string|null
      */
-    protected ?string $modifiedAt;
+    protected ?string $modifiedAt = null;
 
     /**
      * publish or not publish
@@ -61,14 +61,14 @@ class Post extends Entity
      *
      * @var string|null
      */
-    protected ?string $publishAt;
+    protected ?string $publishAt = null;
 
     /**
      * publisher id
      *
      * @var int|null
      */
-    protected ?int $publishUserId;
+    protected ?int $publishUserId = null;
 
     /**
      * excerpt of the content
@@ -131,7 +131,6 @@ class Post extends Entity
     /**
      * set name
      *
-     * @param  string $name
      * @return void
      */
     public function setName(string $name): void
@@ -154,7 +153,6 @@ class Post extends Entity
     /**
      * set slug
      *
-     * @param  string $text
      * @return void
      */
     public function setSlug(string $text): void
@@ -177,7 +175,6 @@ class Post extends Entity
     /**
      * set content
      *
-     * @param  string $text
      * @return void
      */
     public function setContent(string $text): void
@@ -211,7 +208,6 @@ class Post extends Entity
     /**
      * set ModifiedAt
      *
-     * @param  string $date
      * @return void
      */
     public function setModifiedAt(string $date): void
@@ -283,7 +279,6 @@ class Post extends Entity
     /**
      * set CountComments
      *
-     * @param  int $count
      * @return void
      */
     public function setCountComments(int $count): void
@@ -306,7 +301,6 @@ class Post extends Entity
     /**
      * set username
      *
-     * @param  string $name
      * @return void
      */
     public function setUsername(string $name): void
@@ -329,7 +323,6 @@ class Post extends Entity
     /**
      * set Publish State
      *
-     * @param  bool $state
      * @return void
      */
     public function setPublishState(bool $state): void
@@ -350,11 +343,10 @@ class Post extends Entity
 
 
      /**
-      * set publishAt
-      *
-      * @param  string $date
-      * @return void
-      */
+     * set publishAt
+     *
+     * @return void
+     */
     public function setPublishAt(string $date): void
     {
         $this->publishAt = $date;

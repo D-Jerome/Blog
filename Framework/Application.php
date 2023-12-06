@@ -13,14 +13,14 @@ final class Application
      *
      * @var Request
      */
-    private Request $request;
+    private readonly Request $request;
 
     /**
      *  router object
      *
      * @var Router
      */
-    private Router $router;
+    private readonly Router $router;
 
     /**
      * datas from config file
@@ -54,10 +54,10 @@ final class Application
 
         try {
             $foundRoute = $this->router->findRoute($this->request);
-            if ($foundRoute === null) {
+            if (!$foundRoute instanceof \Framework\Route) {
                 throw new NoRouteFoundException();
             }
-            
+
             $controller = $foundRoute->getController();
             $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
@@ -66,7 +66,7 @@ final class Application
             if (!$route->isAuthorize($authRoles)) {
                 header('Location: '. self::getBaseUrl() .'/?auth=0');
             }
- 
+
             if ($route->isAuthorize($authRoles)) {
 
                 $id = null;
@@ -75,7 +75,7 @@ final class Application
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
                     \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
-                    
+
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
@@ -85,13 +85,13 @@ final class Application
                         if (stripos((string)$paramsKey, $typeObj . 'id') >= 0 && stripos((string)$paramsKey, $typeObj . 'id') !== false) {
                             $id = $paramsValues[$paramsKey];
                         }
-                        
+
                     }//end foreach
 
                     $route->$action($id);
                 } else {
                     $route->$action();
-                    
+
                 }//end if
 
             }//end if

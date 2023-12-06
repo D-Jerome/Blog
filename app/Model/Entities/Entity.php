@@ -12,18 +12,13 @@ abstract class Entity
      */
     public function __get(string|int $name): null|string|int
     {
-        if (isset($this->$name)) {
-            /* et puis là on peut bricoler les données */
-            return $this->$name;
-        }
-        return null;
+        return $this->$name ?? null;
     }
 
 
     /**
      * __set
      *
-     * @param  string $name
      * @param  mixed  $value Multiple types of values
      * @return void
      */
@@ -32,9 +27,8 @@ abstract class Entity
         if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */
             $this->$name = $value;
-        } else if (false !== strpos($name, '_')) {
+        } elseif (str_contains($name, '_')) {
             /* et traduire le snake_case en camelCase */
-
             $this->__set($this->snakeCaseToCamelCase($name), $value);
         }
     }
@@ -43,7 +37,6 @@ abstract class Entity
     /**
      * snakeCaseToCamelCase
      *
-     * @param  string $str
      * @return string
      */
     protected function snakeCaseToCamelCase(string $str): string

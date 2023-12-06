@@ -21,7 +21,7 @@ class User extends BaseController
     public function userList(): void
     {
         $userSession = $this->session->getUser();
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->session->generateToken();
         $user['token']= $this->session->getToken();
 
@@ -67,12 +67,10 @@ class User extends BaseController
             'authUser' => $user
         ];
 
-        if (isset($httpParams['user'])) {
-            if ($httpParams['user'] == 'modified') {
-                $dataView['message'] = '<strong>Modification réussie</strong><br>
+        if (isset($httpParams['user']) && $httpParams['user'] == 'modified') {
+            $dataView['message'] = '<strong>Modification réussie</strong><br>
                 La modification de l\'utilisateur a été éffectué.';
-                $dataView['error'] = false;
-            }
+            $dataView['error'] = false;
         }
 
         $this->view('backoffice/admin.users.html.twig', $dataView);
@@ -82,7 +80,6 @@ class User extends BaseController
     /**
      * modifyUser
      *
-     * @param  int $id
      * @return void
      */
     public function modifyUser(int $id): void
@@ -104,7 +101,6 @@ class User extends BaseController
     /**
      * modifiedUser: action of user modification
      *
-     * @param  int $id
      * @return void
      */
     public function modifiedUser(int $id): void
@@ -142,7 +138,7 @@ class User extends BaseController
      * @param  int $id Id's user to enable
      * @return void
      */
-    public function enableUser(int $id): void
+    public function enableUser(int $id): never
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
         $filterParams = isset($filterParams)? '?'.$filterParams : null;

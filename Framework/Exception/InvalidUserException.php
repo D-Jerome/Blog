@@ -10,7 +10,6 @@ class InvalidUserException extends Exception
     /**
      * __construct
      *
-     * @param  string $message
      * @return void
      */
     public function __construct(string $message = "Opération Impossible<br>Vous n'avez pas les droits pour effectuer cette opération. ")

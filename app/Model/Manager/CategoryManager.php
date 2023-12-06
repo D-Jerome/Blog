@@ -11,7 +11,7 @@ use PDO;
 class CategoryManager extends BaseManager
 {
 
-    private static ?CategoryManager $categoryInstance;
+    private static ?CategoryManager $categoryInstance = null;
 
 
     /**
@@ -37,7 +37,7 @@ class CategoryManager extends BaseManager
      */
     public static function getCategoryInstance(array $datasource): CategoryManager
     {
-        if (empty(self::$categoryInstance) || (!isset(self::$categoryInstance))) {
+        if (!self::$categoryInstance instanceof \App\Model\Manager\CategoryManager || (!isset(self::$categoryInstance))) {
             self::$categoryInstance = new self($datasource);
         }
 

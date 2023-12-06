@@ -40,7 +40,7 @@ class HttpParams
         $this->paramsGet = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $this->paramsPost = \Safe\filter_input_array(INPUT_POST, );
 
-        if (array_key_exists('HTTP_REFERER', \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)) === true) {
+        if (array_key_exists('HTTP_REFERER', \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL))) {
             $this->paramsReferer = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
 
         }// end if
@@ -64,7 +64,7 @@ class HttpParams
     /**
      * getParamsPost
      *
-     * @return  array<string,mixed>|null
+     * @return  array<string,array<int,string>|int|string|null>|null
      */
     public function getParamsPost(): ?array
     {

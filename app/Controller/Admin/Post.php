@@ -25,7 +25,7 @@ class Post extends BaseController
     {
         $userSession = $this->session->getUser();
 
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
         $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
@@ -75,12 +75,10 @@ class Post extends BaseController
             'authUser' => $user
         ];
         $params = (new HttpParams())->getParamsGet();
-        if (isset($params['delete'])) {
-            if ($params['delete'] == 'ok') {
-                $dataView['message'] = '<strong>Suppression réussie</strong><br>
+        if (isset($params['delete']) && $params['delete'] == 'ok') {
+            $dataView['message'] = '<strong>Suppression réussie</strong><br>
                 l\'article a été supprimé.';
-                $dataView['error'] = false;
-            }
+            $dataView['error'] = false;
         }
 
         $this->view('backoffice/admin.posts.html.twig', $dataView);
@@ -90,7 +88,6 @@ class Post extends BaseController
     /**
      * deletePost
      *
-     * @param  int $id
      * @return void
      */
     public function deletePost(int $id): void
@@ -139,7 +136,6 @@ class Post extends BaseController
     /**
      * modifyPost
      *
-     * @param  int $id
      * @return void
      */
     public function modifyPost(int $id)
@@ -158,7 +154,6 @@ class Post extends BaseController
     /**
      * modifiedPost
      *
-     * @param  int $id
      * @return void
      */
     public function modifiedPost(int $id)
@@ -198,7 +193,6 @@ class Post extends BaseController
     /**
      * addComment
      *
-     * @param  int $id
      * @return void
      */
     public function addComment(int $id): void
@@ -227,7 +221,6 @@ class Post extends BaseController
     /**
      * addedComment
      *
-     * @param  int $id
      * @return void
      */
     public function addedComment(int $id): void
@@ -258,7 +251,7 @@ class Post extends BaseController
 
         $userSession = $this->session->getUser();
 
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
@@ -318,7 +311,6 @@ class Post extends BaseController
     /**
      * unpublishPost
      *
-     * @param  int $id
      * @params array<string,int|string> page filter option
      * @return void
      */
@@ -334,7 +326,6 @@ class Post extends BaseController
     /**
      * publishPost
      *
-     * @param  int $id
      * @return void
      */
     public function publishPost(int $id): void

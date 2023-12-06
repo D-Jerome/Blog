@@ -23,13 +23,6 @@ abstract class BaseController
      */
     protected Session $session;
 
-    /**
-     * route found
-     *
-     * @var Route
-     */
-    protected Route $route;
-
 
     /**
      * __construct :
@@ -37,7 +30,10 @@ abstract class BaseController
      * @param  Route $route Route found
      * @return void
      */
-    public function __construct(Route $route)
+    public function __construct(/**
+     * route found
+     */
+    protected Route $route)
     {
 
         $this->session = new Session();
@@ -49,7 +45,6 @@ abstract class BaseController
             ]
         );
         $this->twig->addExtension(new IntlExtension());
-        $this->route = $route;
 
     }//end __construct
 
@@ -95,18 +90,14 @@ abstract class BaseController
 
         $user = $this->session->getUser();
 
-        if ($user === null) {
+        if (!$user instanceof \Framework\Security\AuthUser) {
             return false;
         }
 
         if (!in_array($user->getRoleName(), $authRoles, true)) {
             return false;
         }
-
-        if ($this->tokenVerify() !== true) {
-            return false;
-        }
-        return true;
+        return $this->tokenVerify();
     }
 
 
@@ -120,8 +111,8 @@ abstract class BaseController
         $filterReturn = (new HttpParams())->getParamsGet();
         $filterReturn['sort'] = isset(($filterReturn)['sort']) ? (string)($filterReturn['sort']) : 'createdAt';
         $filterReturn['dir'] = isset(($filterReturn)['dir']) ? (string)($filterReturn['dir']) : 'DESC';
-        $filterReturn['list'] = !empty(($filterReturn)['list']) ? (string)($filterReturn)['list'] : null;
-        if (isset(($filterReturn)['listSelect']) === true) {
+        $filterReturn['list'] = empty(($filterReturn)['list']) ? null : (string)($filterReturn)['list'];
+        if (isset(($filterReturn)['listSelect'])) {
             $filterReturn['listSelect'] = ($filterReturn['listSelect']) !== '---' ? $filterReturn['listSelect'] : null;
         } else {
             $filterReturn['listSelect'] = null;
@@ -150,12 +141,8 @@ abstract class BaseController
         if ($this->getRoute()->getMethod() !== 'POST') {
             return true;
         }
-
-        if ($this->session->getToken() === (new HttpParams())->getParamsPost()['token']) {
-            return true;
-        }
-
-        return false;
+        
+        return $this->session->getToken() === (new HttpParams())->getParamsPost()['token'];
     }
 
 

@@ -18,7 +18,7 @@ class UserManager extends BaseManager
      *
      * @var UserManager|null
      */
-    private static ?UserManager $userInstance;
+    private static ?UserManager $userInstance = null;
 
 
     /**
@@ -43,7 +43,7 @@ class UserManager extends BaseManager
      */
     public static function getUserInstance(array $datasource): UserManager
     {
-        if (empty(self::$userInstance) || (!isset(self::$userInstance))) {
+        if (!self::$userInstance instanceof \App\Model\Manager\UserManager || (!isset(self::$userInstance))) {
             self::$userInstance = new self($datasource);
         }
 
@@ -192,9 +192,9 @@ class UserManager extends BaseManager
 
             if ($param != $actualUser->$getUser()) {
                 $field = $k;
-                if (\Safe\preg_match('~[A-Z]~', $k, $matches)) {
+                if (\Safe\preg_match('~[A-Z]~', $k, $matches) !== 0) {
                     foreach ($matches as $match) {
-                        $field = str_replace($match, '_' . strtolower($match), $field);
+                        $field = str_replace($match, '_' . strtolower((string) $match), $field);
                     }
                 }
                 $sql =  <<<SQL

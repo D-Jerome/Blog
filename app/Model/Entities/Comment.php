@@ -33,7 +33,7 @@ class Comment extends Entity
      *
      * @var string|null
      */
-    protected ?string $modifiedAt;
+    protected ?string $modifiedAt = null;
 
     /**
      * publish or unpublish
@@ -47,14 +47,14 @@ class Comment extends Entity
      *
      * @var string|null
      */
-    protected ?string $publishAt;
+    protected ?string $publishAt = null;
 
     /**
      * id of publisher
      *
      * @var int|null
      */
-    protected ?int $publishUserId;
+    protected ?int $publishUserId = null;
 
     /**
      * post id linked with comment

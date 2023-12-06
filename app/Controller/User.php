@@ -21,7 +21,7 @@ class User extends BaseController
     {
         $users = UserManager::getUserInstance(Application::getDatasource());
         $paramsPost = (new HttpParams())->getParamsPost();
-        if (is_string($paramsPost['login']) === true) {
+        if (isset($paramsPost['login']) && is_string($paramsPost['login'])) {
             $user = $users->getByUsername($paramsPost['login']);
         }
         if (isset($user) === false) {
@@ -52,7 +52,7 @@ class User extends BaseController
             );
             exit;
         }
-        if (is_string($paramsPost['password']) === true) {
+        if (isset($paramsPost['password']) && is_string($paramsPost['password'])) {
             if (password_verify($paramsPost['password'], $user->getPassword())) {
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
@@ -83,7 +83,7 @@ class User extends BaseController
     {
         $userSession = $this->session->getUser();
 
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         if ($user !== null) {
             header('Location: '. Application::getBaseUrl() .'/admin/logged');
         }
@@ -107,7 +107,7 @@ class User extends BaseController
     {
         $user = null;
         $userSession = $this->session->getUser();
-        if (null !== $userSession) {
+        if ($userSession instanceof \Framework\Security\AuthUser) {
             $user = $userSession->getAllUserInfo();
         }
         $this->view(
@@ -153,8 +153,8 @@ class User extends BaseController
 
             }
             $users = UserManager::getUserInstance(Application::getDatasource());
-            if (is_string($postdatas['username']) === true) {
-                if ($users->getByUsername($postdatas['username'])) {
+            if (is_string($postdatas['username'])) {
+                if ($users->getByUsername($postdatas['username']) instanceof \App\Model\Entities\User) {
                     $message = "Identifiant déjà utilisé";
                     $error = true;
                 }
@@ -164,11 +164,12 @@ class User extends BaseController
                     $error = true;
                 }
 
-                if ($error === true) {
+                if ($error) {
                     unset($postdatas['password']);
                     unset($postdatas['confirmPassword']);
                     $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $postdatas]);
                 } else {
+                    
                     $users->insertNewUser($postdatas);
                     $mail = new Mail(Application::getEmailSource());
                     $mail->sendMailToUser($users->getByUsername($postdatas['username']));
@@ -176,7 +177,7 @@ class User extends BaseController
                 }//end if
 
             }// end if
-        } catch (UnauthorizeValueException $e) {
+        } catch (UnauthorizeValueException) {
 
         }
 
@@ -219,45 +220,48 @@ class User extends BaseController
     public function sendUserConnectionMail()
     {
         $postDatas = (new HttpParams())->getParamsPost();
-        $email = (string)filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
-        $mail = new Mail(Application::getEmailSource());
-        $users = UserManager::getUserInstance(Application::getDatasource());
-        $userInfo = $users->getByUserEmail($email);
-        if (isset(($userInfo)['email']) === false) {
-            $this->view(
-                'frontoffice/forget.pwd.html.twig',
-                [
-                'baseUrl' => Application::getBaseUrl(),
-                'message' => '<strong>Utilisateur inconnu</strong><br>
-                            Votre email nous est inconnu<br>
-                            Merci de vous rapprocher de votre administrateur.',
-                'error' => true,
-                ]
-            );
-        } else {
-            if ($mail->sendMailToUser($userInfo) === true) {
+        if (isset($postDatas['email']) && is_string($postDatas['email'])) {
+            $email = (string)filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
+            $mail = new Mail(Application::getEmailSource());
+            $users = UserManager::getUserInstance(Application::getDatasource());
+            $userInfo = $users->getByUserEmail($email);
+            if (isset(($userInfo)['email']) === false) {
                 $this->view(
                     'frontoffice/forget.pwd.html.twig',
                     [
                     'baseUrl' => Application::getBaseUrl(),
-                    'message' => '<h5>Email envoyé</h5><br>
-                                Un email de connexion vous a été envoyé.',
-                    'error' => false,
-                    ]
-                );
-            } else {
-                $this->view(
-                    'frontoffice/forget.pwd.html.twig',
-                    [
-                    'baseUrl' => Application::getBaseUrl(),
-                    'message' => '<h5>Email non envoyé</h5><br>
-                                Un problème est survenu. Rééssayez plus tard.',
+                    'message' => '<strong>Utilisateur inconnu</strong><br>
+                                Votre email nous est inconnu<br>
+                                Merci de vous rapprocher de votre administrateur.',
                     'error' => true,
                     ]
                 );
+            } else {
+                if ($mail->sendMailToUser($userInfo)) {
+                    $this->view(
+                        'frontoffice/forget.pwd.html.twig',
+                        [
+                        'baseUrl' => Application::getBaseUrl(),
+                        'message' => '<h5>Email envoyé</h5><br>
+                                    Un email de connexion vous a été envoyé.',
+                        'error' => false,
+                        ]
+                    );
+                } else {
+                    $this->view(
+                        'frontoffice/forget.pwd.html.twig',
+                        [
+                        'baseUrl' => Application::getBaseUrl(),
+                        'message' => '<h5>Email non envoyé</h5><br>
+                                    Un problème est survenu. Rééssayez plus tard.',
+                        'error' => true,
+                        ]
+                    );
+                }//endif
+
             }//endif
 
-        }//endif
+        }// end if
 
     }
 

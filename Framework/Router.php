@@ -57,7 +57,7 @@ class Router
                         $paramsValues[(string)$names] = $params[$key + 1][0];
                     }
                     $typeControllerObj = substr($route->getController(), strrpos($route->getController(), '\\') + 1);
-                    if ($this->validateRoute($typeControllerObj, $paramsValues) === true) {
+                    if ($this->validateRoute($typeControllerObj, $paramsValues)) {
                         return $route;
                     }
 

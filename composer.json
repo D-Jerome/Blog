@@ -29,7 +29,7 @@
         "phpstan/phpstan": "^1.10",
         "squizlabs/php_codesniffer": "*",
         "thecodingmachine/phpstan-safe-rule": "^1.2",
-        "rector/rector": "^0.18.10",
+        "rector/rector": "^0.18.12",
         "phpstan/phpstan-webmozart-assert": "^1.2"
     }
 }

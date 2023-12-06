@@ -18,7 +18,7 @@ class Error extends BaseController
     {
         $userSession = $this->session->getUser();
 
-        $user = $userSession ? $userSession->getAllUserInfo() : null;
+        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->view('frontoffice/404.html.twig', ['baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
 
     }

@@ -10,7 +10,6 @@ class NoRouteFoundException extends Exception
     /**
      * __construct
      *
-     * @param  string $message
      * @return void
      */
     public function __construct(string $message = "No route has been found")

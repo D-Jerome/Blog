@@ -9,14 +9,14 @@ class Role extends Entity
      *
      * @var int|null
      */
-    protected ?int $id;
+    protected ?int $id = null;
 
     /**
      * name of role
      *
      * @var string|null
      */
-    protected ?string $name;
+    protected ?string $name = null;
 
 
     /**
