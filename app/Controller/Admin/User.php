@@ -111,7 +111,6 @@ class User extends BaseController
 
         $users->getAllByParams(['id' => $id]);
         $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
 
         header('Location: '. Application::getBaseUrl() .'/admin?user=modified');
     }
@@ -138,13 +137,12 @@ class User extends BaseController
      * @param  int $id Id's user to enable
      * @return void
      */
-    public function enableUser(int $id): never
+    public function enableUser(int $id): void
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
         $filterParams = isset($filterParams)? '?'.$filterParams : null;
         (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
         header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
-        exit;
     }
 
 

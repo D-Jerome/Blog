@@ -61,6 +61,11 @@ final class Application
             $controller = $foundRoute->getController();
             $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
+             /**
+             *  controller object
+             *
+             * @var BaseController
+             */
             $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {

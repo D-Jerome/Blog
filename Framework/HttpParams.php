@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Webmozart\Assert\Assert;
+
 use function Safe\parse_url;
 
 class HttpParams
@@ -39,7 +41,7 @@ class HttpParams
 
         $this->paramsGet = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $this->paramsPost = \Safe\filter_input_array(INPUT_POST, );
-
+        Assert::notEmpty(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL));
         if (array_key_exists('HTTP_REFERER', \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL))) {
             $this->paramsReferer = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
 

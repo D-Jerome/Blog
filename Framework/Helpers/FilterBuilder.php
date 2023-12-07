@@ -4,6 +4,7 @@ namespace Framework\Helpers;
 
 use App\Model\Manager\CategoryManager;
 use Framework\Application;
+use Webmozart\Assert\Assert;
 
 class FilterBuilder
 {
@@ -55,13 +56,16 @@ class FilterBuilder
      */
     public function __construct(array $config, string $typeObj)
     {
+        Assert::notEmpty($config);
+        Assert::keyExists($config, $typeObj);
+        Assert::isArray($config[$typeObj]);
+        Assert::keyExists($config[$typeObj],'sort');
+        Assert::isArray($config[$typeObj]['sort']);
+        $this->sort =  $config[$typeObj]['sort'] ;
+        Assert::keyExists($config, 'dir');
+        Assert::isArray($config['dir']);
+        $this->dir = $config['dir'];
 
-        if (is_array($config[$typeObj]['sort'])) {
-            $this->sort =  $config[$typeObj]['sort'] ;
-        }
-        if (is_array($config['dir'])) {
-            $this->dir = $config['dir'];
-        }
         if (!empty($config[$typeObj]['list']) && is_array($config[$typeObj]['list'])) {
             $this->list = $config[$typeObj]['list'];
             if (is_array($config[$typeObj]['listSelect'])) {
