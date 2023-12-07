@@ -6,6 +6,7 @@ use Framework\Security\Session;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Intl\IntlExtension;
+use Webmozart\Assert\Assert;
 
 abstract class BaseController
 {
@@ -141,8 +142,11 @@ abstract class BaseController
         if ($this->getRoute()->getMethod() !== 'POST') {
             return true;
         }
-        
-        return $this->session->getToken() === (new HttpParams())->getParamsPost()['token'];
+        $postDatas = (new HttpParams())->getParamsPost();
+        Assert::notEmpty($postDatas);
+        Assert::keyExists($postDatas ,'token');
+
+        return $this->session->getToken() === $postDatas['token'];
     }
 
 
