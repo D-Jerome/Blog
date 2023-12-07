@@ -37,19 +37,14 @@ class HttpParams
      */
     public function __construct()
     {
-
-
         $this->paramsGet = \Safe\filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $this->paramsPost = \Safe\filter_input_array(INPUT_POST, );
-        Assert::notEmpty(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL));
-        if (array_key_exists('HTTP_REFERER', \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL))) {
-            $this->paramsReferer = parse_url(\Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL)['HTTP_REFERER'], PHP_URL_QUERY);
-
-        }// end if
-
-
-
-    }//end __construct
+        $this->paramsPost = \Safe\filter_input_array(INPUT_POST);
+        $serverData = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL);
+        if (Assert::notEmpty($serverData) && Assert::keyExists($serverData, 'HTTP_REFERER')) {
+            $this->paramsReferer = parse_url($serverData['HTTP_REFERER'], PHP_URL_QUERY);
+        }
+    }
+    //end __construct
 
 
     /**
@@ -83,6 +78,4 @@ class HttpParams
     {
         return  $this->paramsReferer;
     }
-
-
 }

@@ -5,12 +5,12 @@ namespace App\Model\Manager;
 use App\Model\Entities\Category;
 use Framework\PDOConnection;
 use PDO;
+
 /**
  * @extends BaseManager <Category>
  */
 class CategoryManager extends BaseManager
 {
-
     private static ?CategoryManager $categoryInstance = null;
 
 
@@ -23,8 +23,8 @@ class CategoryManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('category', Category::class, $datasource);
-
-    }//end __construct
+    }
+    //end __construct
 
 
 

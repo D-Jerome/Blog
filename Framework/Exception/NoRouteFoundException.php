@@ -6,7 +6,6 @@ use Exception;
 
 class NoRouteFoundException extends Exception
 {
-
     /**
      * __construct
      *
@@ -15,8 +14,6 @@ class NoRouteFoundException extends Exception
     public function __construct(string $message = "No route has been found")
     {
         parent::__construct($message, 0002);
-
-    }//end __construct()
-
-
+    }
+    //end __construct()
 }

@@ -37,9 +37,9 @@ class Route
          * authorized roles for route
          */
         protected array $authRoles
-    )
-    {
-    } //end __construct
+    ) {
+    }
+    //end __construct
 
 
     /**
@@ -95,7 +95,4 @@ class Route
     {
         return $this->authRoles;
     }
-
-
-
 }

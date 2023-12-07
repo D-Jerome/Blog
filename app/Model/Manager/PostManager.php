@@ -28,8 +28,8 @@ class PostManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('post', Post::class, $datasource);
-
-    }//end _construct
+    }
+    //end _construct
 
 
     /**
@@ -117,7 +117,6 @@ class PostManager extends BaseManager
         $query->execute([$category->getId()]);
         $statementByCategories = $query->fetchAll();
         foreach ($statementByCategories as $statementByCategory) {
-
             $statementByCategory->categories =  $this->getCategoriesById(
                 $statementByCategory->getId()
             );
@@ -129,11 +128,9 @@ class PostManager extends BaseManager
                     $statementByCategory->getUserId()
                 )
             );
-
         }//end foreach
 
         return $statementByCategories;
-
     }
 
 
@@ -243,12 +240,8 @@ class PostManager extends BaseManager
                 $query->bindParam(':category_id', $category);
                 $query->execute();
             }//end foreach
-
         }//end if
 
         return $postId;
-
     }
-
-
 }

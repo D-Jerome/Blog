@@ -147,6 +147,4 @@ class Post extends BaseController
 
         $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
-
-
 }

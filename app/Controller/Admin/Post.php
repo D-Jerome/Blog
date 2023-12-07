@@ -93,7 +93,7 @@ class Post extends BaseController
     public function deletePost(int $id): void
     {
         (PostManager::getPostInstance(Application::getDatasource()))->delete($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/posts?delete=ok');
+        header('Location: ' . Application::getBaseUrl() . '/admin/posts?delete=ok');
     }
 
 
@@ -237,7 +237,7 @@ class Post extends BaseController
         $post = PostManager::getPostInstance(Application::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
-        Header('Location: '. Application::getBaseUrl() .'/post/'. $slug .'/'. $id);
+        Header('Location: ' . Application::getBaseUrl() . '/post/' . $slug . '/' . $id);
     }
 
 
@@ -304,7 +304,6 @@ class Post extends BaseController
             'authUser' => $user
             ]
         );
-
     }
 
 
@@ -317,9 +316,9 @@ class Post extends BaseController
     public function unpublishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (PostManager::getPostInstance(Application::getDatasource()))->unpublish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
     }
 
 
@@ -331,10 +330,8 @@ class Post extends BaseController
     public function publishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (PostManager::getPostInstance(Application::getDatasource()))->publish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/posts'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
     }
-
-
 }

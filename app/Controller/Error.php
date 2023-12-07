@@ -8,7 +8,6 @@ use Framework\Route;
 
 class Error extends BaseController
 {
-
     /**
      * __construct
      *
@@ -20,7 +19,5 @@ class Error extends BaseController
 
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->view('frontoffice/404.html.twig', ['baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
-
     }
-
 }

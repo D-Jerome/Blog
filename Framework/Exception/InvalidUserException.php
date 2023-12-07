@@ -6,7 +6,6 @@ use Exception;
 
 class InvalidUserException extends Exception
 {
-
     /**
      * __construct
      *
@@ -15,8 +14,6 @@ class InvalidUserException extends Exception
     public function __construct(string $message = "Opération Impossible<br>Vous n'avez pas les droits pour effectuer cette opération. ")
     {
         parent::__construct($message, 0011);
-
-    }//end __construct()
-
-
+    }
+    //end __construct()
 }

@@ -6,7 +6,6 @@ use Exception;
 
 class DataBaseConnectionException extends Exception
 {
-
     /**
      * __construct
      *
@@ -15,8 +14,6 @@ class DataBaseConnectionException extends Exception
     public function __construct(string $message = "database connection doesn't work")
     {
         parent::__construct($message, 0000);
-
-    }//end __construct()
-
-
+    }
+    //end __construct()
 }

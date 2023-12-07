@@ -6,7 +6,6 @@ use Exception;
 
 class DisableUserException extends Exception
 {
-
     /**
      * __construct
      *
@@ -15,8 +14,6 @@ class DisableUserException extends Exception
     public function __construct(string $message = "disable user")
     {
         parent::__construct($message, 0010);
-
-    }//end __construct()
-
-
+    }
+    //end __construct()
 }

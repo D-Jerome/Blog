@@ -6,7 +6,6 @@ use Framework\Application;
 use Framework\BaseController;
 use Framework\Session;
 
-
 class Auth extends BaseController
 {
     /**
@@ -18,7 +17,7 @@ class Auth extends BaseController
     {
         $user = $this->session->getUser()->getAllUserInfo();
 
-        $this->view('backoffice/'.$user['roleName'].'.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+        $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
 
@@ -31,8 +30,6 @@ class Auth extends BaseController
     {
         \Safe\session_destroy();
 
-        header('Location: '. Application::getBaseUrl() .'/');
+        header('Location: ' . Application::getBaseUrl() . '/');
     }
-
-
 }

@@ -39,6 +39,4 @@ class Role extends Entity
     {
         return $this->name;
     }
-
-
 }

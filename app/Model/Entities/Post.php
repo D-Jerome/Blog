@@ -362,6 +362,4 @@ class Post extends Entity
     {
         return $this->publishUserId;
     }
-
-
 }

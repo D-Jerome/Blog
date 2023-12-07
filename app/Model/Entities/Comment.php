@@ -213,5 +213,4 @@ class Comment extends Entity
     {
         $this->username = $name;
     }
-
 }

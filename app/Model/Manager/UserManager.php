@@ -30,8 +30,8 @@ class UserManager extends BaseManager
     private function __construct(array $datasource)
     {
         parent::__construct('user', User::class, $datasource);
-
-    }//end __construct
+    }
+    //end __construct
 
 
     /**
@@ -207,7 +207,6 @@ class UserManager extends BaseManager
                 $query->bindParam(':id', $params['id']);
                 $query->execute();
             }//end if
-
         }//end foreach
 
         return $actualUser->getId();
@@ -273,7 +272,5 @@ class UserManager extends BaseManager
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
         $query->execute();
-
     }
-
 }

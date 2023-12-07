@@ -192,9 +192,8 @@ class User extends Entity
      *
      * @return void
      */
-    public function setRoleName(string $name):void
+    public function setRoleName(string $name): void
     {
         $this->roleName = $name;
     }
-
 }

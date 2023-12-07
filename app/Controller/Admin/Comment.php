@@ -76,8 +76,6 @@ class Comment extends BaseController
             'authUser' => $user
             ]
         );
-
-
     }
 
 
@@ -96,7 +94,7 @@ class Comment extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
-        $user['token']= $this->session->getToken();
+        $user['token'] = $this->session->getToken();
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
@@ -113,11 +111,9 @@ class Comment extends BaseController
         $statement = $comments->getById($id);
 
         if ((new HttpParams())->getParamsPost()['content'] !== $statement->getContent()) {
-
             $params['content'] = (new HttpParams())->getParamsPost()['content'];
         }
         if (null !== $params) {
-
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
             $params['publishState'] = 0;
 
@@ -127,7 +123,7 @@ class Comment extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
-        $user['token']= $this->session->getToken();
+        $user['token'] = $this->session->getToken();
         $comments = CommentManager::getCommentInstance(Application::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
@@ -147,9 +143,9 @@ class Comment extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->session->generateToken();
-        $user['token']= $this->session->getToken();
+        $user['token'] = $this->session->getToken();
 
-        $filter = new FilterBuilder(Application::getFilter(), 'admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
@@ -203,7 +199,6 @@ class Comment extends BaseController
             'authUser' => $user
             ]
         );
-
     }
 
 
@@ -215,9 +210,9 @@ class Comment extends BaseController
     public function unpublishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams)? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (CommentManager::getCommentInstance(Application::getDatasource()))->unpublish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
 
 
@@ -229,10 +224,8 @@ class Comment extends BaseController
     public function publishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams)? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (CommentManager::getCommentInstance(Application::getDatasource()))->publish($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/moderation/comments'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
-
-
 }

@@ -40,8 +40,8 @@ final class Application
         self::$config = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/config.json"), true);
         $this->request = new Request(self::$config['baseUrl']);
         $this->router = new Router();
-
-    }//end __construct()
+    }
+    //end __construct()
 
 
     /**
@@ -69,11 +69,10 @@ final class Application
             $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {
-                header('Location: '. self::getBaseUrl() .'/?auth=0');
+                header('Location: ' . self::getBaseUrl() . '/?auth=0');
             }
 
             if ($route->isAuthorize($authRoles)) {
-
                 $id = null;
                 if (\Safe\preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
                     $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
@@ -90,23 +89,18 @@ final class Application
                         if (stripos((string)$paramsKey, $typeObj . 'id') >= 0 && stripos((string)$paramsKey, $typeObj . 'id') !== false) {
                             $id = $paramsValues[$paramsKey];
                         }
-
                     }//end foreach
 
                     $route->$action($id);
                 } else {
                     $route->$action();
-
                 }//end if
-
             }//end if
-
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
-            header('Location: '. self::getBaseUrl() .'/404');
+            header('Location: ' . self::getBaseUrl() . '/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
-
         }
     }
 
@@ -153,6 +147,4 @@ final class Application
     {
         return self::$config['filter'];
     }
-
-
 }

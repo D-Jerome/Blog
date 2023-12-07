@@ -23,7 +23,7 @@ class User extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $this->session->generateToken();
-        $user['token']= $this->session->getToken();
+        $user['token'] = $this->session->getToken();
 
         $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
@@ -35,7 +35,7 @@ class User extends BaseController
         if ($httpParams['list'] === null) {
             $count = count($users->getAllByParams([]));
         } else {
-            $count = count($users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
+            $count = count($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -93,7 +93,7 @@ class User extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
-        $user['token']= $this->session->getToken();
+        $user['token'] = $this->session->getToken();
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
@@ -112,7 +112,7 @@ class User extends BaseController
         $users->getAllByParams(['id' => $id]);
         $userSession = $this->session->getUser();
 
-        header('Location: '. Application::getBaseUrl() .'/admin?user=modified');
+        header('Location: ' . Application::getBaseUrl() . '/admin?user=modified');
     }
 
 
@@ -125,9 +125,9 @@ class User extends BaseController
     public function disableUser(int $id): void
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
-        $filterParams = isset($filterParams)? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (UserManager::getUserInstance(Application::getDatasource()))->disable($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
 
 
@@ -140,9 +140,9 @@ class User extends BaseController
     public function enableUser(int $id): void
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
-        $filterParams = isset($filterParams)? '?'.$filterParams : null;
+        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
         (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
-        header('Location: '. Application::getBaseUrl() .'/admin/users'.$filterParams.'#'.$id);
+        header('Location: ' . Application::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
 
 
@@ -182,6 +182,4 @@ class User extends BaseController
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }
-
-
 }

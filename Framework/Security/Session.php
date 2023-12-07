@@ -6,7 +6,6 @@ use App\Model\Entities\User;
 
 class Session
 {
-    
     /**
      * __construct : Start session if not already strated
      *
@@ -17,7 +16,8 @@ class Session
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-    }//end __construct()
+    }
+    //end __construct()
 
 
     /**
@@ -42,7 +42,6 @@ class Session
         $_SESSION['id'] = $user->getId();
         $_SESSION['roleName'] = $user->getRoleName();
         $_SESSION['username'] = $user->getUsername();
-
     }
 
     /**
@@ -53,7 +52,6 @@ class Session
     public function generateToken(): void
     {
         $_SESSION['token'] =  md5(bin2hex(openssl_random_pseudo_bytes(6)));
-
     }
 
 
@@ -66,5 +64,4 @@ class Session
     {
         return $_SESSION['token'];
     }
-
 }

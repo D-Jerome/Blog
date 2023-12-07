@@ -32,10 +32,10 @@ abstract class BaseController
      * @return void
      */
     public function __construct(/**
-     * route found
-     */
-    protected Route $route)
-    {
+         * route found
+         */
+        protected Route $route
+    ) {
 
         $this->session = new Session();
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
@@ -46,8 +46,8 @@ abstract class BaseController
             ]
         );
         $this->twig->addExtension(new IntlExtension());
-
-    }//end __construct
+    }
+    //end __construct
 
 
     /**
@@ -144,11 +144,8 @@ abstract class BaseController
         }
         $postDatas = (new HttpParams())->getParamsPost();
         Assert::notEmpty($postDatas);
-        Assert::keyExists($postDatas ,'token');
+        Assert::keyExists($postDatas, 'token');
 
         return $this->session->getToken() === $postDatas['token'];
     }
-
-
-
 }

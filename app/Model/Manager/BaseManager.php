@@ -30,16 +30,19 @@ abstract class BaseManager
      * @return void
      */
     public function __construct(/**
-     * table name
-     */
-    protected string $table, /**
-     * name of object
-     */
-    public string $object, array $datasource)
-    {
+         * table name
+         */
+        protected string $table, /**
+         * name of object
+         */
+        public string $object,
+        array $datasource
+    ) {
         $this->dbConnect = PDOConnection::getInstance($datasource);
+    }
+    //end __construct
 
-    }//end __construct
+
     /**
      * getById : get datas from Id
      *
@@ -73,7 +76,7 @@ abstract class BaseManager
                 SELECT * FROM $this->table
         SQL;
         $i = 0;
-        if($params !== null && $params !== [] ) {
+        if ($params !== null && $params !== []) {
             foreach ($params as $key => $value) {
                 if ($i !== 0) {
                     $sql .= <<<SQL
@@ -89,14 +92,12 @@ abstract class BaseManager
                 SQL;
                 $i++;
             }//end foreach
-
         }// end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute();
         return $query->fetchAll();
-
     }
 
 
@@ -215,20 +216,19 @@ abstract class BaseManager
         SQL;
         if (isset($listId)) {
             switch ($this->table) {
-            case 'post':
-                $sql .= <<<SQL
+                case 'post':
+                    $sql .= <<<SQL
                                 INNER JOIN post_category pc ON pc.post_id = post.id
                             SQL;
-                break;
-            case 'user':
-                $sql .= <<<SQL
+                    break;
+                case 'user':
+                    $sql .= <<<SQL
                                 INNER JOIN role ON role.id = user.role_id
                             SQL;
-                break;
-            case 'comment':
-                break;
+                    break;
+                case 'comment':
+                    break;
             }//end switch
-
         }//end if
 
         if ($params !== null && $params !== []) {
@@ -251,24 +251,23 @@ abstract class BaseManager
 
         if (isset($listId)) {
             switch ($this->table) {
-            case 'post':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+                case 'post':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
                                     AND pc.category_id = $listId
                                 SQL;
-                }
-                break;
-            case 'user':
-                if ($listId !== null) {
-                    $sql .= <<<SQL
+                    }
+                    break;
+                case 'user':
+                    if ($listId !== null) {
+                        $sql .= <<<SQL
                                     AND role.id = $listId
                                 SQL;
-                }
-                break;
-            case 'comment':
-                break;
+                    }
+                    break;
+                case 'comment':
+                    break;
             }//end switch
-
         }//end if
 
         $query = $this->dbConnect->prepare($sql);
@@ -295,18 +294,18 @@ abstract class BaseManager
             SELECT $this->table.* FROM $this->table
         SQL;
         switch ($this->table) {
-        case 'post':
-            $sql .= <<<SQL
+            case 'post':
+                $sql .= <<<SQL
                 INNER JOIN post_category pc ON pc.post_id = post.id
             SQL;
-            break;
-        case 'user':
-            $sql .= <<<SQL
+                break;
+            case 'user':
+                $sql .= <<<SQL
                 INNER JOIN role ON role.id = user.role_id
             SQL;
-            break;
-        case 'comment':
-            break;
+                break;
+            case 'comment':
+                break;
         }
 
 
@@ -328,22 +327,22 @@ abstract class BaseManager
             }
         }
         switch ($this->table) {
-        case 'post':
-            if ($listId !== null) {
-                $sql .= <<<SQL
+            case 'post':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                     AND pc.category_id = $listId
                 SQL;
-            }
-            break;
-        case 'user':
-            if ($listId !== null) {
-                $sql .= <<<SQL
+                }
+                break;
+            case 'user':
+                if ($listId !== null) {
+                    $sql .= <<<SQL
                     AND role.id = $listId
                 SQL;
-            }
-            break;
-        case 'comment':
-            break;
+                }
+                break;
+            case 'comment':
+                break;
         }
 
 
@@ -373,7 +372,6 @@ abstract class BaseManager
                     OFFSET $offset
                 SQL;
             }
-
         }
 
         $query = $this->dbConnect->prepare($sql);
@@ -439,7 +437,6 @@ abstract class BaseManager
             if ($i !== $countParam) {
                 $sql .= ", ";
             }
-
         }//end foreach
 
         $sql .= <<<SQL
@@ -454,7 +451,6 @@ abstract class BaseManager
             } else {
                 throw new PropertyNotFoundException($this->object);
             }
-
         }//end foreach
 
         $req->execute($boundParam);
@@ -523,5 +519,4 @@ abstract class BaseManager
         $query->bindParam(':publish_at', $now);
         $query->execute();
     }
-
 }

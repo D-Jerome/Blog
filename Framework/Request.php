@@ -35,7 +35,8 @@ class Request
             $this->uri = (str_replace($baseUrl, '', $parseURI)) ;
         }
         $this->method = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS)['REQUEST_METHOD'];
-    }//end __construct()
+    }
+    //end __construct()
 
 
     /**
@@ -58,6 +59,4 @@ class Request
     {
         return $this->method;
     }
-
-
 }

@@ -26,9 +26,8 @@ class CommentManager extends BaseManager
     public function __construct(array $datasource)
     {
         parent::__construct('comment', Comment::class, $datasource);
-
-    }//end _construct
-
+    }
+    //end _construct
 
     /**
      * Instance of manager
@@ -182,5 +181,4 @@ class CommentManager extends BaseManager
         $query->execute();
         return $query->rowCount();
     }
-
 }

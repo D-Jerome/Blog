@@ -57,6 +57,4 @@ class Category extends Entity
     {
         return $this->slug;
     }
-
-
 }

@@ -6,7 +6,6 @@ use Exception;
 
 class PasswordPolicyException extends Exception
 {
-
     /**
      * __construct
      *
@@ -15,8 +14,6 @@ class PasswordPolicyException extends Exception
     public function __construct(string $message = "Password does not satisfy the current policy requirements")
     {
         parent::__construct($message, 0005);
-
-    }//end __construct()
-
-
+    }
+    //end __construct()
 }

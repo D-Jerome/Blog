@@ -59,7 +59,7 @@ class FilterBuilder
         Assert::notEmpty($config);
         Assert::keyExists($config, $typeObj);
         Assert::isArray($config[$typeObj]);
-        Assert::keyExists($config[$typeObj],'sort');
+        Assert::keyExists($config[$typeObj], 'sort');
         Assert::isArray($config[$typeObj]['sort']);
         $this->sort =  $config[$typeObj]['sort'] ;
         Assert::keyExists($config, 'dir');
@@ -71,13 +71,13 @@ class FilterBuilder
             if (is_array($config[$typeObj]['listSelect'])) {
                 $this->listSelect = $config[$typeObj]['listSelect'];
                 $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
-                $getInstance = 'get'.array_key_first($config[$typeObj]['list']).'Instance';
+                $getInstance = 'get' . array_key_first($config[$typeObj]['list']) . 'Instance';
                 $listNames = $objectManagerName::$getInstance(Application::getDatasource());
                 $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
             }
         }
-
-    }//end __construct()
+    }
+    //end __construct()
 
 
     /**
@@ -132,6 +132,4 @@ class FilterBuilder
     {
         return $this->listNames;
     }
-
-
 }

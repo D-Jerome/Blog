@@ -45,13 +45,13 @@ class Pagination extends BaseController
      * @param int   $totalPages
      */
     public function __construct(/**
-     * route found of router
-     */
-    protected Route $route, /**
-     * total pages for pagination
-     */
-    protected int $totalPages)
-    {
+         * route found of router
+         */
+        protected Route $route, /**
+         * total pages for pagination
+         */
+        protected int $totalPages
+    ) {
         $params = (new HttpParams())->getParamsGet();
         if (isset($params['page'])) {
             $this->currentPage = (int) $params['page'];
@@ -60,7 +60,6 @@ class Pagination extends BaseController
         if (isset($params['perPage'])) {
             $this->perPage = (int) $params['perPage'];
         }
-
     }
 
 
@@ -136,11 +135,9 @@ class Pagination extends BaseController
         if ($query !== '' && $query !== '0') {
             $query = "&$query";
         }
-        $pages['previousUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
-        $pages['nextUri'] = Application::getBaseUrl(). $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
+        $pages['previousUri'] = Application::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
+        $pages['nextUri'] = Application::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
 
         return $pages;
     }
-
-
 }

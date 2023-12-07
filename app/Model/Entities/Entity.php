@@ -45,6 +45,4 @@ abstract class Entity
 
         return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
     }
-
-
 }

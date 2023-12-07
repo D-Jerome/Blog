@@ -57,8 +57,7 @@ class User extends BaseController
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
                 $this->session->connect($user);
-                header('Location: '. Application::getBaseUrl() .'/admin/logged');
-
+                header('Location: ' . Application::getBaseUrl() . '/admin/logged');
             } else {
                 $this->view(
                     'frontoffice/login.html.twig',
@@ -85,7 +84,7 @@ class User extends BaseController
 
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         if ($user !== null) {
-            header('Location: '. Application::getBaseUrl() .'/admin/logged');
+            header('Location: ' . Application::getBaseUrl() . '/admin/logged');
         }
         //afficher page de connection
 
@@ -136,21 +135,17 @@ class User extends BaseController
                 if (empty($data)) {
                     $message = "Formulaire Vide";
                     $error = true;
-
                 }
                 Assert::string($data);
                 if (str_contains($k, "username") && !\Safe\preg_match("|^(\w){8,}$|", $data)) {
                     $message = "<strong>Identifiant impossible</strong><br>Votre identifiant doit comporter plus de 8 caractères(chiffres, minuscules , majuscules et _ uniquement). ";
                     $error = true;
-
                 }
 
                 if (str_contains($k, "password") && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
                     $message = "Mot de passe non sécurisé";
                     $error = true;
-
                 }
-
             }
             $users = UserManager::getUserInstance(Application::getDatasource());
             if (is_string($postdatas['username'])) {
@@ -169,18 +164,14 @@ class User extends BaseController
                     unset($postdatas['confirmPassword']);
                     $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $postdatas]);
                 } else {
-                    
                     $users->insertNewUser($postdatas);
                     $mail = new Mail(Application::getEmailSource());
                     $mail->sendMailToUser($users->getByUsername($postdatas['username']));
-                    header('Location: '. Application::getBaseUrl() .'/');
+                    header('Location: ' . Application::getBaseUrl() . '/');
                 }//end if
-
             }// end if
         } catch (UnauthorizeValueException) {
-
         }
-
     }
 
 
@@ -192,7 +183,7 @@ class User extends BaseController
     public function logout()
     {
         \Safe\session_destroy();
-        header('Location: '. Application::getBaseUrl() .'/');
+        header('Location: ' . Application::getBaseUrl() . '/');
     }
 
 
@@ -242,7 +233,7 @@ class User extends BaseController
                         'frontoffice/forget.pwd.html.twig',
                         [
                         'baseUrl' => Application::getBaseUrl(),
-                        'message' => '<h5>Email envoyé</h5><br>
+                        'message' => '<strong>Email envoyé</strong><br>
                                     Un email de connexion vous a été envoyé.',
                         'error' => false,
                         ]
@@ -252,17 +243,13 @@ class User extends BaseController
                         'frontoffice/forget.pwd.html.twig',
                         [
                         'baseUrl' => Application::getBaseUrl(),
-                        'message' => '<h5>Email non envoyé</h5><br>
+                        'message' => '<strong>Email non envoyé</strong><br>
                                     Un problème est survenu. Rééssayez plus tard.',
                         'error' => true,
                         ]
                     );
                 }//endif
-
             }//endif
-
         }// end if
-
     }
-
 }

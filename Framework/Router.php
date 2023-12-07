@@ -10,7 +10,6 @@ use Webmozart\Assert\Assert;
 
 class Router
 {
-
     /**
      * Routes of config file
      *
@@ -26,12 +25,12 @@ class Router
      */
     public function __construct()
     {
-        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__."/../config/routes.json"), true);
+        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/routes.json"), true);
         foreach ($routes as $route) {
             $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
         }
-
-    }//end _construct()
+    }
+    //end _construct()
 
 
     /**
@@ -60,11 +59,8 @@ class Router
                     if ($this->validateRoute($typeControllerObj, $paramsValues)) {
                         return $route;
                     }
-
                 }//end if
-
             }//endif
-
         }//end foreach
 
         return null;
@@ -83,17 +79,14 @@ class Router
         $valid = false;
         $matchesKey = array_keys($matches);
         $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
-        $getInstance = 'get'.$typeObj.'Instance';
+        $getInstance = 'get' . $typeObj . 'Instance';
         if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = $objectManagerName::$getInstance(Application::getDatasource());
             if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
             }
-
         }//end if
 
         return $valid;
     }
-
-
 }

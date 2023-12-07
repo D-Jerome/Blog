@@ -26,7 +26,7 @@ class Home extends BaseController
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         $err = (new HttpParams())->getParamsGet();
 
-        if(!isset($err['auth'])) {
+        if (!isset($err['auth'])) {
             if (null === $user) {
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
                 exit;
@@ -61,7 +61,6 @@ class Home extends BaseController
             if (empty($data)) {
                 $error = true;
                 throw new UnauthorizeValueException();
-
             }
         }
 
@@ -79,8 +78,5 @@ class Home extends BaseController
             L\'envoi du message a échoué.<br>Rééssayez plus tard.', 'error' => true ]
             );
         }
-
     }
-
-
 }

@@ -4,7 +4,6 @@ namespace Framework\Security;
 
 class AuthUser
 {
-
     /**
      * __construct keep auth user information
      *
@@ -24,9 +23,9 @@ class AuthUser
          * username of connected user
          */
         protected string $username
-    )
-    {
-    }//end __construct
+    ) {
+    }
+    //end __construct
 
 
     /**

@@ -55,62 +55,62 @@ class Mail
      *
      * @var string
      */
-    private readonly string $fromAddress;
+    private string $fromAddress;
 
     /**
      * from user name
      *
      * @var string|null
      */
-    private readonly ?string $fromName;
+    private ?string $fromName;
 
     /**
      * ReplyTo Address
      *
      * @var string
      */
-    private readonly string $replyToAddress;
+    private string $replyToAddress;
 
     /**
      * ReplyTo Name
      *
      * @var string|null
      */
-    private readonly ?string $replyToName;
+    private ?string $replyToName;
 
     /**
      * copy address
      *
      * @var string|null
      */
-    private readonly ?string $ccAddress;
+    private ?string $ccAddress;
 
     /**
      * blind copy address
      *
      * @var string|null
      */
-    private readonly ?string $bccAddress;
+    private ?string $bccAddress;
 
     /**
      * administrator address
      *
      * @var string
      */
-    private readonly string $adminAddress;
+    private string $adminAddress;
 
     /**
      * admin user name
      *
      * @var string|null
      */
-    private readonly ?string $adminName;
+    private ?string $adminName;
 
 
     /**
      * __construct : each data of email config
      *
-     * @param  array<string, bool|int|string> $config From the config file
+     * @param  array<string,bool|int|string> $config From the config file
      * @return void
      */
     public function __construct(array $config)
@@ -118,8 +118,8 @@ class Mail
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
-
-    } //end __construct
+    }
+    //end __construct
 
 
     /**
@@ -143,7 +143,7 @@ class Mail
 
         //Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress($user->getEmail(), $user->getFirstName().' '.$user->getLastName());
+        $mail->addAddress($user->getEmail(), $user->getFirstName() . ' ' . $user->getLastName());
         $mail->addReplyTo($this->replyToAddress, $this->replyToName);
         $mail->addCC($this->ccAddress);
         $mail->addBCC($this->bccAddress);
@@ -155,8 +155,8 @@ class Mail
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Inscription à notre blog';
-        $mail->Body    = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
-        $mail->AltBody = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
+        $mail->Body    = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
+        $mail->AltBody = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
 
         try {
             $mail->send();
@@ -164,7 +164,6 @@ class Mail
         } catch (\Exception) {
             return false;
         }
-
     }
 
 
@@ -203,16 +202,16 @@ class Mail
                         Bonjour Admin, <br>
                         Voici un nouveau message d\'un utilisateur. <br>
                         <br>
-                        Message de : '.$contact['name'].'<br>
-                        Email : '.$contact['email'].'<br>
-                        Message : '.$contact['content'].'<br>
+                        Message de : ' . $contact['name'] . '<br>
+                        Email : ' . $contact['email'] . '<br>
+                        Message : ' . $contact['content'] . '<br>
                         ';
         $mail->AltBody = '
                         Bonjour Admin,
                         Voici un nouveau message d\'un utilisateur.
-                        Message de : '.$contact['name'].'
-                        Email : '.$contact['email'].'
-                        Message : '.$contact['content'].'
+                        Message de : ' . $contact['name'] . '
+                        Email : ' . $contact['email'] . '
+                        Message : ' . $contact['content'] . '
                         ';
 
         try {
@@ -221,7 +220,5 @@ class Mail
         } catch (\Exception) {
             return false;
         }
-
     }
-
 }

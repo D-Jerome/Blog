@@ -4,7 +4,6 @@ namespace Framework\Helpers;
 
 class Text
 {
-
     /**
      * toSlug: create a slug text of the @param
      *
@@ -27,8 +26,5 @@ class Text
     {
 
         return strtolower(\Safe\preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
-
     }
-
-
 }
