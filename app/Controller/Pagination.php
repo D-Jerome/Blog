@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Framework\Application;
+use Framework\{Application,Config};
 use Framework\BaseController;
 use Framework\Route;
 use Framework\HttpParams;
@@ -135,8 +135,8 @@ class Pagination extends BaseController
         if ($query !== '' && $query !== '0') {
             $query = "&$query";
         }
-        $pages['previousUri'] = Application::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
-        $pages['nextUri'] = Application::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
+        $pages['previousUri'] = Config::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
+        $pages['nextUri'] = Config::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
 
         return $pages;
     }

@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\Pagination;
 use App\Model\Manager\{UserManager, BaseManager, RoleManager};
-use Framework\Application;
+use Framework\{Application,Config};
 use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
@@ -25,13 +25,13 @@ class User extends BaseController
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
 
-        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-        $users = UserManager::getUserInstance(Application::getDatasource());
+        $users = UserManager::getUserInstance(Config::getDatasource());
         if ($httpParams['list'] === null) {
             $count = count($users->getAllByParams([]));
         } else {
@@ -52,7 +52,7 @@ class User extends BaseController
         }
 
         $dataView = [
-            'baseUrl' => Application::getBaseUrl(),
+            'baseUrl' => Config::getBaseUrl(),
             'registredUsers' => $statementUsers,
             'sort' => $filter->getSort(),
             'dir' => $filter->getDir(),
@@ -84,17 +84,17 @@ class User extends BaseController
      */
     public function modifyUser(int $id): void
     {
-        $users = UserManager::getUserInstance(Application::getDatasource());
+        $users = UserManager::getUserInstance(Config::getDatasource());
         $statementUser = $users->getById($id);
 
-        $roles = RoleManager::getRoleInstance(Application::getDatasource());
+        $roles = RoleManager::getRoleInstance(Config::getDatasource());
         $statementRoles = $roles->getAllByParams([]);
 
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
-        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
 
@@ -105,14 +105,14 @@ class User extends BaseController
      */
     public function modifiedUser(int $id): void
     {
-        $users = UserManager::getUserInstance(Application::getDatasource());
+        $users = UserManager::getUserInstance(Config::getDatasource());
 
         $users->updateUser((new HttpParams())->getParamsPost());
 
         $users->getAllByParams(['id' => $id]);
         $userSession = $this->session->getUser();
 
-        header('Location: ' . Application::getBaseUrl() . '/admin?user=modified');
+        header('Location: ' . Config::getBaseUrl() . '/admin?user=modified');
     }
 
 
@@ -126,8 +126,8 @@ class User extends BaseController
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (UserManager::getUserInstance(Application::getDatasource()))->disable($id);
-        header('Location: ' . Application::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        (UserManager::getUserInstance(Config::getDatasource()))->disable($id);
+        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
 
 
@@ -141,8 +141,8 @@ class User extends BaseController
     {
         $filterParams = ((new HttpParams())->getParamsReferer());
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (UserManager::getUserInstance(Application::getDatasource()))->enable($id);
-        header('Location: ' . Application::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        (UserManager::getUserInstance(Config::getDatasource()))->enable($id);
+        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
 
 
@@ -153,12 +153,12 @@ class User extends BaseController
      */
     public function addUser()
     {
-        $roles = RoleManager::getRoleInstance(Application::getDatasource());
+        $roles = RoleManager::getRoleInstance(Config::getDatasource());
         $statementRoles = $roles->getAllByParams([]);
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $this->view('backoffice/add.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
+        $this->view('backoffice/add.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
 
@@ -169,7 +169,7 @@ class User extends BaseController
      */
     public function addedUser(): void
     {
-        $user = UserManager::getUserInstance(Application::getDatasource());
+        $user = UserManager::getUserInstance(Config::getDatasource());
 
 
         $return = $user->insertNewUser((new HttpParams())->getParamsPost());
@@ -177,9 +177,9 @@ class User extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
-        $users = UserManager::getUserInstance(Application::getDatasource());
+        $users = UserManager::getUserInstance(Config::getDatasource());
         $statementUser = $users->getAllByParams(['id' => $return]);
 
-        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Application::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
+        $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }
 }

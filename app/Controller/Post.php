@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\Entities\Post as EntitiesPost;
 use Framework\BaseController;
 use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
-use Framework\Application;
+use Framework\{Application,Config};
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use App\Controller\Pagination;
@@ -21,9 +21,9 @@ class Post extends BaseController
     public function postsByCategory(): void
     {
         //recherche des 3 derniers articles par catégories
-        $categories = CategoryManager::getCategoryInstance(Application::getDatasource());
+        $categories = CategoryManager::getCategoryInstance(Config::getDatasource());
         $statementCategories = $categories->getAllByParams([]);
-        $posts = PostManager::getPostInstance(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Config::getDatasource());
         $postsByCategories = null;
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
@@ -37,7 +37,7 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         if (!$user instanceof \Framework\Security\AuthUser) {
-            $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
+            $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
             exit;
         }
 
@@ -46,7 +46,7 @@ class Post extends BaseController
             'id' => $user->getId(),
             'roleName' => $user->getRoleName()
         ];
-        $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Application::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
+        $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
 
 
@@ -61,10 +61,10 @@ class Post extends BaseController
 
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
-        $filter = new FilterBuilder(Application::getFilter(), substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [ "publish_state" => true];
-        $posts = PostManager::getPostInstance(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
 
@@ -93,7 +93,7 @@ class Post extends BaseController
         $this->view(
             'frontoffice/posts.html.twig',
             [
-                'baseUrl' => Application::getBaseUrl(),
+                'baseUrl' => Config::getBaseUrl(),
                 'posts' => $statementPosts,
                 'sort' => $filter->getSort(),
                 'dir' => $filter->getDir(),
@@ -119,8 +119,8 @@ class Post extends BaseController
      */
     public function post(int $id): void
     {
-        $post = PostManager::getPostInstance(Application::getDatasource());
-        $comment = CommentManager::getCommentInstance(Application::getDatasource());
+        $post = PostManager::getPostInstance(Config::getDatasource());
+        $comment = CommentManager::getCommentInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
         $statementComments = $comment->getCommentsByPostId($id);
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
@@ -131,7 +131,7 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
-        $this->view('frontoffice/post.html.twig', ['baseUrl' => Application::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
+        $this->view('frontoffice/post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 
@@ -145,6 +145,6 @@ class Post extends BaseController
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
 
-        $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Application::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+        $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 }

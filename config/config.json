@@ -25,11 +25,11 @@
         "adminName" : "Admin"
     },
     "filter" : {
-        "dir" : {
-            "ASC" : "Croissant",
-            "DESC" : "Décroissant"
-        },
         "post" : {
+            "dir" : {
+                "ASC" : "Croissant",
+                "DESC" : "Décroissant"
+            },
             "sort" : {
                 "name" : "Titre",
                 "createdAt" : "Crée le",
@@ -43,6 +43,10 @@
             }
         },
         "admin.post" : {
+            "dir" : {
+                "ASC" : "Croissant",
+                "DESC" : "Décroissant"
+            },
             "sort" : {
                 "name" : "Titre",
                 "createdAt" : "Crée le",
@@ -53,6 +57,10 @@
             "list" : {}
         },
         "admin.user" : {
+            "dir" : {
+                "ASC" : "Croissant",
+                "DESC" : "Décroissant"
+            },
             "sort" : {
                 "username" : "Identifiant",
                 "createdAt" : "Inscrit le",
@@ -66,6 +74,10 @@
             }
         },
         "admin.comment" : {
+            "dir" : {
+                "ASC" : "Croissant",
+                "DESC" : "Décroissant"
+            },
             "sort" : {
                 "user" : "utilisateur",
                 "PublishAt" : "Publié le",

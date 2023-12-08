@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Model\Manager\UserManager;
 use Exception;
-use Framework\{Application, Mail, Request, HttpParams};
+use Framework\{Application, Config, Mail, Request, HttpParams};
 use Framework\BaseController;
 use Framework\Exception\PasswordPolicyException;
 use Framework\Exception\UnauthorizeValueException;
@@ -19,7 +19,7 @@ class User extends BaseController
      */
     public function loginAuth(): void
     {
-        $users = UserManager::getUserInstance(Application::getDatasource());
+        $users = UserManager::getUserInstance(Config::getDatasource());
         $paramsPost = (new HttpParams())->getParamsPost();
         if (isset($paramsPost['login']) && is_string($paramsPost['login'])) {
             $user = $users->getByUsername($paramsPost['login']);
@@ -29,7 +29,7 @@ class User extends BaseController
             $this->view(
                 'frontoffice/login.html.twig',
                 [
-                'baseUrl' => Application::getBaseUrl(),
+                'baseUrl' => Config::getBaseUrl(),
                 'message' =>  '<strong>Erreur</strong><br>
                     Vérifiez votre Identifiant/Mot de passe.' ,
                 'error' => true,
@@ -43,7 +43,7 @@ class User extends BaseController
             $this->view(
                 'frontoffice/login.html.twig',
                 [
-                'baseUrl' => Application::getBaseUrl(),
+                'baseUrl' => Config::getBaseUrl(),
                 'message' => '<strong>Erreur</strong><br>
                     Vérifiez votre Identifiant/Mot de passe.',
                 'error' => true,
@@ -57,12 +57,12 @@ class User extends BaseController
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
                 $this->session->connect($user);
-                header('Location: ' . Application::getBaseUrl() . '/admin/logged');
+                header('Location: ' . Config::getBaseUrl() . '/admin/logged');
             } else {
                 $this->view(
                     'frontoffice/login.html.twig',
                     [
-                    'baseUrl' => Application::getBaseUrl(),
+                    'baseUrl' => Config::getBaseUrl(),
                     'message' => '<strong>Erreur</strong><br>
                         Vérifiez votre Identifiant/Mot de passe.',
                     'error' => true,
@@ -84,14 +84,14 @@ class User extends BaseController
 
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
         if ($user !== null) {
-            header('Location: ' . Application::getBaseUrl() . '/admin/logged');
+            header('Location: ' . Config::getBaseUrl() . '/admin/logged');
         }
         //afficher page de connection
 
         $this->view(
             'frontoffice/login.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl(),
+            'baseUrl' => Config::getBaseUrl(),
             'authUser' => $user]
         );
     }
@@ -112,7 +112,7 @@ class User extends BaseController
         $this->view(
             'frontoffice/signup.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl(),
+            'baseUrl' => Config::getBaseUrl(),
             'authUser' => $user]
         );
     }
@@ -147,7 +147,7 @@ class User extends BaseController
                     $error = true;
                 }
             }
-            $users = UserManager::getUserInstance(Application::getDatasource());
+            $users = UserManager::getUserInstance(Config::getDatasource());
             if (is_string($postdatas['username'])) {
                 if ($users->getByUsername($postdatas['username']) instanceof \App\Model\Entities\User) {
                     $message = "Identifiant déjà utilisé";
@@ -165,9 +165,9 @@ class User extends BaseController
                     $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $postdatas]);
                 } else {
                     $users->insertNewUser($postdatas);
-                    $mail = new Mail(Application::getEmailSource());
+                    $mail = new Mail(Config::getEmailSource());
                     $mail->sendMailToUser($users->getByUsername($postdatas['username']));
-                    header('Location: ' . Application::getBaseUrl() . '/');
+                    header('Location: ' . Config::getBaseUrl() . '/');
                 }//end if
             }// end if
         } catch (UnauthorizeValueException) {
@@ -183,7 +183,7 @@ class User extends BaseController
     public function logout()
     {
         \Safe\session_destroy();
-        header('Location: ' . Application::getBaseUrl() . '/');
+        header('Location: ' . Config::getBaseUrl() . '/');
     }
 
 
@@ -197,7 +197,7 @@ class User extends BaseController
         $this->view(
             'frontoffice/forget.pwd.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl()
+            'baseUrl' => Config::getBaseUrl()
             ]
         );
     }
@@ -213,14 +213,14 @@ class User extends BaseController
         $postDatas = (new HttpParams())->getParamsPost();
         if (isset($postDatas['email']) && is_string($postDatas['email'])) {
             $email = (string)filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
-            $mail = new Mail(Application::getEmailSource());
-            $users = UserManager::getUserInstance(Application::getDatasource());
+            $mail = new Mail(Config::getEmailSource());
+            $users = UserManager::getUserInstance(Config::getDatasource());
             $userInfo = $users->getByUserEmail($email);
             if (isset(($userInfo)['email']) === false) {
                 $this->view(
                     'frontoffice/forget.pwd.html.twig',
                     [
-                    'baseUrl' => Application::getBaseUrl(),
+                    'baseUrl' => Config::getBaseUrl(),
                     'message' => '<strong>Utilisateur inconnu</strong><br>
                                 Votre email nous est inconnu<br>
                                 Merci de vous rapprocher de votre administrateur.',
@@ -232,7 +232,7 @@ class User extends BaseController
                     $this->view(
                         'frontoffice/forget.pwd.html.twig',
                         [
-                        'baseUrl' => Application::getBaseUrl(),
+                        'baseUrl' => Config::getBaseUrl(),
                         'message' => '<strong>Email envoyé</strong><br>
                                     Un email de connexion vous a été envoyé.',
                         'error' => false,
@@ -242,7 +242,7 @@ class User extends BaseController
                     $this->view(
                         'frontoffice/forget.pwd.html.twig',
                         [
-                        'baseUrl' => Application::getBaseUrl(),
+                        'baseUrl' => Config::getBaseUrl(),
                         'message' => '<strong>Email non envoyé</strong><br>
                                     Un problème est survenu. Rééssayez plus tard.',
                         'error' => true,

@@ -4,9 +4,10 @@ namespace Framework\Helpers;
 
 use App\Model\Manager\CategoryManager;
 use Framework\Application;
+use Framework\Config;
 use Webmozart\Assert\Assert;
 
-class FilterBuilder
+class FilterBuilder extends Config
 {
     /**
      * List of Sortable Item
@@ -49,31 +50,35 @@ class FilterBuilder
     /**
      * __construct : Construct filter data
      *
-     * @param string                                                       $typeObj : Name of the object to list
-     * @param array<string,array<string,null|string|array<string,string>>> $config
+     * @param string    $typeObj : Name of the object to list
      *
      * @return void
      */
-    public function __construct(array $config, string $typeObj)
+    public function __construct(string $typeObj)
     {
-        Assert::notEmpty($config);
-        Assert::keyExists($config, $typeObj);
-        Assert::isArray($config[$typeObj]);
-        Assert::keyExists($config[$typeObj], 'sort');
-        Assert::isArray($config[$typeObj]['sort']);
-        $this->sort =  $config[$typeObj]['sort'] ;
-        Assert::keyExists($config, 'dir');
-        Assert::isArray($config['dir']);
-        $this->dir = $config['dir'];
+        if (!isset(parent::$config)) {
+            parent::__construct();
+        }
+        $category = 'filter';
+        $filterDatas = [
+            'sort',
+            'dir',
+            'list',
+            'listSelect'
+        ];
 
-        if (!empty($config[$typeObj]['list']) && is_array($config[$typeObj]['list'])) {
-            $this->list = $config[$typeObj]['list'];
-            if (is_array($config[$typeObj]['listSelect'])) {
-                $this->listSelect = $config[$typeObj]['listSelect'];
-                $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($config[$typeObj]['list']) . 'Manager';
-                $getInstance = 'get' . array_key_first($config[$typeObj]['list']) . 'Instance';
-                $listNames = $objectManagerName::$getInstance(Application::getDatasource());
-                $this->listNames = $listNames->getAllToList($config[$typeObj]['list'][array_key_first($config[$typeObj]['list'])]);
+        foreach ($filterDatas as $filterData) {
+            Assert::notFalse(parent::getSpecificData($category, $typeObj, $filterData), 'Config not containing passed Data');
+            if (!is_null(parent::getSpecificData($category, $typeObj, $filterData)) === true) {
+                if (is_array(parent::getSpecificData($category, $typeObj, $filterData)) === true) {
+                    $this->$filterData =  parent::getSpecificData($category, $typeObj, $filterData);
+                }
+            }
+            if (!is_null($this->list)) {
+                $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($this->list) . 'Manager';
+                $getInstance = 'get' . array_key_first($this->list) . 'Instance';
+                $listNames = $objectManagerName::$getInstance(parent::getDatasource());
+                $this->listNames = $listNames->getAllToList($this->list[array_key_first($this->list)]);
             }
         }
     }

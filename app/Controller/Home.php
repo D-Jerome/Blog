@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\Category;
 use App\Model\Manager\CategoryManager;
 use App\Model\Manager\PostManager;
-use Framework\Application;
+use Framework\{Application,Config};
 use Framework\BaseController;
 use Framework\Exception\{UnauthorizeValueException,InvalidUserException};
 use Framework\Mail;
@@ -28,15 +28,15 @@ class Home extends BaseController
 
         if (!isset($err['auth'])) {
             if (null === $user) {
-                $this->view('frontoffice/home.html.twig', ['baseUrl' => Application::getBaseUrl(), 'error' => false]);
+                $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'error' => false]);
                 exit;
             }
 
-            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Application::getBaseUrl(), 'authUser' => $user]);
+            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
         } else {
             $this->view(
                 'frontoffice/home.html.twig',
-                ['baseUrl' => Application::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
+                ['baseUrl' => Config::getBaseUrl(), 'message' =>  '<strong>Opération non authorisée</strong><br>
                 Vos droits n\'authorisent pas cette action.' , 'error' => true, 'authUser' => $user]
             );
         }
@@ -64,17 +64,17 @@ class Home extends BaseController
             }
         }
 
-        $mail = new Mail(Application::getEmailSource());
+        $mail = new Mail(Config::getEmailSource());
         if ($mail->sendMailToAdmin($postdatas)) {
             $this->view(
                 'frontoffice/home.html.twig',
-                [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
+                [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
             L\'envoi du message a été éffectué.', 'error' => false ]
             );
         } else {
             $this->view(
                 'frontoffice/home.html.twig',
-                [  'baseUrl' => Application::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
+                [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
             L\'envoi du message a échoué.<br>Rééssayez plus tard.', 'error' => true ]
             );
         }

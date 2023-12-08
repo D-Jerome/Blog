@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Controller\Pagination;
 use App\Model\Manager\CommentManager;
 use App\Model\Manager\PostManager;
-use Framework\Application;
+use Framework\{Application,Config};
 use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
@@ -27,11 +27,11 @@ class Comment extends BaseController
 
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
-        $comments = CommentManager::getCommentInstance(Application::getDatasource());
-        $posts = PostManager::getPostInstance(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Config::getDatasource());
+        $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
@@ -60,7 +60,7 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.comments.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl(),
+            'baseUrl' => Config::getBaseUrl(),
             'comments' => $statementComments,
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
@@ -87,7 +87,7 @@ class Comment extends BaseController
     public function modifyComment(int $id): void
     {
 
-        $comments = CommentManager::getCommentInstance(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
@@ -95,7 +95,7 @@ class Comment extends BaseController
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
-        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
 
@@ -106,7 +106,7 @@ class Comment extends BaseController
      */
     public function modifiedComment(int $id): void
     {
-        $comments = CommentManager::getCommentInstance(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $params = [];
         $statement = $comments->getById($id);
 
@@ -124,11 +124,11 @@ class Comment extends BaseController
         $user = $userSession->getAllUserInfo();
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
-        $comments = CommentManager::getCommentInstance(Application::getDatasource());
+        $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
-        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Application::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
+        $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
 
@@ -145,13 +145,13 @@ class Comment extends BaseController
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
 
-        $filter = new FilterBuilder(Application::getFilter(), 'admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
         $sqlParams = [];
 
-        $posts = PostManager::getPostInstance(Application::getDatasource());
+        $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
@@ -161,7 +161,7 @@ class Comment extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $comments = (CommentManager::getCommentInstance(Application::getDatasource()));
+        $comments = (CommentManager::getCommentInstance(Config::getDatasource()));
 
         if ($httpParams['listSelect'] === null) {
             $statementComments = $comments->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
@@ -183,7 +183,7 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.moderation.comments.html.twig',
             [
-            'baseUrl' => Application::getBaseUrl(),
+            'baseUrl' => Config::getBaseUrl(),
             'comments' => $statementComments,
             'posts' => $statementPosts,
             'sort' => $filter->getSort(),
@@ -211,8 +211,8 @@ class Comment extends BaseController
     {
         $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (CommentManager::getCommentInstance(Application::getDatasource()))->unpublish($id);
-        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
+        (CommentManager::getCommentInstance(Config::getDatasource()))->unpublish($id);
+        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
 
 
@@ -225,7 +225,7 @@ class Comment extends BaseController
     {
         $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (CommentManager::getCommentInstance(Application::getDatasource()))->publish($id);
-        header('Location: ' . Application::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
+        (CommentManager::getCommentInstance(Config::getDatasource()))->publish($id);
+        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
 }
