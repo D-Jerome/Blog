@@ -68,7 +68,7 @@ abstract class BaseManager
      *
      * @param array<string,int|string> $params fields and values to filter
      *
-     * @return array<T>|null
+     * @return array<T>|false
      */
     public function getAllByParams(?array $params)
     {

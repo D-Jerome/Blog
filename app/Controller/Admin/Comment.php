@@ -36,11 +36,18 @@ class Comment extends BaseController
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
+        Assert::isArray($user);
+        Assert::keyExists($user, 'roleName');
+        $count = 1;
         if ($user['roleName'] === "admin") {
-            $count = count($comments->getAllByParams([]));
+            if ($comments->getAllByParams([]) !== false) {
+                $count = count($comments->getAllByParams([]));
+            }
         } else {
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($comments->getAllByParams($sqlParams));
+            if ($comments->getAllByParams($sqlParams) !== false) {
+                $count = count($comments->getAllByParams($sqlParams));
+            }
         }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -52,7 +59,10 @@ class Comment extends BaseController
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
 
+
         $statementPosts = $posts->getAllByParams([]);
+        Assert::isArray($statementPosts);
+        Assert::notNull($statementPosts);
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
@@ -92,8 +102,8 @@ class Comment extends BaseController
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
@@ -133,8 +143,8 @@ class Comment extends BaseController
             $comments->update($statement, $params);
         }
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
@@ -168,9 +178,10 @@ class Comment extends BaseController
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-
-        $count = count($posts->getAllByParams([]));
-
+        $count = 1;
+        if ($posts->getAllByParams([]) !== false) {
+            $count = count($posts->getAllByParams([]));
+        }
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
@@ -187,6 +198,7 @@ class Comment extends BaseController
 
 
         $statementPosts = $posts->getAllByParams([]);
+        Assert::isArray($statementPosts);
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));

@@ -60,9 +60,9 @@ class Mail
     /**
      * from user name
      *
-     * @var string|null
+     * @var string
      */
-    private ?string $fromName;
+    private string $fromName = '';
 
     /**
      * ReplyTo Address
@@ -74,9 +74,9 @@ class Mail
     /**
      * ReplyTo Name
      *
-     * @var string|null
+     * @var string
      */
-    private ?string $replyToName;
+    private string $replyToName = '';
 
     /**
      * copy address
@@ -102,9 +102,9 @@ class Mail
     /**
      * admin user name
      *
-     * @var string|null
+     * @var string
      */
-    private ?string $adminName;
+    private string $adminName = '';
 
 
     /**
@@ -145,9 +145,12 @@ class Mail
         $mail->setFrom($this->fromAddress, $this->fromName);
         $mail->addAddress($user->getEmail(), $user->getFirstName() . ' ' . $user->getLastName());
         $mail->addReplyTo($this->replyToAddress, $this->replyToName);
-        $mail->addCC($this->ccAddress);
-        $mail->addBCC($this->bccAddress);
-
+        if ($this->ccAddress !== null) {
+            $mail->addCC($this->ccAddress);
+        }
+        if ($this->bccAddress !== null) {
+            $mail->addBCC($this->bccAddress);
+        }
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
         // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name

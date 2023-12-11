@@ -10,6 +10,7 @@ use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use App\Controller\Pagination;
 use PDO;
+use Webmozart\Assert\Assert;
 
 class Post extends BaseController
 {
@@ -25,6 +26,7 @@ class Post extends BaseController
         $statementCategories = $categories->getAllByParams([]);
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $postsByCategories = null;
+        Assert::notFalse($statementCategories);
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
             foreach ($statementPostsByCategory as $statementPost) {
@@ -66,6 +68,7 @@ class Post extends BaseController
         $sqlParams = [ "publish_state" => true];
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
+        Assert::keyExists($httpParams, 'sort');
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
 
         if ($httpParams['list'] === null) {
@@ -144,7 +147,8 @@ class Post extends BaseController
     {
         $userSession = $this->session->getUser();
         $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
+        Assert::isArray($user);
+        Assert::keyExists($user, 'roleName');
         $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 }

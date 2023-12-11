@@ -175,6 +175,9 @@ class User extends BaseController
                 } else {
                     $users->insertNewUser($dataPost);
                     $mail = new Mail(Config::getEmailSource());
+                    Assert::isArray($postdatas);
+                    Assert::notNull($postdatas);
+                    Assert::notNull($users->getByUsername($postdatas['username']));
                     $mail->sendMailToUser($users->getByUsername($postdatas['username']));
                     header('Location: ' . Config::getBaseUrl() . '/');
                 }//end if

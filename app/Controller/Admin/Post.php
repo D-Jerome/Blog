@@ -34,12 +34,18 @@ class Post extends BaseController
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-
+        Assert::isArray($user);
+        Assert::keyExists($user, 'roleName');
+        $count = 1;
         if ($user['roleName'] === "admin") {
-            $count = count($posts->getAllByParams([]));
+            if ($posts->getAllByParams([]) !== false) {
+                $count = count($posts->getAllByParams([]));
+            }
         } else {
             $sqlParams = ['user_id' => $user['id']];
-            $count = count($posts->getAllByParams($sqlParams));
+            if ($posts->getAllByParams($sqlParams) !== false) {
+                $count = count($posts->getAllByParams($sqlParams));
+            }
         }//end if
 
         if ($httpParams['list'] !== null) {
@@ -107,8 +113,8 @@ class Post extends BaseController
     {
         $category = CategoryManager::getCategoryInstance(Config::getDatasource());
         $statementCategories = $category->getAllByParams([]);
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $this->view('backoffice/add.post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'authUser' => $user]);
@@ -123,10 +129,19 @@ class Post extends BaseController
     public function addedPost()
     {
         $post = PostManager::getPostInstance(Config::getDatasource());
-
-        $newId = $post->insertNewPost((new HttpParams())->getParamsPost());
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $postData = (new HttpParams())->getParamsPost();
+        $dataPost = [];
+        Assert::isArray($postData);
+        foreach ($postData as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            Assert::string($data);
+            $dataPost[$key] = htmlentities($data);
+        }
+        $newId = $post->insertNewPost($dataPost);
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $statementPost = $post->getById($newId);
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
@@ -145,8 +160,8 @@ class Post extends BaseController
         $statementPost = $post->getById($id);
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost , 'authUser' => $user]);
@@ -163,7 +178,8 @@ class Post extends BaseController
         $params = [];
         $statement = $post->getById($id);
         $postDatas = (new HttpParams())->getParamsPost();
-
+        Assert::isArray($postDatas);
+        Assert::keyExists($postDatas, 'content');
         if ($postDatas['content'] !== $statement->getContent()) {
             Assert::stringNotEmpty($postDatas['content']);
             $params['content'] =  (string)$postDatas['content'];
@@ -180,8 +196,8 @@ class Post extends BaseController
             $post->update($statement, $params);
         }
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isArray($user);
         $this->session->generateToken();
         $user['token'] = $this->session->getToken();
         $post = PostManager::getPostInstance(Config::getDatasource());
@@ -213,9 +229,10 @@ class Post extends BaseController
         $statementPost->setcountComments($post->getCountCommentsByPostId($statementPost->getId()));
         // $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
         $this->session->generateToken();
+        Assert::isArray($user);
+        Assert::keyExists($user, 'token');
         $user['token'] = $this->session->getToken();
         $this->view('backoffice/add.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
@@ -243,8 +260,7 @@ class Post extends BaseController
         $comment->insertNewComment($dataComment);
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
 
         $post = PostManager::getPostInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
@@ -275,9 +291,10 @@ class Post extends BaseController
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-
-        $count = count($posts->getAllByParams([]));
-
+        $count = 1;
+        if ($posts->getAllByParams([]) !== false) {
+            $count = count($posts->getAllByParams([]));
+        }
         if ($httpParams['list'] !== null) {
             $count = count($posts->getAllFilteredCat($sqlParams, (int)$httpParams['listSelect']));
         }//end if
