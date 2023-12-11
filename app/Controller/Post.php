@@ -9,6 +9,7 @@ use Framework\{Application,Config};
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use App\Controller\Pagination;
+use Framework\Security\AuthUser;
 use PDO;
 use Webmozart\Assert\Assert;
 
@@ -59,10 +60,10 @@ class Post extends BaseController
      */
     public function posts(): void
     {
-        $userSession = $this->session->getUser();
-
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [ "publish_state" => true];
@@ -131,24 +132,25 @@ class Post extends BaseController
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername((string)$comment->getCommentUsername($statementComment->getUserId()));
         }
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         $this->view('frontoffice/post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
 
-    /**
-     * admin : administration role panel for user
-     *
-     * @return void
-     */
-    public function admin(): void
-    {
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-        Assert::isArray($user);
-        Assert::keyExists($user, 'roleName');
-        $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
-    }
+    // /**
+    //  * admin : administration role panel for user
+    //  *
+    //  * @return void
+    //  */
+    // public function admin(): void
+    // {
+    //     $user = $this->session->getUser();
+    //     if (!$user instanceof \Framework\Security\AuthUser) {
+    //         $user = null;
+    //     }
+    //     $this->view('frontoffice/' . $user->getRoleName() . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+    // }
 }

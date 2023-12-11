@@ -9,6 +9,7 @@ use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\{Request, HttpParams};
+use Framework\Security\AuthUser;
 use Framework\Session;
 use Webmozart\Assert\Assert;
 
@@ -21,10 +22,11 @@ class User extends BaseController
      */
     public function userList(): void
     {
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
 
         $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
@@ -100,9 +102,10 @@ class User extends BaseController
         $statementRoles = $roles->getAllByParams([]);
 
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
@@ -133,7 +136,8 @@ class User extends BaseController
 
         $users->getAllByParams(['id' => $id]);
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
+
 
         header('Location: ' . Config::getBaseUrl() . '/admin?user=modified');
     }
@@ -179,7 +183,7 @@ class User extends BaseController
         $roles = RoleManager::getRoleInstance(Config::getDatasource());
         $statementRoles = $roles->getAllByParams([]);
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
 
         $this->view('backoffice/add.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }
@@ -209,7 +213,7 @@ class User extends BaseController
         $validation = $user->insertNewUser($dataUser);
         //verif si pas erreur
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
 
         $users = UserManager::getUserInstance(Config::getDatasource());
         $statementUser = $users->getAllByParams(['id' => $validation]);

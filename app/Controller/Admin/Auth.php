@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Framework\{Application,Config};
 use Framework\BaseController;
+use Framework\Security\AuthUser;
 use Framework\Session;
 use Webmozart\Assert\Assert;
 
@@ -17,9 +18,9 @@ class Auth extends BaseController
     public function loggedIn(): void
     {
         $user = (($this->session)->getUser());
-        Assert::isArray($user);
-        Assert::keyExists($user, 'roleName');
-        $this->view('backoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+        Assert::isInstanceof($user, AuthUser::class);
+
+        $this->view('backoffice/' . $user->getRoleName() . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
 

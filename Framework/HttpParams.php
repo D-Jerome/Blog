@@ -27,7 +27,7 @@ class HttpParams
      *
      * @var mixed
      */
-    protected mixed $paramsReferer;
+    protected mixed $paramsReferer = null;
 
 
     /**
@@ -42,7 +42,7 @@ class HttpParams
         $serverData = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL);
         Assert::isArray($serverData);
         Assert::keyExists($serverData, 'HTTP_REFERER');
-        if (Assert::notEmpty($serverData) && Assert::notNull($serverData['HTTP_REFERER'])) {
+        if (!empty($serverData) && ($serverData['HTTP_REFERER']) !== null) {
             $this->paramsReferer = parse_url($serverData['HTTP_REFERER'], PHP_URL_QUERY);
         }
     }

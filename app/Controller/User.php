@@ -8,6 +8,7 @@ use Framework\{Application, Config, Mail, Request, HttpParams};
 use Framework\BaseController;
 use Framework\Exception\PasswordPolicyException;
 use Framework\Exception\UnauthorizeValueException;
+use Framework\Security\AuthUser;
 use Webmozart\Assert\Assert;
 
 class User extends BaseController
@@ -24,7 +25,7 @@ class User extends BaseController
         if (isset($paramsPost['login']) && is_string($paramsPost['login'])) {
             $user = $users->getByUsername($paramsPost['login']);
         }
-        if (isset($user) === false) {
+        if (isset($user) === false || $user === false) {
             $user = [];
             $this->view(
                 'frontoffice/login.html.twig',
@@ -81,10 +82,8 @@ class User extends BaseController
      */
     public function login()
     {
-        $userSession = $this->session->getUser();
-
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-        if ($user !== null) {
+        $user = $this->session->getUser();
+        if ($user instanceof \Framework\Security\AuthUser) {
             header('Location: ' . Config::getBaseUrl() . '/admin/logged');
         }
         //afficher page de connection
@@ -105,10 +104,9 @@ class User extends BaseController
      */
     public function signUp()
     {
-        $user = null;
-        $userSession = $this->session->getUser();
-        if ($userSession instanceof \Framework\Security\AuthUser) {
-            $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
         }
         $this->view(
             'frontoffice/signup.html.twig',
@@ -177,8 +175,10 @@ class User extends BaseController
                     $mail = new Mail(Config::getEmailSource());
                     Assert::isArray($postdatas);
                     Assert::notNull($postdatas);
-                    Assert::notNull($users->getByUsername($postdatas['username']));
-                    $mail->sendMailToUser($users->getByUsername($postdatas['username']));
+                    if ($users->getByUsername($postdatas['username']) !== false) {
+                        $mail->sendMailToUser($users->getByUsername($postdatas['username']));
+                    }
+
                     header('Location: ' . Config::getBaseUrl() . '/');
                 }//end if
             }// end if
@@ -227,8 +227,9 @@ class User extends BaseController
             $email = (string)filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
             $mail = new Mail(Config::getEmailSource());
             $users = UserManager::getUserInstance(Config::getDatasource());
+
             $userInfo = $users->getByUserEmail($email);
-            if (isset(($userInfo)['email']) === false) {
+            if ($userInfo === false) {
                 $this->view(
                     'frontoffice/forget.pwd.html.twig',
                     [

@@ -9,6 +9,7 @@ use Framework\{Application,Config};
 use Framework\BaseController;
 use Framework\Helpers\{Text, FilterBuilder};
 use Framework\{Request, HttpParams};
+use Framework\Security\AuthUser;
 use Framework\Session;
 use Safe\DateTime;
 use Webmozart\Assert\Assert;
@@ -24,9 +25,8 @@ class Post extends BaseController
      */
     public function posts(): void
     {
-        $userSession = $this->session->getUser();
-
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
 
         $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
@@ -34,15 +34,14 @@ class Post extends BaseController
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-        Assert::isArray($user);
-        Assert::keyExists($user, 'roleName');
+
         $count = 1;
-        if ($user['roleName'] === "admin") {
+        if ($user->getRoleName() === "admin") {
             if ($posts->getAllByParams([]) !== false) {
                 $count = count($posts->getAllByParams([]));
             }
         } else {
-            $sqlParams = ['user_id' => $user['id']];
+            $sqlParams = ['user_id' => $user->getId()];
             if ($posts->getAllByParams($sqlParams) !== false) {
                 $count = count($posts->getAllByParams($sqlParams));
             }
@@ -65,6 +64,9 @@ class Post extends BaseController
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
             $statementPost->setUsername($posts->getPostUsername($statementPost->getUserId()));
         }
+        $this->session->generateToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
 
         $dataView = [
             'baseUrl' => Config::getBaseUrl(),
@@ -114,9 +116,10 @@ class Post extends BaseController
         $category = CategoryManager::getCategoryInstance(Config::getDatasource());
         $statementCategories = $category->getAllByParams([]);
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $this->view('backoffice/add.post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'authUser' => $user]);
     }
 
@@ -136,12 +139,18 @@ class Post extends BaseController
             Assert::notEmpty($data);
             Assert::string($key);
             Assert::notNull($data);
-            Assert::string($data);
-            $dataPost[$key] = htmlentities($data);
+            if (is_string($data) === true) {
+                $dataPost[$key] = htmlentities($data);
+            } else {
+                $dataPost[$key] = $data;
+            }
         }
         $newId = $post->insertNewPost($dataPost);
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
+        $this->session->generateToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $statementPost = $post->getById($newId);
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
@@ -161,9 +170,10 @@ class Post extends BaseController
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $this->view('backoffice/modify.post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost , 'authUser' => $user]);
     }
 
@@ -191,15 +201,16 @@ class Post extends BaseController
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
-            $params['publishState'] = false;
+            $params['publishState'] = 0;
 
             $post->update($statement, $params);
         }
 
         $user = $this->session->getUser();
-        Assert::isArray($user);
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $post = PostManager::getPostInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
@@ -231,9 +242,9 @@ class Post extends BaseController
 
         $user = $this->session->getUser();
         $this->session->generateToken();
-        Assert::isArray($user);
-        Assert::keyExists($user, 'token');
-        $user['token'] = $this->session->getToken();
+        Assert::isInstanceOf($user, AuthUser::class);
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $this->view('backoffice/add.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
 
@@ -260,8 +271,6 @@ class Post extends BaseController
         $comment->insertNewComment($dataComment);
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
-        $user = $this->session->getUser();
-
         $post = PostManager::getPostInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
@@ -277,11 +286,11 @@ class Post extends BaseController
     public function moderationPosts(): void
     {
 
-        $userSession = $this->session->getUser();
-
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
         $httpParams = $this->groupFilterDataUser();

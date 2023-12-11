@@ -55,14 +55,14 @@ class UserManager extends BaseManager
      * getByUsername : get User Object of the user
      *
      * @param  string $login Username passed in login form
-     * @return User|null
+     * @return User|false
      */
-    public function getByUsername(string $login): ?User
+    public function getByUsername(string $login): User|false
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$login]);
-        return $statement->fetch() ?? null;
+        return $statement->fetch();
     }
 
 
@@ -70,14 +70,14 @@ class UserManager extends BaseManager
      * getByUseremail : get User Object of the user
      *
      * @param  string $email email of forget password form
-     * @return User|null
+     * @return User|false
      */
-    public function getByUserEmail(string $email): ?User
+    public function getByUserEmail(string $email): User|false
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$email]);
-        return $statement->fetch() ?? null;
+        return $statement->fetch();
     }
 
 

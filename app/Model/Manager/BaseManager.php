@@ -414,7 +414,7 @@ abstract class BaseManager
      * update : update data of an object
      *
      * @param  T                    $obj
-     * @param  array<string,bool|string> $param
+     * @param  array<string,int|bool|string> $param
      * @return void
      * @throws PropertyNotFoundException
      */

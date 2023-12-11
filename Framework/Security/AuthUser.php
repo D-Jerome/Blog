@@ -5,6 +5,14 @@ namespace Framework\Security;
 class AuthUser
 {
     /**
+     * instant Token
+     *
+     * @var string
+     */
+    private string $token;
+
+
+    /**
      * __construct keep auth user information
      *
      *
@@ -75,5 +83,32 @@ class AuthUser
             'name' => $this->username,
             'roleName' => $this->roleName,
         ];
+    }
+
+
+    /**
+     * set Token value
+     *
+     * @param string $token
+     *
+     * @return void
+     *
+     */
+    public function setToken(string $token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * get Token value
+     *
+     *
+     *
+     * @return string
+     *
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 }
