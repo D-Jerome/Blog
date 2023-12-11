@@ -11,6 +11,7 @@ use Framework\Exception\{UnauthorizeValueException,InvalidUserException};
 use Framework\Mail;
 use Framework\{Request,HttpParams};
 use Framework\Session;
+use Webmozart\Assert\Assert;
 
 class Home extends BaseController
 {
@@ -51,21 +52,19 @@ class Home extends BaseController
     public function homeContact(): void
     {
         $error = false;
+        $dataPost = [];
         $postdatas = (new HttpParams())->getParamsPost();
-        foreach ($postdatas as $data) {
-            if (is_string($data)) {
-                $data = htmlentities($data);
-            }
-        }
-        foreach ($postdatas as $k => $data) {
-            if (empty($data)) {
-                $error = true;
-                throw new UnauthorizeValueException();
-            }
+        Assert::isArray($postdatas);
+        foreach ($postdatas as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            Assert::string($data);
+            $dataPost[$key] = htmlentities($data);
         }
 
         $mail = new Mail(Config::getEmailSource());
-        if ($mail->sendMailToAdmin($postdatas)) {
+        if ($mail->sendMailToAdmin($dataPost)) {
             $this->view(
                 'frontoffice/home.html.twig',
                 [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>

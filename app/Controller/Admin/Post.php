@@ -11,6 +11,7 @@ use Framework\Helpers\{Text, FilterBuilder};
 use Framework\{Request, HttpParams};
 use Framework\Session;
 use Safe\DateTime;
+use Webmozart\Assert\Assert;
 
 use function Safe\parse_url;
 
@@ -164,15 +165,17 @@ class Post extends BaseController
         $postDatas = (new HttpParams())->getParamsPost();
 
         if ($postDatas['content'] !== $statement->getContent()) {
-            $params['content'] =  $postDatas['content'];
+            Assert::stringNotEmpty($postDatas['content']);
+            $params['content'] =  (string)$postDatas['content'];
         }
 
         if ($postDatas['name'] !== $statement->getName()) {
-            $params['name'] =  $postDatas['name'];
+            Assert::stringNotEmpty($postDatas['name']);
+            $params['name'] =  (string)$postDatas['name'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
-            $params['publishState'] = 0;
+            $params['publishState'] = false;
 
             $post->update($statement, $params);
         }
@@ -227,8 +230,17 @@ class Post extends BaseController
     {
 
         $comment = CommentManager::getCommentInstance(Config::getDatasource());
-
-        $comment->insertNewComment((new HttpParams())->getParamsPost());
+        $commentData = (new HttpParams())->getParamsPost();
+        $dataComment = [];
+        Assert::isArray($commentData);
+        foreach ($commentData as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            Assert::string($data);
+            $dataComment[$key] = htmlentities($data);
+        }
+        $comment->insertNewComment($dataComment);
         //Message de prise en compte et de validation du commentaire par l'administrateur
 
         $userSession = $this->session->getUser();

@@ -81,7 +81,7 @@ class Router
         $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
         $getInstance = 'get' . $typeObj . 'Instance';
         if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
-            $objectManager = $objectManagerName::$getInstance(Application::getDatasource());
+            $objectManager = $objectManagerName::$getInstance(Config::getDatasource());
             if ($objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]]) === 1) {
                 $valid = true;
             }

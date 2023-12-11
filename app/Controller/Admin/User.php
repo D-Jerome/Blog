@@ -10,6 +10,7 @@ use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\{Request, HttpParams};
 use Framework\Session;
+use Webmozart\Assert\Assert;
 
 class User extends BaseController
 {
@@ -106,8 +107,21 @@ class User extends BaseController
     public function modifiedUser(int $id): void
     {
         $users = UserManager::getUserInstance(Config::getDatasource());
+        $userData = (new HttpParams())->getParamsPost();
+        $dataUser = [];
+        Assert::isArray($userData);
+        foreach ($userData as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            if (is_string($data)) {
+                $dataUser[$key] = htmlentities($data);
+            } elseif (is_integer($data)) {
+                $dataUser[$key] = $data;
+            }
+        }
 
-        $users->updateUser((new HttpParams())->getParamsPost());
+        $users->updateUser($dataUser);
 
         $users->getAllByParams(['id' => $id]);
         $userSession = $this->session->getUser();
@@ -171,14 +185,25 @@ class User extends BaseController
     {
         $user = UserManager::getUserInstance(Config::getDatasource());
 
+        $userData = (new HttpParams())->getParamsPost();
+        $dataUser = [];
+        Assert::isArray($userData);
+        foreach ($userData as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            Assert::string($data);
+            $dataUser[$key] = htmlentities($data);
+        }
 
-        $return = $user->insertNewUser((new HttpParams())->getParamsPost());
+
+        $validation = $user->insertNewUser($dataUser);
         //verif si pas erreur
         $userSession = $this->session->getUser();
         $user = $userSession->getAllUserInfo();
 
         $users = UserManager::getUserInstance(Config::getDatasource());
-        $statementUser = $users->getAllByParams(['id' => $return]);
+        $statementUser = $users->getAllByParams(['id' => $validation]);
 
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'users' => $statementUser, 'authUser' => $user]);
     }

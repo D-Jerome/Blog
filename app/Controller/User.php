@@ -66,7 +66,8 @@ class User extends BaseController
                     'message' => '<strong>Erreur</strong><br>
                         Vérifiez votre Identifiant/Mot de passe.',
                     'error' => true,
-                    'authUser' => $user]
+                    'authUser' => $user
+                    ]
                 );
             }//end if
         }
@@ -147,6 +148,14 @@ class User extends BaseController
                     $error = true;
                 }
             }
+            $dataPost = [];
+            foreach ($postdatas as $key => $data) {
+                Assert::notEmpty($data);
+                Assert::string($key);
+                Assert::notNull($data);
+                Assert::string($data);
+                $dataPost[$key] = htmlentities($data);
+            }
             $users = UserManager::getUserInstance(Config::getDatasource());
             if (is_string($postdatas['username'])) {
                 if ($users->getByUsername($postdatas['username']) instanceof \App\Model\Entities\User) {
@@ -162,9 +171,9 @@ class User extends BaseController
                 if ($error) {
                     unset($postdatas['password']);
                     unset($postdatas['confirmPassword']);
-                    $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $postdatas]);
+                    $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $dataPost]);
                 } else {
-                    $users->insertNewUser($postdatas);
+                    $users->insertNewUser($dataPost);
                     $mail = new Mail(Config::getEmailSource());
                     $mail->sendMailToUser($users->getByUsername($postdatas['username']));
                     header('Location: ' . Config::getBaseUrl() . '/');

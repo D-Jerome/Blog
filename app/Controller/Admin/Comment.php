@@ -11,6 +11,7 @@ use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\HttpParams;
 use Safe\DateTime;
+use Webmozart\Assert\Assert;
 
 use function Safe\parse_url;
 
@@ -109,14 +110,26 @@ class Comment extends BaseController
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $params = [];
         $statement = $comments->getById($id);
-
-        if ((new HttpParams())->getParamsPost()['content'] !== $statement->getContent()) {
-            $params['content'] = (new HttpParams())->getParamsPost()['content'];
+        $postData = (new HttpParams())->getParamsPost();
+        $dataPost = [];
+        Assert::isArray($postData);
+        foreach ($postData as $key => $data) {
+            Assert::notEmpty($data);
+            Assert::string($key);
+            Assert::notNull($data);
+            if (is_string($data)) {
+                $dataPost[$key] = htmlentities($data);
+            } elseif (is_integer($data)) {
+                $dataPost[$key] = $data;
+            }
+        }
+        if ($dataPost['content'] !== $statement->getContent()) {
+            $params['content'] = (string)$dataPost['content'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
-            $params['publishState'] = 0;
-
+            $params['publishState'] = false;
+            Assert::keyExists($params, 'content');
             $comments->update($statement, $params);
         }
 
