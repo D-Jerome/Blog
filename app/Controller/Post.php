@@ -138,19 +138,4 @@ class Post extends BaseController
         }
         $this->view('frontoffice/post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
     }
-
-
-    // /**
-    //  * admin : administration role panel for user
-    //  *
-    //  * @return void
-    //  */
-    // public function admin(): void
-    // {
-    //     $user = $this->session->getUser();
-    //     if (!$user instanceof \Framework\Security\AuthUser) {
-    //         $user = null;
-    //     }
-    //     $this->view('frontoffice/' . $user->getRoleName() . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
-    // }
 }
