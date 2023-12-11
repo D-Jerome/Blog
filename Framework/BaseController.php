@@ -105,9 +105,9 @@ abstract class BaseController
     /**
      * ckeck and group filter information pass by user
      *
-     * @return array<string,null|string|int>|null
+     * @return array<string,null|string|int>
      */
-    public function groupFilterDataUser(): ?array
+    public function groupFilterDataUser(): array
     {
         $filterReturn = (new HttpParams())->getParamsGet();
         $filterReturn['sort'] = isset(($filterReturn)['sort']) ? (string)($filterReturn['sort']) : 'createdAt';

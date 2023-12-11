@@ -23,8 +23,10 @@ class Home extends BaseController
     public function home(): void
     {
         //recherche des 3 derniers articles par catégories
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         $err = (new HttpParams())->getParamsGet();
 
         if (!isset($err['auth'])) {

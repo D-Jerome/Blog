@@ -4,10 +4,10 @@
 {% if authUser.id != false  %}
     <li class="nav-item dropstart  me-2 my-auto">
         <a  class="btn btn-outline-dark dropdown-toggle float-end" href="#" role="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ authUser.name }}
-        </a>    
+        {{ authUser.username }}
+        </a>
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{{ baseUrl }}/admin/user/modify/{{ authUser.name }}/{{ authUser.id }}">Profil</a></li>
+            <li><a class="dropdown-item" href="{{ baseUrl }}/admin/user/modify/{{ authUser.username }}/{{ authUser.id }}">Profil</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{{ baseUrl }}/admin/logged">Administration</a></li>
             <li><hr class="dropdown-divider"></li>

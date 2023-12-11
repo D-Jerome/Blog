@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Pagination;
+use App\Model\Entities\Post;
 use App\Model\Manager\CommentManager;
 use App\Model\Manager\PostManager;
 use Framework\{Application,Config};
@@ -10,6 +11,7 @@ use Framework\BaseController;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\HttpParams;
+use Framework\Security\AuthUser;
 use Safe\DateTime;
 use Webmozart\Assert\Assert;
 
@@ -26,8 +28,8 @@ class Comment extends BaseController
     public function comments()
     {
 
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
@@ -36,11 +38,17 @@ class Comment extends BaseController
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-        if ($user['roleName'] === "admin") {
-            $count = count($comments->getAllByParams([]));
+        $count = 1;
+
+        if ($user->getRoleName() === "admin") {
+            if ($comments->getAllByParams([]) !== false) {
+                $count = count($comments->getAllByParams([]));
+            }
         } else {
-            $sqlParams = ['user_id' => $user['id']];
-            $count = count($comments->getAllByParams($sqlParams));
+            $sqlParams = ['user_id' => $user->getId()];
+            if ($comments->getAllByParams($sqlParams) !== false) {
+                $count = count($comments->getAllByParams($sqlParams));
+            }
         }//end if
 
         $pagination = new Pagination($this->getRoute(), $count);
@@ -52,7 +60,10 @@ class Comment extends BaseController
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
 
+
         $statementPosts = $posts->getAllByParams([]);
+        Assert::isArray($statementPosts);
+        Assert::notNull($statementPosts);
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
@@ -92,10 +103,11 @@ class Comment extends BaseController
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
@@ -128,15 +140,15 @@ class Comment extends BaseController
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
-            $params['publishState'] = false;
-            Assert::keyExists($params, 'content');
+            $params['publishState'] = 0;
             $comments->update($statement, $params);
         }
 
-        $userSession = $this->session->getUser();
-        $user = $userSession->getAllUserInfo();
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
@@ -153,10 +165,11 @@ class Comment extends BaseController
     public function moderationComments()
     {
 
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
+        $user = $this->session->getUser();
+        Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        $user['token'] = $this->session->getToken();
+        Assert::notNull(($this->session)->getToken());
+        $user->setToken(($this->session)->getToken());
 
         $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
 
@@ -168,9 +181,10 @@ class Comment extends BaseController
         $pages = [];
 
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
-
-        $count = count($posts->getAllByParams([]));
-
+        $count = 1;
+        if ($posts->getAllByParams([]) !== false) {
+            $count = count($posts->getAllByParams([]));
+        }
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
@@ -187,6 +201,7 @@ class Comment extends BaseController
 
 
         $statementPosts = $posts->getAllByParams([]);
+        Assert::isArray($statementPosts);
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));

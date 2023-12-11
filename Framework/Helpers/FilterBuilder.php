@@ -75,10 +75,12 @@ class FilterBuilder extends Config
                 }
             }
             if (!is_null($this->list)) {
-                $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($this->list) . 'Manager';
-                $getInstance = 'get' . array_key_first($this->list) . 'Instance';
-                $listNames = $objectManagerName::$getInstance(parent::getDatasource());
-                $this->listNames = $listNames->getAllToList($this->list[array_key_first($this->list)]);
+                if (!empty($this->list)) {
+                    $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($this->list) . 'Manager';
+                    $getInstance = 'get' . array_key_first($this->list) . 'Instance';
+                    $listNames = $objectManagerName::$getInstance(parent::getDatasource());
+                    $this->listNames = $listNames->getAllToList($this->list[array_key_first($this->list)]);
+                }
             }
         }
     }

@@ -9,7 +9,9 @@ use Framework\{Application,Config};
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use App\Controller\Pagination;
+use Framework\Security\AuthUser;
 use PDO;
+use Webmozart\Assert\Assert;
 
 class Post extends BaseController
 {
@@ -25,6 +27,7 @@ class Post extends BaseController
         $statementCategories = $categories->getAllByParams([]);
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $postsByCategories = null;
+        Assert::notFalse($statementCategories);
         foreach ($statementCategories as $statementCategory) {
             $statementPostsByCategory = $posts->getPostsbyCategory($statementCategory);
             foreach ($statementPostsByCategory as $statementPost) {
@@ -57,15 +60,16 @@ class Post extends BaseController
      */
     public function posts(): void
     {
-        $userSession = $this->session->getUser();
-
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [ "publish_state" => true];
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
+        Assert::keyExists($httpParams, 'sort');
         $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
 
         if ($httpParams['list'] === null) {
@@ -128,23 +132,10 @@ class Post extends BaseController
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername((string)$comment->getCommentUsername($statementComment->getUserId()));
         }
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         $this->view('frontoffice/post.html.twig', ['baseUrl' => Config::getBaseUrl(), 'post' => $statementPost, 'authUser' => $user, 'comments' => $statementComments]);
-    }
-
-
-    /**
-     * admin : administration role panel for user
-     *
-     * @return void
-     */
-    public function admin(): void
-    {
-        $userSession = $this->session->getUser();
-        $user = $userSession instanceof \Framework\Security\AuthUser ? $userSession->getAllUserInfo() : null;
-
-        $this->view('frontoffice/' . $user['roleName'] . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 }
