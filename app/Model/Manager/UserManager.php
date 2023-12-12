@@ -62,7 +62,11 @@ class UserManager extends BaseManager
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$login]);
-        return $statement->fetch();
+        $result = $statement->fetch();
+        if ($result instanceof \App\Model\Entities\User) {
+            return $result;
+        }
+        return false;
     }
 
 
@@ -77,7 +81,11 @@ class UserManager extends BaseManager
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$email]);
-        return $statement->fetch();
+        $result = $statement->fetch();
+        if ($result instanceof \App\Model\Entities\User) {
+            return $result;
+        }
+        return false;
     }
 
 

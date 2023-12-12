@@ -26,8 +26,10 @@ class Router
     public function __construct()
     {
         $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/routes.json"), true);
-        foreach ($routes as $route) {
-            $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
+        if (is_array($routes) === true) {
+            foreach ($routes as $route) {
+                $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
+            }
         }
     }
     //end _construct()

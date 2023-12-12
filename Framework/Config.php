@@ -11,21 +11,45 @@ class Config
     /**
      * datas from config file
      *
-     * @var array<string,mixed>
+     * @var object
      */
-    protected static array $config;
+    protected static object $config;
 
     /**
      * Base url of site
      *
      * @var string
      */
-    public static string $baseUrl;
+    private static string $baseUrl;
+
+    /**
+     * config Database of site
+     *
+     * @var array<string,string>
+     */
+    private static array $databaseConf;
+
+    /**
+     * email config of site
+     *
+     * @var array<string,int|bool|string>
+     */
+    private static array $emailConf;
+
+    /**
+     * Base url of site
+     *
+     * @var object
+     */
+    private static object $filterConf;
 
     public function __construct()
     {
-        self::$config = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/config.json"), true);
-        self::$baseUrl = self::$config['baseUrl'];
+        self::$config = (object)\Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/config.json"), false);
+        self::$baseUrl =  (self::$config)->baseUrl;
+        self::$databaseConf = (array)(self::$config)->database;
+        self::$emailConf = (array)(self::$config)->email;
+        self::$filterConf = (self::$config)->filter;
     }
     //end __construct()
 
@@ -47,21 +71,21 @@ class Config
      * @param string $page
      * @param string $needle
      *
-     * @return array<string,string>|false|null
+     * @return object|false
      *
      */
-    public static function getSpecificData(string $category, string $page, string $needle): null|array|false
+    public static function getSpecificData(string $category, string $page, string $needle): object|false
     {
-        if (array_key_exists($category, self::$config) === false) {
+        if (isset(self::$config->$category) === false) {
             return false;
         }
-        if (array_key_exists($page, self::$config[$category]) === false) {
+        if (isset(self::$config->$category->$page) === false) {
             return false;
         }
-        if (array_key_exists($needle, self::$config[$category][$page]) === false) {
+        if (isset(self::$config->$category->$page->$needle) === false) {
             return false;
         }
-        return self::$config[$category][$page][$needle];
+        return self::$config->$category->$page->$needle;
     }
 
 
@@ -72,7 +96,7 @@ class Config
          */
     public static function getDatasource(): array
     {
-        return self::$config['database'];
+        return self::$databaseConf;
     }
 
 
@@ -83,7 +107,7 @@ class Config
      */
     public static function getEmailSource(): array
     {
-        return self::$config['email'];
+        return self::$emailConf;
     }
 }
 

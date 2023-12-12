@@ -68,11 +68,8 @@ class FilterBuilder extends Config
         ];
 
         foreach ($filterDatas as $filterData) {
-            Assert::notFalse(parent::getSpecificData($category, $typeObj, $filterData), 'Config not containing passed Data');
-            if (!is_null(parent::getSpecificData($category, $typeObj, $filterData)) === true) {
-                if (is_array(parent::getSpecificData($category, $typeObj, $filterData)) === true) {
-                    $this->$filterData =  parent::getSpecificData($category, $typeObj, $filterData);
-                }
+            if ((parent::getSpecificData($category, $typeObj, $filterData)) != false) {
+                    $this->$filterData = (array)parent::getSpecificData($category, $typeObj, $filterData);
             }
             if (!is_null($this->list)) {
                 if (!empty($this->list)) {
@@ -94,7 +91,7 @@ class FilterBuilder extends Config
      */
     public function getSort(): array
     {
-        return $this->sort;
+        return (array)$this->sort;
     }
 
 
@@ -105,7 +102,7 @@ class FilterBuilder extends Config
      */
     public function getDir(): array
     {
-        return $this->dir;
+        return (array)$this->dir;
     }
 
 
@@ -116,7 +113,7 @@ class FilterBuilder extends Config
      */
     public function getList(): ?array
     {
-        return $this->list;
+        return (array)$this->list;
     }
 
 
@@ -127,7 +124,7 @@ class FilterBuilder extends Config
      */
     public function getListSelect(): ?array
     {
-        return $this->listSelect;
+        return (array)$this->listSelect;
     }
 
     /**

@@ -31,7 +31,7 @@ final class Application
     public function __construct()
     {
         new Config();
-        $this->request = new Request(Config::$baseUrl);
+        $this->request = new Request(Config::getbaseUrl());
         $this->router = new Router();
     }
     //end __construct()
