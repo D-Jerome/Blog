@@ -41,9 +41,10 @@ class HttpParams
         $this->paramsPost = \Safe\filter_input_array(INPUT_POST);
         $serverData = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_URL);
         Assert::isArray($serverData);
-        Assert::keyExists($serverData, 'HTTP_REFERER');
-        if (!empty($serverData) && ($serverData['HTTP_REFERER']) !== null) {
-            $this->paramsReferer = parse_url($serverData['HTTP_REFERER'], PHP_URL_QUERY);
+        if (!empty($serverData) && array_key_exists('HTTP_REFERER', $serverData)) {
+            if (($serverData['HTTP_REFERER']) !== null) {
+                $this->paramsReferer = parse_url($serverData['HTTP_REFERER'], PHP_URL_QUERY);
+            }
         }
     }
     //end __construct

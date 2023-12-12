@@ -129,6 +129,12 @@ class User extends BaseController
             $message = '';
             $error = false;
             $postdatas = (new HttpParams())->getParamsPost();
+
+            if (is_array($postdatas) === true && array_key_exists('re-email', $postdatas) === true && !empty($postdatas['re-email'])) {
+                $error = true;
+                $message = "<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email";
+            }
+            unset($postdatas['re-email']);
             Assert::isArray($postdatas);
             foreach ($postdatas as $k => $data) {
                 if (empty($data)) {
@@ -154,35 +160,36 @@ class User extends BaseController
                 Assert::string($data);
                 $dataPost[$key] = htmlentities($data);
             }
+
             $users = UserManager::getUserInstance(Config::getDatasource());
-            if (is_string($postdatas['username'])) {
-                if ($users->getByUsername($postdatas['username']) instanceof \App\Model\Entities\User) {
+            if (is_string($dataPost['username'])) {
+                if ($users->getByUsername($dataPost['username']) instanceof \App\Model\Entities\User) {
                     $message = "Identifiant déjà utilisé";
                     $error = true;
                 }
 
-                if ($postdatas['password'] !== $postdatas['confirmPassword']) {
+                if ($dataPost['password'] !== $dataPost['confirmPassword']) {
                     $message = "Les mots de passes ne sont pas identiques";
                     $error = true;
                 }
+            }
 
-                if ($error) {
-                    unset($postdatas['password']);
-                    unset($postdatas['confirmPassword']);
-                    $this->view('frontoffice/signup.html.twig', ['message' => $message, 'error' => true, 'data' => $dataPost]);
-                } else {
-                    $users->insertNewUser($dataPost);
-                    $mail = new Mail(Config::getEmailSource());
-                    Assert::isArray($postdatas);
-                    Assert::notNull($postdatas);
-                    if ($users->getByUsername($postdatas['username']) !== false) {
-                        $mail->sendMailToUser($users->getByUsername($postdatas['username']));
-                    }
 
-                    header('Location: ' . Config::getBaseUrl() . '/');
-                }//end if
-            }// end if
-        } catch (UnauthorizeValueException) {
+            if ($error) {
+                unset($dataPost['password']);
+                unset($dataPost['confirmPassword']);
+                $this->view('frontoffice/signup.html.twig', ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => true, 'data' => $dataPost]);
+            } else {
+                $users->insertNewUser($dataPost);
+                $mail = new Mail(Config::getEmailSource());
+                Assert::isArray($dataPost);
+                Assert::notNull($dataPost);
+                Assert::notFalse($users->getByUsername($dataPost['username']));
+                $mail->sendMailToUser($users->getByUsername($dataPost['username']));
+                $message = "Votre compte est créé";
+                $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => false, 'data' => $dataPost]);
+            }
+        } catch (UnauthorizeValueException $e) {
         }
     }
 

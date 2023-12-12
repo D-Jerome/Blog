@@ -139,7 +139,7 @@ class Post extends BaseController
             Assert::notEmpty($data);
             Assert::string($key);
             Assert::notNull($data);
-            if (is_string($data) === true) {
+            if (is_string($data) === true && $key !== 'content') {
                 $dataPost[$key] = htmlentities($data);
             } else {
                 $dataPost[$key] = $data;
@@ -238,7 +238,6 @@ class Post extends BaseController
         }
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
         $statementPost->setcountComments($post->getCountCommentsByPostId($statementPost->getId()));
-        // $statementPost->username = ($post->getPostUsername($statementPost->getUserId()));
 
         $user = $this->session->getUser();
         $this->session->generateToken();
@@ -266,7 +265,7 @@ class Post extends BaseController
             Assert::string($key);
             Assert::notNull($data);
             Assert::string($data);
-            $dataComment[$key] = htmlentities($data);
+            $dataComment[$key] = $data;
         }
         $comment->insertNewComment($dataComment);
         //Message de prise en compte et de validation du commentaire par l'administrateur

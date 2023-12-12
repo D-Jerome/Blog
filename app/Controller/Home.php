@@ -54,8 +54,13 @@ class Home extends BaseController
     public function homeContact(): void
     {
         $error = false;
+        $message = '';
         $dataPost = [];
         $postdatas = (new HttpParams())->getParamsPost();
+        if (is_array($postdatas) === true && array_key_exists('re-email', $postdatas) && !empty($postdatas['re-email'])) {
+            $error = true;
+            $message = "<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email";
+        }
         Assert::isArray($postdatas);
         foreach ($postdatas as $key => $data) {
             Assert::notEmpty($data);
@@ -64,9 +69,13 @@ class Home extends BaseController
             Assert::string($data);
             $dataPost[$key] = htmlentities($data);
         }
-
         $mail = new Mail(Config::getEmailSource());
-        if ($mail->sendMailToAdmin($dataPost)) {
+        if (!$mail->sendMailToAdmin($dataPost)) {
+            $error = true;
+            $message = "<strong>Envoi a echoué</strong><br>L'envoi du message a échoué.<br>Rééssayez plus tard.";
+        }
+
+        if ($error == false) {
             $this->view(
                 'frontoffice/home.html.twig',
                 [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
@@ -75,8 +84,7 @@ class Home extends BaseController
         } else {
             $this->view(
                 'frontoffice/home.html.twig',
-                [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi a echoué</strong><br>
-            L\'envoi du message a échoué.<br>Rééssayez plus tard.', 'error' => true ]
+                ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => true ]
             );
         }
     }
