@@ -15,12 +15,10 @@ class Router
 
     /**
      * __construct : Construct all routes of config file
-     *
-     * @return void
      */
     public function __construct()
     {
-        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . '/../config/routes.json'), true);
+        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__.'/../config/routes.json'), true);
         if (true === \is_array($routes)) {
             foreach ($routes as $route) {
                 $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
@@ -45,7 +43,7 @@ class Router
                     return $route;
                 }
 
-                if (\Safe\preg_match_all("~^$routeMatcher$~", $request->getUri(), $params, \PREG_UNMATCHED_AS_NULL)) {
+                if (\Safe\preg_match_all("~^{$routeMatcher}$~", $request->getUri(), $params, \PREG_UNMATCHED_AS_NULL)) {
                     $paramsValues = [];
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[(string) $names] = $params[$key + 1][0];
@@ -71,8 +69,8 @@ class Router
     {
         $valid = false;
         $matchesKey = array_keys($matches);
-        $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
-        $getInstance = 'get' . $typeObj . 'Instance';
+        $objectManagerName = 'App\\Model\\Manager\\'.$typeObj.'Manager';
+        $getInstance = 'get'.$typeObj.'Instance';
         if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = $objectManagerName::$getInstance(Config::getDatasource());
             if (1 === $objectManager->verifyCouple($matches[$matchesKey[1]], $matches[$matchesKey[0]])) {

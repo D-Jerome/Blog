@@ -16,8 +16,7 @@ class RoleManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string,string> $datasource Database connection informations from config file
-     * @return void
+     * @param array<string,string> $datasource Database connection informations from config file
      */
     private function __construct(array $datasource)
     {

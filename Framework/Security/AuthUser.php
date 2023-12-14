@@ -13,8 +13,6 @@ class AuthUser
 
     /**
      * __construct keep auth user information
-     *
-     * @return void
      */
     public function __construct(
         /**
@@ -29,8 +27,7 @@ class AuthUser
          * username of connected user
          */
         protected string $username
-    ) {
-    }
+    ) {}
     // end __construct
 
     /**
@@ -74,8 +71,6 @@ class AuthUser
 
     /**
      * set Token value
-     *
-     * @return void
      */
     public function setToken(string $token)
     {

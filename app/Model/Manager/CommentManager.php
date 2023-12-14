@@ -18,8 +18,7 @@ class CommentManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string,string> $datasource Connection database informations
-     * @return void
+     * @param array<string,string> $datasource Connection database informations
      */
     public function __construct(array $datasource)
     {
@@ -49,10 +48,10 @@ class CommentManager extends BaseManager
      */
     public function getCommentsByPostId(int $id): array
     {
-        $sql = <<<SQL
-             SELECT * FROM comment com
-            WHERE com.post_id = ? and com.publish_state = true
-        SQL;
+        $sql = <<<'SQL'
+                 SELECT * FROM comment com
+                WHERE com.post_id = ? and com.publish_state = true
+            SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$id]);
@@ -67,10 +66,10 @@ class CommentManager extends BaseManager
      */
     public function getCountCommentsByPostId(int $id): int
     {
-        $sql = <<<SQL
-            SELECT com.id FROM comment com
-            WHERE p.id = ? and com.publish_state = true
-        SQL;
+        $sql = <<<'SQL'
+                SELECT com.id FROM comment com
+                WHERE p.id = ? and com.publish_state = true
+            SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
@@ -85,10 +84,10 @@ class CommentManager extends BaseManager
      */
     public function getCommentUsername(int $id): string
     {
-        $sql = <<<SQL
-            SELECT username FROM user
-            WHERE user.id = ?
-        SQL;
+        $sql = <<<'SQL'
+                SELECT username FROM user
+                WHERE user.id = ?
+            SQL;
         $query = $this->dbConnect->prepare($sql);
 
         $query->execute([$id]);
@@ -105,9 +104,9 @@ class CommentManager extends BaseManager
     public function getCommentsByUserId(int $id): array
     {
         $sql = <<<SQL
-            SELECT * FROM  $this->table
-            WHERE user_id = :user_id
-        SQL;
+                SELECT * FROM  {$this->table}
+                WHERE user_id = :user_id
+            SQL;
         $query = $this->dbConnect->prepare($sql);
 
         $query->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -120,27 +119,26 @@ class CommentManager extends BaseManager
     /**
      * insertNewComment ; inser new comment in database
      *
-     * @param  array<string, string> $params Data to insert
-     * @return void
+     * @param array<string, string> $params Data to insert
      */
     public function insertNewComment(array $params)
     {
         $sql = <<<SQL
-            INSERT INTO  $this->table (
-                                            content,
-                                            created_at,
-                                            modified_at,
-                                            post_id,
-                                            user_id
-                                            )
-            VALUES (
-                    :content,
-                    :created_at,
-                    :modified_at,
-                    :post_id,
-                    :user_id
-                    )
-        SQL;
+                INSERT INTO  {$this->table} (
+                                                content,
+                                                created_at,
+                                                modified_at,
+                                                post_id,
+                                                user_id
+                                                )
+                VALUES (
+                        :content,
+                        :created_at,
+                        :modified_at,
+                        :post_id,
+                        :user_id
+                        )
+            SQL;
         $query = $this->dbConnect->prepare($sql);
 
         $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -162,9 +160,9 @@ class CommentManager extends BaseManager
     public function verifyCouple(int $postId, int $commentId): int
     {
         $sql = <<<SQL
-            SELECT id FROM  $this->table
-            WHERE post_id = :postId AND id = :commentId
-        SQL;
+                SELECT id FROM  {$this->table}
+                WHERE post_id = :postId AND id = :commentId
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':postId', $postId);

@@ -25,8 +25,7 @@ abstract class BaseController
     /**
      * __construct :
      *
-     * @param  Route $route Route found
-     * @return void
+     * @param Route $route Route found
      */
     public function __construct(/**
          * route found
@@ -34,7 +33,7 @@ abstract class BaseController
         protected Route $route
     ) {
         $this->session = new Session();
-        $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
+        $loader = new FilesystemLoader(__DIR__.'/../app/templates');
         $this->twig = new Environment(
             $loader,
             [

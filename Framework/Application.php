@@ -21,8 +21,6 @@ final class Application
 
     /**
      * __construct
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -34,8 +32,6 @@ final class Application
 
     /**
      * router of application
-     *
-     * @return void
      */
     public function run()
     {
@@ -56,7 +52,7 @@ final class Application
             $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {
-                header('Location: ' . Config::getBaseUrl() . '/?auth=0');
+                header('Location: '.Config::getBaseUrl().'/?auth=0');
             }
 
             if ($route->isAuthorize($authRoles)) {
@@ -64,7 +60,7 @@ final class Application
                 if (\Safe\preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
                     $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
-                    \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, \PREG_UNMATCHED_AS_NULL);
+                    \Safe\preg_match_all("~^{$routeMatcher}$~", $this->request->getUri(), $params, \PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
 
                     foreach ($paramNames[1] as $key => $names) {
@@ -73,19 +69,19 @@ final class Application
                     $typeObj = strtolower(substr($controller, strrpos($controller, '\\') + 1));
                     $paramsKeys = array_keys($paramsValues);
                     foreach ($paramsKeys as $paramsKey) {
-                        if (stripos((string) $paramsKey, $typeObj . 'id') >= 0 && false !== stripos((string) $paramsKey, $typeObj . 'id')) {
+                        if (stripos((string) $paramsKey, $typeObj.'id') >= 0 && false !== stripos((string) $paramsKey, $typeObj.'id')) {
                             $id = $paramsValues[$paramsKey];
                         }
                     }// end foreach
 
-                    $route->$action($id);
+                    $route->{$action}($id);
                 } else {
-                    $route->$action();
+                    $route->{$action}();
                 }// end if
             }// end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
-            header('Location: ' . Config::getBaseUrl() . '/404');
+            header('Location: '.Config::getBaseUrl().'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
         }

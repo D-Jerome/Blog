@@ -83,13 +83,12 @@ class Mail
     /**
      * __construct : each data of email config
      *
-     * @param  array<string,bool|int|string> $config From the config file
-     * @return void
+     * @param array<string,bool|int|string> $config From the config file
      */
     public function __construct(array $config)
     {
         foreach ($config as $key => $value) {
-            $this->$key = $value;
+            $this->{$key} = $value;
         }
     }
     // end __construct
@@ -114,7 +113,7 @@ class Mail
 
         // Recipients
         $mail->setFrom($this->fromAddress, $this->fromName);
-        $mail->addAddress($user->getEmail(), $user->getFirstName() . ' ' . $user->getLastName());
+        $mail->addAddress($user->getEmail(), $user->getFirstName().' '.$user->getLastName());
         $mail->addReplyTo($this->replyToAddress, $this->replyToName);
         if (null !== $this->ccAddress) {
             $mail->addCC($this->ccAddress);
@@ -129,8 +128,8 @@ class Mail
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = 'Inscription à notre blog';
-        $mail->Body = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>' . $user->getUsername() . '</b> correspondant à votre email .' . $user->getEmail();
-        $mail->AltBody = 'Bienvenue, ' . $user->getFirstname() . ' ' . $user->getLastname() . ' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : ' . $user->getUsername() . ' correspondant à votre email . ' . $user->getEmail();
+        $mail->Body = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' <br> Merci de vous être inscrit sur notre blog.<br><br>Votre identifiant pour votre connexion est : <b>'.$user->getUsername().'</b> correspondant à votre email .'.$user->getEmail();
+        $mail->AltBody = 'Bienvenue, '.$user->getFirstname().' '.$user->getLastname().' Merci de vous être inscrit sur notre blog. Votre identifiant pour votre connexion est : '.$user->getUsername().' correspondant à votre email . '.$user->getEmail();
 
         try {
             $mail->send();
@@ -175,16 +174,16 @@ class Mail
                         Bonjour Admin, <br>
                         Voici un nouveau message d\'un utilisateur. <br>
                         <br>
-                        Message de : ' . $contact['name'] . '<br>
-                        Email : ' . $contact['email'] . '<br>
-                        Message : ' . $contact['content'] . '<br>
+                        Message de : '.$contact['name'].'<br>
+                        Email : '.$contact['email'].'<br>
+                        Message : '.$contact['content'].'<br>
                         ';
         $mail->AltBody = '
                         Bonjour Admin,
                         Voici un nouveau message d\'un utilisateur.
-                        Message de : ' . $contact['name'] . '
-                        Email : ' . $contact['email'] . '
-                        Message : ' . $contact['content'] . '
+                        Message de : '.$contact['name'].'
+                        Email : '.$contact['email'].'
+                        Message : '.$contact['content'].'
                         ';
 
         try {

@@ -169,11 +169,11 @@ class Post extends Entity
     /**
      * getExcerptContent
      */
-    public function getExcerptContent(): string | false
+    public function getExcerptContent(): false | string
     {
-        $excerpt = substr($this->content, 0, 60) . '...';
+        $excerpt = substr($this->content, 0, 60).'...';
         if (str_contains($excerpt, '<img ')) {
-            $excerpt = substr($this->content, 0, (int) strpos($this->content, '<img ')) . '...';
+            $excerpt = substr($this->content, 0, (int) strpos($this->content, '<img ')).'...';
         }
 
         return $excerpt;

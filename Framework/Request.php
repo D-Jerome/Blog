@@ -22,8 +22,6 @@ class Request
      * __construct
      *
      * @param string $baseUrl Base of url directory
-     *
-     * @return void
      */
     public function __construct(string $baseUrl)
     {

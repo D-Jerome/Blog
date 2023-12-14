@@ -49,8 +49,6 @@ class FilterBuilder extends Config
      * __construct : Construct filter data
      *
      * @param string $typeObj : Name of the object to list
-     *
-     * @return void
      */
     public function __construct(string $typeObj)
     {
@@ -67,12 +65,12 @@ class FilterBuilder extends Config
 
         foreach ($filterDatas as $filterData) {
             if (false !== parent::getSpecificData($category, $typeObj, $filterData)) {
-                $this->$filterData = (array) parent::getSpecificData($category, $typeObj, $filterData);
+                $this->{$filterData} = (array) parent::getSpecificData($category, $typeObj, $filterData);
             }
             if (null !== $this->list) {
                 if (!empty($this->list)) {
-                    $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($this->list) . 'Manager';
-                    $getInstance = 'get' . array_key_first($this->list) . 'Instance';
+                    $objectManagerName = 'App\\Model\\Manager\\'.array_key_first($this->list).'Manager';
+                    $getInstance = 'get'.array_key_first($this->list).'Instance';
                     $listNames = $objectManagerName::$getInstance(parent::getDatasource());
                     $this->listNames = $listNames->getAllToList($this->list[array_key_first($this->list)]);
                 }

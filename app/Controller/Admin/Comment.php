@@ -21,14 +21,12 @@ class Comment extends BaseController
     /**
      * comments: show comments of user
      *      or show all comments for admin
-     *
-     * @return void
      */
     public function comments()
     {
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
@@ -147,8 +145,6 @@ class Comment extends BaseController
 
     /**
      * moderationComments; prepare view to moderate comments
-     *
-     * @return void
      */
     public function moderationComments()
     {
@@ -158,7 +154,7 @@ class Comment extends BaseController
         Assert::notNull($this->session->getToken());
         $user->setToken($this->session->getToken());
 
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
@@ -221,9 +217,9 @@ class Comment extends BaseController
     public function unpublishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         CommentManager::getCommentInstance(Config::getDatasource())->unpublish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/comments'.$filterParams.'#'.$id);
     }
 
     /**
@@ -232,8 +228,8 @@ class Comment extends BaseController
     public function publishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         CommentManager::getCommentInstance(Config::getDatasource())->publish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/comments'.$filterParams.'#'.$id);
     }
 }

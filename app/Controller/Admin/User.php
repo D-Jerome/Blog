@@ -28,7 +28,7 @@ class User extends BaseController
         Assert::notNull($this->session->getToken());
         $user->setToken($this->session->getToken());
 
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
@@ -44,8 +44,8 @@ class User extends BaseController
         } else {
             Assert::keyExists($httpParams, 'listSelect');
             Assert::notNull($httpParams['listSelect']);
-            if (false !== $users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']])) {
-                $count = \count($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]));
+            if (false !== $users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']])) {
+                $count = \count($users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
             }
         }
 
@@ -132,7 +132,7 @@ class User extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
 
-        header('Location: ' . Config::getBaseUrl() . '/admin?user=modified');
+        header('Location: '.Config::getBaseUrl().'/admin?user=modified');
     }
 
     /**
@@ -143,9 +143,9 @@ class User extends BaseController
     public function disableUser(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         UserManager::getUserInstance(Config::getDatasource())->disable($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/users'.$filterParams.'#'.$id);
     }
 
     /**
@@ -156,15 +156,13 @@ class User extends BaseController
     public function enableUser(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         UserManager::getUserInstance(Config::getDatasource())->enable($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/users'.$filterParams.'#'.$id);
     }
 
     /**
      * addUser: show page to add user
-     *
-     * @return void
      */
     public function addUser()
     {

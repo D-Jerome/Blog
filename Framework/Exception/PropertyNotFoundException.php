@@ -10,8 +10,6 @@ class PropertyNotFoundException extends Exception
 {
     /**
      * __construct
-     *
-     * @return void
      */
     public function __construct(string $message = 'Property has not been found')
     {

@@ -36,15 +36,14 @@ class PDOConnection
     /**
      * __construct
      *
-     * @param  array<string, string> $datasource : database connection informations from config file
-     * @return void
+     * @param array<string, string> $datasource : database connection informations from config file
      */
     private function __construct(array $datasource)
     {
         $dsn = $datasource['dbtype'];
         $dsn .= $datasource['host'];
-        $dsn .= '; ' . $datasource['dbname'];
-        $dsn .= '; ' . $datasource['port'];
+        $dsn .= '; '.$datasource['dbname'];
+        $dsn .= '; '.$datasource['port'];
         $this->dbConnect = new PDO(
             $dsn,
             $datasource['username'],

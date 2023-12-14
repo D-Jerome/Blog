@@ -22,8 +22,7 @@ class UserManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string,string> $datasource Database connection informations from config file
-     * @return void
+     * @param array<string,string> $datasource Database connection informations from config file
      */
     private function __construct(array $datasource)
     {
@@ -50,7 +49,7 @@ class UserManager extends BaseManager
      *
      * @param string $login Username passed in login form
      */
-    public function getByUsername(string $login): User | false
+    public function getByUsername(string $login): false | User
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -68,7 +67,7 @@ class UserManager extends BaseManager
      *
      * @param string $email email of forget password form
      */
-    public function getByUserEmail(string $email): User | false
+    public function getByUserEmail(string $email): false | User
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -88,10 +87,10 @@ class UserManager extends BaseManager
      */
     public function getRoleById(int $id): string
     {
-        $sql = <<<SQL
-            SELECT r.name FROM role r
-            WHERE r.id = ?
-        SQL;
+        $sql = <<<'SQL'
+                SELECT r.name FROM role r
+                WHERE r.id = ?
+            SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->execute([$id]);
 
@@ -107,45 +106,45 @@ class UserManager extends BaseManager
     {
         if (isset($params['roleId'])) {
             $sql = <<<SQL
-                INSERT INTO $this->table (
-                                        firstname,
-                                        lastname,
-                                        username,
-                                        email,
-                                        password,
-                                        created_at,
-                                        role_id
-                                        )
-                VALUES (
-                        :firstname,
-                        :lastname,
-                        :username,
-                        :email ,
-                        :password,
-                        :created_at,
-                        :role_id
-                        )
-            SQL;
+                    INSERT INTO {$this->table} (
+                                            firstname,
+                                            lastname,
+                                            username,
+                                            email,
+                                            password,
+                                            created_at,
+                                            role_id
+                                            )
+                    VALUES (
+                            :firstname,
+                            :lastname,
+                            :username,
+                            :email ,
+                            :password,
+                            :created_at,
+                            :role_id
+                            )
+                SQL;
             $query = $this->dbConnect->prepare($sql);
         } else {
             $sql = <<<SQL
-                INSERT INTO $this->table (
-                                        firstname,
-                                        lastname,
-                                        username,
-                                        email,
-                                        password,
-                                        created_at
-                                        )
-                VALUES (
-                        :firstname,
-                        :lastname,
-                        :username,
-                        :email,
-                        :password,
-                        :created_at
-                        )
-            SQL;
+                    INSERT INTO {$this->table} (
+                                            firstname,
+                                            lastname,
+                                            username,
+                                            email,
+                                            password,
+                                            created_at
+                                            )
+                    VALUES (
+                            :firstname,
+                            :lastname,
+                            :username,
+                            :email,
+                            :password,
+                            :created_at
+                            )
+                SQL;
             $query = $this->dbConnect->prepare($sql);
         }// endif
 
@@ -182,20 +181,20 @@ class UserManager extends BaseManager
         $actualUser = $this->getById((int) $params['id']);
         unset($params['token']);
         foreach ($params as $k => $param) {
-            $getUser = 'get' . ucfirst($k);
+            $getUser = 'get'.ucfirst($k);
 
-            if ($param !== $actualUser->$getUser()) {
+            if ($actualUser->{$getUser}() !== $param) {
                 $field = $k;
                 if (0 !== \Safe\preg_match('~[A-Z]~', $k, $matches)) {
                     foreach ($matches as $match) {
-                        $field = str_replace($match, '_' . strtolower((string) $match), $field);
+                        $field = str_replace($match, '_'.strtolower((string) $match), $field);
                     }
                 }
                 $sql = <<<SQL
-                    UPDATE $this->table
-                    SET $field = :value
-                    WHERE id = :id
-                SQL;
+                        UPDATE {$this->table}
+                        SET {$field} = :value
+                        WHERE id = :id
+                    SQL;
                 $query = $this->dbConnect->prepare($sql);
                 $query->bindParam(':value', $param);
                 $query->bindParam(':id', $params['id']);
@@ -216,9 +215,9 @@ class UserManager extends BaseManager
     public function verifyCouple(int $id, string $username): int
     {
         $sql = <<<SQL
-            SELECT id FROM $this->table
-            WHERE id = :id AND username = :username
-        SQL;
+                SELECT id FROM {$this->table}
+                WHERE id = :id AND username = :username
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
@@ -236,9 +235,9 @@ class UserManager extends BaseManager
     public function disable(int $id): void
     {
         $sql = <<<SQL
-            UPDATE $this->table SET active = false
-            WHERE id = :id
-        SQL;
+                UPDATE {$this->table} SET active = false
+                WHERE id = :id
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
@@ -253,9 +252,9 @@ class UserManager extends BaseManager
     public function enable(int $id): void
     {
         $sql = <<<SQL
-            UPDATE $this->table SET active = true
-            WHERE id = :id
-        SQL;
+                UPDATE {$this->table} SET active = true
+                WHERE id = :id
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);

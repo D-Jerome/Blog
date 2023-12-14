@@ -10,8 +10,6 @@ class Session
 {
     /**
      * __construct : Start session if not already strated
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -32,8 +30,7 @@ class Session
     /**
      * connect : keep information of user un session
      *
-     * @param  User $user User connected
-     * @return void
+     * @param User $user User connected
      */
     public function connect(User $user)
     {

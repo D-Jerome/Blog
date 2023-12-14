@@ -23,10 +23,9 @@ abstract class BaseManager
     /**
      * __construct
      *
-     * @param  string               $table      Name of the table to query database
-     * @param  string               $object     Name of object to return information
-     * @param  array<string,string> $datasource Database connection informations
-     * @return void
+     * @param string               $table      Name of the table to query database
+     * @param string               $object     Name of object to return information
+     * @param array<string,string> $datasource Database connection informations
      */
     public function __construct(/**
          * table name
@@ -49,9 +48,9 @@ abstract class BaseManager
     public function getById(int $id)
     {
         $sql = <<<SQL
-            SELECT * FROM $this->table
-            WHERE id = ?
-        SQL;
+                SELECT * FROM {$this->table}
+                WHERE id = ?
+            SQL;
 
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
@@ -70,23 +69,23 @@ abstract class BaseManager
     public function getAllByParams(?array $params)
     {
         $sql = <<<SQL
-                SELECT * FROM $this->table
-        SQL;
+                    SELECT * FROM {$this->table}
+            SQL;
         $i = 0;
         if (null !== $params && [] !== $params) {
             foreach ($params as $key => $value) {
                 if (0 !== $i) {
-                    $sql .= <<<SQL
-                        AND
-                    SQL;
+                    $sql .= <<<'SQL'
+                            AND
+                        SQL;
                 } else {
-                    $sql .= <<<SQL
-                        WHERE
-                    SQL;
+                    $sql .= <<<'SQL'
+                            WHERE
+                        SQL;
                 }
                 $sql .= <<<SQL
-                    $key = $value
-                SQL;
+                        {$key} = {$value}
+                    SQL;
                 ++$i;
             }// end foreach
         }// end if
@@ -107,8 +106,8 @@ abstract class BaseManager
     public function getAllToList(string $field): array
     {
         $sql = <<<SQL
-                SELECT id, $field FROM $this->table
-        SQL;
+                    SELECT id, {$field} FROM {$this->table}
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
 
@@ -123,9 +122,9 @@ abstract class BaseManager
     public function getAllPublish(): array
     {
         $sql = <<<SQL
-                SELECT * FROM $this->table
-                WHERE publish_state = true
-        SQL;
+                    SELECT * FROM {$this->table}
+                    WHERE publish_state = true
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
 
@@ -146,49 +145,49 @@ abstract class BaseManager
     public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
     {
         $sql = <<<SQL
-            SELECT * FROM  $this->table
-        SQL;
-        if (null !== $params && [] !== $params) {
-            $sql .= <<<SQL
-                WHERE
+                SELECT * FROM  {$this->table}
             SQL;
+        if (null !== $params && [] !== $params) {
+            $sql .= <<<'SQL'
+                    WHERE
+                SQL;
             $i = false;
             foreach ($params as $k => $value) {
                 if ($i) {
-                    $sql .= <<<SQL
-                        AND
-                    SQL;
+                    $sql .= <<<'SQL'
+                            AND
+                        SQL;
                 }
                 $sql .= <<<SQL
-                    $k = $value
-                SQL;
+                        {$k} = {$value}
+                    SQL;
                 $i = true;
             }
         }// end if
 
         if (isset($field)) {
             $sql .= <<<SQL
-                ORDER BY $field
-            SQL;
+                    ORDER BY {$field}
+                SQL;
         }
         if (\in_array($dir, ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
-                $dir
-            SQL;
+                    {$dir}
+                SQL;
         } else {
-            $sql .= <<<SQL
-                DESC
-            SQL;
+            $sql .= <<<'SQL'
+                    DESC
+                SQL;
         }
         if (isset($limit)) {
             $sql .= <<<SQL
-                LIMIT $limit
-            SQL;
+                    LIMIT {$limit}
+                SQL;
             if (isset($page) && 1 !== $page) {
                 $offset = ($page - 1) * $limit;
                 $sql .= <<<SQL
-                    OFFSET $offset
-                SQL;
+                        OFFSET {$offset}
+                    SQL;
             }
         }// end if
 
@@ -208,19 +207,19 @@ abstract class BaseManager
     public function getAllFilteredCat(?array $params, ?int $listId): array
     {
         $sql = <<<SQL
-            SELECT $this->table.* FROM $this->table
-        SQL;
+                SELECT {$this->table}.* FROM {$this->table}
+            SQL;
         if (isset($listId)) {
             switch ($this->table) {
                 case 'post':
-                    $sql .= <<<SQL
-                                INNER JOIN post_category pc ON pc.post_id = post.id
-                            SQL;
+                    $sql .= <<<'SQL'
+                            INNER JOIN post_category pc ON pc.post_id = post.id
+                        SQL;
                     break;
                 case 'user':
-                    $sql .= <<<SQL
-                                INNER JOIN role ON role.id = user.role_id
-                            SQL;
+                    $sql .= <<<'SQL'
+                            INNER JOIN role ON role.id = user.role_id
+                        SQL;
                     break;
                 case 'comment':
                     break;
@@ -228,19 +227,19 @@ abstract class BaseManager
         }// end if
 
         if (null !== $params && [] !== $params) {
-            $sql .= <<<SQL
-                WHERE
-            SQL;
+            $sql .= <<<'SQL'
+                    WHERE
+                SQL;
             $i = false;
             foreach ($params as $k => $value) {
                 if ($i) {
-                    $sql .= <<<SQL
-                        AND
-                    SQL;
+                    $sql .= <<<'SQL'
+                            AND
+                        SQL;
                 }
                 $sql .= <<<SQL
-                    $k = $value
-                SQL;
+                        {$k} = {$value}
+                    SQL;
                 $i = true;
             }
         }// end if
@@ -250,15 +249,15 @@ abstract class BaseManager
                 case 'post':
                     if (null !== $listId) {
                         $sql .= <<<SQL
-                                    AND pc.category_id = $listId
-                                SQL;
+                                AND pc.category_id = {$listId}
+                            SQL;
                     }
                     break;
                 case 'user':
                     if (null !== $listId) {
                         $sql .= <<<SQL
-                                    AND role.id = $listId
-                                SQL;
+                                AND role.id = {$listId}
+                            SQL;
                     }
                     break;
                 case 'comment':
@@ -286,37 +285,37 @@ abstract class BaseManager
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
         $sql = <<<SQL
-            SELECT $this->table.* FROM $this->table
-        SQL;
+                SELECT {$this->table}.* FROM {$this->table}
+            SQL;
         switch ($this->table) {
             case 'post':
-                $sql .= <<<SQL
-                INNER JOIN post_category pc ON pc.post_id = post.id
-            SQL;
+                $sql .= <<<'SQL'
+                        INNER JOIN post_category pc ON pc.post_id = post.id
+                    SQL;
                 break;
             case 'user':
-                $sql .= <<<SQL
-                INNER JOIN role ON role.id = user.role_id
-            SQL;
+                $sql .= <<<'SQL'
+                        INNER JOIN role ON role.id = user.role_id
+                    SQL;
                 break;
             case 'comment':
                 break;
         }
 
         if (null !== $params && [] !== $params) {
-            $sql .= <<<SQL
-                WHERE
-            SQL;
+            $sql .= <<<'SQL'
+                    WHERE
+                SQL;
             $i = false;
             foreach ($params as $k => $value) {
                 if ($i) {
-                    $sql .= <<<SQL
-                        AND
-                    SQL;
+                    $sql .= <<<'SQL'
+                            AND
+                        SQL;
                 }
                 $sql .= <<<SQL
-                    $k = $value
-                SQL;
+                        {$k} = {$value}
+                    SQL;
                 $i = true;
             }
         }
@@ -324,15 +323,15 @@ abstract class BaseManager
             case 'post':
                 if (null !== $listId) {
                     $sql .= <<<SQL
-                    AND pc.category_id = $listId
-                SQL;
+                            AND pc.category_id = {$listId}
+                        SQL;
                 }
                 break;
             case 'user':
                 if (null !== $listId) {
                     $sql .= <<<SQL
-                    AND role.id = $listId
-                SQL;
+                            AND role.id = {$listId}
+                        SQL;
                 }
                 break;
             case 'comment':
@@ -341,29 +340,29 @@ abstract class BaseManager
 
         if (isset($field)) {
             $sql .= <<<SQL
-                ORDER BY $field
-            SQL;
+                    ORDER BY {$field}
+                SQL;
         }
 
         if (\in_array($dir, ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
-                $dir
-            SQL;
+                    {$dir}
+                SQL;
         } else {
-            $sql .= <<<SQL
-                DESC
-            SQL;
+            $sql .= <<<'SQL'
+                    DESC
+                SQL;
         }
 
         if (isset($limit)) {
             $sql .= <<<SQL
-                LIMIT $limit
-            SQL;
+                    LIMIT {$limit}
+                SQL;
             if (isset($page) && 1 !== $page) {
                 $offset = ($page - 1) * $limit;
                 $sql .= <<<SQL
-                    OFFSET $offset
-                SQL;
+                        OFFSET {$offset}
+                    SQL;
             }
         }
 
@@ -387,13 +386,13 @@ abstract class BaseManager
         $paramValue = implode(', ', $param);
         $valueString = implode(', ', $valueArray);
         $sql = <<<SQL
-            INSERT INTO $this->table ($paramValue) VALUES($valueString)
-        SQL;
+                INSERT INTO {$this->table} ({$paramValue}) VALUES({$valueString})
+            SQL;
         $req = $this->dbConnect->prepare($sql);
         $boundParam = [];
         foreach ($param as $paramName) {
             if (property_exists((object) $obj, $paramName)) {
-                $boundParam[$paramName] = $obj->$paramName;
+                $boundParam[$paramName] = $obj->{$paramName};
             } else {
                 throw new PropertyNotFoundException($this->object);
             }
@@ -411,8 +410,8 @@ abstract class BaseManager
     public function update($obj, array $param): void
     {
         $sql = <<<SQL
-            UPDATE $this->table SET
-        SQL;
+                UPDATE {$this->table} SET
+            SQL;
         $countParam = \count($param);
         $i = 0;
         foreach (array_keys($param) as $paramName) {
@@ -420,8 +419,8 @@ abstract class BaseManager
             if ('id' !== $paramName) {
                 $field = Text::camelCaseToSnakeCase($paramName);
                 $sql .= <<<SQL
-                    $field = :$field
-                SQL;
+                        {$field} = :{$field}
+                    SQL;
             }
 
             if ($i !== $countParam) {
@@ -429,9 +428,9 @@ abstract class BaseManager
             }
         }// end foreach
 
-        $sql .= <<<SQL
-            WHERE id = :id
-        SQL;
+        $sql .= <<<'SQL'
+                WHERE id = :id
+            SQL;
         $req = $this->dbConnect->prepare($sql);
         $param['id'] = $obj->getId();
         $boundParam = [];
@@ -455,8 +454,8 @@ abstract class BaseManager
     {
         try {
             $sql = <<<SQL
-                DELETE FROM $this->table WHERE id= ?
-            SQL;
+                    DELETE FROM {$this->table} WHERE id= ?
+                SQL;
             $query = $this->dbConnect->prepare($sql);
             $query->execute([$id]);
 
@@ -474,10 +473,10 @@ abstract class BaseManager
     public function unpublish(int $id): void
     {
         $sql = <<<SQL
-             UPDATE $this->table
-            SET publish_state = false
-            WHERE id = :id
-        SQL;
+                 UPDATE {$this->table}
+                SET publish_state = false
+                WHERE id = :id
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(PDO::FETCH_DEFAULT);
         $query->bindParam(':id', $id);
@@ -492,11 +491,11 @@ abstract class BaseManager
     public function publish(int $id): void
     {
         $sql = <<<SQL
-            UPDATE $this->table
-            SET publish_state = true,
-                publish_at = :publish_at
-            WHERE id = :id
-        SQL;
+                UPDATE {$this->table}
+                SET publish_state = true,
+                    publish_at = :publish_at
+                WHERE id = :id
+            SQL;
         $query = $this->dbConnect->prepare($sql);
         $now = (new DateTime('now'))->format('Y-m-d H:i:s');
         $query->setFetchMode(PDO::FETCH_DEFAULT);

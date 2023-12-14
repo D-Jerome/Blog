@@ -9,12 +9,11 @@ class Route
     /**
      * __construct : Construct Route
      *
-     * @param  string             $path       pattern of URI
-     * @param  string             $method     type of method (post,get)
-     * @param  string             $controller address of the controller to use
-     * @param  string             $action     name of function to use
-     * @param  array<int, string> $authRoles  : List of authorized Roles
-     * @return void
+     * @param string             $path       pattern of URI
+     * @param string             $method     type of method (post,get)
+     * @param string             $controller address of the controller to use
+     * @param string             $action     name of function to use
+     * @param array<int, string> $authRoles  : List of authorized Roles
      */
     public function __construct(
         /**
@@ -37,8 +36,7 @@ class Route
          * authorized roles for route
          */
         protected array $authRoles
-    ) {
-    }
+    ) {}
     // end __construct
 
     /**

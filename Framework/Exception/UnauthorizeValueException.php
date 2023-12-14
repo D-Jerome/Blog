@@ -10,8 +10,6 @@ class UnauthorizeValueException extends Exception
 {
     /**
      * __construct
-     *
-     * @return void
      */
     public function __construct(string $message = 'Unauthorize values')
     {

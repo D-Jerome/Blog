@@ -16,8 +16,7 @@ class CategoryManager extends BaseManager
     /**
      * __construct
      *
-     * @param  array<string,string> $datasource Connection datas
-     * @return void
+     * @param array<string,string> $datasource Connection datas
      */
     public function __construct(array $datasource)
     {

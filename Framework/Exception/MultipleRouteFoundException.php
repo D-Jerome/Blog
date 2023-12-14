@@ -10,8 +10,6 @@ class MultipleRouteFoundException extends Exception
 {
     /**
      * __construct
-     *
-     * @return void
      */
     public function __construct(string $message = 'More than 1 route has been found')
     {

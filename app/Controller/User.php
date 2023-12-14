@@ -57,7 +57,7 @@ class User extends BaseController
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
                 $this->session->connect($user);
-                header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+                header('Location: '.Config::getBaseUrl().'/admin/logged');
             } else {
                 $this->view(
                     'frontoffice/login.html.twig',
@@ -75,14 +75,12 @@ class User extends BaseController
 
     /**
      * login: show login form
-     *
-     * @return void
      */
     public function login()
     {
         $user = $this->session->getUser();
         if ($user instanceof \Framework\Security\AuthUser) {
-            header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+            header('Location: '.Config::getBaseUrl().'/admin/logged');
         }
         // afficher page de connection
 
@@ -96,8 +94,6 @@ class User extends BaseController
 
     /**
      * signUp : show sign up form
-     *
-     * @return void
      */
     public function signUp()
     {
@@ -115,8 +111,6 @@ class User extends BaseController
 
     /**
      * validationSignUp : Verify information of sign up
-     *
-     * @return void
      */
     public function validationSignUp()
     {
@@ -137,12 +131,12 @@ class User extends BaseController
                     $error = true;
                 }
                 Assert::string($data);
-                if (str_contains($k, 'username') && !\Safe\preg_match("|^(\w){8,}$|", $data)) {
+                if (str_contains($k, 'username') && !\Safe\preg_match('|^(\\w){8,}$|', $data)) {
                     $message = '<strong>Identifiant impossible</strong><br>Votre identifiant doit comporter plus de 8 caractères(chiffres, minuscules , majuscules et _ uniquement). ';
                     $error = true;
                 }
 
-                if (str_contains($k, 'password') && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
+                if (str_contains($k, 'password') && !\Safe\preg_match('|^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$|', $data)) {
                     $message = 'Mot de passe non sécurisé';
                     $error = true;
                 }
@@ -170,8 +164,8 @@ class User extends BaseController
             }
 
             if ($error) {
-                unset($dataPost['password']);
-                unset($dataPost['confirmPassword']);
+                unset($dataPost['password'], $dataPost['confirmPassword']);
+
                 $this->view('frontoffice/signup.html.twig', ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => true, 'data' => $dataPost]);
             } else {
                 $users->insertNewUser($dataPost);
@@ -189,19 +183,15 @@ class User extends BaseController
 
     /**
      * logout : Destroy session
-     *
-     * @return void
      */
     public function logout()
     {
         \Safe\session_destroy();
-        header('Location: ' . Config::getBaseUrl() . '/');
+        header('Location: '.Config::getBaseUrl().'/');
     }
 
     /**
      * forgetPwd : show for to obtain connection information
-     *
-     * @return void
      */
     public function forgetPwd()
     {
@@ -215,8 +205,6 @@ class User extends BaseController
 
     /**
      * sendUserConnectionMail
-     *
-     * @return void
      */
     public function sendUserConnectionMail()
     {

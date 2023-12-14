@@ -37,7 +37,7 @@ class Config
 
     public function __construct()
     {
-        self::$config = (object) \Safe\json_decode(\Safe\file_get_contents(__DIR__ . '/../config/config.json'), false);
+        self::$config = (object) \Safe\json_decode(\Safe\file_get_contents(__DIR__.'/../config/config.json'), false);
         self::$baseUrl = self::$config->baseUrl;
         self::$databaseConf = (array) self::$config->database;
         self::$emailConf = (array) self::$config->email;
@@ -56,19 +56,19 @@ class Config
     /**
      * Obtain result for only 1 specific data
      */
-    public static function getSpecificData(string $category, string $page, string $needle): object | false
+    public static function getSpecificData(string $category, string $page, string $needle): false | object
     {
-        if (false === isset(self::$config->$category)) {
+        if (false === isset(self::$config->{$category})) {
             return false;
         }
-        if (false === isset(self::$config->$category->$page)) {
+        if (false === isset(self::$config->{$category}->{$page})) {
             return false;
         }
-        if (false === isset(self::$config->$category->$page->$needle)) {
+        if (false === isset(self::$config->{$category}->{$page}->{$needle})) {
             return false;
         }
 
-        return self::$config->$category->$page->$needle;
+        return self::$config->{$category}->{$page}->{$needle};
     }
 
     /**

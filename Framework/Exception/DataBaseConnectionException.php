@@ -10,8 +10,6 @@ class DataBaseConnectionException extends Exception
 {
     /**
      * __construct
-     *
-     * @return void
      */
     public function __construct(string $message = "database connection doesn't work")
     {
