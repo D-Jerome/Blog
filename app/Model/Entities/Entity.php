@@ -1,26 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Entities;
 
 abstract class Entity
 {
     /**
      * __get
-     *
-     * @param  string|int $name
-     * @return string|int|null
      */
-    public function __get(string|int $name): null|string|int
+    public function __get(string | int $name): null | string | int
     {
         return $this->$name ?? null;
     }
 
-
     /**
      * __set
      *
-     * @param  mixed  $value Multiple types of values
-     * @return void
+     * @param mixed $value Multiple types of values
      */
     public function __set(string $name, mixed $value): void
     {
@@ -33,11 +30,8 @@ abstract class Entity
         }
     }
 
-
     /**
      * snakeCaseToCamelCase
-     *
-     * @return string
      */
     protected function snakeCaseToCamelCase(string $str): string
     {

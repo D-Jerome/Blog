@@ -1,59 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Model\Manager\UserManager;
-use Exception;
-use Framework\{Application, Config, Mail, Request, HttpParams};
 use Framework\BaseController;
-use Framework\Exception\PasswordPolicyException;
+use Framework\Config;
 use Framework\Exception\UnauthorizeValueException;
-use Framework\Security\AuthUser;
+use Framework\HttpParams;
+use Framework\Mail;
 use Webmozart\Assert\Assert;
 
 class User extends BaseController
 {
     /**
      * loginAuth : Verifiy password match
-     *
-     * @return void
      */
     public function loginAuth(): void
     {
         $users = UserManager::getUserInstance(Config::getDatasource());
         $paramsPost = (new HttpParams())->getParamsPost();
-        if (isset($paramsPost['login']) && is_string($paramsPost['login'])) {
+        if (isset($paramsPost['login']) && \is_string($paramsPost['login'])) {
             $user = $users->getByUsername($paramsPost['login']);
         }
-        if (isset($user) === false || $user === false) {
+        if (false === isset($user) || false === $user) {
             $user = [];
             $this->view(
                 'frontoffice/login.html.twig',
                 [
-                'baseUrl' => Config::getBaseUrl(),
-                'message' =>  '<strong>Erreur</strong><br>
+                    'baseUrl' => Config::getBaseUrl(),
+                    'message' => '<strong>Erreur</strong><br>
                     Vérifiez votre Identifiant/Mot de passe.' ,
-                'error' => true,
-                'authUser' => $user]
+                    'error'    => true,
+                    'authUser' => $user]
             );
             exit;
         }
 
-        if (false === ($user->getActive())) {
+        if (false === $user->getActive()) {
             $user = [];
             $this->view(
                 'frontoffice/login.html.twig',
                 [
-                'baseUrl' => Config::getBaseUrl(),
-                'message' => '<strong>Erreur</strong><br>
+                    'baseUrl' => Config::getBaseUrl(),
+                    'message' => '<strong>Erreur</strong><br>
                     Vérifiez votre Identifiant/Mot de passe.',
-                'error' => true,
-                'authUser' => $user
+                    'error'    => true,
+                    'authUser' => $user,
                 ]
             );
             exit;
         }
-        if (isset($paramsPost['password']) && is_string($paramsPost['password'])) {
+        if (isset($paramsPost['password']) && \is_string($paramsPost['password'])) {
             if (password_verify($paramsPost['password'], $user->getPassword())) {
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
@@ -63,17 +62,16 @@ class User extends BaseController
                 $this->view(
                     'frontoffice/login.html.twig',
                     [
-                    'baseUrl' => Config::getBaseUrl(),
-                    'message' => '<strong>Erreur</strong><br>
+                        'baseUrl' => Config::getBaseUrl(),
+                        'message' => '<strong>Erreur</strong><br>
                         Vérifiez votre Identifiant/Mot de passe.',
-                    'error' => true,
-                    'authUser' => $user
+                        'error'    => true,
+                        'authUser' => $user,
                     ]
                 );
-            }//end if
+            }// end if
         }
     }
-
 
     /**
      * login: show login form
@@ -86,16 +84,15 @@ class User extends BaseController
         if ($user instanceof \Framework\Security\AuthUser) {
             header('Location: ' . Config::getBaseUrl() . '/admin/logged');
         }
-        //afficher page de connection
+        // afficher page de connection
 
         $this->view(
             'frontoffice/login.html.twig',
             [
-            'baseUrl' => Config::getBaseUrl(),
-            'authUser' => $user]
+                'baseUrl'  => Config::getBaseUrl(),
+                'authUser' => $user]
         );
     }
-
 
     /**
      * signUp : show sign up form
@@ -111,11 +108,10 @@ class User extends BaseController
         $this->view(
             'frontoffice/signup.html.twig',
             [
-            'baseUrl' => Config::getBaseUrl(),
-            'authUser' => $user]
+                'baseUrl'  => Config::getBaseUrl(),
+                'authUser' => $user]
         );
     }
-
 
     /**
      * validationSignUp : Verify information of sign up
@@ -124,31 +120,30 @@ class User extends BaseController
      */
     public function validationSignUp()
     {
-
         try {
             $message = '';
             $error = false;
             $postdatas = (new HttpParams())->getParamsPost();
 
-            if (is_array($postdatas) === true && array_key_exists('re-email', $postdatas) === true && !empty($postdatas['re-email'])) {
+            if (true === \is_array($postdatas) && true === \array_key_exists('re-email', $postdatas) && !empty($postdatas['re-email'])) {
                 $error = true;
-                $message = "<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email";
+                $message = '<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email';
             }
             unset($postdatas['re-email']);
             Assert::isArray($postdatas);
             foreach ($postdatas as $k => $data) {
                 if (empty($data)) {
-                    $message = "Formulaire Vide";
+                    $message = 'Formulaire Vide';
                     $error = true;
                 }
                 Assert::string($data);
-                if (str_contains($k, "username") && !\Safe\preg_match("|^(\w){8,}$|", $data)) {
-                    $message = "<strong>Identifiant impossible</strong><br>Votre identifiant doit comporter plus de 8 caractères(chiffres, minuscules , majuscules et _ uniquement). ";
+                if (str_contains($k, 'username') && !\Safe\preg_match("|^(\w){8,}$|", $data)) {
+                    $message = '<strong>Identifiant impossible</strong><br>Votre identifiant doit comporter plus de 8 caractères(chiffres, minuscules , majuscules et _ uniquement). ';
                     $error = true;
                 }
 
-                if (str_contains($k, "password") && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
-                    $message = "Mot de passe non sécurisé";
+                if (str_contains($k, 'password') && !\Safe\preg_match("|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$|", $data)) {
+                    $message = 'Mot de passe non sécurisé';
                     $error = true;
                 }
             }
@@ -162,18 +157,17 @@ class User extends BaseController
             }
 
             $users = UserManager::getUserInstance(Config::getDatasource());
-            if (is_string($dataPost['username'])) {
+            if (\is_string($dataPost['username'])) {
                 if ($users->getByUsername($dataPost['username']) instanceof \App\Model\Entities\User) {
-                    $message = "Identifiant déjà utilisé";
+                    $message = 'Identifiant déjà utilisé';
                     $error = true;
                 }
 
                 if ($dataPost['password'] !== $dataPost['confirmPassword']) {
-                    $message = "Les mots de passes ne sont pas identiques";
+                    $message = 'Les mots de passes ne sont pas identiques';
                     $error = true;
                 }
             }
-
 
             if ($error) {
                 unset($dataPost['password']);
@@ -186,13 +180,12 @@ class User extends BaseController
                 Assert::notNull($dataPost);
                 Assert::notFalse($users->getByUsername($dataPost['username']));
                 $mail->sendMailToUser($users->getByUsername($dataPost['username']));
-                $message = "Votre compte est créé";
+                $message = 'Votre compte est créé';
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => false, 'data' => $dataPost]);
             }
         } catch (UnauthorizeValueException $e) {
         }
     }
-
 
     /**
      * logout : Destroy session
@@ -205,7 +198,6 @@ class User extends BaseController
         header('Location: ' . Config::getBaseUrl() . '/');
     }
 
-
     /**
      * forgetPwd : show for to obtain connection information
      *
@@ -216,11 +208,10 @@ class User extends BaseController
         $this->view(
             'frontoffice/forget.pwd.html.twig',
             [
-            'baseUrl' => Config::getBaseUrl()
+                'baseUrl' => Config::getBaseUrl(),
             ]
         );
     }
-
 
     /**
      * sendUserConnectionMail
@@ -230,21 +221,21 @@ class User extends BaseController
     public function sendUserConnectionMail()
     {
         $postDatas = (new HttpParams())->getParamsPost();
-        if (isset($postDatas['email']) && is_string($postDatas['email'])) {
-            $email = (string)filter_var($postDatas['email'], FILTER_SANITIZE_EMAIL);
+        if (isset($postDatas['email']) && \is_string($postDatas['email'])) {
+            $email = (string) filter_var($postDatas['email'], \FILTER_SANITIZE_EMAIL);
             $mail = new Mail(Config::getEmailSource());
             $users = UserManager::getUserInstance(Config::getDatasource());
 
             $userInfo = $users->getByUserEmail($email);
-            if ($userInfo === false) {
+            if (false === $userInfo) {
                 $this->view(
                     'frontoffice/forget.pwd.html.twig',
                     [
-                    'baseUrl' => Config::getBaseUrl(),
-                    'message' => '<strong>Utilisateur inconnu</strong><br>
+                        'baseUrl' => Config::getBaseUrl(),
+                        'message' => '<strong>Utilisateur inconnu</strong><br>
                                 Votre email nous est inconnu<br>
                                 Merci de vous rapprocher de votre administrateur.',
-                    'error' => true,
+                        'error' => true,
                     ]
                 );
             } else {
@@ -252,24 +243,24 @@ class User extends BaseController
                     $this->view(
                         'frontoffice/forget.pwd.html.twig',
                         [
-                        'baseUrl' => Config::getBaseUrl(),
-                        'message' => '<strong>Email envoyé</strong><br>
+                            'baseUrl' => Config::getBaseUrl(),
+                            'message' => '<strong>Email envoyé</strong><br>
                                     Un email de connexion vous a été envoyé.',
-                        'error' => false,
+                            'error' => false,
                         ]
                     );
                 } else {
                     $this->view(
                         'frontoffice/forget.pwd.html.twig',
                         [
-                        'baseUrl' => Config::getBaseUrl(),
-                        'message' => '<strong>Email non envoyé</strong><br>
+                            'baseUrl' => Config::getBaseUrl(),
+                            'message' => '<strong>Email non envoyé</strong><br>
                                     Un problème est survenu. Rééssayez plus tard.',
-                        'error' => true,
+                            'error' => true,
                         ]
                     );
-                }//endif
-            }//endif
+                }// endif
+            }// endif
         }// end if
     }
 }

@@ -1,61 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Controller\Pagination;
-use App\Model\Manager\{UserManager, BaseManager, RoleManager};
-use Framework\{Application,Config};
+use App\Model\Manager\RoleManager;
+use App\Model\Manager\UserManager;
 use Framework\BaseController;
+use Framework\Config;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
-use Framework\{Request, HttpParams};
+use Framework\HttpParams;
 use Framework\Security\AuthUser;
-use Framework\Session;
 use Webmozart\Assert\Assert;
 
 class User extends BaseController
 {
     /**
      * userList: show list of user
-     *
-     * @return void
      */
     public function userList(): void
     {
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        Assert::notNull(($this->session)->getToken());
-        $user->setToken(($this->session)->getToken());
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
 
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
         $users = UserManager::getUserInstance(Config::getDatasource());
         Assert::keyExists($httpParams, 'list');
         $count = 1;
-        if ($httpParams['list'] === null) {
-            if ($users->getAllByParams([]) !== false) {
-                $count = count($users->getAllByParams([]));
+        if (null === $httpParams['list']) {
+            if (false !== $users->getAllByParams([])) {
+                $count = \count($users->getAllByParams([]));
             }
         } else {
             Assert::keyExists($httpParams, 'listSelect');
             Assert::notNull($httpParams['listSelect']);
-            if ($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]) !== false) {
-                $count = count($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]));
+            if (false !== $users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']])) {
+                $count = \count($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]));
             }
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if ($httpParams['listSelect'] === null) {
-            $statementUsers = $users->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if (null === $httpParams['listSelect']) {
+            $statementUsers = $users->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
+            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
         }
 
         foreach ($statementUsers as $statementUser) {
@@ -63,22 +63,22 @@ class User extends BaseController
         }
 
         $dataView = [
-            'baseUrl' => Config::getBaseUrl(),
+            'baseUrl'        => Config::getBaseUrl(),
             'registredUsers' => $statementUsers,
-            'sort' => $filter->getSort(),
-            'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['dir'],
-            'sortBy' => $httpParams['sort'],
-            'listSort' => $httpParams['list'],
-            'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSelect'],
-            'listSelect' => $filter->getListSelect(),
-            'listNames' => $filter->getListNames(),
-            'pages' => $pages,
-            'authUser' => $user
+            'sort'           => $filter->getSort(),
+            'dir'            => $filter->getDir(),
+            'sortDir'        => $httpParams['dir'],
+            'sortBy'         => $httpParams['sort'],
+            'listSort'       => $httpParams['list'],
+            'list'           => $filter->getList() ,
+            'idListSelect'   => $httpParams['listSelect'],
+            'listSelect'     => $filter->getListSelect(),
+            'listNames'      => $filter->getListNames(),
+            'pages'          => $pages,
+            'authUser'       => $user,
         ];
 
-        if (isset($httpParams['user']) && $httpParams['user'] == 'modified') {
+        if (isset($httpParams['user']) && 'modified' === $httpParams['user']) {
             $dataView['message'] = '<strong>Modification réussie</strong><br>
                 La modification de l\'utilisateur a été éffectué.';
             $dataView['error'] = false;
@@ -87,11 +87,8 @@ class User extends BaseController
         $this->view('backoffice/admin.users.html.twig', $dataView);
     }
 
-
     /**
      * modifyUser
-     *
-     * @return void
      */
     public function modifyUser(int $id): void
     {
@@ -104,16 +101,13 @@ class User extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        Assert::notNull(($this->session)->getToken());
-        $user->setToken(($this->session)->getToken());
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
         $this->view('backoffice/modify.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'user' => $statementUser, 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
-
     /**
      * modifiedUser: action of user modification
-     *
-     * @return void
      */
     public function modifiedUser(int $id): void
     {
@@ -125,9 +119,9 @@ class User extends BaseController
             Assert::notEmpty($data);
             Assert::string($key);
             Assert::notNull($data);
-            if (is_string($data)) {
+            if (\is_string($data)) {
                 $dataUser[$key] = htmlentities($data);
-            } elseif (is_integer($data)) {
+            } elseif (\is_int($data)) {
                 $dataUser[$key] = $data;
             }
         }
@@ -138,40 +132,34 @@ class User extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
 
-
         header('Location: ' . Config::getBaseUrl() . '/admin?user=modified');
     }
-
 
     /**
      * disableUser
      *
-     * @param  int $id Id's user to disable
-     * @return void
+     * @param int $id Id's user to disable
      */
     public function disableUser(int $id): void
     {
-        $filterParams = ((new HttpParams())->getParamsReferer());
+        $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (UserManager::getUserInstance(Config::getDatasource()))->disable($id);
+        UserManager::getUserInstance(Config::getDatasource())->disable($id);
         header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
-
 
     /**
      * enableUser
      *
-     * @param  int $id Id's user to enable
-     * @return void
+     * @param int $id Id's user to enable
      */
     public function enableUser(int $id): void
     {
-        $filterParams = ((new HttpParams())->getParamsReferer());
+        $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (UserManager::getUserInstance(Config::getDatasource()))->enable($id);
+        UserManager::getUserInstance(Config::getDatasource())->enable($id);
         header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
     }
-
 
     /**
      * addUser: show page to add user
@@ -188,11 +176,8 @@ class User extends BaseController
         $this->view('backoffice/add.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }
 
-
     /**
      * addedUser: action after validate form => insert new user
-     *
-     * @return void
      */
     public function addedUser(): void
     {
@@ -209,9 +194,8 @@ class User extends BaseController
             $dataUser[$key] = htmlentities($data);
         }
 
-
         $validation = $user->insertNewUser($dataUser);
-        //verif si pas erreur
+        // verif si pas erreur
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
 

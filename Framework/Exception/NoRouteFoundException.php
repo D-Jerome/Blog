@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Exception;
 
 use Exception;
@@ -11,9 +13,9 @@ class NoRouteFoundException extends Exception
      *
      * @return void
      */
-    public function __construct(string $message = "No route has been found")
+    public function __construct(string $message = 'No route has been found')
     {
         parent::__construct($message, 0002);
     }
-    //end __construct()
+    // end __construct()
 }

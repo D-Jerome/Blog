@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
-use Framework\Helpers\Text;
 use App\Model\PDOConnection;
 use Framework\Exception\PropertyNotFoundException;
+use Framework\Helpers\Text;
 use PDO;
 use Safe\DateTime;
 
@@ -15,17 +17,14 @@ abstract class BaseManager
 {
     /**
      * Database connector
-     *
-     * @var PDO
      */
     public PDO $dbConnect;
-
 
     /**
      * __construct
      *
      * @param  string               $table      Name of the table to query database
-     * @param string $object Name of object to return information
+     * @param  string               $object     Name of object to return information
      * @param  array<string,string> $datasource Database connection informations
      * @return void
      */
@@ -40,12 +39,10 @@ abstract class BaseManager
     ) {
         $this->dbConnect = PDOConnection::getInstance($datasource);
     }
-    //end __construct
-
+    // end __construct
 
     /**
      * getById : get datas from Id
-     *
      *
      * @return T
      */
@@ -59,9 +56,9 @@ abstract class BaseManager
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute([$id]);
+
         return $query->fetch();
     }
-
 
     /**
      * getAllByParams : get all datas of filtered of objects
@@ -76,9 +73,9 @@ abstract class BaseManager
                 SELECT * FROM $this->table
         SQL;
         $i = 0;
-        if ($params !== null && $params !== []) {
+        if (null !== $params && [] !== $params) {
             foreach ($params as $key => $value) {
-                if ($i !== 0) {
+                if (0 !== $i) {
                     $sql .= <<<SQL
                         AND
                     SQL;
@@ -90,21 +87,21 @@ abstract class BaseManager
                 $sql .= <<<SQL
                     $key = $value
                 SQL;
-                $i++;
-            }//end foreach
+                ++$i;
+            }// end foreach
         }// end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->object);
         $query->execute();
+
         return $query->fetchAll();
     }
-
 
     /**
      * getAllOneField : collect all information on the field
      *
-     * @param  string $field Name of field to list
+     * @param  string                $field Name of field to list
      * @return array<string, string>
      */
     public function getAllToList(string $field): array
@@ -114,9 +111,9 @@ abstract class BaseManager
         SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 
     /**
      * getAllPublish: get all published object
@@ -131,18 +128,18 @@ abstract class BaseManager
         SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
-
 
     /**
      * getAllOrderLimit : get paged Posts
      *
-     * @param null|string                          $field  Name of field to order
-     * @param null|string                          $dir    Direction of order
-     * @param null|int                             $limit  Number of posts by page
-     * @param null|int                             $page   Current page
-     * @param null|array<string, int|string|bool > $params Differents parameters for WHERE clause
+     * @param string|null                          $field  Name of field to order
+     * @param string|null                          $dir    Direction of order
+     * @param int|null                             $limit  Number of posts by page
+     * @param int|null                             $page   Current page
+     * @param array<string, int|string|bool >|null $params Differents parameters for WHERE clause
      *
      * @return array<T>
      */
@@ -151,7 +148,7 @@ abstract class BaseManager
         $sql = <<<SQL
             SELECT * FROM  $this->table
         SQL;
-        if ($params !== null && $params !== []) {
+        if (null !== $params && [] !== $params) {
             $sql .= <<<SQL
                 WHERE
             SQL;
@@ -167,14 +164,14 @@ abstract class BaseManager
                 SQL;
                 $i = true;
             }
-        }//end if
+        }// end if
 
         if (isset($field)) {
             $sql .= <<<SQL
                 ORDER BY $field
             SQL;
         }
-        if (in_array($dir, ['ASC', 'DESC'])) {
+        if (\in_array($dir, ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
                 $dir
             SQL;
@@ -187,30 +184,29 @@ abstract class BaseManager
             $sql .= <<<SQL
                 LIMIT $limit
             SQL;
-            if (isset($page) && $page !== 1) {
+            if (isset($page) && 1 !== $page) {
                 $offset = ($page - 1) * $limit;
                 $sql .= <<<SQL
                     OFFSET $offset
                 SQL;
             }
-        }//end if
+        }// end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
-
 
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
      * @param  array<string,string|int>|null $params Differents parameters for WHERE clause
-     * @param  null|int                      $listId Id of List item to filter
+     * @param  int|null                      $listId Id of List item to filter
      * @return array<T>
      */
     public function getAllFilteredCat(?array $params, ?int $listId): array
     {
-
         $sql = <<<SQL
             SELECT $this->table.* FROM $this->table
         SQL;
@@ -228,10 +224,10 @@ abstract class BaseManager
                     break;
                 case 'comment':
                     break;
-            }//end switch
-        }//end if
+            }// end switch
+        }// end if
 
-        if ($params !== null && $params !== []) {
+        if (null !== $params && [] !== $params) {
             $sql .= <<<SQL
                 WHERE
             SQL;
@@ -247,19 +243,19 @@ abstract class BaseManager
                 SQL;
                 $i = true;
             }
-        }//end if
+        }// end if
 
         if (isset($listId)) {
             switch ($this->table) {
                 case 'post':
-                    if ($listId !== null) {
+                    if (null !== $listId) {
                         $sql .= <<<SQL
                                     AND pc.category_id = $listId
                                 SQL;
                     }
                     break;
                 case 'user':
-                    if ($listId !== null) {
+                    if (null !== $listId) {
                         $sql .= <<<SQL
                                     AND role.id = $listId
                                 SQL;
@@ -267,29 +263,28 @@ abstract class BaseManager
                     break;
                 case 'comment':
                     break;
-            }//end switch
-        }//end if
+            }// end switch
+        }// end if
 
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
-
 
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  null|string                        $field  Name of field to order
-     * @param  null|string                        $dir    Direction of order
-     * @param  null|int                           $limit  Number of posts by page
-     * @param  null|int                           $page   Current page
+     * @param  string|null                        $field  Name of field to order
+     * @param  string|null                        $dir    Direction of order
+     * @param  int|null                           $limit  Number of posts by page
+     * @param  int|null                           $page   Current page
      * @param  array<string,string|bool|int>|null $params Differents parameters for WHERE clause
-     * @param  null|int                           $listId Id of List item to filter
+     * @param  int|null                           $listId Id of List item to filter
      * @return array<T>
      */
     public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
     {
-
         $sql = <<<SQL
             SELECT $this->table.* FROM $this->table
         SQL;
@@ -308,8 +303,7 @@ abstract class BaseManager
                 break;
         }
 
-
-        if ($params !== null && $params !== []) {
+        if (null !== $params && [] !== $params) {
             $sql .= <<<SQL
                 WHERE
             SQL;
@@ -328,14 +322,14 @@ abstract class BaseManager
         }
         switch ($this->table) {
             case 'post':
-                if ($listId !== null) {
+                if (null !== $listId) {
                     $sql .= <<<SQL
                     AND pc.category_id = $listId
                 SQL;
                 }
                 break;
             case 'user':
-                if ($listId !== null) {
+                if (null !== $listId) {
                     $sql .= <<<SQL
                     AND role.id = $listId
                 SQL;
@@ -345,14 +339,13 @@ abstract class BaseManager
                 break;
         }
 
-
         if (isset($field)) {
             $sql .= <<<SQL
                 ORDER BY $field
             SQL;
         }
 
-        if (in_array($dir, ['ASC', 'DESC'])) {
+        if (\in_array($dir, ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
                 $dir
             SQL;
@@ -366,7 +359,7 @@ abstract class BaseManager
             $sql .= <<<SQL
                 LIMIT $limit
             SQL;
-            if (isset($page) && $page !== 1) {
+            if (isset($page) && 1 !== $page) {
                 $offset = ($page - 1) * $limit;
                 $sql .= <<<SQL
                     OFFSET $offset
@@ -376,31 +369,30 @@ abstract class BaseManager
 
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
-
 
     /**
      * insert : insert data in database
      *
-     * @param  T                     $obj
-     * @param  array<string, string> $param
-     * @return void
+     * @param  T                         $obj
+     * @param  array<string, string>     $param
      * @throws PropertyNotFoundException
      */
     public function insert($obj, array $param): void
     {
-        $paramNumber = count($param);
-        $valueArray = array_fill(1, $paramNumber, "?");
-        $paramValue = implode(", ", $param);
-        $valueString = implode(", ", $valueArray);
+        $paramNumber = \count($param);
+        $valueArray = array_fill(1, $paramNumber, '?');
+        $paramValue = implode(', ', $param);
+        $valueString = implode(', ', $valueArray);
         $sql = <<<SQL
             INSERT INTO $this->table ($paramValue) VALUES($valueString)
         SQL;
         $req = $this->dbConnect->prepare($sql);
         $boundParam = [];
         foreach ($param as $paramName) {
-            if (property_exists((object)$obj, $paramName)) {
+            if (property_exists((object) $obj, $paramName)) {
                 $boundParam[$paramName] = $obj->$paramName;
             } else {
                 throw new PropertyNotFoundException($this->object);
@@ -409,13 +401,11 @@ abstract class BaseManager
         $req->execute($boundParam);
     }
 
-
     /**
      * update : update data of an object
      *
-     * @param  T                    $obj
+     * @param  T                             $obj
      * @param  array<string,int|bool|string> $param
-     * @return void
      * @throws PropertyNotFoundException
      */
     public function update($obj, array $param): void
@@ -423,11 +413,11 @@ abstract class BaseManager
         $sql = <<<SQL
             UPDATE $this->table SET
         SQL;
-        $countParam = count($param);
+        $countParam = \count($param);
         $i = 0;
         foreach (array_keys($param) as $paramName) {
-            $i++;
-            if ($paramName !== 'id') {
+            ++$i;
+            if ('id' !== $paramName) {
                 $field = Text::camelCaseToSnakeCase($paramName);
                 $sql .= <<<SQL
                     $field = :$field
@@ -435,9 +425,9 @@ abstract class BaseManager
             }
 
             if ($i !== $countParam) {
-                $sql .= ", ";
+                $sql .= ', ';
             }
-        }//end foreach
+        }// end foreach
 
         $sql .= <<<SQL
             WHERE id = :id
@@ -446,22 +436,20 @@ abstract class BaseManager
         $param['id'] = $obj->getId();
         $boundParam = [];
         foreach ($param as $paramName => $paramValue) {
-            if (property_exists((object)$obj, $paramName)) {
+            if (property_exists((object) $obj, $paramName)) {
                 $boundParam[Text::camelCaseToSnakeCase($paramName)] = $paramValue;
             } else {
                 throw new PropertyNotFoundException($this->object);
             }
-        }//end foreach
+        }// end foreach
 
         $req->execute($boundParam);
     }
 
-
     /**
      * delete : delete data of id
      *
-     * @param  int $id Id of item to delete
-     * @return bool
+     * @param int $id Id of item to delete
      */
     public function delete(int $id): bool
     {
@@ -471,18 +459,17 @@ abstract class BaseManager
             SQL;
             $query = $this->dbConnect->prepare($sql);
             $query->execute([$id]);
+
             return true;
         } catch (\Exception) {
             return false;
         }
     }
 
-
     /**
      * [unpublish] : unpublish post
      *
-     * @param  int $id Post id
-     * @return void
+     * @param int $id Post id
      */
     public function unpublish(int $id): void
     {
@@ -497,12 +484,10 @@ abstract class BaseManager
         $query->execute();
     }
 
-
     /**
      * [publish] : publish post
      *
-     * @param  int $id Post id
-     * @return void
+     * @param int $id Post id
      */
     public function publish(int $id): void
     {

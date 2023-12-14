@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Exception;
 
 use Exception;
@@ -11,9 +13,9 @@ class UnauthorizeValueException extends Exception
      *
      * @return void
      */
-    public function __construct(string $message = "Unauthorize values")
+    public function __construct(string $message = 'Unauthorize values')
     {
         parent::__construct($message, 006);
     }
-    //end __construct()
+    // end __construct()
 }

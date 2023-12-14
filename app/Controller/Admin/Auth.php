@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
-use Framework\{Application,Config};
 use Framework\BaseController;
+use Framework\Config;
 use Framework\Security\AuthUser;
 use Framework\Session;
 use Webmozart\Assert\Assert;
@@ -12,22 +14,17 @@ class Auth extends BaseController
 {
     /**
      * loggedIn: show user administration panel
-     *
-     * @return void
      */
     public function loggedIn(): void
     {
-        $user = (($this->session)->getUser());
+        $user = $this->session->getUser();
         Assert::isInstanceof($user, AuthUser::class);
 
         $this->view('backoffice/' . $user->getRoleName() . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
-
     /**
      * logout m destroy session
-     *
-     * @return void
      */
     public function logout(): void
     {

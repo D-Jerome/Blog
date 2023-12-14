@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework;
 
-use Framework\Exception\InvalidUserException;
 use Framework\Exception\MultipleRouteFoundException;
 use Framework\Exception\NoRouteFoundException;
 
@@ -10,18 +11,13 @@ final class Application
 {
     /**
      * http request information
-     *
-     * @var Request
      */
     private readonly Request $request;
 
     /**
      *  router object
-     *
-     * @var Router
      */
     private readonly Router $router;
-
 
     /**
      * __construct
@@ -34,8 +30,7 @@ final class Application
         $this->request = new Request(Config::getbaseUrl());
         $this->router = new Router();
     }
-    //end __construct()
-
+    // end __construct()
 
     /**
      * router of application
@@ -44,7 +39,6 @@ final class Application
      */
     public function run()
     {
-
         try {
             $foundRoute = $this->router->findRoute($this->request);
             if (!$foundRoute instanceof \Framework\Route) {
@@ -55,10 +49,10 @@ final class Application
             $action = $foundRoute->getaction();
             $authRoles = $foundRoute->getAuthRoles();
             /**
-            *  controller object
-            *
-            * @var BaseController
-            */
+             *  controller object
+             *
+             * @var BaseController
+             */
             $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {
@@ -70,25 +64,25 @@ final class Application
                 if (\Safe\preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
                     $routeMatcher = \Safe\preg_replace('/\{(\w*)\}/', '(\S*)', $foundRoute->getPath());
                     $routeMatcher = str_replace('/', '\/', $routeMatcher);
-                    \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, PREG_UNMATCHED_AS_NULL);
+                    \Safe\preg_match_all("~^$routeMatcher$~", $this->request->getUri(), $params, \PREG_UNMATCHED_AS_NULL);
                     $paramsValues = [];
 
                     foreach ($paramNames[1] as $key => $names) {
                         $paramsValues[$names] = $params[$key + 1][0];
                     }
-                    $typeObj = strtolower(substr($controller, strrpos($controller, "\\") + 1));
+                    $typeObj = strtolower(substr($controller, strrpos($controller, '\\') + 1));
                     $paramsKeys = array_keys($paramsValues);
                     foreach ($paramsKeys as $paramsKey) {
-                        if (stripos((string)$paramsKey, $typeObj . 'id') >= 0 && stripos((string)$paramsKey, $typeObj . 'id') !== false) {
+                        if (stripos((string) $paramsKey, $typeObj . 'id') >= 0 && false !== stripos((string) $paramsKey, $typeObj . 'id')) {
                             $id = $paramsValues[$paramsKey];
                         }
-                    }//end foreach
+                    }// end foreach
 
                     $route->$action($id);
                 } else {
                     $route->$action();
-                }//end if
-            }//end if
+                }// end if
+            }// end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
             header('Location: ' . Config::getBaseUrl() . '/404');

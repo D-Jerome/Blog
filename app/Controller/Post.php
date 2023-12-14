@@ -1,28 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Model\Entities\Post as EntitiesPost;
+use App\Model\Manager\CategoryManager;
+use App\Model\Manager\CommentManager;
+use App\Model\Manager\PostManager;
 use Framework\BaseController;
-use App\Model\Manager\{CategoryManager, PostManager, CommentManager, UserManager};
-use Framework\{Application,Config};
+use Framework\Config;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
-use App\Controller\Pagination;
-use Framework\Security\AuthUser;
-use PDO;
 use Webmozart\Assert\Assert;
 
 class Post extends BaseController
 {
     /**
      * postsByCategory : 3 most recent Posts by category
-     *
-     * @return void
      */
     public function postsByCategory(): void
     {
-        //recherche des 3 derniers articles par catégories
+        // recherche des 3 derniers articles par catégories
         $categories = CategoryManager::getCategoryInstance(Config::getDatasource());
         $statementCategories = $categories->getAllByParams([]);
         $posts = PostManager::getPostInstance(Config::getDatasource());
@@ -35,7 +33,7 @@ class Post extends BaseController
                 $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
                 $statementPost->setUsername($posts->getPostUsername($statementPost->getUserId()));
             }
-            $postsByCategories =  array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
+            $postsByCategories = array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
         }
 
         $user = $this->session->getUser();
@@ -45,18 +43,15 @@ class Post extends BaseController
         }
 
         $user = [
-            'name' => $user->getUsername(),
-            'id' => $user->getId(),
-            'roleName' => $user->getRoleName()
+            'name'     => $user->getUsername(),
+            'id'       => $user->getId(),
+            'roleName' => $user->getRoleName(),
         ];
         $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
 
-
     /**
      * posts : recovers all informations for each publish article for display with paging
-     *
-     * @return void
      */
     public function posts(): void
     {
@@ -64,29 +59,28 @@ class Post extends BaseController
         if (!$user instanceof \Framework\Security\AuthUser) {
             $user = null;
         }
-        $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
         $httpParams = $this->groupFilterDataUser();
-        $sqlParams = [ "publish_state" => true];
+        $sqlParams = ['publish_state' => true];
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
         Assert::keyExists($httpParams, 'sort');
-        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
 
-        if ($httpParams['list'] === null) {
-            $count = count($posts->getAllPublish());
+        if (null === $httpParams['list']) {
+            $count = \count($posts->getAllPublish());
         } else {
-            $count = count($posts->getAllFilteredByParam((string)$httpParams['list'], (int)$httpParams['listSelect'], true));
+            $count = \count($posts->getAllFilteredByParam((string) $httpParams['list'], (int) $httpParams['listSelect'], true));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if ($httpParams['listSelect'] === null) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if (null === $httpParams['listSelect']) {
+            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
+            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
         }
-
 
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
@@ -97,29 +91,25 @@ class Post extends BaseController
         $this->view(
             'frontoffice/posts.html.twig',
             [
-                'baseUrl' => Config::getBaseUrl(),
-                'posts' => $statementPosts,
-                'sort' => $filter->getSort(),
-                'dir' => $filter->getDir(),
-                'sortDir' => $httpParams['dir'],
-                'sortBy' => $httpParams['sort'],
-                'listSort' => $httpParams['list'],
-                'list' => $filter->getList() ,
+                'baseUrl'      => Config::getBaseUrl(),
+                'posts'        => $statementPosts,
+                'sort'         => $filter->getSort(),
+                'dir'          => $filter->getDir(),
+                'sortDir'      => $httpParams['dir'],
+                'sortBy'       => $httpParams['sort'],
+                'listSort'     => $httpParams['list'],
+                'list'         => $filter->getList() ,
                 'idListSelect' => $httpParams['listSelect'],
-                'listSelect' => $filter->getListSelect(),
-                'listNames' => $filter->getListNames(),
-                'pages' => $pages,
-                'authUser' => $user
-                ]
+                'listSelect'   => $filter->getListSelect(),
+                'listNames'    => $filter->getListNames(),
+                'pages'        => $pages,
+                'authUser'     => $user,
+            ]
         );
     }
 
-
-
     /**
      * post : recovers article's informations (in @param) for display
-     *
-     * @return void
      */
     public function post(int $id): void
     {
@@ -130,7 +120,7 @@ class Post extends BaseController
         $statementPost->setUsername($post->getPostUsername($statementPost->getUserId()));
         $statementPost->setCategories($post->getCategoriesById($statementPost->getId()));
         foreach ($statementComments as $statementComment) {
-            $statementComment->setUsername((string)$comment->getCommentUsername($statementComment->getUserId()));
+            $statementComment->setUsername((string) $comment->getCommentUsername($statementComment->getUserId()));
         }
         $user = $this->session->getUser();
         if (!$user instanceof \Framework\Security\AuthUser) {

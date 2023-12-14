@@ -1,48 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use Framework\{Application,Config};
 use Framework\BaseController;
-use Framework\Route;
+use Framework\Config;
 use Framework\HttpParams;
+use Framework\Route;
 
 class Pagination extends BaseController
 {
     /**
      * actual page
-     *
-     * @var int
      */
     protected int $currentPage = 1;
 
     /**
      * number of previous page
-     *
-     * @var int
      */
     protected int $previousPage;
 
     /**
      * number of next page
-     *
-     * @var int
      */
     protected int $nextPage;
 
     /**
      * number of item by page
-     *
-     * @var int
      */
     protected int $perPage = 8;
 
-
     /**
      * __construct
-     *
-     * @param Route $route
-     * @param int   $totalPages
      */
     public function __construct(/**
          * route found of router
@@ -62,50 +52,37 @@ class Pagination extends BaseController
         }
     }
 
-
     /**
      * get the actual page
-     *
-     * @return int
      */
     public function getCurrentPage(): int
     {
         return $this->currentPage;
     }
 
-
     /**
      * setCurrentPage
-     *
-     * @return void
      */
     public function setCurrentPage(int $currentPage): void
     {
         $this->currentPage = $currentPage;
     }
 
-
     /**
      * getPerPage
-     *
-     * @return int
      */
     public function getPerPage(): int
     {
         return $this->perPage;
     }
 
-
     /**
      * setPerPage : set number of articles per page
-     *
-     * @return void
      */
     public function setPerPage(int $perPage): void
     {
         $this->perPage = $perPage;
     }
-
 
     /**
      * isActivePaging : Return information of pagination buttons
@@ -114,25 +91,24 @@ class Pagination extends BaseController
      */
     public function pagesInformations(): array
     {
-
-        if (((int) (ceil(($this->totalPages / $this->perPage))) === 1) || $this->totalPages === 0) {
+        if ((1 === (int) ceil($this->totalPages / $this->perPage)) || 0 === $this->totalPages) {
             $pages['nextActive'] = false;
             $pages['previousActive'] = false;
-        } elseif ($this->currentPage >= (ceil(($this->totalPages / $this->perPage)))) {
+        } elseif ($this->currentPage >= ceil($this->totalPages / $this->perPage)) {
             $pages['previousActive'] = true;
             $pages['nextActive'] = false;
-        } elseif ($this->currentPage === 1) {
+        } elseif (1 === $this->currentPage) {
             $pages['previousActive'] = false;
             $pages['nextActive'] = true;
         } else {
             $pages['nextActive'] = true;
             $pages['previousActive'] = true;
-        }//end if
+        }// end if
 
         $temp = (new HttpParams())->getParamsGet();
         unset($temp['page']);
         $query = isset($temp) ? http_build_query($temp) : '';
-        if ($query !== '' && $query !== '0') {
+        if ('' !== $query && '0' !== $query) {
             $query = "&$query";
         }
         $pages['previousUri'] = Config::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;

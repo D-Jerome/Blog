@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
 use App\Model\Entities\Category;
 use App\Model\Entities\Post;
-use Safe\DateTime;
-use Framework\Application;
 use Framework\Helpers\Text;
-use Framework\PDOConnection;
-use Framework\Request;
 use PDO;
+use Safe\DateTime;
 
 /**
  * Post Model
@@ -19,6 +18,7 @@ use PDO;
 class PostManager extends BaseManager
 {
     private static ?PostManager $postInstance = null;
+
     /**
      * [ __construct]
      *
@@ -29,15 +29,12 @@ class PostManager extends BaseManager
     {
         parent::__construct('post', Post::class, $datasource);
     }
-    //end _construct
-
+    // end _construct
 
     /**
      * Instance of manager
      *
      * @param array<string,string> $datasource
-     *
-     * @return PostManager
      */
     public static function getPostInstance(array $datasource): PostManager
     {
@@ -48,11 +45,10 @@ class PostManager extends BaseManager
         return self::$postInstance;
     }
 
-
     /**
      * GetCategoriesById : all Categories of post
      *
-     * @param  int $id Id of post
+     * @param  int             $id Id of post
      * @return array<Category>
      */
     public function getCategoriesById(int $id): array
@@ -66,18 +62,18 @@ class PostManager extends BaseManager
         $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_CLASS, Category::class);
         $statement->execute([$id]);
+
         return $statement->fetchAll();
     }
-
 
     /**
      * getAllFilteredByParam : get all datas of filtered of objects
      *
-     * @param  string     $paramItem  Name of field to filter
-     * @param  int|string $paramValue Value of field to filter
+     * @param  string      $paramItem  Name of field to filter
+     * @param  int|string  $paramValue Value of field to filter
      * @return array<Post>
      */
-    public function getAllFilteredByParam(string $paramItem, string|int $paramValue, null|bool $publish = false): array
+    public function getAllFilteredByParam(string $paramItem, string | int $paramValue, null | bool $publish = false): array
     {
         $sql = <<<SQL
                 SELECT *
@@ -85,7 +81,7 @@ class PostManager extends BaseManager
                 INNER JOIN post_category pc ON pc.post_id = $this->table.id
                 WHERE pc.category_id = $paramValue
         SQL;
-        if ($publish === true) {
+        if (true === $publish) {
             $sql .= <<<SQL
                     AND publish_state = TRUE
             SQL;
@@ -93,14 +89,14 @@ class PostManager extends BaseManager
 
         $query = $this->dbConnect->prepare($sql);
         $query->execute();
+
         return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
     }
-
 
     /**
      * [getPostsbyCategory] : get all posts linked to Category selected
      *
-     * @param  Category $category Category object
+     * @param  Category    $category Category object
      * @return array<Post>
      */
     public function getPostsbyCategory(Category $category): array
@@ -117,28 +113,25 @@ class PostManager extends BaseManager
         $query->execute([$category->getId()]);
         $statementByCategories = $query->fetchAll();
         foreach ($statementByCategories as $statementByCategory) {
-            $statementByCategory->categories =  $this->getCategoriesById(
+            $statementByCategory->categories = $this->getCategoriesById(
                 $statementByCategory->getId()
             );
-            $statementByCategory->countComments = (int)$this->getCountCommentsByPostId(
+            $statementByCategory->countComments = (int) $this->getCountCommentsByPostId(
                 $statementByCategory->getId()
             );
-            $statementByCategory->username =  (
+            $statementByCategory->username =
                 $this->getPostUsername(
                     $statementByCategory->getUserId()
-                )
-            );
-        }//end foreach
+                );
+        }// end foreach
 
         return $statementByCategories;
     }
 
-
     /**
      * [getCountCommentsByPostId] : count comments of post
      *
-     * @param  int $id Post id
-     * @return int
+     * @param int $id Post id
      */
     public function getCountCommentsByPostId(int $id): int
     {
@@ -149,15 +142,14 @@ class PostManager extends BaseManager
         SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->execute([$id]);
+
         return $statement->rowcount();
     }
-
 
     /**
      * [getPostUsername] : get username from user_id
      *
-     * @param  int $id User id
-     * @return string
+     * @param int $id User id
      */
     public function getPostUsername(int $id): string
     {
@@ -167,16 +159,15 @@ class PostManager extends BaseManager
         SQL;
         $query = $this->dbConnect->prepare($sql);
         $query->execute([$id]);
-        return (string)$query->fetchColumn();
-    }
 
+        return (string) $query->fetchColumn();
+    }
 
     /**
      * [verifyCouple] : verify the existance of a post with id and slug pass in address
      *
-     * @param  int    $id   id of post
-     * @param  string $slug Slug of post
-     * @return int
+     * @param int    $id   id of post
+     * @param string $slug Slug of post
      */
     public function verifyCouple(int $id, string $slug): int
     {
@@ -189,19 +180,18 @@ class PostManager extends BaseManager
         $query->bindParam(':id', $id);
         $query->bindParam(':slug', $slug);
         $query->execute();
+
         return $query->rowCount();
     }
-
 
     /**
      * [insertNewPost] : Create a new post (unpublished post)
      *
      * @param  array<string, array<int,string>|string|int|null> $params Information to create a new post
-     * @return int : Last PostId
+     * @return int                                              : Last PostId
      */
     public function insertNewPost(array $params): int
     {
-
         $sql = <<<SQL
             INSERT INTO $this->table (
                 name,
@@ -214,8 +204,8 @@ class PostManager extends BaseManager
             VALUES (:name , :slug , :content, :created_at, :user_id, :modified_at)
         SQL;
         $query = $this->dbConnect->prepare($sql);
-        if (is_string($params['name'])) {
-            $slug = Text::toSlug((string)$params['name']);
+        if (\is_string($params['name'])) {
+            $slug = Text::toSlug((string) $params['name']);
         }
         $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
 
@@ -227,8 +217,8 @@ class PostManager extends BaseManager
         $query->bindParam(':modified_at', $created_at);
         $query->execute();
 
-        $postId = (int)$this->dbConnect->lastInsertId();
-        if (isset($params['categoryId']) && (is_array($params['categoryId']))) {
+        $postId = (int) $this->dbConnect->lastInsertId();
+        if (isset($params['categoryId']) && \is_array($params['categoryId'])) {
             $categories = $params['categoryId'];
             foreach ($categories as $category) {
                 $sql = <<<SQL
@@ -239,8 +229,8 @@ class PostManager extends BaseManager
                 $query->bindParam(':post_id', $postId);
                 $query->bindParam(':category_id', $category);
                 $query->execute();
-            }//end foreach
-        }//end if
+            }// end foreach
+        }// end if
 
         return $postId;
     }

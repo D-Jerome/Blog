@@ -1,25 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Helpers;
 
-use App\Model\Manager\CategoryManager;
-use Framework\Application;
 use Framework\Config;
-use Webmozart\Assert\Assert;
 
 class FilterBuilder extends Config
 {
     /**
      * List of Sortable Item
      *
-     * @var array<string,string> $sort
+     * @var array<string,string>
      */
     private array $sort;
 
     /**
      * direction of sort
      *
-     * @var array<string,string> $dir
+     * @var array<string,string>
      */
     private array $dir;
 
@@ -27,30 +26,29 @@ class FilterBuilder extends Config
      * Table and field to filter the list
      *  Object => field
      *
-     * @var array<string,string>|null $list
+     * @var array<string,string>|null
      */
-    private ?array $list = null ;
+    private ?array $list = null;
 
     /**
      * Name of the list
      * param Item of object => Name display
      *
-     * @var array<string,string>|null $listSelect
+     * @var array<string,string>|null
      */
     private ?array $listSelect = null;
 
     /**
      * Items of the list
      *
-     * @var array<int,string>|null $listNames
+     * @var array<int,string>|null
      */
     private ?array $listNames = null;
-
 
     /**
      * __construct : Construct filter data
      *
-     * @param string    $typeObj : Name of the object to list
+     * @param string $typeObj : Name of the object to list
      *
      * @return void
      */
@@ -64,14 +62,14 @@ class FilterBuilder extends Config
             'sort',
             'dir',
             'list',
-            'listSelect'
+            'listSelect',
         ];
 
         foreach ($filterDatas as $filterData) {
-            if ((parent::getSpecificData($category, $typeObj, $filterData)) != false) {
-                    $this->$filterData = (array)parent::getSpecificData($category, $typeObj, $filterData);
+            if (false !== parent::getSpecificData($category, $typeObj, $filterData)) {
+                $this->$filterData = (array) parent::getSpecificData($category, $typeObj, $filterData);
             }
-            if (!is_null($this->list)) {
+            if (null !== $this->list) {
                 if (!empty($this->list)) {
                     $objectManagerName = 'App\\Model\\Manager\\' . array_key_first($this->list) . 'Manager';
                     $getInstance = 'get' . array_key_first($this->list) . 'Instance';
@@ -81,8 +79,7 @@ class FilterBuilder extends Config
             }
         }
     }
-    //end __construct()
-
+    // end __construct()
 
     /**
      * getSort: Type and FR translate
@@ -91,9 +88,8 @@ class FilterBuilder extends Config
      */
     public function getSort(): array
     {
-        return (array)$this->sort;
+        return (array) $this->sort;
     }
-
 
     /**
      * getDir: Type and FR translate
@@ -102,9 +98,8 @@ class FilterBuilder extends Config
      */
     public function getDir(): array
     {
-        return (array)$this->dir;
+        return (array) $this->dir;
     }
-
 
     /**
      * getCategories : Type and FR translate
@@ -113,9 +108,8 @@ class FilterBuilder extends Config
      */
     public function getList(): ?array
     {
-        return (array)$this->list;
+        return (array) $this->list;
     }
-
 
     /**
      * getListSelect
@@ -124,7 +118,7 @@ class FilterBuilder extends Config
      */
     public function getListSelect(): ?array
     {
-        return (array)$this->listSelect;
+        return (array) $this->listSelect;
     }
 
     /**

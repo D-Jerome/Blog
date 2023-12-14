@@ -1,29 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework;
 
 use Framework\Security\Session;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 use Twig\Extra\Intl\IntlExtension;
+use Twig\Loader\FilesystemLoader;
 use Webmozart\Assert\Assert;
 
 abstract class BaseController
 {
     /**
      * twig environment
-     *
-     * @var Environment
      */
     protected Environment $twig;
 
     /**
      * session information
-     *
-     * @var Session
      */
     protected Session $session;
-
 
     /**
      * __construct :
@@ -36,37 +33,31 @@ abstract class BaseController
          */
         protected Route $route
     ) {
-
         $this->session = new Session();
         $loader = new FilesystemLoader(__DIR__ . '/../app/templates');
         $this->twig = new Environment(
             $loader,
             [
-            // 'cache' => __DIR__ . '/../app/var/cache',
+                // 'cache' => __DIR__ . '/../app/var/cache',
             ]
         );
         $this->twig->addExtension(new IntlExtension());
     }
-    //end __construct
-
+    // end __construct
 
     /**
      * getRoute
-     *
-     * @return Route
      */
     protected function getRoute(): Route
     {
         return $this->route;
     }
 
-
     /**
      * view : Twig Template view construct
      *
-     * @param  string                                                           $template Name of the template
-     * @param  array<string,mixed> $params   Params to show in template
-     * @return void
+     * @param string              $template Name of the template
+     * @param array<string,mixed> $params   Params to show in template
      */
     protected function view(string $template, array $params): void
     {
@@ -74,7 +65,6 @@ abstract class BaseController
         echo $this->twig->render($template, $params);
         \Safe\ob_end_flush();
     }
-
 
     /**
      * isAuthorize: verify if user has the right to access to the page
@@ -84,8 +74,7 @@ abstract class BaseController
      */
     public function isAuthorize(array $authRoles)
     {
-
-        if (in_array('all', $authRoles, true)) {
+        if (\in_array('all', $authRoles, true)) {
             return true;
         }
 
@@ -95,51 +84,47 @@ abstract class BaseController
             return false;
         }
 
-        if (!in_array($user->getRoleName(), $authRoles, true)) {
+        if (!\in_array($user->getRoleName(), $authRoles, true)) {
             return false;
         }
+
         return $this->tokenVerify();
     }
-
 
     /**
      * ckeck and group filter information pass by user
      *
-     * @return array<string,null|string|int>
+     * @return array<string,string|int|null>
      */
     public function groupFilterDataUser(): array
     {
         $filterReturn = (new HttpParams())->getParamsGet();
-        $filterReturn['sort'] = isset(($filterReturn)['sort']) ? (string)($filterReturn['sort']) : 'createdAt';
-        $filterReturn['dir'] = isset(($filterReturn)['dir']) ? (string)($filterReturn['dir']) : 'DESC';
-        $filterReturn['list'] = empty(($filterReturn)['list']) ? null : (string)($filterReturn)['list'];
-        if (isset(($filterReturn)['listSelect'])) {
-            $filterReturn['listSelect'] = ($filterReturn['listSelect']) !== '---' ? $filterReturn['listSelect'] : null;
+        $filterReturn['sort'] = isset($filterReturn['sort']) ? (string) ($filterReturn['sort']) : 'createdAt';
+        $filterReturn['dir'] = isset($filterReturn['dir']) ? (string) ($filterReturn['dir']) : 'DESC';
+        $filterReturn['list'] = empty($filterReturn['list']) ? null : (string) ($filterReturn)['list'];
+        if (isset($filterReturn['listSelect'])) {
+            $filterReturn['listSelect'] = '---' !== $filterReturn['listSelect'] ? $filterReturn['listSelect'] : null;
         } else {
             $filterReturn['listSelect'] = null;
         }
 
-        if ($filterReturn['listSelect'] === null && $filterReturn['list'] !== null) {
+        if (null === $filterReturn['listSelect'] && null !== $filterReturn['list']) {
             $filterReturn['list'] = null;
         }
 
-        if ($filterReturn['list'] === null && $filterReturn['listSelect'] !== null) {
+        if (null === $filterReturn['list'] && null !== $filterReturn['listSelect']) {
             $filterReturn['listSelect'] = null;
         }
 
         return $filterReturn;
     }
 
-
     /**
      * CSRF token
-     *
-     * @return bool
      */
     protected function tokenVerify(): bool
     {
-
-        if ($this->getRoute()->getMethod() !== 'POST') {
+        if ('POST' !== $this->getRoute()->getMethod()) {
             return true;
         }
         $postDatas = (new HttpParams())->getParamsPost();

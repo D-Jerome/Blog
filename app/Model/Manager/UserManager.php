@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
 use App\Model\Entities\Role;
 use App\Model\Entities\User;
 use PDO;
 use Safe\DateTime;
-use PhpParser\Node\Stmt\Else_;
 
 /**
  * @extends BaseManager <User>
@@ -15,11 +16,8 @@ class UserManager extends BaseManager
 {
     /**
      * User Instance
-     *
-     * @var UserManager|null
      */
     private static ?UserManager $userInstance = null;
-
 
     /**
      * __construct
@@ -31,15 +29,12 @@ class UserManager extends BaseManager
     {
         parent::__construct('user', User::class, $datasource);
     }
-    //end __construct
-
+    // end __construct
 
     /**
      * Instance of manager
      *
      * @param array<string,string> $datasource
-     *
-     * @return UserManager
      */
     public static function getUserInstance(array $datasource): UserManager
     {
@@ -50,14 +45,12 @@ class UserManager extends BaseManager
         return self::$userInstance;
     }
 
-
     /**
      * getByUsername : get User Object of the user
      *
-     * @param  string $login Username passed in login form
-     * @return User|false
+     * @param string $login Username passed in login form
      */
-    public function getByUsername(string $login): User|false
+    public function getByUsername(string $login): User | false
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -66,17 +59,16 @@ class UserManager extends BaseManager
         if ($result instanceof \App\Model\Entities\User) {
             return $result;
         }
+
         return false;
     }
-
 
     /**
      * getByUseremail : get User Object of the user
      *
-     * @param  string $email email of forget password form
-     * @return User|false
+     * @param string $email email of forget password form
      */
-    public function getByUserEmail(string $email): User|false
+    public function getByUserEmail(string $email): User | false
     {
         $statement = $this->dbConnect->prepare("SELECT * FROM {$this->table} WHERE email = ?");
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
@@ -85,15 +77,14 @@ class UserManager extends BaseManager
         if ($result instanceof \App\Model\Entities\User) {
             return $result;
         }
+
         return false;
     }
-
 
     /**
      * getRoleById : get Role object of the user-role-id
      *
-     * @param  int $id Id of the Role of the user
-     * @return string
+     * @param int $id Id of the Role of the user
      */
     public function getRoleById(int $id): string
     {
@@ -103,19 +94,17 @@ class UserManager extends BaseManager
         SQL;
         $statement = $this->dbConnect->prepare($sql);
         $statement->execute([$id]);
-        return (string)$statement->fetchColumn();
-    }
 
+        return (string) $statement->fetchColumn();
+    }
 
     /**
      * insertNewUser : add new user in database
      *
-     * @param  array<string,string> $params User information
-     * @return int
+     * @param array<string,string> $params User information
      */
     public function insertNewUser(array $params): int
     {
-
         if (isset($params['roleId'])) {
             $sql = <<<SQL
                 INSERT INTO $this->table (
@@ -158,16 +147,15 @@ class UserManager extends BaseManager
                         )
             SQL;
             $query = $this->dbConnect->prepare($sql);
-        }//endif
+        }// endif
 
         if (isset($params['password'])) {
-            $password = password_hash($params['password'], PASSWORD_BCRYPT);
+            $password = password_hash($params['password'], \PASSWORD_BCRYPT);
         } else {
-            $password = password_hash('default', PASSWORD_BCRYPT);
+            $password = password_hash('default', \PASSWORD_BCRYPT);
         }
 
         $created_at = (new DateTime('now'))->format('Y-m-d H:i:s');
-
 
         $query->bindParam(':firstname', $params['firstname']);
         $query->bindParam(':lastname', $params['lastname']);
@@ -180,32 +168,30 @@ class UserManager extends BaseManager
         }
 
         $query->execute();
-        return (int)$this->dbConnect->lastInsertId();
-    }
 
+        return (int) $this->dbConnect->lastInsertId();
+    }
 
     /**
      * updateUser : Update user information
      *
-     * @param  array<string,string|int> $params New data user
-     * @return int
+     * @param array<string,string|int> $params New data user
      */
     public function updateUser(array $params): int
     {
-
-        $actualUser = $this->getById((int)$params['id']);
+        $actualUser = $this->getById((int) $params['id']);
         unset($params['token']);
         foreach ($params as $k => $param) {
             $getUser = 'get' . ucfirst($k);
 
-            if ($param != $actualUser->$getUser()) {
+            if ($param !== $actualUser->$getUser()) {
                 $field = $k;
-                if (\Safe\preg_match('~[A-Z]~', $k, $matches) !== 0) {
+                if (0 !== \Safe\preg_match('~[A-Z]~', $k, $matches)) {
                     foreach ($matches as $match) {
                         $field = str_replace($match, '_' . strtolower((string) $match), $field);
                     }
                 }
-                $sql =  <<<SQL
+                $sql = <<<SQL
                     UPDATE $this->table
                     SET $field = :value
                     WHERE id = :id
@@ -214,20 +200,18 @@ class UserManager extends BaseManager
                 $query->bindParam(':value', $param);
                 $query->bindParam(':id', $params['id']);
                 $query->execute();
-            }//end if
-        }//end foreach
+            }// end if
+        }// end foreach
 
         return $actualUser->getId();
     }
-
 
     /**
      * verifyCouple : Valid link of items
      * verify the existance of a user with id and username pass in address
      *
-     * @param  int    $id       User id pass in the address
-     * @param  string $username Username in the address
-     * @return int
+     * @param int    $id       User id pass in the address
+     * @param string $username Username in the address
      */
     public function verifyCouple(int $id, string $username): int
     {
@@ -240,15 +224,14 @@ class UserManager extends BaseManager
         $query->bindParam(':id', $id);
         $query->bindParam(':username', $username);
         $query->execute();
+
         return $query->rowCount();
     }
-
 
     /**
      * disable : disable an user
      *
-     * @param  int $id Id of user to disable
-     * @return void
+     * @param int $id Id of user to disable
      */
     public function disable(int $id): void
     {
@@ -262,16 +245,13 @@ class UserManager extends BaseManager
         $query->execute();
     }
 
-
     /**
      * enable : enable an user
      *
-     * @param  int $id Id of user to enable
-     * @return void
+     * @param int $id Id of user to enable
      */
     public function enable(int $id): void
     {
-
         $sql = <<<SQL
             UPDATE $this->table SET active = true
             WHERE id = :id

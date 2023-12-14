@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
 use App\Model\Entities\Category;
-use Framework\PDOConnection;
-use PDO;
 
 /**
  * @extends BaseManager <Category>
@@ -12,7 +12,6 @@ use PDO;
 class CategoryManager extends BaseManager
 {
     private static ?CategoryManager $categoryInstance = null;
-
 
     /**
      * __construct
@@ -24,16 +23,12 @@ class CategoryManager extends BaseManager
     {
         parent::__construct('category', Category::class, $datasource);
     }
-    //end __construct
-
-
+    // end __construct
 
     /**
      * Instance of manager
      *
      * @param array<string,string> $datasource
-     *
-     * @return CategoryManager
      */
     public static function getCategoryInstance(array $datasource): CategoryManager
     {

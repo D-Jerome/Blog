@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Security;
 
 use App\Model\Entities\User;
@@ -13,23 +15,19 @@ class Session
      */
     public function __construct()
     {
-        if (session_status() === PHP_SESSION_NONE) {
+        if (\PHP_SESSION_NONE === session_status()) {
             session_start();
         }
     }
-    //end __construct()
-
+    // end __construct()
 
     /**
      * getUser : get User connected
-     *
-     * @return AuthUser|null
      */
     public function getUser(): ?AuthUser
     {
         return isset($_SESSION['id']) ? new AuthUser($_SESSION['id'], $_SESSION['roleName'], $_SESSION['username']) : null;
     }
-
 
     /**
      * connect : keep information of user un session
@@ -46,19 +44,14 @@ class Session
 
     /**
      * Generate new token when call
-     *
-     * @return void
      */
     public function generateToken(): void
     {
-        $_SESSION['token'] =  md5(bin2hex(openssl_random_pseudo_bytes(6)));
+        $_SESSION['token'] = md5(bin2hex(openssl_random_pseudo_bytes(6)));
     }
-
 
     /**
      * getToken
-     *
-     * @return string|null
      */
     public function getToken(): ?string
     {

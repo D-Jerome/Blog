@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework;
 
 use Webmozart\Assert\Assert;
@@ -8,15 +10,11 @@ class Request
 {
     /**
      * URI of page
-     *
-     * @var string
      */
     protected string $uri;
 
     /**
      * method used (post, get)
-     *
-     * @var string
      */
     protected string $method;
 
@@ -29,36 +27,30 @@ class Request
      */
     public function __construct(string $baseUrl)
     {
-        $inputServer = \Safe\filter_input_array(INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $inputServer = \Safe\filter_input_array(\INPUT_SERVER, \FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         Assert::notNull($inputServer);
         Assert::isArray($inputServer);
         Assert::keyExists($inputServer, 'REQUEST_URI');
 
-        $parseURI = \Safe\parse_url($inputServer['REQUEST_URI'], PHP_URL_PATH);
-        if (is_string($parseURI)) {
-            $this->uri = (str_replace($baseUrl, '', $parseURI)) ;
+        $parseURI = \Safe\parse_url($inputServer['REQUEST_URI'], \PHP_URL_PATH);
+        if (\is_string($parseURI)) {
+            $this->uri = str_replace($baseUrl, '', $parseURI);
         }
         Assert::keyExists($inputServer, 'REQUEST_METHOD');
         $this->method = $inputServer['REQUEST_METHOD'];
     }
-    //end __construct()
-
+    // end __construct()
 
     /**
      * getUri
-     *
-     * @return string
      */
     public function getUri(): string
     {
         return $this->uri;
     }
 
-
     /**
      * getMethod
-     *
-     * @return string
      */
     public function getMethod(): string
     {

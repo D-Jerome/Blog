@@ -1,24 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework;
-
-use Webmozart\Assert\Assert;
-
-use function Safe\parse_url;
 
 class Config
 {
     /**
      * datas from config file
-     *
-     * @var object
      */
     protected static object $config;
 
     /**
      * Base url of site
-     *
-     * @var string
      */
     private static string $baseUrl;
 
@@ -38,26 +32,21 @@ class Config
 
     /**
      * Base url of site
-     *
-     * @var object
      */
     private static object $filterConf;
 
     public function __construct()
     {
-        self::$config = (object)\Safe\json_decode(\Safe\file_get_contents(__DIR__ . "/../config/config.json"), false);
-        self::$baseUrl =  (self::$config)->baseUrl;
-        self::$databaseConf = (array)(self::$config)->database;
-        self::$emailConf = (array)(self::$config)->email;
-        self::$filterConf = (self::$config)->filter;
+        self::$config = (object) \Safe\json_decode(\Safe\file_get_contents(__DIR__ . '/../config/config.json'), false);
+        self::$baseUrl = self::$config->baseUrl;
+        self::$databaseConf = (array) self::$config->database;
+        self::$emailConf = (array) self::$config->email;
+        self::$filterConf = self::$config->filter;
     }
-    //end __construct()
+    // end __construct()
 
     /**
      * Return Base of url site
-     *
-     * @return string
-     *
      */
     public static function getBaseUrl(): string
     {
@@ -66,39 +55,31 @@ class Config
 
     /**
      * Obtain result for only 1 specific data
-     *
-     * @param string $category
-     * @param string $page
-     * @param string $needle
-     *
-     * @return object|false
-     *
      */
-    public static function getSpecificData(string $category, string $page, string $needle): object|false
+    public static function getSpecificData(string $category, string $page, string $needle): object | false
     {
-        if (isset(self::$config->$category) === false) {
+        if (false === isset(self::$config->$category)) {
             return false;
         }
-        if (isset(self::$config->$category->$page) === false) {
+        if (false === isset(self::$config->$category->$page)) {
             return false;
         }
-        if (isset(self::$config->$category->$page->$needle) === false) {
+        if (false === isset(self::$config->$category->$page->$needle)) {
             return false;
         }
+
         return self::$config->$category->$page->$needle;
     }
 
-
     /**
-         * getDatasource : get the config information of database in array
-         *
-         * @return array<string,string>
-         */
+     * getDatasource : get the config information of database in array
+     *
+     * @return array<string,string>
+     */
     public static function getDatasource(): array
     {
         return self::$databaseConf;
     }
-
 
     /**
      * getEmailSource: get the config information of email in array
@@ -110,7 +91,6 @@ class Config
         return self::$emailConf;
     }
 }
-
 
 //  Recuperer les info du fichier de configuration //
 //  stocker le fichier //

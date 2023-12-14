@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Exception;
 
 use Exception;
@@ -11,9 +13,9 @@ class PasswordPolicyException extends Exception
      *
      * @return void
      */
-    public function __construct(string $message = "Password does not satisfy the current policy requirements")
+    public function __construct(string $message = 'Password does not satisfy the current policy requirements')
     {
         parent::__construct($message, 0005);
     }
-    //end __construct()
+    // end __construct()
 }

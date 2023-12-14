@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Framework\Exception;
 
 use Exception;
@@ -15,5 +17,5 @@ class DataBaseConnectionException extends Exception
     {
         parent::__construct($message, 0000);
     }
-    //end __construct()
+    // end __construct()
 }

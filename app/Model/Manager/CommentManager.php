@@ -1,11 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
-use App\Helpers\Text;
 use App\Model\Entities\Comment;
-use Framework\Application;
-use Framework\PDOConnection;
 use PDO;
 use Safe\DateTime;
 
@@ -15,7 +14,6 @@ use Safe\DateTime;
 class CommentManager extends BaseManager
 {
     private static ?CommentManager $commentInstance = null;
-
 
     /**
      * __construct
@@ -27,14 +25,12 @@ class CommentManager extends BaseManager
     {
         parent::__construct('comment', Comment::class, $datasource);
     }
-    //end _construct
+    // end _construct
 
     /**
      * Instance of manager
      *
      * @param array<string,string> $datasource
-     *
-     * @return CommentManager
      */
     public static function getCommentInstance(array $datasource): CommentManager
     {
@@ -48,7 +44,7 @@ class CommentManager extends BaseManager
     /**
      * getCommentsByPostId: get all comments od a post
      *
-     * @param  int $id Post Id
+     * @param  int            $id Post Id
      * @return array<Comment>
      */
     public function getCommentsByPostId(int $id): array
@@ -60,15 +56,14 @@ class CommentManager extends BaseManager
         $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_CLASS, $this->object);
         $statement->execute([$id]);
+
         return $statement->fetchAll();
     }
-
 
     /**
      * getCountCommentsByPostId : Number of comments of a post
      *
-     * @param  int $id Post id
-     * @return int
+     * @param int $id Post id
      */
     public function getCountCommentsByPostId(int $id): int
     {
@@ -79,15 +74,14 @@ class CommentManager extends BaseManager
         $statement = $this->dbConnect->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_DEFAULT);
         $statement->execute([$id]);
+
         return $statement->rowCount();
     }
-
 
     /**
      * getCommentUsername: get username of post
      *
-     * @param  int $id Post id
-     * @return string
+     * @param int $id Post id
      */
     public function getCommentUsername(int $id): string
     {
@@ -98,14 +92,14 @@ class CommentManager extends BaseManager
         $query = $this->dbConnect->prepare($sql);
 
         $query->execute([$id]);
-        return (string)$query->fetchColumn();
-    }
 
+        return (string) $query->fetchColumn();
+    }
 
     /**
      * getCommentsByUserId : get comment by user
      *
-     * @param  int $id User id
+     * @param  int            $id User id
      * @return array<Comment>
      */
     public function getCommentsByUserId(int $id): array
@@ -122,7 +116,6 @@ class CommentManager extends BaseManager
 
         return $query->fetchAll();
     }
-
 
     /**
      * insertNewComment ; inser new comment in database
@@ -160,13 +153,11 @@ class CommentManager extends BaseManager
         $query->execute();
     }
 
-
     /**
      * verifyCouple : verify the existance of a couple post and comment pass in address
      *
-     * @param  int $postId    Post id
-     * @param  int $commentId Comment id
-     * @return int
+     * @param int $postId    Post id
+     * @param int $commentId Comment id
      */
     public function verifyCouple(int $postId, int $commentId): int
     {
@@ -179,6 +170,7 @@ class CommentManager extends BaseManager
         $query->bindParam(':postId', $postId);
         $query->bindParam(':commentId', $commentId);
         $query->execute();
+
         return $query->rowCount();
     }
 }

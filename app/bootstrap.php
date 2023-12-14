@@ -1,8 +1,6 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 

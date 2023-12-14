@@ -1,28 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Model\Category;
-use App\Model\Manager\CategoryManager;
-use App\Model\Manager\PostManager;
-use Framework\{Application,Config};
 use Framework\BaseController;
-use Framework\Exception\{UnauthorizeValueException,InvalidUserException};
+use Framework\Config;
+use Framework\HttpParams;
 use Framework\Mail;
-use Framework\{Request,HttpParams};
-use Framework\Session;
 use Webmozart\Assert\Assert;
 
 class Home extends BaseController
 {
     /**
      * home
-     *
-     * @return void
      */
     public function home(): void
     {
-        //recherche des 3 derniers articles par catégories
+        // recherche des 3 derniers articles par catégories
         $user = $this->session->getUser();
         if (!$user instanceof \Framework\Security\AuthUser) {
             $user = null;
@@ -35,7 +30,7 @@ class Home extends BaseController
                 exit;
             }
 
-            $this->view('frontoffice/home.html.twig', [  'baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
+            $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
         } else {
             $this->view(
                 'frontoffice/home.html.twig',
@@ -45,11 +40,8 @@ class Home extends BaseController
         }
     }
 
-
     /**
      * homeContact
-     *
-     * @return void
      */
     public function homeContact(): void
     {
@@ -57,9 +49,9 @@ class Home extends BaseController
         $message = '';
         $dataPost = [];
         $postdatas = (new HttpParams())->getParamsPost();
-        if (is_array($postdatas) === true && array_key_exists('re-email', $postdatas) && !empty($postdatas['re-email'])) {
+        if (true === \is_array($postdatas) && \array_key_exists('re-email', $postdatas) && !empty($postdatas['re-email'])) {
             $error = true;
-            $message = "<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email";
+            $message = '<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email';
         }
         Assert::isArray($postdatas);
         foreach ($postdatas as $key => $data) {
@@ -75,16 +67,16 @@ class Home extends BaseController
             $message = "<strong>Envoi a echoué</strong><br>L'envoi du message a échoué.<br>Rééssayez plus tard.";
         }
 
-        if ($error == false) {
+        if (false === $error) {
             $this->view(
                 'frontoffice/home.html.twig',
-                [  'baseUrl' => Config::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
-            L\'envoi du message a été éffectué.', 'error' => false ]
+                ['baseUrl'                                => Config::getBaseUrl(), 'message' => '<strong>Envoi réussi</strong><br>
+            L\'envoi du message a été éffectué.', 'error' => false]
             );
         } else {
             $this->view(
                 'frontoffice/home.html.twig',
-                ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => true ]
+                ['baseUrl' => Config::getBaseUrl(), 'message' => $message, 'error' => true]
             );
         }
     }

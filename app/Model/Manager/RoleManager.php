@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Manager;
 
 use App\Model\Entities\Role;
-use Framework\PDOConnection;
-use PDO;
 
 /**
  * @extends BaseManager <Role>
@@ -12,7 +12,6 @@ use PDO;
 class RoleManager extends BaseManager
 {
     private static ?RoleManager $roleInstance = null;
-
 
     /**
      * __construct
@@ -24,15 +23,12 @@ class RoleManager extends BaseManager
     {
         parent::__construct('role', Role::class, $datasource);
     }
-    //end __construct
-
+    // end __construct
 
     /**
      * Instance of manager
      *
      * @param array<string,string> $datasource
-     *
-     * @return RoleManager
      */
     public static function getRoleInstance(array $datasource): RoleManager
     {

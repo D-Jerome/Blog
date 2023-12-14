@@ -1,4 +1,5 @@
 vendor/
 .neon
 app/var
-app/varrr
+.php-cs-fixer.cache
+.phpcs-cache

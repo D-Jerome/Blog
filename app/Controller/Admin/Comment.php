@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Controller\Pagination;
-use App\Model\Entities\Post;
 use App\Model\Manager\CommentManager;
 use App\Model\Manager\PostManager;
-use Framework\{Application,Config};
 use Framework\BaseController;
+use Framework\Config;
 use Framework\Helpers\FilterBuilder;
 use Framework\Helpers\Text;
 use Framework\HttpParams;
 use Framework\Security\AuthUser;
 use Safe\DateTime;
 use Webmozart\Assert\Assert;
-
-use function Safe\parse_url;
 
 class Comment extends BaseController
 {
@@ -27,39 +26,36 @@ class Comment extends BaseController
      */
     public function comments()
     {
-
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
         $count = 1;
 
-        if ($user->getRoleName() === "admin") {
-            if ($comments->getAllByParams([]) !== false) {
-                $count = count($comments->getAllByParams([]));
+        if ('admin' === $user->getRoleName()) {
+            if (false !== $comments->getAllByParams([])) {
+                $count = \count($comments->getAllByParams([]));
             }
         } else {
             $sqlParams = ['user_id' => $user->getId()];
-            if ($comments->getAllByParams($sqlParams) !== false) {
-                $count = count($comments->getAllByParams($sqlParams));
+            if (false !== $comments->getAllByParams($sqlParams)) {
+                $count = \count($comments->getAllByParams($sqlParams));
             }
-        }//end if
+        }// end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
-
 
         $statementPosts = $posts->getAllByParams([]);
         Assert::isArray($statementPosts);
@@ -72,33 +68,29 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.comments.html.twig',
             [
-            'baseUrl' => Config::getBaseUrl(),
-            'comments' => $statementComments,
-            'posts' => $statementPosts,
-            'sort' => $filter->getSort(),
-            'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['dir'],
-            'sortBy' => $httpParams['sort'],
-            'listSort' => $httpParams['list'],
-            'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSelect'],
-            'listSelect' => $filter->getListSelect(),
-            'listNames' => $filter->getListNames(),
-            'pages' => $pages,
-            'authUser' => $user
+                'baseUrl'      => Config::getBaseUrl(),
+                'comments'     => $statementComments,
+                'posts'        => $statementPosts,
+                'sort'         => $filter->getSort(),
+                'dir'          => $filter->getDir(),
+                'sortDir'      => $httpParams['dir'],
+                'sortBy'       => $httpParams['sort'],
+                'listSort'     => $httpParams['list'],
+                'list'         => $filter->getList() ,
+                'idListSelect' => $httpParams['listSelect'],
+                'listSelect'   => $filter->getListSelect(),
+                'listNames'    => $filter->getListNames(),
+                'pages'        => $pages,
+                'authUser'     => $user,
             ]
         );
     }
 
-
     /**
      * modifyComment
-     *
-     * @return void
      */
     public function modifyComment(int $id): void
     {
-
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
@@ -106,16 +98,13 @@ class Comment extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        Assert::notNull(($this->session)->getToken());
-        $user->setToken(($this->session)->getToken());
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
 
-
     /**
      * modifiedComment: action after modification of comment
-     *
-     * @return void
      */
     public function modifiedComment(int $id): void
     {
@@ -129,14 +118,14 @@ class Comment extends BaseController
             Assert::notEmpty($data);
             Assert::string($key);
             Assert::notNull($data);
-            if (is_string($data)) {
+            if (\is_string($data)) {
                 $dataPost[$key] = htmlentities($data);
-            } elseif (is_integer($data)) {
+            } elseif (\is_int($data)) {
                 $dataPost[$key] = $data;
             }
         }
         if ($dataPost['content'] !== $statement->getContent()) {
-            $params['content'] = (string)$dataPost['content'];
+            $params['content'] = (string) $dataPost['content'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -147,15 +136,14 @@ class Comment extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        Assert::notNull(($this->session)->getToken());
-        $user->setToken(($this->session)->getToken());
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $statement = $comments->getById($id);
         $statement->setUsername($comments->getCommentUsername($statement->getUserId()));
 
         $this->view('backoffice/modify.comment.html.twig', ['baseUrl' => Config::getBaseUrl(), 'comment' => $statement, 'authUser' => $user]);
     }
-
 
     /**
      * moderationComments; prepare view to moderate comments
@@ -164,14 +152,13 @@ class Comment extends BaseController
      */
     public function moderationComments()
     {
-
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $this->session->generateToken();
-        Assert::notNull(($this->session)->getToken());
-        $user->setToken(($this->session)->getToken());
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
 
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), "\\") + 1));
+        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
@@ -180,25 +167,24 @@ class Comment extends BaseController
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase((string)$httpParams['sort']);
+        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
         $count = 1;
-        if ($posts->getAllByParams([]) !== false) {
-            $count = count($posts->getAllByParams([]));
+        if (false !== $posts->getAllByParams([])) {
+            $count = \count($posts->getAllByParams([]));
         }
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $comments = (CommentManager::getCommentInstance(Config::getDatasource()));
+        $comments = CommentManager::getCommentInstance(Config::getDatasource());
 
-        if ($httpParams['listSelect'] === null) {
-            $statementComments = $comments->getAllOrderLimit($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        if (null === $httpParams['listSelect']) {
+            $statementComments = $comments->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         } else {
-            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, (string)$httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int)$httpParams['listSelect']);
+            $statementComments = $comments->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
         }
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
-
 
         $statementPosts = $posts->getAllByParams([]);
         Assert::isArray($statementPosts);
@@ -211,49 +197,43 @@ class Comment extends BaseController
         $this->view(
             'backoffice/admin.moderation.comments.html.twig',
             [
-            'baseUrl' => Config::getBaseUrl(),
-            'comments' => $statementComments,
-            'posts' => $statementPosts,
-            'sort' => $filter->getSort(),
-            'dir' => $filter->getDir(),
-            'sortDir' => $httpParams['dir'],
-            'sortBy' => $httpParams['sort'],
-            'listSort' => $httpParams['list'],
-            'list' => $filter->getList() ,
-            'idListSelect' => $httpParams['listSelect'],
-            'listSelect' => $filter->getListSelect(),
-            'listNames' => $filter->getListNames(),
-            'pages' => $pages,
-            'authUser' => $user
+                'baseUrl'      => Config::getBaseUrl(),
+                'comments'     => $statementComments,
+                'posts'        => $statementPosts,
+                'sort'         => $filter->getSort(),
+                'dir'          => $filter->getDir(),
+                'sortDir'      => $httpParams['dir'],
+                'sortBy'       => $httpParams['sort'],
+                'listSort'     => $httpParams['list'],
+                'list'         => $filter->getList() ,
+                'idListSelect' => $httpParams['listSelect'],
+                'listSelect'   => $filter->getListSelect(),
+                'listNames'    => $filter->getListNames(),
+                'pages'        => $pages,
+                'authUser'     => $user,
             ]
         );
     }
 
-
     /**
      * unpublishComment: action of unpublish comment
-     *
-     * @return void
      */
     public function unpublishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (CommentManager::getCommentInstance(Config::getDatasource()))->unpublish($id);
+        CommentManager::getCommentInstance(Config::getDatasource())->unpublish($id);
         header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
 
-
     /**
      * publishComment: action of publish comment
-     *
-     * @return void
      */
     public function publishComment(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
         $filterParams = isset($filterParams) ? '?' . $filterParams : null;
-        (CommentManager::getCommentInstance(Config::getDatasource()))->publish($id);
+        CommentManager::getCommentInstance(Config::getDatasource())->publish($id);
         header('Location: ' . Config::getBaseUrl() . '/admin/moderation/comments' . $filterParams . '#' . $id);
     }
 }

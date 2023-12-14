@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework;
+declare(strict_types=1);
 
-use Framework\Request;
+namespace Framework;
 
 class Route
 {
@@ -39,52 +39,39 @@ class Route
         protected array $authRoles
     ) {
     }
-    //end __construct
-
+    // end __construct
 
     /**
      * getPath
-     *
-     * @return string
      */
     public function getPath(): string
     {
         return $this->path;
     }
 
-
     /**
      * getMethod
-     *
-     * @return string
      */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-
     /**
      * getController
-     *
-     * @return string
      */
     public function getController(): string
     {
         return $this->controller;
     }
 
-
     /**
      * getAction
-     *
-     * @return string
      */
     public function getAction(): string
     {
         return $this->action;
     }
-
 
     /**
      * getAuthRoles

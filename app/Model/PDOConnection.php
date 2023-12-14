@@ -1,27 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
-use Framework\Exception\DataBaseConnectionException;
 use PDO;
-use PhpParser\json_decode;
 
 class PDOConnection
 {
     /**
      * database connector
-     *
-     * @var PDO
      */
     private readonly PDO $dbConnect;
 
     /**
      * Instance of connection
-     *
-     * @var PDOConnection
      */
     private static ?PDOConnection $pdoInstance = null;
-
 
     /**
      * getInstance : create instance pdo if no set
@@ -31,14 +26,12 @@ class PDOConnection
      */
     public static function getInstance(array $datasource)
     {
-
         if (!self::$pdoInstance instanceof \App\Model\PDOConnection || (!isset(self::$pdoInstance))) {
             self::$pdoInstance = new PDOConnection($datasource);
         }
 
         return self::$pdoInstance->dbConnect;
     }
-
 
     /**
      * __construct
@@ -48,22 +41,21 @@ class PDOConnection
      */
     private function __construct(array $datasource)
     {
-
-            $dsn = ($datasource['dbtype']);
-            $dsn .= ($datasource['host']);
-            $dsn .= '; ' . ($datasource['dbname']);
-            $dsn .= "; " . ($datasource['port']);
-            $this->dbConnect = new PDO(
-                $dsn,
-                $datasource['username'],
-                $datasource['password'],
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS
-                ]
-            );
+        $dsn = $datasource['dbtype'];
+        $dsn .= $datasource['host'];
+        $dsn .= '; ' . $datasource['dbname'];
+        $dsn .= '; ' . $datasource['port'];
+        $this->dbConnect = new PDO(
+            $dsn,
+            $datasource['username'],
+            $datasource['password'],
+            [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS,
+            ]
+        );
 
         $this->dbConnect->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
     }
-    //end __construct
+    // end __construct
 }
