@@ -37,6 +37,6 @@ abstract class Entity
     {
         $upperCamelCase = str_replace('_', '', ucwords($str, '_'));
 
-        return strtolower(substr($upperCamelCase, 0, 1)).substr($upperCamelCase, 1);
+        return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
     }
 }

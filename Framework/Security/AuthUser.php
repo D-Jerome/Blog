@@ -27,7 +27,8 @@ class AuthUser
          * username of connected user
          */
         protected string $username
-    ) {}
+    ) {
+    }
     // end __construct
 
     /**
@@ -71,8 +72,10 @@ class AuthUser
 
     /**
      * set Token value
+     *
+     * return void
      */
-    public function setToken(string $token)
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }

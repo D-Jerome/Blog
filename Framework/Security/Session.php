@@ -31,8 +31,10 @@ class Session
      * connect : keep information of user un session
      *
      * @param User $user User connected
+     *
+     * return void
      */
-    public function connect(User $user)
+    public function connect(User $user): void
     {
         $_SESSION['id'] = $user->getId();
         $_SESSION['roleName'] = $user->getRoleName();

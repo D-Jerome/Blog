@@ -120,8 +120,10 @@ class CommentManager extends BaseManager
      * insertNewComment ; inser new comment in database
      *
      * @param array<string, string> $params Data to insert
+     *
+     * @return void
      */
-    public function insertNewComment(array $params)
+    public function insertNewComment(array $params): void
     {
         $sql = <<<SQL
                 INSERT INTO  {$this->table} (
