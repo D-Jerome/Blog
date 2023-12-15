@@ -18,7 +18,7 @@ class Router
      */
     public function __construct()
     {
-        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__.'/../config/routes.json'), true);
+        $routes = \Safe\json_decode(\Safe\file_get_contents(__DIR__ . '/../config/routes.json'), true);
         if (true === \is_array($routes)) {
             foreach ($routes as $route) {
                 $this->routes[] = new Route($route['path'], $route['method'], $route['controller'], $route['action'], $route['authorize']);
@@ -69,8 +69,8 @@ class Router
     {
         $valid = false;
         $matchesKey = array_keys($matches);
-        $objectManagerName = 'App\\Model\\Manager\\'.$typeObj.'Manager';
-        $getInstance = 'get'.$typeObj.'Instance';
+        $objectManagerName = 'App\\Model\\Manager\\' . $typeObj . 'Manager';
+        $getInstance = 'get' . $typeObj . 'Instance';
         if (!empty($matches[$matchesKey[0]]) && !empty($matches[$matchesKey[1]]) && is_numeric($matches[$matchesKey[1]])) {
             $objectManager = $objectManagerName::$getInstance(Config::getDatasource());
             if (is_numeric($matches[$matchesKey[0]])) {

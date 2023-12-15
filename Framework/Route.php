@@ -36,7 +36,8 @@ class Route
          * authorized roles for route
          */
         protected array $authRoles
-    ) {}
+    ) {
+    }
     // end __construct
 
     /**

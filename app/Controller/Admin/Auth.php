@@ -20,7 +20,7 @@ class Auth extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceof($user, AuthUser::class);
 
-        $this->view('backoffice/'.$user->getRoleName().'.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
+        $this->view('backoffice/' . $user->getRoleName() . '.panel.html.twig', ['baseUrl' => Config::getBaseUrl(), 'login' => true, 'authUser' => $user]);
     }
 
     /**
@@ -30,6 +30,6 @@ class Auth extends BaseController
     {
         \Safe\session_destroy();
 
-        header('Location: '.Config::getBaseUrl().'/');
+        header('Location: ' . Config::getBaseUrl() . '/');
     }
 }

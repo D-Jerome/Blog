@@ -42,8 +42,8 @@ class PDOConnection
     {
         $dsn = $datasource['dbtype'];
         $dsn .= $datasource['host'];
-        $dsn .= '; '.$datasource['dbname'];
-        $dsn .= '; '.$datasource['port'];
+        $dsn .= '; ' . $datasource['dbname'];
+        $dsn .= '; ' . $datasource['port'];
         $this->dbConnect = new PDO(
             $dsn,
             $datasource['username'],

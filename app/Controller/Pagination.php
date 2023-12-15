@@ -111,8 +111,8 @@ class Pagination extends BaseController
         if ('' !== $query && '0' !== $query) {
             $query = "&{$query}";
         }
-        $pages['previousUri'] = Config::getBaseUrl().$this->route->getPath().'?page='.($this->currentPage - 1).$query;
-        $pages['nextUri'] = Config::getBaseUrl().$this->route->getPath().'?page='.($this->currentPage + 1).$query;
+        $pages['previousUri'] = Config::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage - 1) . $query;
+        $pages['nextUri'] = Config::getBaseUrl() . $this->route->getPath() . '?page=' . ($this->currentPage + 1) . $query;
 
         return $pages;
     }

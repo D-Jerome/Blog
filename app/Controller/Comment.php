@@ -6,4 +6,6 @@ namespace App\Controller;
 
 use Framework\BaseController;
 
-class Comment extends BaseController {}
+class Comment extends BaseController
+{
+}
