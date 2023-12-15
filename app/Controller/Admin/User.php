@@ -28,7 +28,7 @@ class User extends BaseController
         Assert::notNull($this->session->getToken());
         $user->setToken($this->session->getToken());
 
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
         $sqlParams = [];
@@ -44,19 +44,15 @@ class User extends BaseController
         } else {
             Assert::keyExists($httpParams, 'listSelect');
             Assert::notNull($httpParams['listSelect']);
-            if (false !== $users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']])) {
-                $count = \count($users->getAllByParams([$httpParams['list'] . '_id' => $httpParams['listSelect']]));
+            if (false !== $users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']])) {
+                $count = \count($users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
             }
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if (null === $httpParams['listSelect']) {
-            $statementUsers = $users->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        } else {
-            $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
-        }
+        $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
 
         foreach ($statementUsers as $statementUser) {
             $statementUser->setRoleName($users->getRoleById($statementUser->getRoleId()));
@@ -132,7 +128,7 @@ class User extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
 
-        header('Location: ' . Config::getBaseUrl() . '/admin?user=modified');
+        header('Location: '.Config::getBaseUrl().'/admin?user=modified');
     }
 
     /**
@@ -143,9 +139,9 @@ class User extends BaseController
     public function disableUser(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         UserManager::getUserInstance(Config::getDatasource())->disable($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/users'.$filterParams.'#'.$id);
     }
 
     /**
@@ -156,15 +152,13 @@ class User extends BaseController
     public function enableUser(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         UserManager::getUserInstance(Config::getDatasource())->enable($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/users' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/users'.$filterParams.'#'.$id);
     }
 
     /**
      * addUser: show page to add user
-     *
-     * @return void
      */
     public function addUser(): void
     {
@@ -172,6 +166,10 @@ class User extends BaseController
         $statementRoles = $roles->getAllByParams([]);
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
+
+        $this->session->generateToken();
+        Assert::notNull($this->session->getToken());
+        $user->setToken($this->session->getToken());
 
         $this->view('backoffice/add.user.html.twig', ['baseUrl' => Config::getBaseUrl(), 'roles' => $statementRoles, 'authUser' => $user]);
     }

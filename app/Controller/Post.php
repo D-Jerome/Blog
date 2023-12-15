@@ -20,6 +20,10 @@ class Post extends BaseController
      */
     public function postsByCategory(): void
     {
+        $user = $this->session->getUser();
+        if (!$user instanceof \Framework\Security\AuthUser) {
+            $user = null;
+        }
         // recherche des 3 derniers articles par catégories
         $categories = CategoryManager::getCategoryInstance(Config::getDatasource());
         $statementCategories = $categories->getAllByParams([]);
@@ -36,17 +40,6 @@ class Post extends BaseController
             $postsByCategories = array_merge((array) $statementPostsByCategory, (array) $postsByCategories);
         }
 
-        $user = $this->session->getUser();
-        if (!$user instanceof \Framework\Security\AuthUser) {
-            $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories, 'error' => false]);
-            exit;
-        }
-
-        $user = [
-            'name'     => $user->getUsername(),
-            'id'       => $user->getId(),
-            'roleName' => $user->getRoleName(),
-        ];
         $this->view('frontoffice/posts.category.html.twig', ['baseUrl' => Config::getBaseUrl(), 'categories' => $statementCategories, 'posts' => $postsByCategories,  'authUser' => $user]);
     }
 
@@ -76,11 +69,7 @@ class Post extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if (null === $httpParams['listSelect']) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
-        }
+        $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
 
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
