@@ -57,7 +57,7 @@ class User extends BaseController
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
                 $this->session->connect($user);
-                header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+                header('Location: '.Config::getBaseUrl().'/admin/logged');
             } else {
                 $this->view(
                     'frontoffice/login.html.twig',
@@ -80,7 +80,7 @@ class User extends BaseController
     {
         $user = $this->session->getUser();
         if ($user instanceof \Framework\Security\AuthUser) {
-            header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+            header('Location: '.Config::getBaseUrl().'/admin/logged');
         }
         // afficher page de connection
 
@@ -187,7 +187,7 @@ class User extends BaseController
     public function logout(): void
     {
         \Safe\session_destroy();
-        header('Location: ' . Config::getBaseUrl() . '/');
+        header('Location: '.Config::getBaseUrl().'/');
     }
 
     /**

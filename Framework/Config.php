@@ -37,7 +37,7 @@ class Config
 
     public function __construct()
     {
-        self::$config = (object) \Safe\json_decode(\Safe\file_get_contents(__DIR__ . '/../config/config.json'), false);
+        self::$config = (object) \Safe\json_decode(\Safe\file_get_contents(__DIR__.'/../config/config.json'), false);
         self::$baseUrl = self::$config->baseUrl;
         self::$databaseConf = (array) self::$config->database;
         self::$emailConf = (array) self::$config->email;

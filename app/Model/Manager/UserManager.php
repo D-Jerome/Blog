@@ -181,13 +181,13 @@ class UserManager extends BaseManager
         $actualUser = $this->getById((int) $params['id']);
         unset($params['token']);
         foreach ($params as $k => $param) {
-            $getUser = 'get' . ucfirst($k);
+            $getUser = 'get'.ucfirst($k);
 
             if ($actualUser->{$getUser}() !== $param) {
                 $field = $k;
                 if (0 !== \Safe\preg_match('~[A-Z]~', $k, $matches)) {
                     foreach ($matches as $match) {
-                        $field = str_replace($match, '_' . strtolower((string) $match), $field);
+                        $field = str_replace($match, '_'.strtolower((string) $match), $field);
                     }
                 }
                 $sql = <<<SQL

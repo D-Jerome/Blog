@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Framework;
 
 use Webmozart\Assert\Assert;
-
 use function Safe\parse_url;
 
 class HttpParams

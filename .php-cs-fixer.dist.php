@@ -9,6 +9,7 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setCacheFile(__DIR__.'/.php-cs-fixer.cache')
+    ->registerCustomFixers(new PedroTroller\CS\Fixer\Fixers())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PHP74Migration' => true,
@@ -79,7 +80,7 @@ return (new PhpCsFixer\Config())
             ],
         ],
         'self_accessor'                                    => false,
-
+        'PedroTroller/line_break_between_method_arguments' => false,
         'php_unit_test_case_static_method_calls'           => ['call_type' => 'self'],
         'types_spaces'                                     => ['space' => 'single'],
         'blank_line_between_import_groups'                 => false,

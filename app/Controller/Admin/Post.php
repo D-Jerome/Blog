@@ -94,7 +94,7 @@ class Post extends BaseController
     public function deletePost(int $id): void
     {
         PostManager::getPostInstance(Config::getDatasource())->delete($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/posts?delete=ok');
+        header('Location: '.Config::getBaseUrl().'/admin/posts?delete=ok');
     }
 
     /**
@@ -246,7 +246,7 @@ class Post extends BaseController
         $post = PostManager::getPostInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
-        header('Location: ' . Config::getBaseUrl() . '/post/' . $slug . '/' . $id);
+        header('Location: '.Config::getBaseUrl().'/post/'.$slug.'/'.$id);
     }
 
     /**
@@ -259,7 +259,7 @@ class Post extends BaseController
         $this->session->generateToken();
         Assert::notNull($this->session->getToken());
         $user->setToken($this->session->getToken());
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
@@ -315,9 +315,9 @@ class Post extends BaseController
     public function unpublishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         PostManager::getPostInstance(Config::getDatasource())->unpublish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 
     /**
@@ -326,8 +326,8 @@ class Post extends BaseController
     public function publishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         PostManager::getPostInstance(Config::getDatasource())->publish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 }
