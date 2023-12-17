@@ -23,7 +23,11 @@ abstract class Entity
     {
         if (property_exists($this, $name)) {
             /* et on peut aussi bricoler les données */
-            $this->{$name} = $value;
+            if (!str_contains($name, 'Id') && !str_contains($name, 'count') && (1 === $value || 0 === $value)) {
+                $this->{$name} = (bool) $value;
+            } else {
+                $this->{$name} = $value;
+            }
         } elseif (str_contains($name, '_')) {
             /* et traduire le snake_case en camelCase */
             $this->__set($this->snakeCaseToCamelCase($name), $value);
@@ -37,6 +41,6 @@ abstract class Entity
     {
         $upperCamelCase = str_replace('_', '', ucwords($str, '_'));
 
-        return strtolower(substr($upperCamelCase, 0, 1)) . substr($upperCamelCase, 1);
+        return strtolower(substr($upperCamelCase, 0, 1)).substr($upperCamelCase, 1);
     }
 }

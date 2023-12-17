@@ -30,11 +30,8 @@ final class Application
     }
     // end __construct()
 
-
     /**
      * router of application
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -55,7 +52,7 @@ final class Application
             $route = new $controller($foundRoute);
 
             if (!$route->isAuthorize($authRoles)) {
-                header('Location: ' . Config::getBaseUrl() . '/?auth=0');
+                header('Location: '.Config::getBaseUrl().'/?auth=0');
             }
 
             if ($route->isAuthorize($authRoles)) {
@@ -72,8 +69,8 @@ final class Application
                     $typeObj = strtolower(substr($controller, strrpos($controller, '\\') + 1));
                     $paramsKeys = array_keys($paramsValues);
                     foreach ($paramsKeys as $paramsKey) {
-                        if (stripos((string) $paramsKey, $typeObj . 'id') >= 0 && false !== stripos((string) $paramsKey, $typeObj . 'id')) {
-                            $id = $paramsValues[$paramsKey];
+                        if (stripos((string) $paramsKey, $typeObj.'id') >= 0 && false !== stripos((string) $paramsKey, $typeObj.'id')) {
+                            $id = (int) $paramsValues[$paramsKey];
                         }
                     }// end foreach
 
@@ -84,7 +81,7 @@ final class Application
             }// end if
         } catch (NoRouteFoundException $e) {
             $msgErr = $e->getMessage();
-            header('Location: ' . Config::getBaseUrl() . '/404');
+            header('Location: '.Config::getBaseUrl().'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
         }

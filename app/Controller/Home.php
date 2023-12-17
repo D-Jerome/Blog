@@ -27,7 +27,6 @@ class Home extends BaseController
         if (!isset($err['auth'])) {
             if (null === $user) {
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'error' => false]);
-                exit;
             }
 
             $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
@@ -53,6 +52,7 @@ class Home extends BaseController
             $error = true;
             $message = '<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email';
         }
+        unset($postdatas['re-email']);
         Assert::isArray($postdatas);
         foreach ($postdatas as $key => $data) {
             Assert::notEmpty($data);
