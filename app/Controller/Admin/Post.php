@@ -47,17 +47,13 @@ class Post extends BaseController
         }// end if
 
         if (null !== $httpParams['list']) {
-            $count = \count($posts->getAllFilteredCat($sqlParams, (int) $httpParams['listSelect']));
+            $count = \count($posts->getAllFilteredCat($sqlParams, (int) $httpParams['listSelect'] ?: null));
         }// end if
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if (null === $httpParams['listSelect']) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
-        }
+        $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
             $statementPost->setCountComments($posts->getCountCommentsByPostId($statementPost->getId()));
@@ -98,7 +94,7 @@ class Post extends BaseController
     public function deletePost(int $id): void
     {
         PostManager::getPostInstance(Config::getDatasource())->delete($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/posts?delete=ok');
+        header('Location: '.Config::getBaseUrl().'/admin/posts?delete=ok');
     }
 
     /**
@@ -118,8 +114,6 @@ class Post extends BaseController
 
     /**
      * addedPost
-     *
-     * @return void
      */
     public function addedPost(): void
     {
@@ -151,8 +145,6 @@ class Post extends BaseController
 
     /**
      * modifyPost
-     *
-     * @return void
      */
     public function modifyPost(int $id): void
     {
@@ -170,8 +162,6 @@ class Post extends BaseController
 
     /**
      * modifiedPost
-     *
-     * @return void
      */
     public function modifiedPost(int $id): void
     {
@@ -256,7 +246,7 @@ class Post extends BaseController
         $post = PostManager::getPostInstance(Config::getDatasource());
         $statementPost = $post->getById($id);
         $slug = $statementPost->getSlug();
-        header('Location: ' . Config::getBaseUrl() . '/post/' . $slug . '/' . $id);
+        header('Location: '.Config::getBaseUrl().'/post/'.$slug.'/'.$id);
     }
 
     /**
@@ -269,7 +259,7 @@ class Post extends BaseController
         $this->session->generateToken();
         Assert::notNull($this->session->getToken());
         $user->setToken($this->session->getToken());
-        $filter = new FilterBuilder('admin.' . substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
+        $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
         $httpParams = $this->groupFilterDataUser();
 
@@ -289,11 +279,7 @@ class Post extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        if (null === $httpParams['listSelect']) {
-            $statementPosts = $posts->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
-        } else {
-            $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect']);
-        }
+        $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
 
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
@@ -329,9 +315,9 @@ class Post extends BaseController
     public function unpublishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         PostManager::getPostInstance(Config::getDatasource())->unpublish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 
     /**
@@ -340,8 +326,8 @@ class Post extends BaseController
     public function publishPost(int $id): void
     {
         $filterParams = (new HttpParams())->getParamsReferer();
-        $filterParams = isset($filterParams) ? '?' . $filterParams : null;
+        $filterParams = isset($filterParams) ? '?'.$filterParams : null;
         PostManager::getPostInstance(Config::getDatasource())->publish($id);
-        header('Location: ' . Config::getBaseUrl() . '/admin/moderation/posts' . $filterParams . '#' . $id);
+        header('Location: '.Config::getBaseUrl().'/admin/moderation/posts'.$filterParams.'#'.$id);
     }
 }

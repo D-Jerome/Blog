@@ -30,7 +30,8 @@
         "squizlabs/php_codesniffer": "^3.7",
         "thecodingmachine/phpstan-safe-rule": "^1.2",
         "rector/rector": "^0.18.12",
-        "phpstan/phpstan-webmozart-assert": "^1.2"
+        "phpstan/phpstan-webmozart-assert": "^1.2",
+        "pedrotroller/php-cs-custom-fixer": "^2.33"
     },
     "scripts": {
         "csall": [

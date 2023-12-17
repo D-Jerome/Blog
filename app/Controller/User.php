@@ -57,7 +57,7 @@ class User extends BaseController
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
                 $user->setRoleName($users->getRoleById($user->getRoleId()));
                 $this->session->connect($user);
-                header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+                header('Location: '.Config::getBaseUrl().'/admin/logged');
             } else {
                 $this->view(
                     'frontoffice/login.html.twig',
@@ -75,14 +75,12 @@ class User extends BaseController
 
     /**
      * login: show login form
-     *
-     * @return void
      */
     public function login(): void
     {
         $user = $this->session->getUser();
         if ($user instanceof \Framework\Security\AuthUser) {
-            header('Location: ' . Config::getBaseUrl() . '/admin/logged');
+            header('Location: '.Config::getBaseUrl().'/admin/logged');
         }
         // afficher page de connection
 
@@ -96,8 +94,6 @@ class User extends BaseController
 
     /**
      * signUp : show sign up form
-     *
-     * @return void
      */
     public function signUp(): void
     {
@@ -115,8 +111,6 @@ class User extends BaseController
 
     /**
      * validationSignUp : Verify information of sign up
-     *
-     * @return void
      */
     public function validationSignUp(): void
     {
@@ -189,19 +183,15 @@ class User extends BaseController
 
     /**
      * logout : Destroy session
-     *
-     * @return void
      */
     public function logout(): void
     {
         \Safe\session_destroy();
-        header('Location: ' . Config::getBaseUrl() . '/');
+        header('Location: '.Config::getBaseUrl().'/');
     }
 
     /**
      * forgetPwd : show for to obtain connection information
-     *
-     * @return void
      */
     public function forgetPwd(): void
     {
@@ -215,8 +205,6 @@ class User extends BaseController
 
     /**
      * sendUserConnectionMail
-     *
-     * @return void
      */
     public function sendUserConnectionMail(): void
     {

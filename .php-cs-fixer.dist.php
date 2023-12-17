@@ -9,6 +9,7 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setCacheFile(__DIR__.'/.php-cs-fixer.cache')
+    ->registerCustomFixers(new PedroTroller\CS\Fixer\Fixers())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
@@ -26,8 +27,8 @@ return (new PhpCsFixer\Config())
         'non_printable_character'   => false,
         'align_multiline_comment'   => ['comment_type' => 'phpdocs_only'],
         'array_indentation'         => true,
-        'braces'                    => ['allow_single_line_closure' => true],
-        'compact_nullable_typehint' => true,
+        'single_space_around_construct'                     => true,
+        'compact_nullable_type_declaration' => true,
         'fopen_flags'               => ['b_mode' => true],
         'no_extra_blank_lines'      => [
             'tokens' => [
@@ -76,7 +77,7 @@ return (new PhpCsFixer\Config())
             ],
         ],
         'self_accessor'                                    => false,
-
+        'PedroTroller/line_break_between_method_arguments' => false,
         'php_unit_test_case_static_method_calls'           => ['call_type' => 'self'],
         'types_spaces'                                     => ['space' => 'single'],
         'blank_line_between_import_groups'                 => false,

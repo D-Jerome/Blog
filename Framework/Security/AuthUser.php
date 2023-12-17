@@ -27,8 +27,7 @@ class AuthUser
          * username of connected user
          */
         protected string $username
-    ) {
-    }
+    ) {}
     // end __construct
 
     /**
