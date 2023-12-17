@@ -36,10 +36,14 @@
         "csall": [
             "@csfix",
             "@cscheck",
+            "@csfixerfix",
+            "@csfixercheck",
             "@phpstan"
         ],
         "csfix": "phpcbf --ignore=src/Migrations/**,src/Kernel.php,public/*,workInProgress/**",
         "cscheck": "phpcs --ignore=src/Migrations/**,src/Kernel.php,public/*,workInProgress/**",
+        "csfixerfix": "php-cs-fixer fix --config=.php-cs-fixer.dist.php -v",
+        "csfixercheck": "php-cs-fixer check --config=.php-cs-fixer.dist.php -v",
         "phpstan": "phpstan analyse -c phpstan.neon -vvv --memory-limit=1024M"
     }
 }
