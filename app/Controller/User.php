@@ -35,7 +35,7 @@ class User extends BaseController
                     'error'    => true,
                     'authUser' => $user]
             );
-            exit;
+            exit; //  exit of method
         }
 
         if (false === $user->getActive()) {
@@ -50,7 +50,7 @@ class User extends BaseController
                     'authUser' => $user,
                 ]
             );
-            exit;
+            exit; //  exit of method
         }
         if (isset($paramsPost['password']) && \is_string($paramsPost['password'])) {
             if (password_verify($paramsPost['password'], $user->getPassword())) {

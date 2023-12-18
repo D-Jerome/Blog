@@ -84,6 +84,7 @@ final class Application
             header('Location: '.Config::getBaseUrl().'/404');
         } catch (MultipleRouteFoundException $e) {
             $msgErr = $e->getMessage();
+            header('Location: '.Config::getBaseUrl().'/404');
         }
     }
 }

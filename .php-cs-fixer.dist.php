@@ -14,10 +14,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        'general_phpdoc_annotation_remove' => ['annotations' => ['expectedDeprecation']], // one should use PHPUnit built-in method instead
-        'modernize_strpos' => true, // needs PHP 8+ or polyfill
-        'no_useless_concat_operator' => false, // TODO switch back on when the `src/Console/Application.php` no longer needs the concat
-        '@DoctrineAnnotation'       => true,
+        'modernize_strpos' => true, 
+        'no_useless_concat_operator' => false, 
         '@PHP74Migration' => true,
         '@PHP74Migration:risky' => true,
         '@PHPUnit100Migration:risky' => true,
@@ -27,7 +25,7 @@ return (new PhpCsFixer\Config())
         'non_printable_character'   => false,
         'align_multiline_comment'   => ['comment_type' => 'phpdocs_only'],
         'array_indentation'         => true,
-        'single_space_around_construct'                     => true,
+        'single_space_around_construct'                     => false,
         'compact_nullable_type_declaration' => true,
         'fopen_flags'               => ['b_mode' => true],
         'no_extra_blank_lines'      => [
