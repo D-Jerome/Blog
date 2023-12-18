@@ -6,6 +6,8 @@ namespace App\Model\Manager;
 
 use App\Model\Entities\Role;
 use App\Model\Entities\User;
+use Framework\Helpers\Text;
+use Framework\ParamsGetFilter;
 use PDO;
 use Safe\DateTime;
 
@@ -314,20 +316,19 @@ class UserManager extends BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  string|null                        $field  Name of field to order
-     * @param  string|null                        $dir    Direction of order
-     * @param  int|null                           $limit  Number of posts by page
-     * @param  int|null                           $page   Current page
-     * @param  array<string,string|bool|int>|null $params Differents parameters for WHERE clause
-     * @param  int|null                           $listId Id of List item to filter(optionnal)
+     * @param ParamsGetFilter                    $paramsGet object ParamsGetFilter
+     * @param int|null                           $limit     Number of posts by page
+     * @param int|null                           $page      Current page
+     * @param array<string,string|bool|int>|null $params    Differents parameters for WHERE clause
+     *
      * @return array<User>
      */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
+    public function getAllOrderLimitCat(ParamsGetFilter $paramsGet, ?int $limit, ?int $page, ?array $params): array
     {
         $sql = <<<SQL
                 SELECT {$this->table}.* FROM {$this->table}
             SQL;
-        if (isset($listId)) {
+        if (null !== $paramsGet->getListSelect()) {
             $sql .= <<<'SQL'
                     INNER JOIN role ON role.id = user.role_id
                 SQL;
@@ -350,23 +351,19 @@ class UserManager extends BaseManager
                 $i = true;
             }
         }
-        if (isset($listId)) {
-            if (null !== $listId) {
-                $sql .= <<<SQL
-                        AND role.id = {$listId}
-                    SQL;
-            }
-        }
-
-        if (isset($field)) {
+        if (null !== $paramsGet->getListSelect()) {
             $sql .= <<<SQL
-                    ORDER BY {$field}
+                    AND role.id = {$paramsGet->getListSelect()}
                 SQL;
         }
+        $field = Text::camelCaseToSnakeCase($paramsGet->getSort());
+        $sql .= <<<SQL
+                ORDER BY {$field}
+            SQL;
 
-        if (\in_array($dir, ['ASC', 'DESC'], true)) {
+        if (\in_array($paramsGet->getDir(), ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
-                    {$dir}
+                    {$paramsGet->getDir()}
                 SQL;
         } else {
             $sql .= <<<'SQL'

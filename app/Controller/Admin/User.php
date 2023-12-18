@@ -10,8 +10,8 @@ use App\Model\Manager\UserManager;
 use Framework\BaseController;
 use Framework\Config;
 use Framework\Helpers\FilterBuilder;
-use Framework\Helpers\Text;
 use Framework\HttpParams;
+use Framework\ParamsGetFilter;
 use Framework\Security\AuthUser;
 use Webmozart\Assert\Assert;
 
@@ -30,29 +30,27 @@ class User extends BaseController
 
         $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
-        $httpParams = $this->groupFilterDataUser();
+        $httpParams = new ParamsGetFilter();
         $sqlParams = [];
         $pages = [];
-        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
+
         $users = UserManager::getUserInstance(Config::getDatasource());
-        Assert::keyExists($httpParams, 'list');
         $count = 1;
-        if (null === $httpParams['list']) {
+        if (null === $httpParams->getList()) {
             if (false !== $users->getAllByParams([])) {
                 $count = \count($users->getAllByParams([]));
             }
         } else {
-            Assert::keyExists($httpParams, 'listSelect');
-            Assert::notNull($httpParams['listSelect']);
-            if (false !== $users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']])) {
-                $count = \count($users->getAllByParams([$httpParams['list'].'_id' => $httpParams['listSelect']]));
+            Assert::notNull($httpParams->getListSelect());
+            if (false !== $users->getAllByParams([$httpParams->getList().'_id' => $httpParams->getListSelect()])) {
+                $count = \count($users->getAllByParams([$httpParams->getList().'_id' => $httpParams->getListSelect()]));
             }
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $statementUsers = $users->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
+        $statementUsers = $users->getAllOrderLimitCat($httpParams, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
 
         foreach ($statementUsers as $statementUser) {
             $statementUser->setRoleName($users->getRoleById($statementUser->getRoleId()));
@@ -61,20 +59,13 @@ class User extends BaseController
         $dataView = [
             'baseUrl'        => Config::getBaseUrl(),
             'registredUsers' => $statementUsers,
-            'sort'           => $filter->getSort(),
-            'dir'            => $filter->getDir(),
-            'sortDir'        => $httpParams['dir'],
-            'sortBy'         => $httpParams['sort'],
-            'listSort'       => $httpParams['list'],
-            'list'           => $filter->getList() ,
-            'idListSelect'   => $httpParams['listSelect'],
-            'listSelect'     => $filter->getListSelect(),
-            'listNames'      => $filter->getListNames(),
+            'filter'         => $filter,
+            'httpFilter'     => $httpParams,
             'pages'          => $pages,
             'authUser'       => $user,
         ];
 
-        if (isset($httpParams['user']) && 'modified' === $httpParams['user']) {
+        if (null !== $httpParams->getUserInfo() && 'modified' === $httpParams->getUserInfo()) {
             $dataView['message'] = '<strong>Modification réussie</strong><br>
                 La modification de l\'utilisateur a été éffectué.';
             $dataView['error'] = false;
