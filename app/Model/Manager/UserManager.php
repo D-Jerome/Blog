@@ -263,7 +263,6 @@ class UserManager extends BaseManager
         $query->execute();
     }
 
-
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *

@@ -174,7 +174,6 @@ class CommentManager extends BaseManager
         return $query->rowCount();
     }
 
-
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
