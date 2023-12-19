@@ -119,7 +119,7 @@ class User extends BaseController
             $error = false;
             $postdatas = (new HttpParams())->getParamsPost();
 
-            if (true === \is_array($postdatas) && true === \array_key_exists('re-email', $postdatas) && !empty($postdatas['re-email'])) {
+            if (true === \is_array($postdatas) && true === \array_key_exists('re-email', $postdatas) && false === empty($postdatas['re-email'])) {
                 $error = true;
                 $message = '<strong>Une erreur est survenue</strong><br>Veuillez vérifier votre email';
             }

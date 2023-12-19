@@ -263,55 +263,6 @@ class UserManager extends BaseManager
         $query->execute();
     }
 
-    /**
-     * getAllOrderLimitCat : get paged Posts about specifical category
-     *
-     * @param  array<string,string|int>|null $params Differents parameters for WHERE clause
-     * @param  int|null                      $listId Id of List item to filter
-     * @return array<User>
-     */
-    public function getAllFilteredCat(?array $params, ?int $listId): array
-    {
-        $sql = <<<SQL
-                SELECT {$this->table}.* FROM {$this->table}
-            SQL;
-        if (isset($listId)) {
-            $sql .= <<<'SQL'
-                    INNER JOIN role ON role.id = user.role_id
-                SQL;
-        }// end if
-
-        if (null !== $params && [] !== $params) {
-            $sql .= <<<'SQL'
-                    WHERE
-                SQL;
-            $i = false;
-            foreach ($params as $k => $value) {
-                if ($i) {
-                    $sql .= <<<'SQL'
-                            AND
-                        SQL;
-                }
-                $sql .= <<<SQL
-                        {$k} = {$value}
-                    SQL;
-                $i = true;
-            }
-        }// end if
-
-        if (isset($listId)) {
-            if (null !== $listId) {
-                $sql .= <<<SQL
-                        AND role.id = {$listId}
-                    SQL;
-            }
-        }// end if
-
-        $query = $this->dbConnect->prepare($sql);
-        $query->execute();
-
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
-    }
 
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category

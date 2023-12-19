@@ -21,7 +21,7 @@ class Post extends BaseController
     public function postsByCategory(): void
     {
         $user = $this->session->getUser();
-        if (!$user instanceof \Framework\Security\AuthUser) {
+        if (false === $user instanceof \Framework\Security\AuthUser) {
             $user = null;
         }
         // recherche des 3 derniers articles par catégories
@@ -49,7 +49,7 @@ class Post extends BaseController
     public function posts(): void
     {
         $user = $this->session->getUser();
-        if (!$user instanceof \Framework\Security\AuthUser) {
+        if (false === $user instanceof \Framework\Security\AuthUser) {
             $user = null;
         }
         $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
