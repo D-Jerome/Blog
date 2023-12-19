@@ -19,39 +19,24 @@ class User extends BaseController
      */
     public function loginAuth(): void
     {
+        $data = [];
         $users = UserManager::getUserInstance(Config::getDatasource());
         $paramsPost = (new HttpParams())->getParamsPost();
         if (isset($paramsPost['login']) && \is_string($paramsPost['login'])) {
             $user = $users->getByUsername($paramsPost['login']);
         }
-        if (false === isset($user) || false === $user) {
-            $user = [];
-            $this->view(
-                'frontoffice/login.html.twig',
-                [
-                    'baseUrl' => Config::getBaseUrl(),
-                    'message' => '<strong>Erreur</strong><br>
-                    Vérifiez votre Identifiant/Mot de passe.' ,
-                    'error'    => true,
-                    'authUser' => $user]
-            );
-            exit; //  exit of method
-        }
 
-        if (false === $user->getActive()) {
+        if (false === isset($user) || false === $user || false === $user->getActive()) {
             $user = [];
-            $this->view(
-                'frontoffice/login.html.twig',
-                [
-                    'baseUrl' => Config::getBaseUrl(),
-                    'message' => '<strong>Erreur</strong><br>
-                    Vérifiez votre Identifiant/Mot de passe.',
-                    'error'    => true,
-                    'authUser' => $user,
-                ]
-            );
-            exit; //  exit of method
+            $data = [
+                'baseUrl' => Config::getBaseUrl(),
+                'message' => '<strong>Erreur</strong><br>
+                    Vérifiez votre Identifiant/Mot de passe.' ,
+                'error'    => true,
+                'authUser' => $user,
+            ];
         }
+        Assert::isInstanceOf($user, \App\Model\Entities\User::class);
         if (isset($paramsPost['password']) && \is_string($paramsPost['password'])) {
             if (password_verify($paramsPost['password'], $user->getPassword())) {
                 //     si ok : Mise en place de session de connexion pour l'utilisateur
@@ -59,18 +44,16 @@ class User extends BaseController
                 $this->session->connect($user);
                 header('Location: '.Config::getBaseUrl().'/admin/logged');
             } else {
-                $this->view(
-                    'frontoffice/login.html.twig',
-                    [
-                        'baseUrl' => Config::getBaseUrl(),
-                        'message' => '<strong>Erreur</strong><br>
+                $data = [
+                    'baseUrl' => Config::getBaseUrl(),
+                    'message' => '<strong>Erreur</strong><br>
                         Vérifiez votre Identifiant/Mot de passe.',
-                        'error'    => true,
-                        'authUser' => $user,
-                    ]
-                );
+                    'error'    => true,
+                    'authUser' => $user,
+                ];
             }// end if
         }
+        $this->view('frontoffice/login.html.twig', $data);
     }
 
     /**

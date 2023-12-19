@@ -69,11 +69,10 @@ class PostManager extends BaseManager
     /**
      * getAllFilteredByParam : get all datas of filtered of objects
      *
-     * @param  string      $paramItem  Name of field to filter
      * @param  int|string  $paramValue Value of field to filter
      * @return array<Post>
      */
-    public function getAllFilteredByParam(string $paramItem, int | string $paramValue, null | bool $publish = false): array
+    public function getAllFilteredByParam(int | string $paramValue, null | bool $publish = false): array
     {
         $sql = <<<SQL
                     SELECT *

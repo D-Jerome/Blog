@@ -80,10 +80,8 @@ final class Application
                 }// end if
             }// end if
         } catch (NoRouteFoundException $e) {
-            $msgErr = $e->getMessage();
             header('Location: '.Config::getBaseUrl().'/404');
         } catch (MultipleRouteFoundException $e) {
-            $msgErr = $e->getMessage();
             header('Location: '.Config::getBaseUrl().'/404');
         }
     }

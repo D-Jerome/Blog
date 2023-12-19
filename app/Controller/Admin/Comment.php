@@ -109,14 +109,14 @@ class Comment extends BaseController
             Assert::notEmpty($data);
             Assert::string($key);
             Assert::notNull($data);
-            if (\is_string($data)) {
+            if (true === \is_string($data) && 'content' !== $key) {
                 $dataPost[$key] = htmlentities($data);
-            } elseif (\is_int($data)) {
+            } else {
                 $dataPost[$key] = $data;
             }
         }
         if ($dataPost['content'] !== $statement->getContent()) {
-            $params['content'] = (string) $dataPost['content'];
+            $params['content'] = $dataPost['content'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');

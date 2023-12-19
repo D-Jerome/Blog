@@ -61,7 +61,7 @@ class Post extends BaseController
         if (null === $httpParams->getList()) {
             $count = \count($posts->getAllPublish());
         } else {
-            $count = \count($posts->getAllFilteredByParam((string) $httpParams->getList(), (int) $httpParams->getListSelect(), true));
+            $count = \count($posts->getAllFilteredByParam((int) $httpParams->getListSelect(), true));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
