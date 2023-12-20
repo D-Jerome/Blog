@@ -28,7 +28,7 @@ final class Application
         $this->request = new Request(Config::getbaseUrl());
         $this->router = new Router();
     }
-    // end __construct()
+    // end __construct(
 
     /**
      * router of application
@@ -37,7 +37,7 @@ final class Application
     {
         try {
             $foundRoute = $this->router->findRoute($this->request);
-            if (!$foundRoute instanceof \Framework\Route) {
+            if (false === $foundRoute instanceof \Framework\Route) {
                 throw new NoRouteFoundException();
             }
 
@@ -51,10 +51,9 @@ final class Application
              */
             $route = new $controller($foundRoute);
 
-            if (!$route->isAuthorize($authRoles)) {
+            if (false === $route->isAuthorize($authRoles)) {
                 header('Location: '.Config::getBaseUrl().'/?auth=0');
             }
-
             if ($route->isAuthorize($authRoles)) {
                 $id = null;
                 if (\Safe\preg_match_all('/\{(\w*)\}/', $foundRoute->getPath(), $paramNames)) {
@@ -78,12 +77,10 @@ final class Application
                 } else {
                     $route->{$action}();
                 }// end if
-            }// end if
+            }
         } catch (NoRouteFoundException $e) {
-            $msgErr = $e->getMessage();
             header('Location: '.Config::getBaseUrl().'/404');
         } catch (MultipleRouteFoundException $e) {
-            $msgErr = $e->getMessage();
             header('Location: '.Config::getBaseUrl().'/404');
         }
     }

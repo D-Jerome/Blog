@@ -10,7 +10,7 @@ use App\Model\Manager\PostManager;
 use Framework\BaseController;
 use Framework\Config;
 use Framework\Helpers\FilterBuilder;
-use Framework\Helpers\Text;
+use Framework\ParamsGetFilter;
 use Webmozart\Assert\Assert;
 
 class Post extends BaseController
@@ -21,7 +21,7 @@ class Post extends BaseController
     public function postsByCategory(): void
     {
         $user = $this->session->getUser();
-        if (!$user instanceof \Framework\Security\AuthUser) {
+        if (false === $user instanceof \Framework\Security\AuthUser) {
             $user = null;
         }
         // recherche des 3 derniers articles par catégories
@@ -49,27 +49,25 @@ class Post extends BaseController
     public function posts(): void
     {
         $user = $this->session->getUser();
-        if (!$user instanceof \Framework\Security\AuthUser) {
+        if (false === $user instanceof \Framework\Security\AuthUser) {
             $user = null;
         }
         $filter = new FilterBuilder(substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
-        $httpParams = $this->groupFilterDataUser();
+        $httpParams = new ParamsGetFilter();
         $sqlParams = ['publish_state' => true];
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
-        Assert::keyExists($httpParams, 'sort');
-        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
 
-        if (null === $httpParams['list']) {
+        if (null === $httpParams->getList()) {
             $count = \count($posts->getAllPublish());
         } else {
-            $count = \count($posts->getAllFilteredByParam((string) $httpParams['list'], (int) $httpParams['listSelect'], true));
+            $count = \count($posts->getAllFilteredByParam((int) $httpParams->getListSelect(), true));
         }
 
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $statementPosts = $posts->getAllOrderLimitCat($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams, (int) $httpParams['listSelect'] ?: null);
+        $statementPosts = $posts->getAllOrderLimitCat($httpParams, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
 
         foreach ($statementPosts as $statementPost) {
             $statementPost->setCategories($posts->getCategoriesById($statementPost->getId()));
@@ -82,15 +80,8 @@ class Post extends BaseController
             [
                 'baseUrl'      => Config::getBaseUrl(),
                 'posts'        => $statementPosts,
-                'sort'         => $filter->getSort(),
-                'dir'          => $filter->getDir(),
-                'sortDir'      => $httpParams['dir'],
-                'sortBy'       => $httpParams['sort'],
-                'listSort'     => $httpParams['list'],
-                'list'         => $filter->getList() ,
-                'idListSelect' => $httpParams['listSelect'],
-                'listSelect'   => $filter->getListSelect(),
-                'listNames'    => $filter->getListNames(),
+                'filter'       => $filter,
+                'httpFilter'   => $httpParams,
                 'pages'        => $pages,
                 'authUser'     => $user,
             ]

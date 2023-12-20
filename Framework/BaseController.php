@@ -91,34 +91,6 @@ abstract class BaseController
     }
 
     /**
-     * ckeck and group filter information pass by user
-     *
-     * @return array<string,string|int|null>
-     */
-    public function groupFilterDataUser(): array
-    {
-        $filterReturn = (new HttpParams())->getParamsGet();
-        $filterReturn['sort'] = isset($filterReturn['sort']) ? (string) ($filterReturn['sort']) : 'createdAt';
-        $filterReturn['dir'] = isset($filterReturn['dir']) ? (string) ($filterReturn['dir']) : 'DESC';
-        $filterReturn['list'] = empty($filterReturn['list']) ? null : (string) ($filterReturn)['list'];
-        if (isset($filterReturn['listSelect'])) {
-            $filterReturn['listSelect'] = '---' !== $filterReturn['listSelect'] ? $filterReturn['listSelect'] : null;
-        } else {
-            $filterReturn['listSelect'] = null;
-        }
-
-        if (null === $filterReturn['listSelect'] && null !== $filterReturn['list']) {
-            $filterReturn['list'] = null;
-        }
-
-        if (null === $filterReturn['list'] && null !== $filterReturn['listSelect']) {
-            $filterReturn['listSelect'] = null;
-        }
-
-        return $filterReturn;
-    }
-
-    /**
      * CSRF token
      */
     protected function tokenVerify(): bool

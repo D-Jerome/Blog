@@ -27,9 +27,9 @@ class Home extends BaseController
         if (!isset($err['auth'])) {
             if (null === $user) {
                 $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'error' => false]);
+            } else {
+                $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
             }
-
-            $this->view('frontoffice/home.html.twig', ['baseUrl' => Config::getBaseUrl(), 'authUser' => $user]);
         } else {
             $this->view(
                 'frontoffice/home.html.twig',

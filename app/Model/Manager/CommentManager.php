@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Model\Manager;
 
 use App\Model\Entities\Comment;
+use Framework\Helpers\Text;
+use Framework\ParamsGetFilter;
 use PDO;
 use Safe\DateTime;
 
@@ -173,90 +175,15 @@ class CommentManager extends BaseManager
     }
 
     /**
-     * getAllFilteredCat : get paged Posts about specifical category
-     *
-     * @param  array<string,string|int>|null $params Differents parameters for WHERE clause
-     * @param  int|null                      $listId Id of List item to filter
-     * @return array<Comment>
-     */
-    public function getAllFilteredCat(?array $params, ?int $listId): array
-    {
-        $sql = <<<SQL
-                SELECT {$this->table}.* FROM {$this->table}
-            SQL;
-        if (isset($listId)) {
-            switch ($this->table) {
-                case 'post':
-                    $sql .= <<<'SQL'
-                            INNER JOIN post_category pc ON pc.post_id = post.id
-                        SQL;
-                    break;
-                case 'user':
-                    $sql .= <<<'SQL'
-                            INNER JOIN role ON role.id = user.role_id
-                        SQL;
-                    break;
-                case 'comment':
-                    break;
-            }// end switch
-        }// end if
-
-        if (null !== $params && [] !== $params) {
-            $sql .= <<<'SQL'
-                    WHERE
-                SQL;
-            $i = false;
-            foreach ($params as $k => $value) {
-                if ($i) {
-                    $sql .= <<<'SQL'
-                            AND
-                        SQL;
-                }
-                $sql .= <<<SQL
-                        {$k} = {$value}
-                    SQL;
-                $i = true;
-            }
-        }// end if
-
-        if (isset($listId)) {
-            switch ($this->table) {
-                case 'post':
-                    if (null !== $listId) {
-                        $sql .= <<<SQL
-                                AND pc.category_id = {$listId}
-                            SQL;
-                    }
-                    break;
-                case 'user':
-                    if (null !== $listId) {
-                        $sql .= <<<SQL
-                                AND role.id = {$listId}
-                            SQL;
-                    }
-                    break;
-                case 'comment':
-                    break;
-            }// end switch
-        }// end if
-
-        $query = $this->dbConnect->prepare($sql);
-        $query->execute();
-
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->object);
-    }
-
-    /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  string|null                        $field  Name of field to order
-     * @param  string|null                        $dir    Direction of order
-     * @param  int|null                           $limit  Number of posts by page
-     * @param  int|null                           $page   Current page
-     * @param  array<string,string|bool|int>|null $params Differents parameters for WHERE clause
+     * @param  ParamsGetFilter                    $paramsGet object ParamsGetFilter
+     * @param  int|null                           $limit     Number of posts by page
+     * @param  int|null                           $page      Current page
+     * @param  array<string,string|bool|int>|null $params    Differents parameters for WHERE clause
      * @return array<Comment>
      */
-    public function getAllOrderLimit(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params): array
+    public function getAllOrderLimit(ParamsGetFilter $paramsGet, ?int $limit, ?int $page, ?array $params): array
     {
         $sql = <<<SQL
                 SELECT {$this->table}.* FROM {$this->table}
@@ -280,15 +207,14 @@ class CommentManager extends BaseManager
             }
         }
 
-        if (isset($field)) {
-            $sql .= <<<SQL
-                    ORDER BY {$field}
-                SQL;
-        }
+        $field = Text::camelCaseToSnakeCase($paramsGet->getSort());
+        $sql .= <<<SQL
+                ORDER BY {$field}
+            SQL;
 
-        if (\in_array($dir, ['ASC', 'DESC'], true)) {
+        if (\in_array($paramsGet->getDir(), ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
-                    {$dir}
+                    {$paramsGet->getDir()}
                 SQL;
         } else {
             $sql .= <<<'SQL'

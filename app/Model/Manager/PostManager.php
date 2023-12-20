@@ -7,6 +7,7 @@ namespace App\Model\Manager;
 use App\Model\Entities\Category;
 use App\Model\Entities\Post;
 use Framework\Helpers\Text;
+use Framework\ParamsGetFilter;
 use PDO;
 use Safe\DateTime;
 
@@ -68,11 +69,10 @@ class PostManager extends BaseManager
     /**
      * getAllFilteredByParam : get all datas of filtered of objects
      *
-     * @param  string      $paramItem  Name of field to filter
      * @param  int|string  $paramValue Value of field to filter
      * @return array<Post>
      */
-    public function getAllFilteredByParam(string $paramItem, int | string $paramValue, null | bool $publish = false): array
+    public function getAllFilteredByParam(int | string $paramValue, null | bool $publish = false): array
     {
         $sql = <<<SQL
                     SELECT *
@@ -287,20 +287,18 @@ class PostManager extends BaseManager
     /**
      * getAllOrderLimitCat : get paged Posts about specifical category
      *
-     * @param  string|null                        $field  Name of field to order
-     * @param  string|null                        $dir    Direction of order
-     * @param  int|null                           $limit  Number of posts by page
-     * @param  int|null                           $page   Current page
-     * @param  array<string,string|bool|int>|null $params Differents parameters for WHERE clause
-     * @param  int|null                           $listId Id of List item to filter (optionnal)
+     * @param  ParamsGetFilter                    $paramsGet object ParamsGetFilter
+     * @param  int|null                           $limit     Number of posts by page
+     * @param  int|null                           $page      Current page
+     * @param  array<string,string|bool|int>|null $params    Differents parameters for WHERE clause
      * @return array<Post>
      */
-    public function getAllOrderLimitCat(?string $field, ?string $dir, ?int $limit, ?int $page, ?array $params, ?int $listId): array
+    public function getAllOrderLimitCat(ParamsGetFilter $paramsGet, ?int $limit, ?int $page, ?array $params): array
     {
         $sql = <<<SQL
                 SELECT {$this->table}.* FROM {$this->table}
             SQL;
-        if (isset($listId)) {
+        if (null !== $paramsGet->getListSelect()) {
             $sql .= <<<'SQL'
                     INNER JOIN post_category pc ON pc.post_id = post.id
                 SQL;
@@ -323,23 +321,19 @@ class PostManager extends BaseManager
             }
         }
 
-        if (isset($listId)) {
-            if (null !== $listId) {
-                $sql .= <<<SQL
-                        AND pc.category_id = {$listId}
-                    SQL;
-            }
-        }// end if
-
-        if (isset($field)) {
+        if (null !== $paramsGet->getListSelect()) {
             $sql .= <<<SQL
-                    ORDER BY {$field}
+                    AND pc.category_id = {$paramsGet->getListSelect()}
                 SQL;
-        }
+        }// end if
+        $field = Text::camelCaseToSnakeCase($paramsGet->getSort());
+        $sql .= <<<SQL
+                ORDER BY {$field}
+            SQL;
 
-        if (\in_array($dir, ['ASC', 'DESC'], true)) {
+        if (\in_array($paramsGet->getdir(), ['ASC', 'DESC'], true)) {
             $sql .= <<<SQL
-                    {$dir}
+                    {$paramsGet->getdir()}
                 SQL;
         } else {
             $sql .= <<<'SQL'

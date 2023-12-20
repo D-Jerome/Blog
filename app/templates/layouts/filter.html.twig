@@ -1,7 +1,7 @@
 {% extends './layouts/connection.html.twig' %}
 
 {% block filterBlock %}     
-{% if sort %} 
+{% if filter.sort %} 
     <a class="btn btn-primary border border-dark mt-4 mb-2" data-bs-toggle="offcanvas" href="#offcanvasFilter" role="button" aria-controls="offcanvasfilter">Filtrer</a>
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel">
         <div class="offcanvas-header">
@@ -14,23 +14,23 @@
                     <div >
                         <p>Trier par:</p>
                         <div class="btn-group-vertical border border-light gap-1" role="group" aria-label="Vertical radio toggle button group">
-                        {% for key, value in sort %}
-                                <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}"{% if sortBy == key %} checked {% endif %}>
+                        {% for key, value in filter.sort %}
+                                <input class="btn-check" type="radio" value="{{ key }}" name="sort" id="sort-{{ key }}"{% if httpFilter.sort == key %} checked {% endif %}>
                                 <label class="btn btn-outline-primary" for="sort-{{ key }}">{{ value }}</label>
                         {% endfor %}
                         </div>
                         <p>Filtrer par:  </p>
                         <div class="btn-group-vettical border border-light gap-1" role="button" aria-label="basic radio toggle button group">
-                        {% if listSelect %}
-                            {% for key, value in listSelect %}
-                                <input class="btn-check" type="checkbox" value="{{ key }}" name="list" id="listSelectCheck" {% if listSort == key %} checked {% endif %}>
+                        {% if filter.listSelect %}
+                            {% for key, value in filter.listSelect %}
+                                <input class="btn-check" type="checkbox" value="{{ key }}" name="list" id="listSelectCheck" {% if httpFilter.list == key %} checked {% endif %}>
                                 <label class="btn btn-outline-primary" for="listSelectCheck">{{ value }}</label>
                             {% endfor %}
 
                                 <select class="form-select m-1" id="listSelect" name="listSelect" aria-label="itemsSelect">
                                 <option value="">---</option>
-                                {% for item in listNames %}
-                                    <option value="{{ item.id }}" {% if idListSelect == item.id %} {% if listSort %} selected {% endif %}{% endif %}>{{ item.name }}</option>
+                                {% for item in filter.listNames %}
+                                    <option value="{{ item.id }}" {% if httpFilter.listSelect == item.id %} {% if httpFilter.sort %} selected {% endif %}{% endif %}>{{ item.name }}</option>
                                 {% endfor %}
                                 </select>
                             {# </div> #}
@@ -38,10 +38,10 @@
                         </div>
                         <p>Sens:</p>
                         <div class="btn-group m-1">
-                        {% if dir %}
+                        {% if filter.dir %}
                             <div class="btn-group gap-1" role="group" aria-label="Basic radio toggle button group">
-                            {% for key, value in dir %}
-                                    <input class="btn-check m-1" type="radio" value="{{ key }}" name="dir" id="dir-{{ key }}" {% if sortDir == key %} checked {% endif %}>
+                            {% for key, value in filter.dir %}
+                                    <input class="btn-check m-1" type="radio" value="{{ key }}" name="dir" id="dir-{{ key }}" {% if httpFilter.dir == key %} checked {% endif %}>
                                     <label class="btn btn-outline-primary" for="dir-{{ key }}">{{ value }}</label>
                             {% endfor %}
                             </div>

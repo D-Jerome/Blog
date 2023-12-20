@@ -10,8 +10,8 @@ use App\Model\Manager\PostManager;
 use Framework\BaseController;
 use Framework\Config;
 use Framework\Helpers\FilterBuilder;
-use Framework\Helpers\Text;
 use Framework\HttpParams;
+use Framework\ParamsGetFilter;
 use Framework\Security\AuthUser;
 use Safe\DateTime;
 use Webmozart\Assert\Assert;
@@ -28,13 +28,12 @@ class Comment extends BaseController
         $user = $this->session->getUser();
         Assert::isInstanceOf($user, AuthUser::class);
         $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
-        $httpParams = $this->groupFilterDataUser();
+        $httpParams = new ParamsGetFilter();
         $sqlParams = [];
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
         $count = 1;
 
         if ('admin' === $user->getRoleName()) {
@@ -51,7 +50,7 @@ class Comment extends BaseController
         $pagination = new Pagination($this->getRoute(), $count);
         $pages = $pagination->pagesInformations();
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($httpParams, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
         }
@@ -70,15 +69,8 @@ class Comment extends BaseController
                 'baseUrl'      => Config::getBaseUrl(),
                 'comments'     => $statementComments,
                 'posts'        => $statementPosts,
-                'sort'         => $filter->getSort(),
-                'dir'          => $filter->getDir(),
-                'sortDir'      => $httpParams['dir'],
-                'sortBy'       => $httpParams['sort'],
-                'listSort'     => $httpParams['list'],
-                'list'         => $filter->getList() ,
-                'idListSelect' => $httpParams['listSelect'],
-                'listSelect'   => $filter->getListSelect(),
-                'listNames'    => $filter->getListNames(),
+                'filter'       => $filter,
+                'httpFilter'   => $httpParams,
                 'pages'        => $pages,
                 'authUser'     => $user,
             ]
@@ -116,15 +108,15 @@ class Comment extends BaseController
         foreach ($postData as $key => $data) {
             Assert::notEmpty($data);
             Assert::string($key);
-            Assert::notNull($data);
-            if (\is_string($data)) {
+            Assert::string($data);
+            if (true === \is_string($data) && 'content' !== $key) {
                 $dataPost[$key] = htmlentities($data);
-            } elseif (\is_int($data)) {
+            } else {
                 $dataPost[$key] = $data;
             }
         }
         if ($dataPost['content'] !== $statement->getContent()) {
-            $params['content'] = (string) $dataPost['content'];
+            $params['content'] = $dataPost['content'];
         }
         if (null !== $params) {
             $params['modifiedAt'] = (new DateTime('now'))->format('Y-m-d H:i:s');
@@ -158,14 +150,13 @@ class Comment extends BaseController
 
         $filter = new FilterBuilder('admin.'.substr(strtolower($this->getRoute()->getcontroller()), strrpos($this->getRoute()->getcontroller(), '\\') + 1));
 
-        $httpParams = $this->groupFilterDataUser();
+        $httpParams = new ParamsGetFilter();
 
         $sqlParams = [];
 
         $posts = PostManager::getPostInstance(Config::getDatasource());
         $pages = [];
 
-        $sortBySQL = Text::camelCaseToSnakeCase((string) $httpParams['sort']);
         $count = 1;
         if (false !== $posts->getAllByParams([])) {
             $count = \count($posts->getAllByParams([]));
@@ -175,7 +166,7 @@ class Comment extends BaseController
 
         $comments = CommentManager::getCommentInstance(Config::getDatasource());
 
-        $statementComments = $comments->getAllOrderLimit($sortBySQL, (string) $httpParams['dir'], $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
+        $statementComments = $comments->getAllOrderLimit($httpParams, $pagination->getPerPage(), $pagination->getCurrentPage(), $sqlParams);
 
         foreach ($statementComments as $statementComment) {
             $statementComment->setUsername($comments->getCommentUsername($statementComment->getUserId()));
@@ -195,15 +186,8 @@ class Comment extends BaseController
                 'baseUrl'      => Config::getBaseUrl(),
                 'comments'     => $statementComments,
                 'posts'        => $statementPosts,
-                'sort'         => $filter->getSort(),
-                'dir'          => $filter->getDir(),
-                'sortDir'      => $httpParams['dir'],
-                'sortBy'       => $httpParams['sort'],
-                'listSort'     => $httpParams['list'],
-                'list'         => $filter->getList() ,
-                'idListSelect' => $httpParams['listSelect'],
-                'listSelect'   => $filter->getListSelect(),
-                'listNames'    => $filter->getListNames(),
+                'filter'       => $filter,
+                'httpFilter'   => $httpParams,
                 'pages'        => $pages,
                 'authUser'     => $user,
             ]
