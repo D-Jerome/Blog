@@ -108,7 +108,7 @@ class Comment extends BaseController
         foreach ($postData as $key => $data) {
             Assert::notEmpty($data);
             Assert::string($key);
-            Assert::notNull($data);
+            Assert::string($data);
             if (true === \is_string($data) && 'content' !== $key) {
                 $dataPost[$key] = htmlentities($data);
             } else {

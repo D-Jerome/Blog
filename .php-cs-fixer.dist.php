@@ -21,7 +21,7 @@ return (new PhpCsFixer\Config())
         '@PHPUnit100Migration:risky' => true,
         '@Symfony'                  => true,
         '@Symfony:risky'            => true,
-        'void_return'               => false, 
+        'void_return'               => true, 
         'non_printable_character'   => false,
         'align_multiline_comment'   => ['comment_type' => 'phpdocs_only'],
         'array_indentation'         => true,

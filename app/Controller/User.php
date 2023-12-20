@@ -35,23 +35,24 @@ class User extends BaseController
                 'error'    => true,
                 'authUser' => $user,
             ];
-        }
-        Assert::isInstanceOf($user, \App\Model\Entities\User::class);
-        if (isset($paramsPost['password']) && \is_string($paramsPost['password'])) {
-            if (password_verify($paramsPost['password'], $user->getPassword())) {
-                //     si ok : Mise en place de session de connexion pour l'utilisateur
-                $user->setRoleName($users->getRoleById($user->getRoleId()));
-                $this->session->connect($user);
-                header('Location: '.Config::getBaseUrl().'/admin/logged');
-            } else {
-                $data = [
-                    'baseUrl' => Config::getBaseUrl(),
-                    'message' => '<strong>Erreur</strong><br>
-                        Vérifiez votre Identifiant/Mot de passe.',
-                    'error'    => true,
-                    'authUser' => $user,
-                ];
-            }// end if
+        } else {
+            Assert::isInstanceOf($user, \App\Model\Entities\User::class);
+            if (isset($paramsPost['password']) && \is_string($paramsPost['password'])) {
+                if (password_verify($paramsPost['password'], $user->getPassword())) {
+                    //     si ok : Mise en place de session de connexion pour l'utilisateur
+                    $user->setRoleName($users->getRoleById($user->getRoleId()));
+                    $this->session->connect($user);
+                    header('Location: '.Config::getBaseUrl().'/admin/logged');
+                } else {
+                    $data = [
+                        'baseUrl' => Config::getBaseUrl(),
+                        'message' => '<strong>Erreur</strong><br>
+                            Vérifiez votre Identifiant/Mot de passe.',
+                        'error'    => true,
+                        'authUser' => $user,
+                    ];
+                }// end if
+            }
         }
         $this->view('frontoffice/login.html.twig', $data);
     }
