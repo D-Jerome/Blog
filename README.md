@@ -68,9 +68,9 @@ Une base de données Mysql pour le stockage des données.
 *  **Etape 2** : Aller sur la page d'accueil du site ( la base de données est alors populer de données tests).
 
 *  **Etape 3** : Les comptes de tests sont :
-                                 *  Login : admin   -  mot de passe: admin
-                                 *  Login : editor   - mot de passe : editor
-                                 *  Login : visitor   - mot de passe : visitor  
+   *  Login : admin   -  mot de passe: admin
+   *  Login : editor   - mot de passe : editor
+   *  Login : visitor   - mot de passe : visitor  
 
 ----------------------------------------------------------------------------------------
 ### Mise en place du compte administrateur ( Sans données tests)
