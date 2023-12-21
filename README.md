@@ -63,7 +63,7 @@ Une base de données Mysql pour le stockage des données.
 ----------------------------------------------------------------------------------------
 ### Populer la base avec des données de tests
 
-*  **Etape 1** : renomer le fichier index.php en index-accueil.php , et replacer le fichier index.php par le fichier indexfill.php present dans le répertoire /commands/
+*  **Etape 1** : renomer le fichier index.php en index-accueil.php , et remplacer le fichier index.php par une copie du fichier indexfill.php present dans le répertoire /commands/
 
 *  **Etape 2** : Aller sur la page d'accueil du site ( la base de données est alors populer de données tests).
 
@@ -71,7 +71,9 @@ Une base de données Mysql pour le stockage des données.
    
    *  Login : admin   -  mot de passe: admin
    *  Login : editor   - mot de passe : editor
-   *  Login : visitor   - mot de passe : visitor  
+   *  Login : visitor   - mot de passe : visitor
+ 
+*  **Etape 4** : Remettre les fichiers comme à l'origine (renomer le fichier index-accueil.php en index.php) .
 
 ----------------------------------------------------------------------------------------
 ### Mise en place du compte administrateur ( Sans données tests)
