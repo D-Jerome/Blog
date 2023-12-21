@@ -2,7 +2,7 @@
 
 Information du projet
 Projet de la formation Développeur d'application - PHP / Symfony.
-
+----------------------------------------------------------------------------------------
 ## Créez votre premier blog en PHP
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/509a2ed4471249838004b6aec1d100e7)](https://app.codacy.com/gh/D-Jerome/Blog/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
@@ -33,21 +33,21 @@ Voici les principales fonctionnalités disponibles suivant les différents statu
     * Accès aux mêmes fonctionnalités que l'editeur.
     * Ajout/suppression/modification/Publication/dépublication ded posts.
     * Modification/Publication/Dépublication des commentaires.
-
+----------------------------------------------------------------------------------------
 ### Informations
 
 Un thème de base a été choisi pour réaliser ce projet, il s'agit du thème Bootstrap Clean-blog.
 
 La version en ligne n'est pas encore disponible.
 
-
+----------------------------------------------------------------------------------------
 ### Prérequis
 
 Php ainsi que Composer doivent être installés sur votre serveur afin de pouvoir correctement lancé le blog.
 Une base de données Mysql pour le stockage des données.
-
+----------------------------------------------------------------------------------------
 ### Installation
-
+```
 **Etape 1** : Cloner le Repositary sur votre serveur.
 
 **Etape 2** : Pour créer la base de données sur votre SGBD, il suffit d'importer le fichier bdd-query.sql. 
@@ -60,21 +60,24 @@ Une base de données Mysql pour le stockage des données.
 
 **Etape 6** : Votre blog est désormais fonctionnel.
 
+```
+----------------------------------------------------------------------------------------
 ### Mise en place du compte administrateur
-
+```
 **Etape 1** : Inscrivez-vous ( Role visiteur à l'inscription)
 
 **Etape 2** : Dans la base de données , exécutez la requete suivante afin de prendre les droits d'administrateur:
             " UPDATE TABLE user set role_id = 1 WHERE username = " Puis mettre votre identifiant créé précédement.
 
-Etape 3: Votre compte administrateur est désormais opérationnel.
-
+**Etape 3** : Votre compte administrateur est désormais opérationnel.
+```
+----------------------------------------------------------------------------------------
 ## Librairies utilisées
 
     -Twig + Extra-bundle + intl-extra (Template de pages)
     -tinyMce (Mise en forme de texte (avec images, couleurs...))
     -phpmailer (transmission d'email)
-
+----------------------------------------------------------------------------------------
 ## Auteur
 
-Dubus Jèrôme - Étudiant à Openclassrooms - Développeur d'application PHP/Symfony
+Dubus Jérôme - Étudiant à Openclassrooms - Développeur d'application PHP/Symfony
