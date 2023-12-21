@@ -47,30 +47,29 @@ Php ainsi que Composer doivent être installés sur votre serveur afin de pouvoi
 Une base de données Mysql pour le stockage des données.
 ----------------------------------------------------------------------------------------
 ### Installation
-```
-**Etape 1** : Cloner le Repositary sur votre serveur.
 
-**Etape 2** : Pour créer la base de données sur votre SGBD, il suffit d'importer le fichier bdd-query.sql. 
+* **Etape 1** : Cloner le Repositary sur votre serveur.
 
-**Etape 3** : Remplir le fichier Config/config.json avec les accès à votre BDD.
+* **Etape 2** : Pour créer la base de données sur votre SGBD, il suffit d'importer le fichier bdd-query.sql. 
 
-**Etape 4** : Remplir le fichier Config/config.json avec les accès à votre compte email.
+* **Etape 3** : Remplir le fichier Config/config.json avec les accès à votre BDD.
 
-**Etape 5** : Remplir le fichier Config/config.json avec le chemin de base votre site.
+* **Etape 4** : Remplir le fichier Config/config.json avec les accès à votre compte email.
 
-**Etape 6** : Votre blog est désormais fonctionnel.
+* **Etape 5** : Remplir le fichier Config/config.json avec le chemin de base votre site.
 
-```
+* **Etape 6** : Votre blog est désormais fonctionnel.
+
 ----------------------------------------------------------------------------------------
 ### Mise en place du compte administrateur
-```
-**Etape 1** : Inscrivez-vous ( Role visiteur à l'inscription)
 
-**Etape 2** : Dans la base de données , exécutez la requete suivante afin de prendre les droits d'administrateur:
+* **Etape 1** : Inscrivez-vous ( Role visiteur à l'inscription)
+
+* **Etape 2** : Dans la base de données , exécutez la requete suivante afin de prendre les droits d'administrateur:
             " UPDATE TABLE user set role_id = 1 WHERE username = " Puis mettre votre identifiant créé précédement.
 
-**Etape 3** : Votre compte administrateur est désormais opérationnel.
-```
+* **Etape 3** : Votre compte administrateur est désormais opérationnel.
+
 ----------------------------------------------------------------------------------------
 ## Librairies utilisées
 
