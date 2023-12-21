@@ -9,30 +9,30 @@ Projet de la formation Développeur d'application - PHP / Symfony.
 
 Voici les principales fonctionnalités disponibles suivant les différents statuts utilisateur:
 
-* Le visiteur:
+*  Le visiteur:
 
-    * Visiter la page d'accueil et ouvrir les différents liens disponibles (compte GitHub, compte Linkedin).
-    * Envoyer un message au créateur du blog.
-    * Parcourir la liste des blogs et parcourir la liste de ses commentaires.
+    *  Visiter la page d'accueil et ouvrir les différents liens disponibles (compte GitHub, compte Linkedin).
+    *  Envoyer un message au créateur du blog.
+    *  Parcourir la liste des blogs et parcourir la liste de ses commentaires.
 
-* Le visiteur (enregistré):
+*  Le visiteur (enregistré):
 
-    * Prérequis: s'être enregistré via le formulaire d'inscription.
-    * Accès aux mêmes fonctionnaités que le visiteur.
-    * Ajout de commentaires et modifications des ses propres commentaires.
+    *  Prérequis: s'être enregistré via le formulaire d'inscription.
+    *  Accès aux mêmes fonctionnaités que le visiteur.
+    *  Ajout de commentaires et modifications des ses propres commentaires.
 
-* L'editeur (enregistré):
+*  L'editeur (enregistré):
 
-    * Prérequis: s'être enregistré via le formulaire d'inscription et avoir les droits 'editor' donnés par l'administrateur.
-    * Accès aux mêmes fonctionnaités que le visiteur (enregistré).
-    * Ajout de Post et modifications des ses propres posts.
+    *  Prérequis: s'être enregistré via le formulaire d'inscription et avoir les droits 'editor' donnés par l'administrateur.
+    *  Accès aux mêmes fonctionnaités que le visiteur (enregistré).
+    *  Ajout de Post et modifications des ses propres posts.
 
-* Administrateur:
+*  Administrateur:
 
-    * Prérequis: avoir le status administrateur.
-    * Accès aux mêmes fonctionnalités que l'editeur.
-    * Ajout/suppression/modification/Publication/dépublication ded posts.
-    * Modification/Publication/Dépublication des commentaires.
+    *  Prérequis: avoir le status administrateur.
+    *  Accès aux mêmes fonctionnalités que l'editeur.
+    *  Ajout/suppression/modification/Publication/dépublication ded posts.
+    *  Modification/Publication/Dépublication des commentaires.
 ----------------------------------------------------------------------------------------
 ### Informations
 
@@ -48,27 +48,39 @@ Une base de données Mysql pour le stockage des données.
 ----------------------------------------------------------------------------------------
 ### Installation
 
-* **Etape 1** : Cloner le Repositary sur votre serveur.
+*  **Etape 1** : Cloner le Repositary sur votre serveur.
 
-* **Etape 2** : Pour créer la base de données sur votre SGBD, il suffit d'importer le fichier bdd-query.sql. 
+*  **Etape 2** : Pour créer la base de données sur votre SGBD, il suffit d'importer le fichier bdd-query.sql. 
 
-* **Etape 3** : Remplir le fichier Config/config.json avec les accès à votre BDD.
+*  **Etape 3** : Remplir le fichier Config/config.json avec les accès à votre BDD.
 
-* **Etape 4** : Remplir le fichier Config/config.json avec les accès à votre compte email.
+*  **Etape 4** : Remplir le fichier Config/config.json avec les accès à votre compte email.
 
-* **Etape 5** : Remplir le fichier Config/config.json avec le chemin de base votre site.
+*  **Etape 5** : Remplir le fichier Config/config.json avec le chemin de base votre site.
 
-* **Etape 6** : Votre blog est désormais fonctionnel.
+*  **Etape 6** : Votre blog est désormais fonctionnel.
 
 ----------------------------------------------------------------------------------------
-### Mise en place du compte administrateur
+### Populer la base avec des données de tests
 
-* **Etape 1** : Inscrivez-vous ( Role visiteur à l'inscription)
+*  **Etape 1** : renomer le fichier index.php en index-accueil.php , et replacer le fichier index.php par le fichier indexfill.php present dans le répertoire /commands/
 
-* **Etape 2** : Dans la base de données , exécutez la requete suivante afin de prendre les droits d'administrateur:
+*  **Etape 2** : Aller sur la page d'accueil du site ( la base de données est alors populer de données tests).
+
+*  **Etape 3** : Les comptes de tests sont :
+                                 *  Login : admin   -  mot de passe: admin
+                                 *  Login : editor   - mot de passe : editor
+                                 *  Login : visitor   - mot de passe : visitor  
+
+----------------------------------------------------------------------------------------
+### Mise en place du compte administrateur ( Sans données tests)
+
+*  **Etape 1** : Inscrivez-vous ( Role visiteur à l'inscription)
+
+*  **Etape 2** : Dans la base de données , exécutez la requete suivante afin de prendre les droits d'administrateur:
             " UPDATE TABLE user set role_id = 1 WHERE username = " Puis mettre votre identifiant créé précédement.
 
-* **Etape 3** : Votre compte administrateur est désormais opérationnel.
+*  **Etape 3** : Votre compte administrateur est désormais opérationnel.
 
 ----------------------------------------------------------------------------------------
 ## Librairies utilisées
